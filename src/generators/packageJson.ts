@@ -124,6 +124,9 @@ export async function generatePackageJson(config: PackageConfig, allConfigs: Pac
     jsonObj.scripts.format = jsonObj.scripts.format.substring(0, jsonObj.scripts.format.lastIndexOf(' && '));
   }
 
+  delete jsonObj.devDependencies['@willbooster/eslint-config'];
+  delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
+
   fs.outputFileSync(filePath, JSON.stringify(jsonObj));
 
   if (dependencies.length) {
