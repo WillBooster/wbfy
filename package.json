@@ -31,7 +31,7 @@
     "@oclif/plugin-help": "2.2.1",
     "deepmerge": "4.2.2",
     "fs-extra": "8.1.0",
-    "glob": "7.1.4",
+    "glob": "7.1.6",
     "js-yaml": "3.13.1",
     "node-fetch": "2.6.0",
     "tslib": "1.10.0"
