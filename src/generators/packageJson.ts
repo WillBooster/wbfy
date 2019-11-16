@@ -9,7 +9,7 @@ const scriptsWithoutLerna = {
   format: 'yarn prettier && yarn sort-package-json && yarn lint-fix',
   lint: 'eslint "./{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}"',
   'lint-fix': 'yarn lint --fix',
-  prettier: 'prettier --write "**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,yaml,yml}"',
+  prettier: 'prettier --write "**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,vue,yaml,yml}"',
   'sort-package-json': 'sort-package-json',
   typecheck: 'tsc --noEmit',
 };
