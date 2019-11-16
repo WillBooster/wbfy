@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import child_process from 'child_process';
 import glob from 'glob';
 import { Command, flags } from '@oclif/command';
 import { generateGitignore } from './generators/gitignore';
@@ -34,12 +33,6 @@ class GenConfigs extends Command {
     const { argv } = this.parse(GenConfigs);
 
     for (const rootDirPath of argv) {
-      child_process.execSync('git status', { cwd: rootDirPath });
-      spawnSync('git', ['switch', 'master'], rootDirPath);
-      spawnSync('git', ['pull'], rootDirPath);
-      spawnSync('git', ['branch', '-D', 'willboosterify'], rootDirPath);
-      spawnSync('git', ['checkout', '-b', 'willboosterify'], rootDirPath);
-
       const rootConfig = getPackageConfig(rootDirPath);
       if (rootConfig == null) {
         console.error(`there is no valid package.json in ${rootDirPath}`);
@@ -87,10 +80,6 @@ class GenConfigs extends Command {
         await generatePackageJson(config, allPackageConfigs);
       }
       spawnSync('yarn', ['format'], rootDirPath);
-      spawnSync('yarn', ['upgrade'], rootDirPath);
-      spawnSync('git', ['add', '-A'], rootDirPath);
-      spawnSync('git', ['commit', '-m', '"chore: willboosterify this repo"'], rootDirPath);
-      spawnSync('git', ['push', 'origin', 'willboosterify', '-f'], rootDirPath);
     }
   }
 }

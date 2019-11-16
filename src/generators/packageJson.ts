@@ -1,5 +1,4 @@
 import path from 'path';
-import child_process from 'child_process';
 import fs from 'fs-extra';
 import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
