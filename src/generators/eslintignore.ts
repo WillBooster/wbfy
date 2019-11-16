@@ -12,6 +12,7 @@ ${IgnoreFileUtil.separator}
 const commonContent = `
 __generated__/
 @types/
+test-fixtures/
 *.config.js
 `;
 

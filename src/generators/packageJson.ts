@@ -1,13 +1,13 @@
 import path from 'path';
-import child_process from 'child_process';
 import fs from 'fs-extra';
 import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
+import { spawnSync } from '../utils/spawnUtil';
 
 const scriptsWithoutLerna = {
   format: 'yarn prettier && yarn sort-package-json && yarn lint-fix',
-  lint: 'eslint . --ext .js,.jsx,.ts,.tsx',
+  lint: 'eslint "./{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}"',
   'lint-fix': 'yarn lint --fix',
   prettier: 'prettier --write "**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,yaml,yml}"',
   'sort-package-json': 'sort-package-json',
@@ -153,9 +153,4 @@ function generatePrettierSuffix(dirPath: string): string {
     .filter(l => l && !l.startsWith('#') && !l.includes('/'));
 
   return lines.map(line => ` \\"!**/${line}/**\\"`).join('');
-}
-
-function spawnSync(command: string, args: string[], cwd: string): void {
-  console.log(`$ ${command} at ${cwd}`);
-  child_process.spawnSync(command, args, { cwd, shell: true, stdio: 'inherit' });
 }

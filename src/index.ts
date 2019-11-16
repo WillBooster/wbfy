@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import child_process from 'child_process';
 import glob from 'glob';
 import { Command, flags } from '@oclif/command';
 import { generateGitignore } from './generators/gitignore';
@@ -16,6 +15,7 @@ import { generateDependabotConfig } from './generators/dependabot';
 import { generateEslintrc } from './generators/eslintrc';
 import { generateEslintignore } from './generators/eslintignore';
 import { generatePackageJson } from './generators/packageJson';
+import { spawnSync } from './utils/spawnUtil';
 
 class GenConfigs extends Command {
   static description = 'Generator/updater for config files in WillBooster projects';
@@ -33,8 +33,6 @@ class GenConfigs extends Command {
     const { argv } = this.parse(GenConfigs);
 
     for (const rootDirPath of argv) {
-      console.log(rootDirPath);
-
       const rootConfig = getPackageConfig(rootDirPath);
       if (rootConfig == null) {
         console.error(`there is no valid package.json in ${rootDirPath}`);
@@ -81,7 +79,7 @@ class GenConfigs extends Command {
       for (const config of allPackageConfigs) {
         await generatePackageJson(config, allPackageConfigs);
       }
-      child_process.spawnSync('yarn', ['format'], { cwd: rootDirPath, shell: true, stdio: 'inherit' });
+      spawnSync('yarn', ['format'], rootDirPath);
     }
   }
 }
