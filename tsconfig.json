@@ -1,0 +1,5 @@
+{
+  "extends": "./node_modules/@willbooster/tsconfig/tsconfig.json",
+  "compilerOptions": { "typeRoots": ["./node_modules/@types", "./@types"], "module": "commonjs", "outDir": "dist" },
+  "include": ["src/**/*", "__tests__/**/*", "packages/*/src/**/*", "packages/*/__tests__/**/*"]
+}
