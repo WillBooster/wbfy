@@ -16,6 +16,7 @@ import { generateDependabotConfig } from './generators/dependabot';
 import { generateEslintrc } from './generators/eslintrc';
 import { generateEslintignore } from './generators/eslintignore';
 import { generatePackageJson } from './generators/packageJson';
+import { spawnSync } from './utils/spawnUtil';
 
 class GenConfigs extends Command {
   static description = 'Generator/updater for config files in WillBooster projects';
@@ -33,7 +34,11 @@ class GenConfigs extends Command {
     const { argv } = this.parse(GenConfigs);
 
     for (const rootDirPath of argv) {
-      console.log(rootDirPath);
+      child_process.execSync('git status', { cwd: rootDirPath });
+      spawnSync('git', ['switch', 'master'], rootDirPath);
+      spawnSync('git', ['pull'], rootDirPath);
+      spawnSync('git', ['branch', '-D', 'willboosterify'], rootDirPath);
+      spawnSync('git', ['checkout', '-b', 'willboosterify'], rootDirPath);
 
       const rootConfig = getPackageConfig(rootDirPath);
       if (rootConfig == null) {
@@ -81,7 +86,11 @@ class GenConfigs extends Command {
       for (const config of allPackageConfigs) {
         await generatePackageJson(config, allPackageConfigs);
       }
-      child_process.spawnSync('yarn', ['format'], { cwd: rootDirPath, shell: true, stdio: 'inherit' });
+      spawnSync('yarn', ['format'], rootDirPath);
+      spawnSync('yarn', ['upgrade'], rootDirPath);
+      spawnSync('git', ['add', '-A'], rootDirPath);
+      spawnSync('git', ['commit', '-m', '"chore: willboosterify this repo"'], rootDirPath);
+      spawnSync('git', ['push', 'origin', 'willboosterify', '-f'], rootDirPath);
     }
   }
 }

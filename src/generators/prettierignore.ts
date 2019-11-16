@@ -10,6 +10,7 @@ ${IgnoreFileUtil.separator}
 `;
 
 const commonContent = `
+test-fixtures/
 yarn.lock
 `;
 
