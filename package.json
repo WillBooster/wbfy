@@ -18,7 +18,7 @@
     "lint": "eslint \"./{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}\"",
     "lint-fix": "yarn lint --fix",
     "prepack": "rimraf dist && yarn build",
-    "prettier": "prettier --write \"**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,yaml,yml}\"",
+    "prettier": "prettier --write \"**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,vue,yaml,yml}\"",
     "sort-package-json": "sort-package-json",
     "start": "./bin/run",
     "test-release": "dotenv yarn semantic-release -d",
