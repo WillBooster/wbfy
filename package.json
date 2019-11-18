@@ -41,7 +41,7 @@
     "@types/glob": "7.1.1",
     "@types/js-yaml": "3.12.1",
     "@types/node-fetch": "2.5.3",
-    "@typescript-eslint/eslint-plugin": "2.7.0",
+    "@typescript-eslint/eslint-plugin": "2.8.0",
     "@typescript-eslint/parser": "2.8.0",
     "@willbooster/eslint-config-ts": "2.0.0",
     "@willbooster/prettier-config": "2.0.0",
