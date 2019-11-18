@@ -103,7 +103,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       containingPackages: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
       containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsx: glob.sync('src/**/*.(t|j)sx', { cwd: dirPath }).length > 0,
+      containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         tsnode: !!dependencies['tsnode'],
       },
