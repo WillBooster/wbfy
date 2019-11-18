@@ -86,8 +86,8 @@ class GenConfigs extends Command {
 
 function getPackageConfig(dirPath: string): PackageConfig | null {
   const packageJsonPath = path.resolve(dirPath, 'package.json');
-  const packageJsonText = fs.readFileSync(packageJsonPath).toString();
   try {
+    const packageJsonText = fs.readFileSync(packageJsonPath).toString();
     const packageJson = JSON.parse(packageJsonText);
     if (!packageJson) {
       return null;
