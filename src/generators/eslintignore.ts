@@ -13,6 +13,7 @@ const commonContent = `
 __generated__/
 @types/
 test-fixtures/
+3rd-party/
 *.config.js
 `;
 

@@ -11,6 +11,7 @@ ${IgnoreFileUtil.separator}
 
 const commonContent = `
 test-fixtures/
+3rd-party/
 yarn.lock
 `;
 
