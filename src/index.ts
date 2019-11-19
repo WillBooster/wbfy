@@ -93,7 +93,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       return null;
     }
 
-    const dependencies = packageJson.dependencies || {};
+    const devDependencies = packageJson.devDependencies || {};
     return {
       dirPath,
       root:
@@ -105,8 +105,8 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
-        firebase: !!dependencies['firebase-tools'],
-        tsnode: !!dependencies['tsnode'],
+        firebase: !!devDependencies['firebase-tools'],
+        tsnode: !!devDependencies['ts-node'],
       },
     };
   } catch (e) {
