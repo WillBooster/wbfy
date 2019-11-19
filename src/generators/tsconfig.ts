@@ -9,6 +9,7 @@ function generateRootJsonObj(): any {
     extends: './node_modules/@willbooster/tsconfig/tsconfig.json',
     compilerOptions: {
       jsx: 'react',
+      outDir: 'dist',
       typeRoots: ['./node_modules/@types', './@types'],
     },
     include: ['src/**/*', '__tests__/**/*', 'packages/*/src/**/*', 'packages/*/__tests__/**/*'],
@@ -20,6 +21,7 @@ function generateSubJsonObj(): any {
     extends: '../../tsconfig.json',
     compilerOptions: {
       module: 'commonjs',
+      outDir: 'dist',
       typeRoots: ['../../node_modules/@types', './@types'],
     },
     include: ['src/**/*', '__tests__/**/*'],
