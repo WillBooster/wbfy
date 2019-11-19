@@ -7,6 +7,7 @@ export interface PackageConfig {
   containingTypeScript: boolean;
   containingJsxOrTsx: boolean;
   depending: {
+    firebase: boolean;
     tsnode: boolean;
   };
   eslintBase?: string;

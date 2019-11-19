@@ -63,7 +63,7 @@ class GenConfigs extends Command {
       }
       generateDependabotConfig(rootConfig);
 
-      await Promise.all(allPackageConfigs.map(config => generateGitignore(config)));
+      await Promise.all(allPackageConfigs.map(config => generateGitignore(config, rootConfig)));
 
       const promises: Promise<void>[] = [];
       for (const config of allPackageConfigs) {
@@ -105,6 +105,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
+        firebase: !!dependencies['firebase-tools'],
         tsnode: !!dependencies['tsnode'],
       },
     };
