@@ -45,7 +45,7 @@
     "@typescript-eslint/parser": "2.8.0",
     "@willbooster/eslint-config-ts": "2.1.0",
     "@willbooster/prettier-config": "2.1.0",
-    "@willbooster/tsconfig": "2.0.0",
+    "@willbooster/tsconfig": "2.1.0",
     "dotenv-cli": "3.0.0",
     "eslint": "6.6.0",
     "eslint-config-prettier": "6.7.0",
