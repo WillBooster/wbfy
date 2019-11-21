@@ -9,7 +9,8 @@ const scriptsWithoutLerna = {
   format: 'yarn prettier && yarn sort-package-json && yarn lint-fix',
   lint: 'eslint "./{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}"',
   'lint-fix': 'yarn lint --fix',
-  prettier: 'prettier --write "**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,vue,yaml,yml}"',
+  prettier:
+    'prettier --write "**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,vue,yaml,yml}" "!**/test-fixtures/**"',
   'sort-package-json': 'sort-package-json',
   typecheck: 'tsc --noEmit',
 };
@@ -65,7 +66,11 @@ const devDeps: { [prop: string]: string[] } = {
   '../../.eslintrc.json': [],
 };
 
-export async function generatePackageJson(config: PackageConfig, allConfigs: PackageConfig[]): Promise<void> {
+export async function generatePackageJson(
+  config: PackageConfig,
+  allConfigs: PackageConfig[],
+  skipAddingDeps: boolean
+): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = fs.readFileSync(filePath).toString();
   const jsonObj = JSON.parse(jsonText);
@@ -129,11 +134,13 @@ export async function generatePackageJson(config: PackageConfig, allConfigs: Pac
 
   fs.outputFileSync(filePath, JSON.stringify(jsonObj));
 
-  if (dependencies.length) {
-    spawnSync('yarn', ['add', '-W', ...new Set(dependencies)], config.dirPath);
-  }
-  if (devDependencies.length) {
-    spawnSync('yarn', ['add', '-W', '-D', ...new Set(devDependencies)], config.dirPath);
+  if (!skipAddingDeps) {
+    if (dependencies.length) {
+      spawnSync('yarn', ['add', '-W', ...new Set(dependencies)], config.dirPath);
+    }
+    if (devDependencies.length) {
+      spawnSync('yarn', ['add', '-W', '-D', ...new Set(devDependencies)], config.dirPath);
+    }
   }
 }
 

@@ -21,6 +21,7 @@ class GenConfigs extends Command {
   static description = 'Generator/updater for config files in WillBooster projects';
 
   static flags = {
+    skipDeps: flags.boolean({ char: 'd' }),
     version: flags.version({ char: 'v' }),
     help: flags.help({ char: 'h' }),
   };
@@ -30,7 +31,7 @@ class GenConfigs extends Command {
   static strict = false;
 
   async run(): Promise<void> {
-    const { argv } = this.parse(GenConfigs);
+    const { argv, flags } = this.parse(GenConfigs);
 
     for (const rootDirPath of argv) {
       const rootConfig = getPackageConfig(rootDirPath);
@@ -77,7 +78,7 @@ class GenConfigs extends Command {
       }
       await Promise.all(promises);
       for (const config of allPackageConfigs) {
-        await generatePackageJson(config, allPackageConfigs);
+        await generatePackageJson(config, allPackageConfigs, flags.skipDeps);
       }
       spawnSync('yarn', ['format'], rootDirPath);
     }
