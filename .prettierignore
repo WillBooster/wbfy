@@ -8,6 +8,7 @@ test-fixtures/
 yarn.lock
 
 
+.devcontainer/
 dist/
 temp/
 
