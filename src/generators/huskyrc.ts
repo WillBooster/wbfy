@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
+import { FsUtil } from '../utils/fsUtil';
 
 function generateJsonObj(): any {
   return {
@@ -28,6 +29,5 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
       // do nothing
     }
   }
-  await fs.outputFile(filePath, JSON.stringify(jsonObj));
-  console.log(`Generated ${filePath}`);
+  await FsUtil.generateFile(filePath, JSON.stringify(jsonObj));
 }

@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
 import { overwriteMerge } from '../utils/mergeUtil';
+import { FsUtil } from '../utils/fsUtil';
 
 function getExtensionBase(config: PackageConfig): string {
   if (config.containingTypeScript) {
@@ -35,6 +36,5 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       // do nothing
     }
   }
-  await fs.outputFile(filePath, JSON.stringify(jsonObj));
-  console.log(`Generated ${filePath}`);
+  await FsUtil.generateFile(filePath, JSON.stringify(jsonObj));
 }

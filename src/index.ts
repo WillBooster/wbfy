@@ -16,6 +16,7 @@ import { generateEslintrc } from './generators/eslintrc';
 import { generateEslintignore } from './generators/eslintignore';
 import { generatePackageJson } from './generators/packageJson';
 import { spawnSync } from './utils/spawnUtil';
+import { generateRenovateJson } from './generators/renovatercJson';
 
 class GenConfigs extends Command {
   static description = 'Generator/updater for config files in WillBooster projects';
@@ -62,7 +63,7 @@ class GenConfigs extends Command {
       if (rootConfig.containingPackages) {
         generateLernaJson(rootConfig);
       }
-      generateDependabotConfig(rootConfig);
+      generateRenovateJson(rootConfig);
 
       await Promise.all(allPackageConfigs.map(config => generateGitignore(config, rootConfig)));
 

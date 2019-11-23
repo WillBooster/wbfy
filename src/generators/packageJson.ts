@@ -42,6 +42,7 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint-plugin-import',
     'eslint-plugin-prettier',
     'eslint-plugin-react',
+    'eslint-plugin-react-hooks',
   ],
   '@willbooster/eslint-config-ts': [
     '@willbooster/eslint-config-ts',
@@ -60,6 +61,7 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint-plugin-import',
     'eslint-plugin-prettier',
     'eslint-plugin-react',
+    'eslint-plugin-react-hooks',
     '@typescript-eslint/eslint-plugin',
     '@typescript-eslint/parser',
   ],

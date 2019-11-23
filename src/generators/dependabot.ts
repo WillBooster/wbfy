@@ -4,6 +4,7 @@ import yaml from 'js-yaml';
 import merge from 'deepmerge';
 import { combineMerge } from '../utils/mergeUtil';
 import { PackageConfig } from '../types/packageConfig';
+import { FsUtil } from '../utils/fsUtil';
 
 const defaultContent = `version: 1
 update_configs:
@@ -44,6 +45,5 @@ export async function generateDependabotConfig(config: PackageConfig): Promise<v
       // do nothing
     }
   }
-  await fs.outputFile(filePath, content);
-  console.log(`Generated ${filePath}`);
+  await FsUtil.generateFile(filePath, content);
 }

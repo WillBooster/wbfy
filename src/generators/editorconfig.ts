@@ -1,6 +1,6 @@
 import path from 'path';
-import fs from 'fs-extra';
 import { PackageConfig } from '../types/packageConfig';
+import { FsUtil } from '../utils/fsUtil';
 
 const content = `root = true
 
@@ -20,6 +20,5 @@ trim_trailing_whitespace = false
 
 export async function generateEditorconfig(config: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.editorconfig');
-  await fs.outputFile(filePath, content);
-  console.log(`Generated ${filePath}`);
+  await FsUtil.generateFile(filePath, content);
 }
