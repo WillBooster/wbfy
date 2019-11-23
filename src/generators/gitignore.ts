@@ -1,8 +1,8 @@
 import path from 'path';
 import fetch from 'node-fetch';
-import fs from 'fs-extra';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../types/packageConfig';
+import { FsUtil } from '../utils/fsUtil';
 
 const defaultNames = ['node', 'jetbrains', 'visualstudiocode', 'vim', 'windows', 'macos'];
 
@@ -30,6 +30,5 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
     const response = await fetch(`https://www.gitignore.io/api/${name}`);
     content += await response.text();
   }
-  await fs.outputFile(filePath, userContent + commonContent + content);
-  console.log(`Generated ${filePath}`);
+  await FsUtil.generateFile(filePath, userContent + commonContent + content);
 }

@@ -1,7 +1,7 @@
 import path from 'path';
-import fs from 'fs-extra';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../types/packageConfig';
+import { FsUtil } from '../utils/fsUtil';
 
 const defaultUserContent = `${IgnoreFileUtil.header}
 
@@ -22,6 +22,5 @@ export async function generatePrettierignore(config: PackageConfig): Promise<voi
   const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
   const gitignoreContent = IgnoreFileUtil.getExistingContent(gitignoreFilePath) || '';
 
-  await fs.outputFile(filePath, userContent + commonContent + gitignoreContent);
-  console.log(`Generated ${filePath}`);
+  await FsUtil.generateFile(filePath, userContent + commonContent + gitignoreContent);
 }
