@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs-extra';
+import fse from 'fs-extra';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
@@ -10,6 +10,6 @@ const content = `{
 
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.renovaterc.json');
-  await fs.remove(path.resolve(config.dirPath, '.dependabot'));
+  await fse.remove(path.resolve(config.dirPath, '.dependabot'));
   await FsUtil.generateFile(filePath, content);
 }

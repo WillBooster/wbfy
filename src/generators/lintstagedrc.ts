@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs-extra';
+import fse from 'fs-extra';
 import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
@@ -20,8 +20,8 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   let jsonObj = generateJsonObj();
 
   const filePath = path.resolve(config.dirPath, '.lintstagedrc.json');
-  if (fs.existsSync(filePath)) {
-    const existingContent = fs.readFileSync(filePath).toString();
+  if (fse.existsSync(filePath)) {
+    const existingContent = fse.readFileSync(filePath).toString();
     try {
       const existingJsonObj = JSON.parse(existingContent);
       for (const key in existingJsonObj) {

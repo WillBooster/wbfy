@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs-extra';
+import fse from 'fs-extra';
 import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
@@ -74,7 +74,7 @@ export async function generatePackageJson(
   skipAddingDeps: boolean
 ): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = fs.readFileSync(filePath).toString();
+  const jsonText = fse.readFileSync(filePath).toString();
   const jsonObj = JSON.parse(jsonText);
   jsonObj.scripts = jsonObj.scripts || {};
   jsonObj.dependencies = jsonObj.dependencies || {};
@@ -134,7 +134,7 @@ export async function generatePackageJson(
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
 
-  fs.outputFileSync(filePath, JSON.stringify(jsonObj));
+  fse.outputFileSync(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
     if (dependencies.length) {
@@ -148,7 +148,7 @@ export async function generatePackageJson(
 
 function generatePrettierSuffix(dirPath: string): string {
   const filePath = path.resolve(dirPath, '.prettierignore');
-  const existingContent = fs.readFileSync(filePath).toString();
+  const existingContent = fse.readFileSync(filePath).toString();
   const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);
   if (index < 0) return '';
 

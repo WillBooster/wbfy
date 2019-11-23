@@ -11,7 +11,6 @@ import { generateEditorconfig } from './generators/editorconfig';
 import { generateYarnrc } from './generators/yarnrc';
 import { generateLernaJson } from './generators/lernaJson';
 import { generateTsconfig } from './generators/tsconfig';
-import { generateDependabotConfig } from './generators/dependabot';
 import { generateEslintrc } from './generators/eslintrc';
 import { generateEslintignore } from './generators/eslintignore';
 import { generatePackageJson } from './generators/packageJson';
