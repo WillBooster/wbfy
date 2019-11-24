@@ -96,7 +96,14 @@ export async function generatePackageJson(
   }
 
   if (config.root) {
-    devDependencies.push('husky', 'lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config');
+    devDependencies.push(
+      'husky',
+      'lint-staged',
+      'prettier',
+      'sort-package-json',
+      '@willbooster/prettier-config',
+      '@willbooster/renovate-config'
+    );
     if (config.containingTypeScript) {
       devDependencies.push('typescript', '@willbooster/tsconfig');
     }
