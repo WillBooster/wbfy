@@ -4,6 +4,7 @@ import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { spawnSync } from '../utils/spawnUtil';
+import { overwriteMerge } from '../utils/mergeUtil';
 
 const scriptsWithoutLerna = {
   format: 'yarn prettier && yarn sort-package-json && yarn lint-fix',
@@ -110,7 +111,17 @@ export async function generatePackageJson(
 
     if (config.containingPackages) {
       devDependencies.push('lerna');
-      jsonObj.workspaces = ['packages/*'];
+      jsonObj.workspaces = jsonObj.workspaces || {};
+      if (jsonObj.workspaces instanceof Array) {
+        jsonObj.workspaces = {};
+      }
+      merge(
+        jsonObj.workspaces,
+        {
+          packages: ['packages/*'],
+        },
+        { arrayMerge: overwriteMerge }
+      );
     }
 
     for (const config of allConfigs) {
