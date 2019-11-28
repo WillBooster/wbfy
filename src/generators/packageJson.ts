@@ -115,7 +115,7 @@ export async function generatePackageJson(
       if (jsonObj.workspaces instanceof Array) {
         jsonObj.workspaces = {};
       }
-      merge(
+      jsonObj.workspaces = merge(
         jsonObj.workspaces,
         {
           packages: ['packages/*'],
