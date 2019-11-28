@@ -149,6 +149,10 @@ export async function generatePackageJson(
     jsonObj.scripts.format = jsonObj.scripts.format.substring(0, jsonObj.scripts.format.lastIndexOf(' && '));
   }
 
+  if (config.containingJsxOrTsx) {
+    jsonObj.scripts['lint-fix'] += ' --rule "{ "react-hooks/exhaustive-deps": 0 }"';
+  }
+
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
 
