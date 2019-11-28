@@ -28,7 +28,7 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
   }
   for (const name of names) {
     const response = await fetch(`https://www.gitignore.io/api/${name}`);
-    content += await response.text();
+    content += (await response.text()).replace('public/', '');
   }
   await FsUtil.generateFile(filePath, userContent + commonContent + content);
 }
