@@ -7,7 +7,7 @@
 
 ## Philosophy
 
-This tool must keep idempotency, i.e., it always yield the same result when a user applies this tool to a project even multiple times.
+This tool must keep idempotency, i.e., it always yields the same result when a user applies this tool to a project even multiple times.
 
 ## Motivation
 
