@@ -136,6 +136,10 @@ export async function generatePackageJson(
     devDependencies = devDependencies.filter(dep => !dep.includes('@willbooster/'));
   }
 
+  if (!config.containingPackages && jsonObj.private === true) {
+    jsonObj.license = 'UNLICENSED';
+  }
+
   jsonObj.scripts = merge(jsonObj.scripts, config.containingPackages ? scriptsWithLerna : scriptsWithoutLerna);
   jsonObj.scripts.prettier += generatePrettierSuffix(config.dirPath);
 
