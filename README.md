@@ -7,9 +7,9 @@
 
 ## Philosophy
 
-This tool must keep idempotency, i.e., it must always yield the same result when a user applies this tool to a project even multiple times.
+This tool must keep idempotency, i.e., it always yield the same result when a user applies this tool to a project even multiple times.
 
 ## Motivation
 
 There are some resources for creating a project with conventional configurations like [Yeoman](https://yeoman.io/), GitHub's Template repository, and starter-kit repositories.
-However, we sometimes faced cases where we wanted to apply conventional configurations to an existing repository, so we've launch this tool!
+However, we sometimes faced the cases where we wanted to apply conventional configurations to an existing repository, so we've launch this tool!
