@@ -59,7 +59,7 @@
     "semantic-release": "15.13.31",
     "sort-package-json": "1.30.0",
     "ts-node": "8.5.4",
-    "typescript": "3.7.2"
+    "typescript": "3.7.3"
   },
   "engines": {
     "node": ">=8.0.0"
