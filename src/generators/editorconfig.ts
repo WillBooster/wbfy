@@ -1,6 +1,7 @@
 import path from 'path';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
+import { Extensions } from '../utils/extensions';
 
 const content = `root = true
 
@@ -10,11 +11,11 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{cpp,js,json,jsx,pu,puml,rb,ts,tsx,vue,yaml,yml}]
+[*.{${Extensions.codeWith2IndentSize.join(',')}}]
 indent_style = space
 indent_size = 2
 
-[*.md]
+[*.{${Extensions.markdownLike.join(',')}}]
 trim_trailing_whitespace = false
 `;
 

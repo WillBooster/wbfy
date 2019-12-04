@@ -16,6 +16,7 @@ import { generateEslintignore } from './generators/eslintignore';
 import { generatePackageJson } from './generators/packageJson';
 import { spawnSync } from './utils/spawnUtil';
 import { generateRenovateJson } from './generators/renovatercJson';
+import { generateGitattributes } from './generators/gitattributes';
 
 class GenConfigs extends Command {
   static description = 'Generator/updater for config files in WillBooster projects';
@@ -56,6 +57,7 @@ class GenConfigs extends Command {
         rootConfig.containingJsxOrTsx || subPackageConfigs.some(c => c.containingJsxOrTsx);
 
       generateEditorconfig(rootConfig);
+      generateGitattributes(rootConfig);
       generateHuskyrc(rootConfig);
       generateLintstagedrc(rootConfig);
       generateYarnrc(rootConfig);
