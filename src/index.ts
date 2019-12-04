@@ -49,24 +49,22 @@ class GenConfigs extends Command {
         .filter(config => !!config) as PackageConfig[];
       const allPackageConfigs = [rootConfig, ...subPackageConfigs] as PackageConfig[];
 
-      rootConfig.containingJavaScript =
-        rootConfig.containingJavaScript || subPackageConfigs.some(c => c.containingJavaScript);
-      rootConfig.containingTypeScript =
-        rootConfig.containingTypeScript || subPackageConfigs.some(c => c.containingTypeScript);
-      rootConfig.containingJsxOrTsx =
-        rootConfig.containingJsxOrTsx || subPackageConfigs.some(c => c.containingJsxOrTsx);
+      rootConfig.containingPubspecYaml = allPackageConfigs.some(c => c.containingPubspecYaml);
+      rootConfig.containingJavaScript = allPackageConfigs.some(c => c.containingJavaScript);
+      rootConfig.containingTypeScript = allPackageConfigs.some(c => c.containingTypeScript);
+      rootConfig.containingJsxOrTsx = allPackageConfigs.some(c => c.containingJsxOrTsx);
 
-      generateEditorconfig(rootConfig);
-      generateGitattributes(rootConfig);
-      generateHuskyrc(rootConfig);
-      generateLintstagedrc(rootConfig);
-      generateYarnrc(rootConfig);
+      const rootPromises = allPackageConfigs.map(config => generateGitignore(config, rootConfig));
+      rootPromises.push(generateEditorconfig(rootConfig));
+      rootPromises.push(generateGitattributes(rootConfig));
+      rootPromises.push(generateHuskyrc(rootConfig));
+      rootPromises.push(generateLintstagedrc(rootConfig));
+      rootPromises.push(generateYarnrc(rootConfig));
+      rootPromises.push(generateRenovateJson(rootConfig));
       if (rootConfig.containingPackages) {
-        generateLernaJson(rootConfig);
+        rootPromises.push(generateLernaJson(rootConfig));
       }
-      generateRenovateJson(rootConfig);
-
-      await Promise.all(allPackageConfigs.map(config => generateGitignore(config, rootConfig)));
+      await Promise.all(rootPromises);
 
       const promises: Promise<void>[] = [];
       for (const config of allPackageConfigs) {
@@ -105,6 +103,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingPackages: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
+      containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {

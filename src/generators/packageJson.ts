@@ -1,4 +1,5 @@
 import path from 'path';
+import * as fs from 'fs';
 import fse from 'fs-extra';
 import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
@@ -7,7 +8,8 @@ import { spawnSync } from '../utils/spawnUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
 
 const scriptsWithoutLerna = {
-  format: 'yarn prettier && yarn sort-package-json && yarn lint-fix',
+  cleanup: 'yarn format && yarn lint-fix',
+  format: `yarn sort-package-json && yarn prettier`,
   lint: 'eslint "./{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}"',
   'lint-fix': 'yarn lint --fix',
   prettier:
@@ -20,7 +22,7 @@ const scriptsWithLerna = merge(
   { ...scriptsWithoutLerna },
   {
     bootstrap: 'yarn && yarn lerna bootstrap --use-workspaces',
-    format: 'yarn prettier && yarn sort-all-package-json && yarn lint-fix',
+    format: `yarn sort-all-package-json && yarn prettier`,
     'sort-all-package-json': 'yarn sort-package-json && yarn lerna run sort-package-json',
     typecheck: 'yarn lerna run typecheck',
   }
@@ -80,6 +82,8 @@ export async function generatePackageJson(
   jsonObj.scripts = jsonObj.scripts || {};
   jsonObj.dependencies = jsonObj.dependencies || {};
   jsonObj.devDependencies = jsonObj.devDependencies || {};
+  jsonObj.peerDependencies = jsonObj.peerDependencies || {};
+
   jsonObj.prettier = '@willbooster/prettier-config';
 
   let dependencies = [] as string[];
@@ -97,6 +101,11 @@ export async function generatePackageJson(
   }
 
   if (config.root) {
+    // Cannot remove a version prefix in sub-packages because a version prefix is required to refer to another sub-package
+    [jsonObj.dependencies, jsonObj.devDependencies, jsonObj.peerDependencies].forEach(deps =>
+      removeVersionPrefix(deps)
+    );
+
     devDependencies.push(
       'husky',
       'lint-staged',
@@ -136,7 +145,12 @@ export async function generatePackageJson(
     devDependencies = devDependencies.filter(dep => !dep.includes('@willbooster/'));
   }
 
-  if (!config.containingPackages && jsonObj.private === true) {
+  if (!jsonObj.name) {
+    jsonObj.name = path.basename(config.dirPath);
+  }
+
+  if (!config.containingPackages && jsonObj.private !== false) {
+    jsonObj.private = true;
     jsonObj.license = 'UNLICENSED';
   }
 
@@ -147,10 +161,23 @@ export async function generatePackageJson(
     delete jsonObj.scripts.typecheck;
   }
 
-  if (!config.containingJavaScript && !config.containingTypeScript) {
+  if ((!config.containingJavaScript && !config.containingTypeScript) || config.containingPubspecYaml) {
     delete jsonObj.scripts.lint;
     delete jsonObj.scripts['lint-fix'];
-    jsonObj.scripts.format = jsonObj.scripts.format.substring(0, jsonObj.scripts.format.lastIndexOf(' && '));
+    jsonObj.scripts.cleanup = jsonObj.scripts.cleanup.substring(0, jsonObj.scripts.cleanup.lastIndexOf(' && '));
+    console.log(jsonObj.scripts.cleanup);
+  }
+
+  if (config.containingPubspecYaml) {
+    jsonObj.scripts.lint = 'flutter analyze';
+    const dirs = ['lib', 'test', 'test_driver'].filter(dir => fs.existsSync(dir));
+    if (dirs.length > 0) {
+      jsonObj.scripts['flutter-format'] += ` && flutter format ${dirs.join(' ')}`;
+      jsonObj.scripts.format += ` && yarn flutter-format`;
+    }
+    if (config.containingPackages) {
+      jsonObj.scripts.format += ` && yarn lerna run flutter-format`;
+    }
   }
 
   if (config.containingJsxOrTsx) {
@@ -159,6 +186,9 @@ export async function generatePackageJson(
 
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
+  if (!Object.keys(jsonObj.peerDependencies).length) {
+    delete jsonObj.peerDependencies;
+  }
 
   fse.outputFileSync(filePath, JSON.stringify(jsonObj));
 
@@ -168,6 +198,14 @@ export async function generatePackageJson(
     }
     if (devDependencies.length) {
       spawnSync('yarn', ['add', '-W', '-D', ...new Set(devDependencies)], config.dirPath);
+    }
+  }
+}
+
+function removeVersionPrefix(deps: any): void {
+  for (const [key, value] of Object.entries(deps)) {
+    if (typeof value === 'string' && value[0] === '^') {
+      deps[key] = value.substring(1);
     }
   }
 }

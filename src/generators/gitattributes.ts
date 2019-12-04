@@ -8,6 +8,7 @@ const content = `* text=auto
 *.vcproj text eol=crlf
 
 ${Extensions.codeWith2IndentSize
+  .concat(Extensions.codeWith4IndentSize)
   .concat(Extensions.markdownLike)
   .map(ext => `*.${ext} text eol=lf`)
   .join('\n')}
