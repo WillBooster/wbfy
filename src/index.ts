@@ -55,12 +55,14 @@ class GenConfigs extends Command {
       rootConfig.containingJsxOrTsx = allPackageConfigs.some(c => c.containingJsxOrTsx);
 
       const rootPromises = allPackageConfigs.map(config => generateGitignore(config, rootConfig));
-      rootPromises.push(generateEditorconfig(rootConfig));
-      rootPromises.push(generateGitattributes(rootConfig));
-      rootPromises.push(generateHuskyrc(rootConfig));
-      rootPromises.push(generateLintstagedrc(rootConfig));
-      rootPromises.push(generateYarnrc(rootConfig));
-      rootPromises.push(generateRenovateJson(rootConfig));
+      rootPromises.push(
+        generateEditorconfig(rootConfig),
+        generateGitattributes(rootConfig),
+        generateHuskyrc(rootConfig),
+        generateLintstagedrc(rootConfig),
+        generateYarnrc(rootConfig),
+        generateRenovateJson(rootConfig)
+      );
       if (rootConfig.containingPackages) {
         rootPromises.push(generateLernaJson(rootConfig));
       }
