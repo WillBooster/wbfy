@@ -4,7 +4,7 @@ import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
-const defaultNames = ['windows', 'macos', 'linux', 'emacs', 'vim', 'node'];
+const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'node'];
 
 const defaultUserContent = `${IgnoreFileUtil.header}
 
@@ -34,8 +34,8 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
 android/key.properties
 `;
   }
+
   const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);
   const content = (await response.text()).replace('public/', '');
-
   await FsUtil.generateFile(filePath, userContent + content);
 }
