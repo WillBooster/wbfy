@@ -4,10 +4,10 @@ export function spawnSync(command: string, args: string[], cwd: string): void {
   let commandAndArgs = `${command} ${args.join(' ')}`;
   if (command === 'yarn' && process.platform !== 'win32') {
     const version = child_process
-      .execSync('nodenv local', { cwd })
+      .execSync('nodenv local || true', { cwd, stdio: 'pipe' })
       .toString()
       .trim();
-    if (!version.includes(' no ')) {
+    if (version && !version.includes(' no ')) {
       commandAndArgs = `zsh -l -c 'eval "$(nodenv init -)" && nodenv shell "${version}" && ${commandAndArgs}'`;
     }
   }
