@@ -14,7 +14,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "format": "yarn prettier && yarn sort-package-json && yarn lint-fix",
+    "cleanup": "yarn format && yarn lint-fix",
+    "format": "yarn sort-package-json && yarn prettier",
     "lint": "eslint \"./{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}\"",
     "lint-fix": "yarn lint --fix",
     "prepack": "rimraf dist && yarn build",
