@@ -37,5 +37,9 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   if (!config.containingJavaScript && !config.containingTypeScript) {
     delete jsonObj[eslintKey];
   }
+  // TODO: support non-flutter dart code
+  if (config.containingPubspecYaml) {
+    jsonObj['./**/*.dart'] = ['flutter format', 'git add'];
+  }
   await FsUtil.generateFile(filePath, JSON.stringify(jsonObj));
 }

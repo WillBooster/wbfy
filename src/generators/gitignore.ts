@@ -4,7 +4,7 @@ import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
-const defaultNames = ['node', 'jetbrains', 'visualstudiocode', 'vim', 'windows', 'macos'];
+const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'node'];
 
 const defaultUserContent = `${IgnoreFileUtil.header}
 
@@ -13,6 +13,8 @@ ${IgnoreFileUtil.separator}
 `;
 
 const commonContent = `
+.idea/
+.vscode/
 .devcontainer/
 dist/
 temp/
@@ -20,15 +22,21 @@ temp/
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.gitignore');
-  const userContent = IgnoreFileUtil.getUserContent(filePath) || defaultUserContent;
-  let content = '';
+  let userContent = (IgnoreFileUtil.getUserContent(filePath) || defaultUserContent) + commonContent;
+
   const names = [...defaultNames];
   if (rootConfig.depending.firebase || config.depending.firebase) {
     names.push('firebase');
   }
-  for (const name of names) {
-    const response = await fetch(`https://www.gitignore.io/api/${name}`);
-    content += (await response.text()).replace('public/', '');
+  if (config.containingPubspecYaml) {
+    names.push('flutter', 'ruby');
+    userContent += `.flutter-plugins-dependencies
+android/key.properties
+ios/.bundle
+`;
   }
-  await FsUtil.generateFile(filePath, userContent + commonContent + content);
+
+  const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);
+  const content = (await response.text()).replace('public/', '');
+  await FsUtil.generateFile(filePath, userContent + content);
 }

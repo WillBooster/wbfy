@@ -12,7 +12,6 @@ ${IgnoreFileUtil.separator}
 const commonContent = `
 test-fixtures/
 3rd-party/
-yarn.lock
 `;
 
 export async function generatePrettierignore(config: PackageConfig): Promise<void> {
@@ -22,5 +21,14 @@ export async function generatePrettierignore(config: PackageConfig): Promise<voi
   const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
   const gitignoreContent = IgnoreFileUtil.getExistingContent(gitignoreFilePath) || '';
 
-  await FsUtil.generateFile(filePath, userContent + commonContent + gitignoreContent);
+  let additionalContent = '';
+  if (config.containingPubspecYaml) {
+    additionalContent = `
+android/app/
+ios/Runner/Assets.xcassets/
+pubspec.yaml
+`;
+  }
+
+  await FsUtil.generateFile(filePath, userContent + commonContent + additionalContent + gitignoreContent);
 }

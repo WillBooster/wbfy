@@ -3,6 +3,7 @@ export interface PackageConfig {
   root: boolean;
   willBoosterConfigs: boolean;
   containingPackages: boolean;
+  containingPubspecYaml: boolean;
   containingJavaScript: boolean;
   containingTypeScript: boolean;
   containingJsxOrTsx: boolean;
