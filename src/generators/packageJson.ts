@@ -149,8 +149,11 @@ export async function generatePackageJson(
     jsonObj.name = path.basename(config.dirPath);
   }
 
-  if (!config.containingPackages && jsonObj.private !== false) {
+  if (config.containingPackages) {
     jsonObj.private = true;
+  }
+
+  if (!jsonObj.license) {
     jsonObj.license = 'UNLICENSED';
   }
 
