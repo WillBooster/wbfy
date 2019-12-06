@@ -13,8 +13,6 @@ ${IgnoreFileUtil.separator}
 `;
 
 const commonContent = `
-.idea/
-.vscode/
 .devcontainer/
 dist/
 temp/
