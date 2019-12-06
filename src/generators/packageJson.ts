@@ -170,9 +170,9 @@ export async function generatePackageJson(
 
   if (config.containingPubspecYaml) {
     jsonObj.scripts.lint = 'flutter analyze';
-    const dirs = ['lib', 'test', 'test_driver'].filter(dir => fs.existsSync(dir));
+    const dirs = ['lib', 'test', 'test_driver'].filter(dir => fs.existsSync(path.resolve(config.dirPath, dir)));
     if (dirs.length > 0) {
-      jsonObj.scripts['flutter-format'] += ` && flutter format ${dirs.join(' ')}`;
+      jsonObj.scripts['flutter-format'] = `flutter format ${dirs.join(' ')}`;
       jsonObj.scripts.format += ` && yarn flutter-format`;
     }
     if (config.containingPackages) {

@@ -32,6 +32,7 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
     names.push('flutter', 'ruby');
     userContent += `.flutter-plugins-dependencies
 android/key.properties
+ios/.bundle
 `;
   }
 
