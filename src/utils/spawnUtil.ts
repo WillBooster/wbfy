@@ -2,7 +2,7 @@ import child_process from 'child_process';
 
 export function spawnSync(command: string, args: string[], cwd: string): void {
   let commandAndArgs = `${command} ${args.join(' ')}`;
-  if (command === 'yarn' && process.platform !== 'win32') {
+  if (process.platform !== 'win32') {
     const version = child_process
       .execSync('nodenv local || true', { cwd, stdio: 'pipe' })
       .toString()
