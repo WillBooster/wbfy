@@ -22,6 +22,9 @@ indent_style = space
 [*.{${Extensions.markdownLike.join(',')}}]
 max_line_length = off
 trim_trailing_whitespace = false
+
+[{Makefile,*.mk}]
+indent_style = tab
 `;
 
 export async function generateEditorconfig(config: PackageConfig): Promise<void> {

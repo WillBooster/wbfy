@@ -16,6 +16,6 @@ export const Extensions = {
     'yaml',
     'yml',
   ],
-  codeWith4IndentSize: ['gradle'],
+  codeWith4IndentSize: ['go', 'gradle'],
   markdownLike: ['md'],
 };

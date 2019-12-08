@@ -89,7 +89,7 @@ export async function generatePackageJson(
   let dependencies = [] as string[];
   let devDependencies = [] as string[];
 
-  if (!config.root || !config.containingPackages) {
+  if (!config.root || !config.containingSubPackages) {
     if (config.containingTypeScript) {
       dependencies.push('tslib');
     }
@@ -118,7 +118,7 @@ export async function generatePackageJson(
       devDependencies.push('typescript', '@willbooster/tsconfig');
     }
 
-    if (config.containingPackages) {
+    if (config.containingSubPackages) {
       devDependencies.push('lerna');
       jsonObj.workspaces = jsonObj.workspaces || {};
       if (jsonObj.workspaces instanceof Array) {
@@ -149,7 +149,7 @@ export async function generatePackageJson(
     jsonObj.name = path.basename(config.dirPath);
   }
 
-  if (config.containingPackages) {
+  if (config.containingSubPackages) {
     jsonObj.private = true;
   }
 
@@ -157,7 +157,7 @@ export async function generatePackageJson(
     jsonObj.license = 'UNLICENSED';
   }
 
-  jsonObj.scripts = merge(jsonObj.scripts, config.containingPackages ? scriptsWithLerna : scriptsWithoutLerna);
+  jsonObj.scripts = merge(jsonObj.scripts, config.containingSubPackages ? scriptsWithLerna : scriptsWithoutLerna);
   jsonObj.scripts.prettier += generatePrettierSuffix(config.dirPath);
 
   if (!config.containingTypeScript) {
@@ -178,7 +178,7 @@ export async function generatePackageJson(
       jsonObj.scripts['flutter-format'] = `flutter format ${dirs.join(' ')}`;
       jsonObj.scripts.format += ` && yarn flutter-format`;
     }
-    if (config.containingPackages) {
+    if (config.containingSubPackages) {
       jsonObj.scripts.format += ` && yarn lerna run flutter-format`;
     }
   }

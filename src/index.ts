@@ -41,7 +41,7 @@ class GenConfigs extends Command {
         continue;
       }
 
-      const subDirPaths = rootConfig.containingPackages
+      const subDirPaths = rootConfig.containingSubPackages
         ? glob.sync('packages/*', { cwd: rootDirPath }).map(subDirPath => path.resolve(rootDirPath, subDirPath))
         : [];
       const subPackageConfigs = subDirPaths
@@ -63,7 +63,7 @@ class GenConfigs extends Command {
         generateYarnrc(rootConfig),
         generateRenovateJson(rootConfig)
       );
-      if (rootConfig.containingPackages) {
+      if (rootConfig.containingSubPackages) {
         rootPromises.push(generateLernaJson(rootConfig));
       }
       await Promise.all(rootPromises);
@@ -97,15 +97,20 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
     }
 
     const devDependencies = packageJson.devDependencies || {};
-    return {
+    const config = {
       dirPath,
       root:
         path.basename(path.resolve(dirPath, '..')) != 'packages' ||
         !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
-      containingPackages: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
+      containingSubPackages: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
+      containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
+      containingGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
+      containingPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
+      containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
+      containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
       containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
@@ -113,6 +118,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
         tsnode: !!devDependencies['ts-node'],
       },
     };
+    return config;
   } catch (e) {
     return null;
   }
