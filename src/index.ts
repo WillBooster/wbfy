@@ -90,13 +90,14 @@ class GenConfigs extends Command {
 function getPackageConfig(dirPath: string): PackageConfig | null {
   const packageJsonPath = path.resolve(dirPath, 'package.json');
   try {
-    const packageJsonText = fs.readFileSync(packageJsonPath).toString();
-    const packageJson = JSON.parse(packageJsonText);
-    if (!packageJson) {
-      return null;
+    const containingPackageJson = fs.existsSync(packageJsonPath);
+    let devDependencies: any = {};
+    if (containingPackageJson) {
+      const packageJsonText = fs.readFileSync(packageJsonPath).toString();
+      const packageJson = JSON.parse(packageJsonText);
+      devDependencies = packageJson.devDependencies || {};
     }
 
-    const devDependencies = packageJson.devDependencies || {};
     const config = {
       dirPath,
       root:
@@ -118,10 +119,20 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
         tsnode: !!devDependencies['ts-node'],
       },
     };
-    return config;
+    if (
+      config.containingGemfile ||
+      config.containingGoMod ||
+      config.containingPackageJson ||
+      config.containingPomXml ||
+      config.containingPubspecYaml ||
+      config.containingTemplateYaml
+    ) {
+      return config;
+    }
   } catch (e) {
-    return null;
+    // do nothing
   }
+  return null;
 }
 
 export = GenConfigs;
