@@ -21,10 +21,9 @@ const scriptsWithoutLerna = {
 const scriptsWithLerna = merge(
   { ...scriptsWithoutLerna },
   {
-    bootstrap: 'yarn && yarn lerna bootstrap --use-workspaces',
     format: `yarn sort-all-package-json && yarn prettier`,
-    'sort-all-package-json': 'yarn sort-package-json && yarn lerna run sort-package-json',
-    typecheck: 'yarn lerna run typecheck',
+    'sort-all-package-json': 'yarn sort-package-json && yarn lerna run sort-package-json --stream',
+    typecheck: 'yarn lerna run typecheck --stream',
   }
 );
 delete scriptsWithLerna['sort-package-json'];
