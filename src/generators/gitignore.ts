@@ -43,7 +43,7 @@ ios/.bundle
   }
   if (config.containingTemplateYaml) {
     userContent += `.aws-sam/
-    packaged.yaml
+packaged.yaml
 `;
   }
   if (rootConfig.depending.firebase || config.depending.firebase) {
