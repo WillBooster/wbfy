@@ -47,9 +47,9 @@ class GenConfigs extends Command {
       const subPackageConfigs = subDirPaths
         .map(subDirPath => getPackageConfig(subDirPath))
         .filter(config => !!config) as PackageConfig[];
-      const allPackageConfigs = [rootConfig, ...subPackageConfigs] as PackageConfig[];
+      const allPackageConfigs = [rootConfig, ...subPackageConfigs];
+      const allNodePackageConfigs = [rootConfig, ...subPackageConfigs.filter(config => config.containingPackageJson)];
 
-      rootConfig.containingPubspecYaml = allPackageConfigs.some(c => c.containingPubspecYaml);
       rootConfig.containingJavaScript = allPackageConfigs.some(c => c.containingJavaScript);
       rootConfig.containingTypeScript = allPackageConfigs.some(c => c.containingTypeScript);
       rootConfig.containingJsxOrTsx = allPackageConfigs.some(c => c.containingJsxOrTsx);
@@ -69,7 +69,7 @@ class GenConfigs extends Command {
       await Promise.all(rootPromises);
 
       const promises: Promise<void>[] = [];
-      for (const config of allPackageConfigs) {
+      for (const config of allNodePackageConfigs) {
         promises.push(generatePrettierignore(config));
         if (rootConfig.containingTypeScript) {
           promises.push(generateTsconfig(config));
@@ -79,8 +79,10 @@ class GenConfigs extends Command {
         }
       }
       await Promise.all(promises);
-      for (const config of allPackageConfigs) {
-        await generatePackageJson(config, allPackageConfigs, flags.skipDeps);
+      for (const config of allNodePackageConfigs) {
+        if (config.containingPackageJson) {
+          await generatePackageJson(config, allNodePackageConfigs, flags.skipDeps);
+        }
       }
       spawnSync('yarn', ['format'], rootDirPath);
     }

@@ -6,14 +6,14 @@ import { PackageConfig } from '../types/packageConfig';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { spawnSync } from '../utils/spawnUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
+import { Extensions } from '../utils/extensions';
 
 const scriptsWithoutLerna = {
   cleanup: 'yarn format && yarn lint-fix',
   format: `yarn sort-package-json && yarn prettier`,
-  lint: 'eslint "./{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}"',
+  lint: `eslint "./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}"`,
   'lint-fix': 'yarn lint --fix',
-  prettier:
-    'prettier --write "**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,vue,yaml,yml}" "!**/test-fixtures/**"',
+  prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
   'sort-package-json': 'sort-package-json',
   typecheck: 'tsc --noEmit',
 };

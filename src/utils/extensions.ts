@@ -18,4 +18,6 @@ export const Extensions = {
   ],
   codeWith4IndentSize: ['go', 'gradle'],
   markdownLike: ['md'],
+  eslint: ['js', 'jsx', 'ts', 'tsx'],
+  prettier: ['css', 'htm', 'html', 'js', 'json', 'jsx', 'md', 'scss', 'ts', 'tsx', 'vue', 'yaml', 'yml'],
 };
