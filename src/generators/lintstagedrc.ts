@@ -4,22 +4,25 @@ import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 import { Extensions } from '../utils/extensions';
 
+const eslintKey = `./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}`;
 const eslint = `
-  "./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}": ["eslint --fix", "git add"],`;
-
-const prettier = `
-  "./**/*.{${Extensions.prettier.join(',')}}": files => {
-    const filtered = files.filter(file => !file.includes('/test-fixtures/')).join(' ');
-    return filtered ? [\`prettier --write \${filtered}\`, \`git add \${filtered}\`] : [];
-  },`;
+  "${eslintKey}": ["eslint --fix", "git add"],`;
+const eslintFilterForPrettier = `files = micromatch.not(files, '${eslintKey}');`;
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
-  const lines = [prettier];
+  const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
     lines.push(eslint);
   }
+  lines.push(`
+  "./**/*.{${Extensions.prettier.join(',')}}": files => {
+    ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
+    const fileList = files.filter(file => !file.includes('/test-fixtures/')).join(' ');
+    return fileList ? [\`prettier --write \${fileList}\`, \`git add \${fileList}\`] : [];
+  },`);
 
-  const content = `module.exports = {${lines.join('')}
+  const content = `const micromatch = require('micromatch');
+module.exports = {${lines.join('')}
 };
 `;
 

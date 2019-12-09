@@ -34,6 +34,11 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
   if (config.containingPackageJson) {
     names.push('node');
   }
+  if (config.containingPomXml) {
+    names.push('maven');
+    userContent += `.idea/google-java-format.xml
+`;
+  }
   if (config.containingPubspecYaml) {
     names.push('flutter', 'ruby');
     userContent += `.flutter-plugins-dependencies
@@ -51,6 +56,14 @@ packaged.yaml
   }
 
   const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);
-  const content = (await response.text()).replace('public/', '');
+  let content = (await response.text()).replace('public/', '# public/');
+  if (config.containingPomXml) {
+    content = content
+      .replace('# .idea/modules.xml', '.idea/modules.xml')
+      .replace('# .idea/*.iml', '.idea/*.iml')
+      .replace('# .idea/modules', '.idea/modules')
+      .replace('# *.iml', '*.iml')
+      .replace('# *.ipr', '*.ipr');
+  }
   await FsUtil.generateFile(filePath, userContent + content);
 }
