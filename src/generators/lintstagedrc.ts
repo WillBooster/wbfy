@@ -5,7 +5,7 @@ import { FsUtil } from '../utils/fsUtil';
 import { Extensions } from '../utils/extensions';
 
 const eslint = `
-  "./packages/*/{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}": ["eslint --fix", "git add"],`;
+  "./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}": ["eslint --fix", "git add"],`;
 
 const prettier = `
   "./**/*.{${Extensions.prettier.join(',')}}": files => {
