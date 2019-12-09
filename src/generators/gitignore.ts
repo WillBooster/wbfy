@@ -4,7 +4,7 @@ import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
-const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'node'];
+const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim'];
 
 const defaultUserContent = `${IgnoreFileUtil.header}
 
@@ -23,8 +23,16 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
   let userContent = (IgnoreFileUtil.getUserContent(filePath) || defaultUserContent) + commonContent;
 
   const names = [...defaultNames];
-  if (rootConfig.depending.firebase || config.depending.firebase) {
-    names.push('firebase');
+  if (config.containingGemfile) {
+    names.push('ruby');
+  }
+  if (config.containingGoMod) {
+    names.push('go');
+    userContent += `${path.basename(config.dirPath)}
+`;
+  }
+  if (config.containingPackageJson) {
+    names.push('node');
   }
   if (config.containingPubspecYaml) {
     names.push('flutter', 'ruby');
@@ -32,6 +40,14 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
 android/key.properties
 ios/.bundle
 `;
+  }
+  if (config.containingTemplateYaml) {
+    userContent += `.aws-sam/
+    packaged.yaml
+`;
+  }
+  if (rootConfig.depending.firebase || config.depending.firebase) {
+    names.push('firebase');
   }
 
   const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);

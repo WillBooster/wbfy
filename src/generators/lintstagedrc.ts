@@ -1,45 +1,31 @@
 import path from 'path';
 import fse from 'fs-extra';
-import merge from 'deepmerge';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
+import { Extensions } from '../utils/extensions';
 
-const eslintKey = './{packages/*/,}{src,__tests__}/**/*.{ts,tsx}';
+const eslint = `
+  "./packages/*/{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}": ["eslint --fix", "git add"],`;
 
-function generateJsonObj(): { [prop: string]: string[] } {
-  return {
-    [eslintKey]: ['eslint --fix', 'git add'],
-    './**/*.{css,htm,html,js,json,jsx,md,scss,yaml,yml}': ['prettier --write', 'git add'],
-    './**/package.json': ['sort-package-json', 'git add'],
-  };
-}
-
-const firstItemShouldBeDeleted = Object.values(generateJsonObj()).map((array: string[]) => array[0]);
+const prettier = `
+  "./**/*.{${Extensions.prettier.join(',')}}": files => {
+    const filtered = files.filter(file => !file.includes('/test-fixtures/')).join(' ');
+    return filtered ? [\`prettier --write \${filtered}\`, \`git add \${filtered}\`] : [];
+  },`;
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
-  let jsonObj = generateJsonObj();
+  const lines = [prettier];
+  if (config.containingJavaScript || config.containingTypeScript) {
+    lines.push(eslint);
+  }
 
-  const filePath = path.resolve(config.dirPath, '.lintstagedrc.json');
-  if (fse.existsSync(filePath)) {
-    const existingContent = fse.readFileSync(filePath).toString();
-    try {
-      const existingJsonObj = JSON.parse(existingContent);
-      for (const key in existingJsonObj) {
-        if (firstItemShouldBeDeleted.includes(existingJsonObj[key][0])) {
-          delete existingJsonObj[key];
-        }
-      }
-      jsonObj = merge(existingJsonObj, jsonObj);
-    } catch (e) {
-      // do nothing
-    }
-  }
-  if (!config.containingJavaScript && !config.containingTypeScript) {
-    delete jsonObj[eslintKey];
-  }
-  // TODO: support non-flutter dart code
-  if (config.containingPubspecYaml) {
-    jsonObj['./**/*.dart'] = ['flutter format', 'git add'];
-  }
-  await FsUtil.generateFile(filePath, JSON.stringify(jsonObj));
+  const content = `module.exports = {${lines.join('')}
+};
+`;
+
+  const filePath = path.resolve(config.dirPath, '.lintstagedrc.js');
+  await Promise.all([
+    fse.remove(path.resolve(config.dirPath, '.lintstagedrc.json')),
+    FsUtil.generateFile(filePath, content),
+  ]);
 }
