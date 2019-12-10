@@ -11,9 +11,8 @@ const eslintFilterForPrettier = `files = micromatch.not(files, '${eslintKey}');`
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
-    const eslintCommand = `eslint --fix${EslintUtil.getLintFixSuffix(config)}`;
     const eslint = `
-  "${eslintKey}": [${JSON.stringify(eslintCommand)}, "git add"],`;
+  "${eslintKey}": ["eslint --fix${EslintUtil.getLintFixSuffix(config)}", "git add"],`;
     lines.push(eslint);
   }
   lines.push(`
