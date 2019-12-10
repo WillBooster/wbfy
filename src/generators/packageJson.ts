@@ -7,6 +7,7 @@ import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { spawnSync } from '../utils/spawnUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { Extensions } from '../utils/extensions';
+import { EslintUtil } from '../utils/eslintUtil';
 
 const scriptsWithoutLerna = {
   cleanup: 'yarn format && yarn lint-fix',
@@ -168,6 +169,8 @@ export async function generatePackageJson(
     delete jsonObj.scripts['lint-fix'];
     jsonObj.scripts.cleanup = jsonObj.scripts.cleanup.substring(0, jsonObj.scripts.cleanup.lastIndexOf(' && '));
     console.log(jsonObj.scripts.cleanup);
+  } else {
+    jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
   }
 
   if (config.containingPubspecYaml) {
@@ -180,10 +183,6 @@ export async function generatePackageJson(
     if (config.containingSubPackages) {
       jsonObj.scripts.format += ` && yarn lerna run flutter-format`;
     }
-  }
-
-  if (config.containingJsxOrTsx) {
-    jsonObj.scripts['lint-fix'] += ' --rule "{ "react-hooks/exhaustive-deps": 0 }"';
   }
 
   delete jsonObj.devDependencies['@willbooster/eslint-config'];

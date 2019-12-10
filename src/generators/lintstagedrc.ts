@@ -3,15 +3,16 @@ import fse from 'fs-extra';
 import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 import { Extensions } from '../utils/extensions';
+import { EslintUtil } from '../utils/eslintUtil';
 
 const eslintKey = `./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}`;
-const eslint = `
-  "${eslintKey}": ["eslint --fix", "git add"],`;
 const eslintFilterForPrettier = `files = micromatch.not(files, '${eslintKey}');`;
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
+    const eslint = `
+  "${eslintKey}": ["eslint --fix${EslintUtil.getLintFixSuffix(config)}", "git add"],`;
     lines.push(eslint);
   }
   lines.push(`
