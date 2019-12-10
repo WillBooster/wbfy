@@ -194,10 +194,10 @@ export async function generatePackageJson(
   fse.outputFileSync(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
-    if (dependencies.length && dependencies.some(dep => !!jsonObj.dependencies[dep])) {
+    if (dependencies.length && dependencies.some(dep => !jsonObj.dependencies[dep])) {
       spawnSync('yarn', ['add', '-W', ...new Set(dependencies)], config.dirPath);
     }
-    if (devDependencies.length && devDependencies.some(dep => !!jsonObj.devDependencies[dep])) {
+    if (devDependencies.length && devDependencies.some(dep => !jsonObj.devDependencies[dep])) {
       spawnSync('yarn', ['add', '-W', '-D', ...new Set(devDependencies)], config.dirPath);
     }
   }
