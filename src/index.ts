@@ -84,7 +84,7 @@ class GenConfigs extends Command {
           await generatePackageJson(config, allNodePackageConfigs, flags.skipDeps);
         }
       }
-      spawnSync('yarn', ['format'], rootDirPath);
+      spawnSync('yarn', ['cleanup'], rootDirPath);
     }
   }
 }
