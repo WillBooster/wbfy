@@ -15,7 +15,7 @@ import { generateEslintrc } from './generators/eslintrc';
 import { generateEslintignore } from './generators/eslintignore';
 import { generatePackageJson } from './generators/packageJson';
 import { spawnSync } from './utils/spawnUtil';
-import { generateRenovateJson } from './generators/renovatercJson';
+import { generateRenovateJson } from './generators/renovaterc';
 import { generateGitattributes } from './generators/gitattributes';
 
 class GenConfigs extends Command {

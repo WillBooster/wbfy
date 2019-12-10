@@ -4,7 +4,7 @@ import { PackageConfig } from '../types/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
 const content = `{
-  "extends": ["willbooster"]
+  "extends": ["@willbooster"]
 }
 `;
 
