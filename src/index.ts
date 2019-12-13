@@ -93,11 +93,13 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
   const packageJsonPath = path.resolve(dirPath, 'package.json');
   try {
     const containingPackageJson = fs.existsSync(packageJsonPath);
-    let devDependencies: any = {};
+    let devDependencies: { [key: string]: string } = {};
+    let scripts: { [key: string]: string } = {};
     if (containingPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath).toString();
       const packageJson = JSON.parse(packageJsonText);
       devDependencies = packageJson.devDependencies || {};
+      scripts = packageJson.scripts || {};
     }
 
     const config = {
@@ -118,7 +120,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
-        tsnode: !!devDependencies['ts-node'],
+        tsnode: Object.values(scripts).some(script => script.includes('ts-node')),
       },
     };
     if (

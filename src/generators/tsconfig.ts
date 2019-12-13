@@ -9,7 +9,7 @@ function generateRootJsonObj(): any {
   return {
     extends: './node_modules/@willbooster/tsconfig/tsconfig.json',
     compilerOptions: {
-      jsx: 'react',
+      jsx: 'react', // required here because we run eslint in the root
       outDir: 'dist',
       typeRoots: ['./node_modules/@types', './@types'],
     },
@@ -21,7 +21,6 @@ function generateSubJsonObj(): any {
   return {
     extends: '../../tsconfig.json',
     compilerOptions: {
-      module: 'commonjs',
       outDir: 'dist',
       typeRoots: ['../../node_modules/@types', './@types'],
     },
@@ -34,8 +33,10 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
   if (!config.containingJsxOrTsx) {
     delete jsonObj.compilerOptions.jsx;
   }
-  if (!config.depending.tsnode) {
-    delete jsonObj.compilerOptions.module;
+  if (config.depending.tsnode) {
+    // We expect Node version is 10+
+    jsonObj.compilerOptions.target = 'es2018';
+    jsonObj.compilerOptions.module = 'commonjs';
   }
 
   const filePath = path.resolve(config.dirPath, 'tsconfig.json');
