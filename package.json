@@ -42,14 +42,14 @@
     "@types/glob": "7.1.1",
     "@types/js-yaml": "3.12.1",
     "@types/node-fetch": "2.5.4",
-    "@typescript-eslint/eslint-plugin": "2.11.0",
-    "@typescript-eslint/parser": "2.11.0",
+    "@typescript-eslint/eslint-plugin": "2.12.0",
+    "@typescript-eslint/parser": "2.12.0",
     "@willbooster/eslint-config-ts": "2.3.2",
     "@willbooster/prettier-config": "2.3.2",
     "@willbooster/renovate-config": "2.3.2",
     "@willbooster/tsconfig": "2.3.3",
     "dotenv-cli": "3.1.0",
-    "eslint": "6.7.2",
+    "eslint": "6.8.0",
     "eslint-config-prettier": "6.7.0",
     "eslint-plugin-import": "2.19.1",
     "eslint-plugin-prettier": "3.1.2",
@@ -57,10 +57,10 @@
     "lint-staged": "9.5.0",
     "prettier": "1.19.1",
     "rimraf": "3.0.0",
-    "semantic-release": "15.13.31",
+    "semantic-release": "15.14.0",
     "sort-package-json": "1.31.0",
     "ts-node": "8.5.4",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   },
   "engines": {
     "node": ">=8.0.0"
