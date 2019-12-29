@@ -15,7 +15,6 @@ const scriptsWithoutLerna = {
   lint: `eslint "./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}"`,
   'lint-fix': 'yarn lint --fix',
   prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
-  'sort-package-json': 'sort-package-json',
   typecheck: 'tsc --noEmit',
 };
 
@@ -23,11 +22,10 @@ const scriptsWithLerna = merge(
   { ...scriptsWithoutLerna },
   {
     format: `yarn sort-all-package-json && yarn prettier`,
-    'sort-all-package-json': 'yarn sort-package-json && yarn lerna run sort-package-json --stream',
+    'sort-all-package-json': 'yarn sort-package-json && yarn lerna exec sort-package-json --stream',
     typecheck: 'yarn lerna run typecheck --stream',
   }
 );
-delete scriptsWithLerna['sort-package-json'];
 
 const devDeps: { [prop: string]: string[] } = {
   '@willbooster/eslint-config-js': [
@@ -185,6 +183,8 @@ export async function generatePackageJson(
     }
   }
 
+  // Remove deprecated things
+  delete jsonObj.scripts['sort-package-json'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   if (!Object.keys(jsonObj.peerDependencies).length) {

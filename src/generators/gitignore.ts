@@ -15,6 +15,7 @@ ${IgnoreFileUtil.separator}
 const commonContent = `
 .devcontainer/
 dist/
+inter/
 temp/
 `;
 
