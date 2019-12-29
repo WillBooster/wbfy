@@ -18,11 +18,15 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   lines.push(`
   "./**/*.{${Extensions.prettier.join(',')}}": files => {
     ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
-    const fileList = files.filter(file => !file.includes('/test-fixtures/')).join(' ');
+    const fileList = files.filter(file => !file.includes('/test-fixtures/'))
+      .map(file => path.relative('', file))
+      .join(' ');
     return fileList ? [\`prettier --write \${fileList}\`, \`git add \${fileList}\`] : [];
   },`);
 
   const content = `const micromatch = require('micromatch');
+const path = require('path');
+
 module.exports = {${lines.join('')}
 };
 `;
