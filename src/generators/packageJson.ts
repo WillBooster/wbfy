@@ -183,7 +183,10 @@ export async function generatePackageJson(
     }
   }
 
-  // Remove deprecated things
+  // Fix deprecated things
+  if (jsonObj.author === 'WillBooster LLC') {
+    jsonObj.author = 'WillBooster Inc.';
+  }
   delete jsonObj.scripts['sort-package-json'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
