@@ -120,7 +120,9 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
-        node: Object.values(scripts).some(script => script.includes('ts-node') || script.includes('babel-node')),
+        node:
+          Object.values(scripts).some(script => script.includes('ts-node') || script.includes('babel-node')) ||
+          Object.keys(devDependencies).some(dep => dep.includes('ts-node') || dep.includes('babel-node')),
       },
     };
     if (

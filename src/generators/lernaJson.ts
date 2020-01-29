@@ -26,7 +26,7 @@ export async function generateLernaJson(config: PackageConfig): Promise<void> {
     try {
       const existingJsonObj = JSON.parse(existingContent) as any;
       const version = existingJsonObj.version;
-      jsonObj = merge(existingJsonObj, jsonObj, { arrayMerge: overwriteMerge });
+      jsonObj = merge.all([jsonObj, existingJsonObj, jsonObj], { arrayMerge: overwriteMerge });
       jsonObj.version = version || jsonObj.version;
     } catch (e) {
       // do nothing

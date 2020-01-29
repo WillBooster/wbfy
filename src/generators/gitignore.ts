@@ -57,7 +57,7 @@ packaged.yaml
   }
 
   const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);
-  let content = (await response.text()).replace('public/', '# public/');
+  let content = await response.text();
   if (config.containingPomXml) {
     content = content
       .replace('# .idea/misc.xml', '.idea/misc.xml')

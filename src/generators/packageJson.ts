@@ -90,6 +90,7 @@ export async function generatePackageJson(
   delete jsonObj.scripts['sort-all-package-json'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
+  delete jsonObj.devDependencies['@willbooster/tsconfig'];
 
   jsonObj.prettier = '@willbooster/prettier-config';
 

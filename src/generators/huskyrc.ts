@@ -24,7 +24,7 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     const existingContent = fse.readFileSync(filePath).toString();
     try {
       const existingJsonObj = JSON.parse(existingContent);
-      jsonObj = merge(existingJsonObj, jsonObj);
+      jsonObj = merge.all([jsonObj, existingJsonObj, jsonObj]);
     } catch (e) {
       // do nothing
     }
