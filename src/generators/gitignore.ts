@@ -60,6 +60,7 @@ packaged.yaml
   let content = (await response.text()).replace('public/', '# public/');
   if (config.containingPomXml) {
     content = content
+      .replace('# .idea/misc.xml', '.idea/misc.xml')
       .replace('# .idea/modules.xml', '.idea/modules.xml')
       .replace('# .idea/*.iml', '.idea/*.iml')
       .replace('# .idea/modules', '.idea/modules')
