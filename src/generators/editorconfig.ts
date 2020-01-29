@@ -1,5 +1,5 @@
 import path from 'path';
-import { PackageConfig } from '../types/packageConfig';
+import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 import { Extensions } from '../utils/extensions';
 

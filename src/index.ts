@@ -1,11 +1,10 @@
 import path from 'path';
-import fs from 'fs';
 import glob from 'glob';
 import { Command, flags } from '@oclif/command';
 import { generateGitignore } from './generators/gitignore';
 import { generatePrettierignore } from './generators/prettierignore';
 import { generateHuskyrc } from './generators/huskyrc';
-import { PackageConfig } from './types/packageConfig';
+import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { generateLintstagedrc } from './generators/lintstagedrc';
 import { generateEditorconfig } from './generators/editorconfig';
 import { generateYarnrc } from './generators/yarnrc';
@@ -87,58 +86,6 @@ class GenConfigs extends Command {
       spawnSync('yarn', ['cleanup'], rootDirPath);
     }
   }
-}
-
-function getPackageConfig(dirPath: string): PackageConfig | null {
-  const packageJsonPath = path.resolve(dirPath, 'package.json');
-  try {
-    const containingPackageJson = fs.existsSync(packageJsonPath);
-    let devDependencies: { [key: string]: string } = {};
-    let scripts: { [key: string]: string } = {};
-    if (containingPackageJson) {
-      const packageJsonText = fs.readFileSync(packageJsonPath).toString();
-      const packageJson = JSON.parse(packageJsonText);
-      devDependencies = packageJson.devDependencies || {};
-      scripts = packageJson.scripts || {};
-    }
-
-    const config: PackageConfig = {
-      dirPath,
-      root:
-        path.basename(path.resolve(dirPath, '..')) != 'packages' ||
-        !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
-      willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
-      containingSubPackages: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
-      containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
-      containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
-      containingGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
-      containingPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
-      containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
-      containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
-      containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
-      containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
-      depending: {
-        firebase: !!devDependencies['firebase-tools'],
-        node:
-          Object.values(scripts).some(script => script.includes('ts-node') || script.includes('babel-node')) ||
-          Object.keys(devDependencies).some(dep => dep.includes('ts-node') || dep.includes('babel-node')),
-      },
-    };
-    if (
-      config.containingGemfile ||
-      config.containingGoMod ||
-      config.containingPackageJson ||
-      config.containingPomXml ||
-      config.containingPubspecYaml ||
-      config.containingTemplateYaml
-    ) {
-      return config;
-    }
-  } catch (e) {
-    // do nothing
-  }
-  return null;
 }
 
 export = GenConfigs;

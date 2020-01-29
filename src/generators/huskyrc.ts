@@ -1,7 +1,7 @@
 import path from 'path';
 import fse from 'fs-extra';
 import merge from 'deepmerge';
-import { PackageConfig } from '../types/packageConfig';
+import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
 function generateJsonObj(): any {

@@ -1,6 +1,6 @@
 import path from 'path';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
-import { PackageConfig } from '../types/packageConfig';
+import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
 const defaultUserContent = `${IgnoreFileUtil.header}

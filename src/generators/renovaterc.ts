@@ -1,6 +1,6 @@
 import path from 'path';
 import fse from 'fs-extra';
-import { PackageConfig } from '../types/packageConfig';
+import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
 const content = `{

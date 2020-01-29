@@ -2,7 +2,7 @@ import path from 'path';
 import * as fs from 'fs';
 import fse from 'fs-extra';
 import merge from 'deepmerge';
-import { PackageConfig } from '../types/packageConfig';
+import { PackageConfig } from '../utils/packageConfig';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { spawnSync } from '../utils/spawnUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
