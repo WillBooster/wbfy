@@ -18,10 +18,14 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   lines.push(`
   './**/*.{${Extensions.prettier.join(',')}}': files => {
     ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
-    const fileList = files.filter(file => !file.includes('/test-fixtures/'))
-      .map(file => path.relative('', file))
-      .join(' ');
-    return fileList ? [\`prettier --write \${fileList}\`] : [];
+    const filteredFiles = files.filter(file => !file.includes('/test-fixtures/'))
+      .map(file => path.relative('', file));
+    if (filteredFiles.length === 0) return [];
+    const commands = [\`prettier --write \${filteredFiles.join(' ')}\`];
+    if (filteredFiles.some(file => file.endsWith('package.json'))) {
+      commands.push('yarn sort-package-json');
+    }
+    return commands;
   },`);
 
   const content = `const micromatch = require('micromatch');

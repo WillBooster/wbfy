@@ -11,7 +11,7 @@ import { EslintUtil } from '../utils/eslintUtil';
 
 const scriptsWithoutLerna = {
   cleanup: 'yarn format && yarn lint-fix',
-  format: `yarn sort-package-json && yarn prettier`,
+  format: `sort-package-json && yarn prettier`,
   lint: `eslint "./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}"`,
   'lint-fix': 'yarn lint --fix',
   prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
@@ -21,8 +21,8 @@ const scriptsWithoutLerna = {
 const scriptsWithLerna = merge(
   { ...scriptsWithoutLerna },
   {
-    format: `yarn sort-all-package-json && yarn prettier`,
-    'sort-all-package-json': 'yarn sort-package-json && yarn lerna exec sort-package-json --stream',
+    format: `yarn sort-package-json && yarn prettier`,
+    'sort-package-json': 'sort-package-json && yarn lerna exec sort-package-json --stream',
     typecheck: 'yarn lerna run typecheck --stream',
   }
 );
@@ -81,6 +81,15 @@ export async function generatePackageJson(
   jsonObj.dependencies = jsonObj.dependencies || {};
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   jsonObj.peerDependencies = jsonObj.peerDependencies || {};
+
+  // Fix deprecated things
+  if (jsonObj.author === 'WillBooster LLC') {
+    jsonObj.author = 'WillBooster Inc.';
+  }
+  delete jsonObj.scripts['sort-package-json'];
+  delete jsonObj.scripts['sort-all-package-json'];
+  delete jsonObj.devDependencies['@willbooster/eslint-config'];
+  delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
 
   jsonObj.prettier = '@willbooster/prettier-config';
 
@@ -183,13 +192,6 @@ export async function generatePackageJson(
     }
   }
 
-  // Fix deprecated things
-  if (jsonObj.author === 'WillBooster LLC') {
-    jsonObj.author = 'WillBooster Inc.';
-  }
-  delete jsonObj.scripts['sort-package-json'];
-  delete jsonObj.devDependencies['@willbooster/eslint-config'];
-  delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   if (!Object.keys(jsonObj.peerDependencies).length) {
     delete jsonObj.peerDependencies;
   }
