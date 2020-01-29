@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "importHelpers": false,
+    "importHelpers": true,
     "outDir": "dist",
     "typeRoots": ["./node_modules/@types", "./@types"]
   },
