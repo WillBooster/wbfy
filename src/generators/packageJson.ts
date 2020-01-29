@@ -188,6 +188,12 @@ export async function generatePackageJson(
     }
   }
 
+  if (!Object.keys(jsonObj.dependencies).length) {
+    delete jsonObj.dependencies;
+  }
+  if (!Object.keys(jsonObj.devDependencies).length) {
+    delete jsonObj.devDependencies;
+  }
   if (!Object.keys(jsonObj.peerDependencies).length) {
     delete jsonObj.peerDependencies;
   }
