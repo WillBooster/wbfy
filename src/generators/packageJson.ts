@@ -121,9 +121,6 @@ export async function generatePackageJson(
       '@willbooster/prettier-config',
       '@willbooster/renovate-config'
     );
-    if (config.containingTypeScript) {
-      devDependencies.push('typescript', '@willbooster/tsconfig');
-    }
 
     if (config.containingSubPackages) {
       devDependencies.push('lerna');
