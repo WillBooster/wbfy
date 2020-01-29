@@ -57,6 +57,10 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       if (existingJsonObj.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
         delete existingJsonObj.extends;
       }
+      if (!config.depending.node) {
+        delete jsonObj?.compilerOptions?.target;
+        delete jsonObj?.compilerOptions?.module;
+      }
       jsonObj = merge.all([jsonObj, existingJsonObj, jsonObj], { arrayMerge: overwriteMerge });
     } catch (e) {
       // do nothing
