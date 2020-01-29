@@ -15,6 +15,7 @@ __generated__/
 test-fixtures/
 3rd-party/
 *.config.js
+*.min.js
 `;
 
 export async function generateEslintignore(config: PackageConfig): Promise<void> {
