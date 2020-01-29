@@ -88,6 +88,7 @@ export async function generatePackageJson(
   }
   delete jsonObj.scripts['sort-package-json'];
   delete jsonObj.scripts['sort-all-package-json'];
+  delete jsonObj.dependencies['tslib'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
@@ -98,9 +99,6 @@ export async function generatePackageJson(
   let devDependencies = [] as string[];
 
   if (!config.root || !config.containingSubPackages) {
-    if (config.containingTypeScript) {
-      dependencies.push('tslib');
-    }
     if (config.containingJsxOrTsx) {
       dependencies.push('react', 'react-hot-loader', '@hot-loader/react-dom');
       jsonObj['alias'] = jsonObj['alias'] || {};
