@@ -70,7 +70,7 @@ class GenConfigs extends Command {
       const promises: Promise<void>[] = [];
       for (const config of allNodePackageConfigs) {
         promises.push(generatePrettierignore(config));
-        if (rootConfig.containingTypeScript) {
+        if (config.containingTypeScript) {
           promises.push(generateTsconfig(config));
         }
         if (config.containingJavaScript || config.containingTypeScript) {
