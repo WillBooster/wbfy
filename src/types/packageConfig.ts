@@ -14,7 +14,7 @@ export interface PackageConfig {
   containingJsxOrTsx: boolean;
   depending: {
     firebase: boolean;
-    tsnode: boolean;
+    node: boolean;
   };
   eslintBase?: string;
 }

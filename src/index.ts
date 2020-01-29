@@ -102,7 +102,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       scripts = packageJson.scripts || {};
     }
 
-    const config = {
+    const config: PackageConfig = {
       dirPath,
       root:
         path.basename(path.resolve(dirPath, '..')) != 'packages' ||
@@ -120,7 +120,7 @@ function getPackageConfig(dirPath: string): PackageConfig | null {
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
-        tsnode: Object.values(scripts).some(script => script.includes('ts-node')),
+        node: Object.values(scripts).some(script => script.includes('ts-node') || script.includes('babel-node')),
       },
     };
     if (

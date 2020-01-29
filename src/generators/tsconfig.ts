@@ -7,9 +7,19 @@ import { FsUtil } from '../utils/fsUtil';
 
 function generateRootJsonObj(): any {
   return {
-    extends: './node_modules/@willbooster/tsconfig/tsconfig.json',
     compilerOptions: {
-      jsx: 'react', // required here because we run eslint in the root
+      target: 'esnext',
+      module: 'esnext',
+      moduleResolution: 'node',
+      jsx: 'react',
+      alwaysStrict: true,
+      strict: true,
+      skipLibCheck: true,
+      allowSyntheticDefaultImports: true,
+      esModuleInterop: true,
+      resolveJsonModule: true,
+      sourceMap: true,
+      importHelpers: true,
       outDir: 'dist',
       typeRoots: ['./node_modules/@types', './@types'],
     },
@@ -33,7 +43,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
   if (!config.containingJsxOrTsx) {
     delete jsonObj.compilerOptions.jsx;
   }
-  if (config.depending.tsnode) {
+  if (config.depending.node) {
     // We expect Node version is 10+
     jsonObj.compilerOptions.target = 'es2018';
     jsonObj.compilerOptions.module = 'commonjs';
