@@ -12,16 +12,16 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
     const eslint = `
-  "${eslintKey}": ["eslint --fix${EslintUtil.getLintFixSuffix(config)}", "git add"],`;
+  '${eslintKey}': ['eslint --fix${EslintUtil.getLintFixSuffix(config)}'],`;
     lines.push(eslint);
   }
   lines.push(`
-  "./**/*.{${Extensions.prettier.join(',')}}": files => {
+  './**/*.{${Extensions.prettier.join(',')}}': files => {
     ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
     const fileList = files.filter(file => !file.includes('/test-fixtures/'))
       .map(file => path.relative('', file))
       .join(' ');
-    return fileList ? [\`prettier --write \${fileList}\`, \`git add \${fileList}\`] : [];
+    return fileList ? [\`prettier --write \${fileList}\`] : [];
   },`);
 
   const content = `const micromatch = require('micromatch');
