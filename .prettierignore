@@ -10,7 +10,6 @@ test-fixtures/
 
 .devcontainer/
 dist/
-inter/
 temp/
 
 # Created by https://www.gitignore.io/api/windows,macos,linux,jetbrains,visualstudiocode,emacs,vim,node
