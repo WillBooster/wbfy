@@ -12,7 +12,7 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
     const eslint = `
-  '${eslintKey}': ["eslint --fix${EslintUtil.getLintFixSuffix(config)}"],`;
+  '${eslintKey}': [${JSON.stringify(`eslint --fix${EslintUtil.getLintFixSuffix(config)}`)}],`;
     lines.push(eslint);
   }
   lines.push(`
