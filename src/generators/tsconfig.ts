@@ -19,7 +19,7 @@ function generateRootJsonObj(): any {
       esModuleInterop: true,
       resolveJsonModule: true,
       sourceMap: true,
-      importHelpers: true,
+      importHelpers: false,
       outDir: 'dist',
       typeRoots: ['./node_modules/@types', './@types'],
     },
