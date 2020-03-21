@@ -10,10 +10,12 @@ ${IgnoreFileUtil.separator}
 `;
 
 const commonContent = `
-test-fixtures/
 3rd-party/
-*.min.js
+android/
+ios/
+test-fixtures/
 *.d.ts
+*.min.js
 `;
 
 export async function generatePrettierignore(config: PackageConfig): Promise<void> {

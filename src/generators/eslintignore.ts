@@ -10,13 +10,15 @@ ${IgnoreFileUtil.separator}
 `;
 
 const commonContent = `
-__generated__/
-@types/
-test-fixtures/
 3rd-party/
+@types/
+__generated__/
+android/
+ios/
+test-fixtures/
 *.config.js
-*.min.js
 *.d.ts
+*.min.js
 `;
 
 export async function generateEslintignore(config: PackageConfig): Promise<void> {
