@@ -18,7 +18,7 @@ export interface PackageConfig {
   containingJsxOrTsx: boolean;
   depending: {
     firebase: boolean;
-    node: boolean;
+    tsnode: boolean;
   };
   eslintBase?: string;
 }
@@ -55,9 +55,9 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
-        node:
-          Object.values(scripts).some(script => script.includes('ts-node') || script.includes('babel-node')) ||
-          Object.keys(devDependencies).some(dep => dep.includes('ts-node') || dep.includes('babel-node')) ||
+        tsnode:
+          Object.values(scripts).some(script => script.includes('ts-node')) ||
+          Object.keys(devDependencies).some(dep => dep.includes('ts-node')) ||
           packageJson?.engines?.node?.startsWith('10'),
       },
     };

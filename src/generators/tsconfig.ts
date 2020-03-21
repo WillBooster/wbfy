@@ -32,7 +32,7 @@ function generateSubJsonObj(): any {
     extends: '../../tsconfig.json',
     compilerOptions: {
       outDir: 'dist',
-      typeRoots: ['../../node_modules/@types', './@types'],
+      typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
     },
     include: ['src/**/*', '__tests__/**/*'],
   };
@@ -43,7 +43,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
   if (!config.containingJsxOrTsx) {
     delete jsonObj.compilerOptions.jsx;
   }
-  if (config.depending.node) {
+  if (config.depending.tsnode) {
     // We expect Node version is 10+
     jsonObj.compilerOptions.target = 'es2018';
     jsonObj.compilerOptions.module = 'commonjs';
@@ -57,7 +57,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       if (existingJsonObj.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
         delete existingJsonObj.extends;
       }
-      if (!config.depending.node) {
+      if (!config.depending.tsnode) {
         delete jsonObj?.compilerOptions?.target;
         delete jsonObj?.compilerOptions?.module;
       }
