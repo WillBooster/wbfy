@@ -54,6 +54,9 @@ packaged.yaml
   if (rootConfig.depending.firebase || config.depending.firebase) {
     names.push('firebase');
   }
+  if (rootConfig.depending.reactNative || config.depending.reactNative) {
+    names.push('reactnative');
+  }
 
   const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);
   let content = await response.text();
