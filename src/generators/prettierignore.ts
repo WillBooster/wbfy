@@ -13,6 +13,7 @@ const commonContent = `
 test-fixtures/
 3rd-party/
 *.min.js
+*.d.ts
 `;
 
 export async function generatePrettierignore(config: PackageConfig): Promise<void> {
