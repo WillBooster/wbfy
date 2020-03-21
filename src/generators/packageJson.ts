@@ -174,7 +174,7 @@ export async function generatePackageJson(
     if (dirs.length > 0) {
       jsonObj.scripts['flutter-format'] = `flutter format $(find ${dirs.join(
         ' '
-      )} -name generated -prune -o -name '*.dart -print')`;
+      )} -name generated -prune -o -name '*.dart' -print)`;
       jsonObj.scripts.format += ` && yarn flutter-format`;
     }
     if (config.containingSubPackages) {
