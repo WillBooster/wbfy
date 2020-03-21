@@ -1,9 +1,9 @@
 import path from 'path';
+import fse from 'fs-extra';
 import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 import { Extensions } from '../utils/extensions';
 import { EslintUtil } from '../utils/eslintUtil';
-import fse from 'fs-extra';
 
 const eslintKey = `./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}`;
 const eslintFilterForPrettier = `files = micromatch.not(files, '${eslintKey}');`;

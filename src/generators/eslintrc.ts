@@ -1,9 +1,9 @@
 import path from 'path';
+import merge from 'deepmerge';
+import fse from 'fs-extra';
 import { PackageConfig } from '../utils/packageConfig';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { FsUtil } from '../utils/fsUtil';
-import merge from 'deepmerge';
-import fse from 'fs-extra';
 
 function getExtensionBase(config: PackageConfig): string {
   if (config.containingTypeScript) {

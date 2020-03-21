@@ -1,8 +1,8 @@
 import path from 'path';
-import { PackageConfig } from '../utils/packageConfig';
-import { FsUtil } from '../utils/fsUtil';
 import fse from 'fs-extra';
 import merge from 'deepmerge';
+import { PackageConfig } from '../utils/packageConfig';
+import { FsUtil } from '../utils/fsUtil';
 
 function generateJsonObj(): any {
   return {
