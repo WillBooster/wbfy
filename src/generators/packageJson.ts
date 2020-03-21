@@ -98,14 +98,6 @@ export async function generatePackageJson(
   let dependencies = [] as string[];
   let devDependencies = [] as string[];
 
-  if (!config.root || !config.containingSubPackages) {
-    if (config.containingJsxOrTsx) {
-      dependencies.push('react', 'react-hot-loader', '@hot-loader/react-dom');
-      jsonObj['alias'] = jsonObj['alias'] || {};
-      jsonObj.alias['react-dom'] = '@hot-loader/react-dom';
-    }
-  }
-
   if (config.root) {
     // Cannot remove a version prefix in sub-packages because a version prefix is required to refer to another sub-package
     [jsonObj.dependencies, jsonObj.devDependencies, jsonObj.peerDependencies].forEach(deps =>
