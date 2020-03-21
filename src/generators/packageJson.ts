@@ -1,7 +1,7 @@
 import path from 'path';
 import * as fs from 'fs';
-import fse from 'fs-extra';
 import merge from 'deepmerge';
+import fse from 'fs-extra';
 import { PackageConfig } from '../utils/packageConfig';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { spawnSync } from '../utils/spawnUtil';

@@ -59,6 +59,8 @@ packaged.yaml
   let content = await response.text();
   if (config.containingPomXml) {
     content = content
+      .replace(/\r?\n/g, '\n')
+      .replace(/^.idea\/?$/m, '# .idea')
       .replace('# .idea/misc.xml', '.idea/misc.xml')
       .replace('# .idea/modules.xml', '.idea/modules.xml')
       .replace('# .idea/*.iml', '.idea/*.iml')
