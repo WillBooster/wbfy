@@ -30,7 +30,7 @@
     "@oclif/config": "1.14.0",
     "@oclif/plugin-help": "2.2.3",
     "deepmerge": "4.2.2",
-    "fs-extra": "8.1.0",
+    "fs-extra": "9.0.0",
     "glob": "7.1.6",
     "js-yaml": "3.13.1",
     "node-fetch": "2.6.0"
@@ -40,8 +40,8 @@
     "@types/glob": "7.1.1",
     "@types/js-yaml": "3.12.2",
     "@types/node-fetch": "2.5.5",
-    "@typescript-eslint/eslint-plugin": "2.23.0",
-    "@typescript-eslint/parser": "2.23.0",
+    "@typescript-eslint/eslint-plugin": "2.24.0",
+    "@typescript-eslint/parser": "2.24.0",
     "@willbooster/eslint-config-ts": "3.0.0",
     "@willbooster/prettier-config": "3.0.0",
     "@willbooster/renovate-config": "3.0.0",
@@ -56,7 +56,7 @@
     "rimraf": "3.0.2",
     "semantic-release": "17.0.4",
     "sort-package-json": "1.40.0",
-    "ts-node": "8.6.2",
+    "ts-node": "8.7.0",
     "typescript": "3.8.3"
   },
   "engines": {
