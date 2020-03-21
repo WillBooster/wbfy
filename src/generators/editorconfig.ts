@@ -19,6 +19,10 @@ ${generateExtensions(Extensions.codeWith4IndentSize)}
 indent_size = 4
 indent_style = space
 
+${generateExtensions(Extensions.codeWith8IndentSize)}
+indent_size = 8
+indent_style = space
+
 ${generateExtensions(Extensions.markdownLike)}
 max_line_length = off
 trim_trailing_whitespace = false

@@ -17,6 +17,7 @@ export const Extensions = {
     'yml',
   ],
   codeWith4IndentSize: ['go', 'gradle'],
+  codeWith8IndentSize: ['sh'],
   markdownLike: ['md'],
   eslint: ['js', 'jsx', 'ts', 'tsx'],
   prettier: ['css', 'htm', 'html', 'js', 'json', 'jsx', 'md', 'scss', 'ts', 'tsx', 'vue', 'yaml', 'yml'],
