@@ -15,6 +15,7 @@ const commonContent = `
 __generated__/
 android/
 ios/
+no-format/
 test-fixtures/
 *.config.js
 *.d.ts

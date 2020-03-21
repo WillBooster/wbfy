@@ -13,6 +13,7 @@ const commonContent = `
 3rd-party/
 android/
 ios/
+no-format/
 test-fixtures/
 *.d.ts
 *.min.js
