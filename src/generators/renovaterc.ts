@@ -1,7 +1,7 @@
 import path from 'path';
-import fse from 'fs-extra';
 import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
+import fse from 'fs-extra';
 
 const content = `{
   "extends": ["@willbooster"]
