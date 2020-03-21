@@ -1,6 +1,4 @@
 import path from 'path';
-import glob from 'glob';
-import { Command, flags } from '@oclif/command';
 import { generateGitignore } from './generators/gitignore';
 import { generatePrettierignore } from './generators/prettierignore';
 import { generateHuskyrc } from './generators/huskyrc';
@@ -16,6 +14,9 @@ import { generatePackageJson } from './generators/packageJson';
 import { spawnSync } from './utils/spawnUtil';
 import { generateRenovateJson } from './generators/renovaterc';
 import { generateGitattributes } from './generators/gitattributes';
+import { generateIdeaSettings } from './generators/idea';
+import { Command, flags } from '@oclif/command';
+import glob from 'glob';
 
 class GenConfigs extends Command {
   static description = 'Generator/updater for config files in WillBooster projects';
@@ -58,6 +59,7 @@ class GenConfigs extends Command {
         generateEditorconfig(rootConfig),
         generateGitattributes(rootConfig),
         generateHuskyrc(rootConfig),
+        generateIdeaSettings(rootConfig),
         generateLintstagedrc(rootConfig),
         generateYarnrc(rootConfig),
         generateRenovateJson(rootConfig)

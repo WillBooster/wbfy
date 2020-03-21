@@ -1,9 +1,9 @@
 import path from 'path';
-import fse from 'fs-extra';
-import merge from 'deepmerge';
 import { PackageConfig } from '../utils/packageConfig';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { FsUtil } from '../utils/fsUtil';
+import merge from 'deepmerge';
+import fse from 'fs-extra';
 
 function getExtensionBase(config: PackageConfig): string {
   if (config.containingTypeScript) {
@@ -24,7 +24,7 @@ function getExtensionBase(config: PackageConfig): string {
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   const eslintBase = getExtensionBase(config);
   config.eslintBase = rootConfig.eslintBase === eslintBase ? '../../.eslintrc.json' : eslintBase;
-  let jsonObj: any = { extends: [config.eslintBase] };
+  let jsonObj: any = { root: true, extends: [config.eslintBase] };
 
   const filePath = path.resolve(config.dirPath, '.eslintrc.json');
   if (fse.existsSync(filePath)) {

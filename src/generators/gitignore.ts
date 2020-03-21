@@ -1,8 +1,8 @@
 import path from 'path';
-import fetch from 'node-fetch';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
+import fetch from 'node-fetch';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim'];
 
@@ -59,6 +59,8 @@ packaged.yaml
   let content = await response.text();
   if (config.containingPomXml) {
     content = content
+      .replace(/\r?\n/g, '\n')
+      .replace(/^.idea\/?$/m, '# .idea')
       .replace('# .idea/misc.xml', '.idea/misc.xml')
       .replace('# .idea/modules.xml', '.idea/modules.xml')
       .replace('# .idea/*.iml', '.idea/*.iml')
