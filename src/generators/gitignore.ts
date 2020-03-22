@@ -56,6 +56,9 @@ packaged.yaml
   }
   if (rootConfig.depending.reactNative || config.depending.reactNative) {
     names.push('reactnative');
+    userContent += `google-services.json
+android/app/src/main/assets/
+`;
   }
 
   const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);
