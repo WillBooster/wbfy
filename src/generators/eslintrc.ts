@@ -34,7 +34,10 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       if (existingJsonObj.extends) {
         existingJsonObj.extends = existingJsonObj.extends.filter((ext: string) => !ext.startsWith('@willbooster/'));
       }
-      newJsonObj = merge.all([existingJsonObj, newJsonObj], { arrayMerge: combineMerge });
+      const newExtends = newJsonObj.extends;
+      newJsonObj.extends = existingJsonObj.extends;
+      existingJsonObj.extends = newExtends;
+      newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: combineMerge });
     } catch (e) {
       // do nothing
     }
