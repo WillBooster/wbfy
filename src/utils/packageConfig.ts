@@ -60,8 +60,8 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
         firebase: !!devDependencies['firebase-tools'],
         reactNative: !!dependencies['react-native'],
         tsnode:
-          Object.values(scripts).some(script => script.includes('ts-node')) ||
-          Object.keys(devDependencies).some(dep => dep.includes('ts-node')) ||
+          Object.values(scripts).some((script) => script.includes('ts-node')) ||
+          Object.keys(devDependencies).some((dep) => dep.includes('ts-node')) ||
           packageJson?.engines?.node?.startsWith('10'),
       },
     };
