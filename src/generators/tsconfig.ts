@@ -5,48 +5,44 @@ import { PackageConfig } from '../utils/packageConfig';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { FsUtil } from '../utils/fsUtil';
 
-function generateRootJsonObj(): any {
-  return {
-    compilerOptions: {
-      target: 'esnext',
-      module: 'esnext',
-      moduleResolution: 'node',
-      jsx: 'react',
-      alwaysStrict: true,
-      strict: true,
-      skipLibCheck: true,
-      allowSyntheticDefaultImports: true,
-      esModuleInterop: true,
-      resolveJsonModule: true,
-      sourceMap: true,
-      importHelpers: false,
-      outDir: 'dist',
-      typeRoots: ['./node_modules/@types', './@types'],
-    },
-    include: ['src/**/*', '__tests__/**/*', 'packages/*/src/**/*', 'packages/*/__tests__/**/*'],
-  };
-}
+const rootJsonObj = {
+  compilerOptions: {
+    target: 'esnext',
+    module: 'esnext',
+    moduleResolution: 'node',
+    jsx: 'react',
+    alwaysStrict: true,
+    strict: true,
+    skipLibCheck: true,
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    resolveJsonModule: true,
+    sourceMap: true,
+    importHelpers: false,
+    outDir: 'dist',
+    typeRoots: ['./node_modules/@types', './@types'],
+  },
+  include: ['src/**/*', '__tests__/**/*', 'packages/*/src/**/*', 'packages/*/__tests__/**/*'],
+};
 
-function generateSubJsonObj(): any {
-  return {
-    extends: '../../tsconfig.json',
-    compilerOptions: {
-      outDir: 'dist',
-      typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
-    },
-    include: ['src/**/*', '__tests__/**/*'],
-  };
-}
+const subJsonObj = {
+  extends: '../../tsconfig.json',
+  compilerOptions: {
+    outDir: 'dist',
+    typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
+  },
+  include: ['src/**/*', '__tests__/**/*'],
+};
 
 export async function generateTsconfig(config: PackageConfig): Promise<void> {
-  let jsonObj = config.root ? generateRootJsonObj() : generateSubJsonObj();
+  let newJsonObj: any = Object.assign({}, config.root ? rootJsonObj : subJsonObj);
   if (!config.containingJsxOrTsx) {
-    delete jsonObj.compilerOptions.jsx;
+    delete newJsonObj.compilerOptions.jsx;
   }
   if (config.depending.tsnode) {
     // We expect Node version is 10+
-    jsonObj.compilerOptions.target = 'es2018';
-    jsonObj.compilerOptions.module = 'commonjs';
+    newJsonObj.compilerOptions.target = 'es2018';
+    newJsonObj.compilerOptions.module = 'commonjs';
   }
 
   const filePath = path.resolve(config.dirPath, 'tsconfig.json');
@@ -58,13 +54,13 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
         delete existingJsonObj.extends;
       }
       if (!config.depending.tsnode) {
-        delete jsonObj?.compilerOptions?.target;
-        delete jsonObj?.compilerOptions?.module;
+        delete newJsonObj?.compilerOptions?.target;
+        delete newJsonObj?.compilerOptions?.module;
       }
-      jsonObj = merge.all([jsonObj, existingJsonObj, jsonObj], { arrayMerge: overwriteMerge });
+      newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });
     } catch (e) {
       // do nothing
     }
   }
-  await FsUtil.generateFile(filePath, JSON.stringify(jsonObj));
+  await FsUtil.generateFile(filePath, JSON.stringify(newJsonObj));
 }

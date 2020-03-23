@@ -65,8 +65,6 @@ android/app/src/main/assets/
   let content = await response.text();
   if (config.containingPomXml) {
     content = content
-      .replace(/\r?\n/g, '\n')
-      .replace(/^.idea\/?$/m, '# .idea')
       .replace('# .idea/misc.xml', '.idea/misc.xml')
       .replace('# .idea/modules.xml', '.idea/modules.xml')
       .replace('# .idea/*.iml', '.idea/*.iml')
@@ -74,5 +72,6 @@ android/app/src/main/assets/
       .replace('# *.iml', '*.iml')
       .replace('# *.ipr', '*.ipr');
   }
+  content = content.replace(/^.idea\/?$/m, '# .idea');
   await FsUtil.generateFile(filePath, userContent + content);
 }

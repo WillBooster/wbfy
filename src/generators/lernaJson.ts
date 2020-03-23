@@ -5,20 +5,18 @@ import { overwriteMerge } from '../utils/mergeUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
-function generateJsonObj(): any {
-  return {
-    packages: ['packages/*'],
-    version: '1.0.0',
-    npmClient: 'yarn',
-    useWorkspaces: true,
-    publishConfig: {
-      access: 'public',
-    },
-  };
-}
+const jsonObj = {
+  packages: ['packages/*'],
+  version: '1.0.0',
+  npmClient: 'yarn',
+  useWorkspaces: true,
+  publishConfig: {
+    access: 'public',
+  },
+};
 
 export async function generateLernaJson(config: PackageConfig): Promise<void> {
-  let jsonObj = generateJsonObj();
+  let newJsonObj: any = Object.assign({}, jsonObj);
 
   const filePath = path.resolve(config.dirPath, 'lerna.json');
   if (fse.existsSync(filePath)) {
@@ -26,11 +24,11 @@ export async function generateLernaJson(config: PackageConfig): Promise<void> {
     try {
       const existingJsonObj = JSON.parse(existingContent) as any;
       const version = existingJsonObj.version;
-      jsonObj = merge.all([jsonObj, existingJsonObj, jsonObj], { arrayMerge: overwriteMerge });
-      jsonObj.version = version || jsonObj.version;
+      newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });
+      newJsonObj.version = version || newJsonObj.version;
     } catch (e) {
       // do nothing
     }
   }
-  await FsUtil.generateFile(filePath, JSON.stringify(jsonObj));
+  await FsUtil.generateFile(filePath, JSON.stringify(newJsonObj));
 }

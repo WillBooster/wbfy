@@ -4,19 +4,17 @@ import merge from 'deepmerge';
 import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
-function generateJsonObj(): any {
-  return {
-    hooks: {
-      'pre-commit': 'lint-staged',
-      'pre-push': 'yarn typecheck',
-    },
-  };
-}
+const jsonObj = {
+  hooks: {
+    'pre-commit': 'lint-staged',
+    'pre-push': 'yarn typecheck',
+  },
+};
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
-  let jsonObj = generateJsonObj();
+  let newJsonObj: any = Object.assign({}, jsonObj);
   if (!config.containingTypeScript) {
-    delete jsonObj.hooks['pre-push'];
+    delete newJsonObj.hooks['pre-push'];
   }
 
   const filePath = path.resolve(config.dirPath, '.huskyrc.json');
@@ -24,10 +22,10 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     const existingContent = fse.readFileSync(filePath).toString();
     try {
       const existingJsonObj = JSON.parse(existingContent);
-      jsonObj = merge.all([jsonObj, existingJsonObj, jsonObj]);
+      newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj]);
     } catch (e) {
       // do nothing
     }
   }
-  await FsUtil.generateFile(filePath, JSON.stringify(jsonObj));
+  await FsUtil.generateFile(filePath, JSON.stringify(newJsonObj));
 }

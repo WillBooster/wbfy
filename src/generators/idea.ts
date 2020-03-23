@@ -6,16 +6,108 @@ import { FsUtil } from '../utils/fsUtil';
 const content = `<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    <enabled-global>
-      <option value="Prettier (TypeScript JSX)" />
-      <option value="Prettier (TypeScript)" />
-      <option value="Prettier (JavaScript)" />
-      <option value="Prettier (JSON)" />
-      <option value="Prettier (Markdown)" />
-    </enabled-global>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="ts" />
+      <option name="immediateSync" value="false" />
+      <option name="name" value="Prettier (.ts)" />
+      <option name="output" value="$FilePathRelativeToProjectRoot$" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/prettier" />
+      <option name="runOnExternalChanges" value="true" />
+      <option name="scopeName" value="Project Files" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="$ProjectFileDir$" />
+      <envs />
+    </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="tsx" />
+      <option name="immediateSync" value="false" />
+      <option name="name" value="Prettier (.tsx)" />
+      <option name="output" value="$FilePathRelativeToProjectRoot$" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/prettier" />
+      <option name="runOnExternalChanges" value="true" />
+      <option name="scopeName" value="Project Files" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="$ProjectFileDir$" />
+      <envs />
+    </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="js" />
+      <option name="immediateSync" value="false" />
+      <option name="name" value="Prettier (.js)" />
+      <option name="output" value="$FilePathRelativeToProjectRoot$" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/prettier" />
+      <option name="runOnExternalChanges" value="true" />
+      <option name="scopeName" value="Project Files" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="$ProjectFileDir$" />
+      <envs />
+    </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="json" />
+      <option name="immediateSync" value="false" />
+      <option name="name" value="Prettier (.json)" />
+      <option name="output" value="$FilePathRelativeToProjectRoot$" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/prettier" />
+      <option name="runOnExternalChanges" value="true" />
+      <option name="scopeName" value="Project Files" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="$ProjectFileDir$" />
+      <envs />
+    </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="md" />
+      <option name="immediateSync" value="false" />
+      <option name="name" value="Prettier (.md)" />
+      <option name="output" value="$FilePathRelativeToProjectRoot$" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/prettier" />
+      <option name="runOnExternalChanges" value="true" />
+      <option name="scopeName" value="Project Files" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="$ProjectFileDir$" />
+      <envs />
+    </TaskOptions>
   </component>
-</project>
-`;
+</project>`;
 
 export async function generateIdeaSettings(config: PackageConfig): Promise<void> {
   const dirPath = path.resolve(config.dirPath, '.idea');
