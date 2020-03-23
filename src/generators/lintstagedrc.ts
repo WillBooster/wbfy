@@ -27,6 +27,15 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
     }
     return commands;
   },`);
+  if (config.containingPubspecYaml) {
+    lines.push(`
+  './{lib,test,test_driver}/**/*.dart': files => {
+    const filteredFiles = files.filter(file => !file.includes('generated'))
+      .map(file => path.relative('', file));
+    if (filteredFiles.length === 0) return [];
+    return [\`flutter format \${filteredFiles.join(' ')}\`];
+  },`);
+  }
 
   const content = `const micromatch = require('micromatch');
 const path = require('path');
