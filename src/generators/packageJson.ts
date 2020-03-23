@@ -100,7 +100,7 @@ export async function generatePackageJson(
 
   if (config.root) {
     // Cannot remove a version prefix in sub-packages because a version prefix is required to refer to another sub-package
-    [jsonObj.dependencies, jsonObj.devDependencies, jsonObj.peerDependencies].forEach(deps =>
+    [jsonObj.dependencies, jsonObj.devDependencies, jsonObj.peerDependencies].forEach((deps) =>
       removeVersionPrefix(deps)
     );
 
@@ -136,8 +136,8 @@ export async function generatePackageJson(
   }
 
   if (config.willBoosterConfigs) {
-    dependencies = dependencies.filter(dep => !dep.includes('@willbooster/'));
-    devDependencies = devDependencies.filter(dep => !dep.includes('@willbooster/'));
+    dependencies = dependencies.filter((dep) => !dep.includes('@willbooster/'));
+    devDependencies = devDependencies.filter((dep) => !dep.includes('@willbooster/'));
   }
 
   if (!jsonObj.name) {
@@ -170,7 +170,7 @@ export async function generatePackageJson(
 
   if (config.containingPubspecYaml) {
     jsonObj.scripts.lint = 'flutter analyze';
-    const dirs = ['lib', 'test', 'test_driver'].filter(dir => fs.existsSync(path.resolve(config.dirPath, dir)));
+    const dirs = ['lib', 'test', 'test_driver'].filter((dir) => fs.existsSync(path.resolve(config.dirPath, dir)));
     if (dirs.length > 0) {
       jsonObj.scripts['flutter-format'] = `flutter format $(find ${dirs.join(
         ' '
@@ -196,11 +196,11 @@ export async function generatePackageJson(
 
   let yarnInstallRequired = true;
   if (!skipAddingDeps) {
-    if (dependencies.length && dependencies.some(dep => !jsonObj.dependencies[dep])) {
+    if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies[dep])) {
       spawnSync('yarn', ['add', '-W', ...new Set(dependencies)], config.dirPath);
       yarnInstallRequired = false;
     }
-    if (devDependencies.length && devDependencies.some(dep => !jsonObj.devDependencies[dep])) {
+    if (devDependencies.length && devDependencies.some((dep) => !jsonObj.devDependencies[dep])) {
       spawnSync('yarn', ['add', '-W', '-D', ...new Set(devDependencies)], config.dirPath);
       yarnInstallRequired = false;
     }
@@ -227,11 +227,11 @@ function generatePrettierSuffix(dirPath: string): string {
   const originalContent = existingContent.substring(0, index);
   const lines = originalContent
     .split('\n')
-    .map(line => {
+    .map((line) => {
       const newLine = line.trim();
       return newLine.endsWith('/') ? newLine.slice(0, -1) : newLine;
     })
-    .filter(l => l && !l.startsWith('#') && !l.includes('/'));
+    .filter((l) => l && !l.startsWith('#') && !l.includes('/'));
 
-  return lines.map(line => ` \\"!**/${line}/**\\"`).join('');
+  return lines.map((line) => ` \\"!**/${line}/**\\"`).join('');
 }

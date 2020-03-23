@@ -42,19 +42,19 @@ class GenConfigs extends Command {
       }
 
       const subDirPaths = rootConfig.containingSubPackages
-        ? glob.sync('packages/*', { cwd: rootDirPath }).map(subDirPath => path.resolve(rootDirPath, subDirPath))
+        ? glob.sync('packages/*', { cwd: rootDirPath }).map((subDirPath) => path.resolve(rootDirPath, subDirPath))
         : [];
       const subPackageConfigs = subDirPaths
-        .map(subDirPath => getPackageConfig(subDirPath))
-        .filter(config => !!config) as PackageConfig[];
+        .map((subDirPath) => getPackageConfig(subDirPath))
+        .filter((config) => !!config) as PackageConfig[];
       const allPackageConfigs = [rootConfig, ...subPackageConfigs];
-      const allNodePackageConfigs = [rootConfig, ...subPackageConfigs.filter(config => config.containingPackageJson)];
+      const allNodePackageConfigs = [rootConfig, ...subPackageConfigs.filter((config) => config.containingPackageJson)];
 
-      rootConfig.containingJavaScript = allPackageConfigs.some(c => c.containingJavaScript);
-      rootConfig.containingTypeScript = allPackageConfigs.some(c => c.containingTypeScript);
-      rootConfig.containingJsxOrTsx = allPackageConfigs.some(c => c.containingJsxOrTsx);
+      rootConfig.containingJavaScript = allPackageConfigs.some((c) => c.containingJavaScript);
+      rootConfig.containingTypeScript = allPackageConfigs.some((c) => c.containingTypeScript);
+      rootConfig.containingJsxOrTsx = allPackageConfigs.some((c) => c.containingJsxOrTsx);
 
-      const rootPromises = allPackageConfigs.map(config => generateGitignore(config, rootConfig));
+      const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig));
       rootPromises.push(
         generateEditorconfig(rootConfig),
         generateGitattributes(rootConfig),

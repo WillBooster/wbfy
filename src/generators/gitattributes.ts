@@ -10,7 +10,7 @@ const content = `* text=auto
 ${Extensions.codeWith2IndentSize
   .concat(Extensions.codeWith4IndentSize)
   .concat(Extensions.markdownLike)
-  .map(ext => `*.${ext} text eol=lf`)
+  .map((ext) => `*.${ext} text eol=lf`)
   .join('\n')}
 `;
 
