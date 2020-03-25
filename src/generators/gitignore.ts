@@ -61,8 +61,14 @@ android/app/src/main/assets/
 `;
   }
 
-  const response = await fetch(`https://www.gitignore.io/api/${names.join(',')}`);
-  let content = await response.text();
+  let content = (
+    await Promise.all(
+      names.map(async (name) => {
+        const response = await fetch(`https://www.gitignore.io/api/${name}`);
+        return await response.text();
+      })
+    )
+  ).join();
   if (config.containingPomXml) {
     content = content
       .replace('# .idea/misc.xml', '.idea/misc.xml')
