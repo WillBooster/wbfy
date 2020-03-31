@@ -13,3 +13,8 @@ However, we sometimes faced the cases where we wanted to apply conventional conf
 ## Philosophy
 
 This tool must keep idempotency, i.e., it always yields the same result when a user applies this tool to a project even multiple times.
+
+## How to Use
+
+1. `yarn`
+1. `yarn start <project directory>`
