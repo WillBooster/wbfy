@@ -78,6 +78,9 @@ android/app/src/main/assets/
       .replace('# *.iml', '*.iml')
       .replace('# *.ipr', '*.ipr');
   }
-  content = content.replace(/^.idea\/?$/m, '# .idea');
+  content = content.replace(/^.idea\/?$/gm, '# .idea');
+  if (rootConfig.depending.reactNative || config.depending.reactNative) {
+    content = content.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
+  }
   await FsUtil.generateFile(filePath, userContent + content);
 }
