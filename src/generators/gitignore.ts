@@ -68,7 +68,7 @@ android/app/src/main/assets/
         return await response.text();
       })
     )
-  ).join();
+  ).join('');
   if (config.containingPomXml) {
     content = content
       .replace('# .idea/misc.xml', '.idea/misc.xml')
