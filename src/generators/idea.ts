@@ -133,7 +133,7 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
   const dirPath = path.resolve(config.dirPath, '.idea');
   if (fse.existsSync(dirPath)) {
     const filePath = path.resolve(dirPath, 'watcherTasks.xml');
-    if (config.containingJavaScript) {
+    if (config.containingJavaScript || config.containingTypeScript) {
       await FsUtil.generateFile(filePath, content);
     } else {
       await fse.remove(filePath);
