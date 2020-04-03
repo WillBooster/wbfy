@@ -127,7 +127,8 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
       <envs />
     </TaskOptions>
   </component>
-</project>`;
+</project>
+`;
 
 export async function generateIdeaSettings(config: PackageConfig): Promise<void> {
   const dirPath = path.resolve(config.dirPath, '.idea');
