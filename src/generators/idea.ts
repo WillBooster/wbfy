@@ -106,6 +106,26 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
       <option name="workingDir" value="$ProjectFileDir$" />
       <envs />
     </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="html" />
+      <option name="immediateSync" value="false" />
+      <option name="name" value="Prettier (.html)" />
+      <option name="output" value="$FilePathRelativeToProjectRoot$" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="$ProjectFileDir$/node_modules/.bin/prettier" />
+      <option name="runOnExternalChanges" value="true" />
+      <option name="scopeName" value="Project Files" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="$ProjectFileDir$" />
+      <envs />
+    </TaskOptions>
   </component>
 </project>`;
 
@@ -113,6 +133,10 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
   const dirPath = path.resolve(config.dirPath, '.idea');
   if (fse.existsSync(dirPath)) {
     const filePath = path.resolve(dirPath, 'watcherTasks.xml');
-    await FsUtil.generateFile(filePath, content);
+    if (config.containingJavaScript) {
+      await FsUtil.generateFile(filePath, content);
+    } else {
+      await fse.remove(filePath);
+    }
   }
 }
