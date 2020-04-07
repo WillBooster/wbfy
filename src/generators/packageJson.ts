@@ -128,6 +128,10 @@ export async function generatePackageJson(
       );
     }
 
+    if (config.containingTypeScript) {
+      devDependencies.push('typescript');
+    }
+
     for (const config of allConfigs) {
       if (config.eslintBase) {
         devDependencies.push(...devDeps[config.eslintBase]);
