@@ -26,7 +26,7 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "@oclif/command": "1.6.0",
+    "@oclif/command": "1.6.1",
     "@oclif/config": "1.15.1",
     "@oclif/plugin-help": "2.2.3",
     "deepmerge": "4.2.2",
@@ -40,8 +40,8 @@
     "@types/glob": "7.1.1",
     "@types/js-yaml": "3.12.3",
     "@types/node-fetch": "2.5.7",
-    "@typescript-eslint/eslint-plugin": "2.30.0",
-    "@typescript-eslint/parser": "2.30.0",
+    "@typescript-eslint/eslint-plugin": "2.31.0",
+    "@typescript-eslint/parser": "2.31.0",
     "@willbooster/eslint-config-ts": "3.0.0",
     "@willbooster/prettier-config": "3.0.0",
     "@willbooster/renovate-config": "3.0.0",
@@ -55,7 +55,7 @@
     "prettier": "2.0.5",
     "rimraf": "3.0.2",
     "semantic-release": "17.0.7",
-    "sort-package-json": "1.42.1",
+    "sort-package-json": "1.42.2",
     "ts-node": "8.10.1",
     "typescript": "3.8.3"
   },
