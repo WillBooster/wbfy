@@ -36,12 +36,12 @@
     "node-fetch": "2.6.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "8.1.0",
+    "@types/fs-extra": "8.1.1",
     "@types/glob": "7.1.1",
-    "@types/js-yaml": "3.12.3",
+    "@types/js-yaml": "3.12.4",
     "@types/node-fetch": "2.5.7",
-    "@typescript-eslint/eslint-plugin": "2.31.0",
-    "@typescript-eslint/parser": "2.31.0",
+    "@typescript-eslint/eslint-plugin": "2.33.0",
+    "@typescript-eslint/parser": "2.33.0",
     "@willbooster/eslint-config-ts": "3.0.0",
     "@willbooster/prettier-config": "3.0.0",
     "@willbooster/renovate-config": "3.0.0",
@@ -57,7 +57,7 @@
     "semantic-release": "17.0.7",
     "sort-package-json": "1.42.2",
     "ts-node": "8.10.1",
-    "typescript": "3.8.3"
+    "typescript": "3.9.2"
   },
   "engines": {
     "node": ">=8.0.0"
