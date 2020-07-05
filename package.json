@@ -26,8 +26,8 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "@oclif/command": "1.6.1",
-    "@oclif/config": "1.15.1",
+    "@oclif/command": "1.7.0",
+    "@oclif/config": "1.16.0",
     "@oclif/plugin-help": "2.2.3",
     "deepmerge": "4.2.2",
     "fs-extra": "9.0.1",
@@ -38,26 +38,26 @@
   "devDependencies": {
     "@types/fs-extra": "8.1.1",
     "@types/glob": "7.1.2",
-    "@types/js-yaml": "3.12.4",
+    "@types/js-yaml": "3.12.5",
     "@types/node-fetch": "2.5.7",
     "@typescript-eslint/eslint-plugin": "2.34.0",
     "@typescript-eslint/parser": "2.34.0",
     "@willbooster/eslint-config-ts": "3.0.0",
     "@willbooster/prettier-config": "3.0.0",
     "@willbooster/renovate-config": "3.0.0",
-    "dotenv-cli": "3.1.0",
+    "dotenv-cli": "3.2.0",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.11.0",
-    "eslint-plugin-import": "2.21.2",
+    "eslint-plugin-import": "2.22.0",
     "eslint-plugin-prettier": "3.1.4",
     "husky": "4.2.5",
     "lint-staged": "10.2.11",
     "prettier": "2.0.5",
     "rimraf": "3.0.2",
-    "semantic-release": "17.0.8",
+    "semantic-release": "17.1.1",
     "sort-package-json": "1.44.0",
     "ts-node": "8.10.2",
-    "typescript": "3.9.5"
+    "typescript": "3.9.6"
   },
   "engines": {
     "node": ">=8.0.0"
