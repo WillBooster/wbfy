@@ -26,8 +26,8 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "@oclif/command": "1.7.0",
-    "@oclif/config": "1.16.0",
+    "@oclif/command": "1.8.0",
+    "@oclif/config": "1.17.0",
     "@oclif/plugin-help": "2.2.3",
     "deepmerge": "4.2.2",
     "fs-extra": "9.0.1",
