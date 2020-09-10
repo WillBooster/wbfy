@@ -71,7 +71,9 @@ android/app/src/main/assets/
   ).join('');
   if (config.containingPomXml) {
     content = content
-      .replace('# .idea/misc.xml', '.idea/misc.xml')
+      .replace('# .idea/artifacts', '.idea/artifacts')
+      .replace('# .idea/compiler.xml', '.idea/compiler.xml')
+      .replace('# .idea/jarRepositories.xml', '.idea/jarRepositories.xml')
       .replace('# .idea/modules.xml', '.idea/modules.xml')
       .replace('# .idea/*.iml', '.idea/*.iml')
       .replace('# .idea/modules', '.idea/modules')
