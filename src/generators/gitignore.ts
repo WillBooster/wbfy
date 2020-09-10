@@ -81,7 +81,7 @@ android/app/src/main/assets/
       .replace('# *.ipr', '*.ipr');
   }
   content = content.replace(/^.idea\/?$/gm, '# .idea');
-  if (rootConfig.depending.reactNative || config.depending.reactNative) {
+  if (rootConfig.depending.reactNative || config.depending.reactNative || config.containingPubspecYaml) {
     content = content.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
   }
   await FsUtil.generateFile(filePath, userContent + content);
