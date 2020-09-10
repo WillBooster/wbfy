@@ -19,4 +19,5 @@
 *.yml text eol=lf
 *.go text eol=lf
 *.gradle text eol=lf
+*.py text eol=lf
 *.md text eol=lf

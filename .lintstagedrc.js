@@ -1,5 +1,5 @@
-const micromatch = require('micromatch');
 const path = require('path');
+const micromatch = require('micromatch');
 
 module.exports = {
   './{packages/*/,}{src,__tests__}/**/*.{js,jsx,ts,tsx}': ['eslint --fix'],
