@@ -23,7 +23,8 @@ class GenConfigs extends Command {
 
   static flags = {
     skipDeps: flags.boolean({ char: 'd' }),
-    version: flags.version({ char: 'v' }),
+    version: flags.version(),
+    verbose: flags.boolean({ char: 'v' }),
     help: flags.help({ char: 'h' }),
   };
 
@@ -53,6 +54,12 @@ class GenConfigs extends Command {
       rootConfig.containingJavaScript = allPackageConfigs.some((c) => c.containingJavaScript);
       rootConfig.containingTypeScript = allPackageConfigs.some((c) => c.containingTypeScript);
       rootConfig.containingJsxOrTsx = allPackageConfigs.some((c) => c.containingJsxOrTsx);
+
+      if (flags.verbose) {
+        for (const config of allPackageConfigs) {
+          console.log(config);
+        }
+      }
 
       const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig));
       rootPromises.push(
