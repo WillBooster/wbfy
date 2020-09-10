@@ -38,8 +38,8 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   },`);
   }
 
-  const content = `const micromatch = require('micromatch');
-const path = require('path');
+  const content = `const path = require('path');
+${config.containingJavaScript || config.containingTypeScript ? "const micromatch = require('micromatch');" : ''}
 
 module.exports = {${lines.join('')}
 };
