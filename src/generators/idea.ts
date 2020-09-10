@@ -8,7 +8,7 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
       <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
-      <option name="checkSyntaxErrors" value="true" />
+      <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="ts" />
@@ -28,7 +28,7 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
     </TaskOptions>
     <TaskOptions isEnabled="true">
       <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
-      <option name="checkSyntaxErrors" value="true" />
+      <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="tsx" />
@@ -48,7 +48,7 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
     </TaskOptions>
     <TaskOptions isEnabled="true">
       <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
-      <option name="checkSyntaxErrors" value="true" />
+      <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="js" />
@@ -68,7 +68,7 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
     </TaskOptions>
     <TaskOptions isEnabled="true">
       <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
-      <option name="checkSyntaxErrors" value="true" />
+      <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="json" />
@@ -88,7 +88,7 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
     </TaskOptions>
     <TaskOptions isEnabled="true">
       <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
-      <option name="checkSyntaxErrors" value="true" />
+      <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="md" />
@@ -108,7 +108,7 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
     </TaskOptions>
     <TaskOptions isEnabled="true">
       <option name="arguments" value="--write $FilePathRelativeToProjectRoot$" />
-      <option name="checkSyntaxErrors" value="true" />
+      <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="html" />
