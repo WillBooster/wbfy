@@ -61,7 +61,7 @@ class GenConfigs extends Command {
         }
       }
 
-      const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig));
+      const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig, allPackageConfigs));
       rootPromises.push(
         generateEditorconfig(rootConfig),
         generateGitattributes(rootConfig),

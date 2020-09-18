@@ -10,6 +10,7 @@ export interface PackageConfig {
   containingGemfile: boolean;
   containingGoMod: boolean;
   containingPackageJson: boolean;
+  containingPoetryLock: boolean;
   containingPomXml: boolean;
   containingPubspecYaml: boolean;
   containingTemplateYaml: boolean;
@@ -51,6 +52,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
       containingGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
       containingPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
+      containingPoetryLock: fs.existsSync(path.resolve(dirPath, 'poetry.lock')),
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
@@ -69,6 +71,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       config.containingGemfile ||
       config.containingGoMod ||
       config.containingPackageJson ||
+      config.containingPoetryLock ||
       config.containingPomXml ||
       config.containingPubspecYaml ||
       config.containingTemplateYaml

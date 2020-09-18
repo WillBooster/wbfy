@@ -95,6 +95,9 @@ export async function generatePackageJson(
 
   jsonObj.prettier = '@willbooster/prettier-config';
 
+  jsonObj.scripts = merge(jsonObj.scripts, config.containingSubPackages ? scriptsWithLerna : scriptsWithoutLerna);
+  jsonObj.scripts.prettier += generatePrettierSuffix(config.dirPath);
+
   let dependencies = [] as string[];
   let devDependencies = [] as string[];
 
@@ -126,6 +129,12 @@ export async function generatePackageJson(
         },
         { arrayMerge: overwriteMerge }
       );
+      if (allConfigs.some((c) => c.containingPubspecYaml)) {
+        jsonObj.scripts.format += ` && yarn lerna run flutter-format`;
+      }
+      if (allConfigs.some((c) => c.containingPoetryLock)) {
+        jsonObj.scripts.format += ` && yarn lerna run python-format`;
+      }
     }
 
     if (config.containingTypeScript) {
@@ -156,9 +165,6 @@ export async function generatePackageJson(
     jsonObj.license = 'UNLICENSED';
   }
 
-  jsonObj.scripts = merge(jsonObj.scripts, config.containingSubPackages ? scriptsWithLerna : scriptsWithoutLerna);
-  jsonObj.scripts.prettier += generatePrettierSuffix(config.dirPath);
-
   if (!config.containingTypeScript) {
     delete jsonObj.scripts.typecheck;
   }
@@ -181,8 +187,20 @@ export async function generatePackageJson(
       )} -name generated -prune -o -name '*.freezed.dart' -prune -o -name '*.g.dart' -prune -o -name '*.dart' -print)`;
       jsonObj.scripts.format += ` && yarn flutter-format`;
     }
-    if (config.containingSubPackages) {
-      jsonObj.scripts.format += ` && yarn lerna run flutter-format`;
+  }
+
+  if (config.containingPoetryLock) {
+    jsonObj.scripts.postinstall = 'poetry install';
+    const dirNames = fs.readdirSync(config.dirPath).filter((dirName) => {
+      const dirPath = path.resolve(config.dirPath, dirName);
+      if (!fs.lstatSync(dirPath).isDirectory()) return false;
+      return fs.readdirSync(dirPath).some((fileName) => fileName.endsWith('.py'));
+    });
+    if (dirNames.length > 0) {
+      jsonObj.scripts['python-format'] = `poetry run black ${dirNames.join(' ')}`;
+      jsonObj.scripts['lint'] = `poetry run flake8 ${dirNames.join(' ')}`;
+      jsonObj.scripts['lint-fix'] = 'yarn lint';
+      jsonObj.scripts.format += ` && yarn python-format`;
     }
   }
 
