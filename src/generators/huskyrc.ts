@@ -4,16 +4,23 @@ import merge from 'deepmerge';
 import { PackageConfig } from '../utils/packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 
-const jsonObj = {
+const jsonObjWithoutLerna = {
   hooks: {
     'pre-commit': 'lint-staged',
     'pre-push': 'yarn typecheck',
   },
 };
 
+const jsonObjWithLerna = {
+  hooks: {
+    'pre-commit': 'lerna exec lint-staged --concurrency 1 --stream --since HEAD --exclude-dependents',
+    'pre-push': 'yarn typecheck',
+  },
+};
+
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
-  let newJsonObj: any = Object.assign({}, jsonObj);
-  if (!config.containingTypeScript) {
+  let newJsonObj: any = Object.assign({}, config.containingSubPackages ? jsonObjWithLerna : jsonObjWithoutLerna);
+  if (!config.containingTypeScriptInPackages && !config.containingTypeScript) {
     delete newJsonObj.hooks['pre-push'];
   }
 

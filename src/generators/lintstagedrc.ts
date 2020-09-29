@@ -5,20 +5,20 @@ import { FsUtil } from '../utils/fsUtil';
 import { Extensions } from '../utils/extensions';
 import { EslintUtil } from '../utils/eslintUtil';
 
-const eslintKey = `./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}`;
+const eslintKey = `./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}`;
 const eslintFilterForPrettier = `files = micromatch.not(files, '${eslintKey}');`;
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
     const eslint = `
-  '${eslintKey}': [${JSON.stringify(`eslint --fix${EslintUtil.getLintFixSuffix(config)}`)}],`;
+  '${eslintKey}': [${JSON.stringify(`eslint --fix${EslintUtil.getLintFixSuffix(config)}`)}, 'prettier --write'],`;
     lines.push(eslint);
   }
   lines.push(`
   './**/*.{${Extensions.prettier.join(',')}}': files => {
     ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
-    const filteredFiles = files.filter(file => !file.includes('/test-fixtures/'))
+    const filteredFiles = files.filter(file => !file.includes('/test-fixtures/') && !file.includes('/packages/'))
       .map(file => path.relative('', file));
     if (filteredFiles.length === 0) return [];
     const commands = [\`prettier --write \${filteredFiles.join(' ')}\`];
@@ -36,6 +36,10 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
     if (filteredFiles.length === 0) return [];
     return [\`flutter format \${filteredFiles.join(' ')}\`];
   },`);
+  }
+  if (config.containingPoetryLock) {
+    lines.push(`
+  './**/*.py': ['poetry run black'],`);
   }
 
   const content = `const path = require('path');

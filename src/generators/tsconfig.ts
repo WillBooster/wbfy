@@ -36,7 +36,7 @@ const subJsonObj = {
 
 export async function generateTsconfig(config: PackageConfig): Promise<void> {
   let newJsonObj: any = Object.assign({}, config.root ? rootJsonObj : subJsonObj);
-  if (!config.containingJsxOrTsx) {
+  if (!config.containingJsxOrTsx && !config.containingJsxOrTsxInPackages) {
     delete newJsonObj.compilerOptions.jsx;
   }
   if (config.depending.tsnode) {

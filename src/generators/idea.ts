@@ -136,7 +136,9 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
     const filePath = path.resolve(dirPath, 'watcherTasks.xml');
     if (
       config.containingJavaScript ||
+      config.containingJavaScriptInPackages ||
       config.containingTypeScript ||
+      config.containingTypeScriptInPackages ||
       (config.containingPackageJson &&
         !config.containingPubspecYaml &&
         !config.containingGemfile &&
