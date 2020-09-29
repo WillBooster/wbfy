@@ -37,7 +37,6 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint',
     'eslint-config-prettier',
     'eslint-plugin-import',
-    'eslint-plugin-prettier',
   ],
   '@willbooster/eslint-config-js-react': [
     '@willbooster/eslint-config-js',
@@ -45,7 +44,6 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint',
     'eslint-config-prettier',
     'eslint-plugin-import',
-    'eslint-plugin-prettier',
     'eslint-plugin-react',
     'eslint-plugin-react-hooks',
   ],
@@ -54,7 +52,6 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint',
     'eslint-config-prettier',
     'eslint-plugin-import',
-    'eslint-plugin-prettier',
     '@typescript-eslint/eslint-plugin',
     '@typescript-eslint/parser',
   ],
@@ -64,7 +61,6 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint',
     'eslint-config-prettier',
     'eslint-plugin-import',
-    'eslint-plugin-prettier',
     'eslint-plugin-react',
     'eslint-plugin-react-hooks',
     '@typescript-eslint/eslint-plugin',
@@ -96,6 +92,7 @@ export async function generatePackageJson(
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
+  delete jsonObj.devDependencies['eslint-plugin-prettier'];
   delete jsonObj.scripts['flutter-format'];
   delete jsonObj.scripts['format-flutter'];
   delete jsonObj.scripts['python-format'];
