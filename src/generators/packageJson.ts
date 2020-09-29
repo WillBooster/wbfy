@@ -12,18 +12,22 @@ import { EslintUtil } from '../utils/eslintUtil';
 const scriptsWithoutLerna = {
   cleanup: 'yarn format && yarn lint-fix',
   format: `sort-package-json && yarn prettier`,
-  lint: `eslint "./{packages/*/,}{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}"`,
+  lint: `eslint "./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}" --color`,
   'lint-fix': 'yarn lint --fix',
-  prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
-  typecheck: 'tsc --noEmit',
+  prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**" --color`,
+  typecheck: 'tsc --noEmit --Pretty',
 };
 
 const scriptsWithLerna = merge(
   { ...scriptsWithoutLerna },
   {
-    format: `yarn sort-package-json && yarn prettier`,
-    'sort-package-json': 'sort-package-json && yarn lerna exec sort-package-json --stream',
-    typecheck: 'yarn lerna run typecheck --stream',
+    format: `sort-package-json && yarn prettier && lerna run format`,
+    lint: `lerna run lint`,
+    'lint-fix': 'lerna run lint-fix',
+    prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(
+      ','
+    )}}" "!**/packages/**" "!**/test-fixtures/**" --color`,
+    typecheck: 'lerna run typecheck',
   }
 );
 
@@ -82,7 +86,7 @@ export async function generatePackageJson(
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   jsonObj.peerDependencies = jsonObj.peerDependencies || {};
 
-  // Fix deprecated things
+  // TODO: remove the following migration code in future
   if (jsonObj.author === 'WillBooster LLC') {
     jsonObj.author = 'WillBooster Inc.';
   }
@@ -92,6 +96,10 @@ export async function generatePackageJson(
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
+  delete jsonObj.scripts['flutter-format'];
+  delete jsonObj.scripts['format-flutter'];
+  delete jsonObj.scripts['python-format'];
+  delete jsonObj.scripts['format-python'];
 
   jsonObj.prettier = '@willbooster/prettier-config';
 
@@ -129,15 +137,9 @@ export async function generatePackageJson(
         },
         { arrayMerge: overwriteMerge }
       );
-      if (allConfigs.some((c) => c.containingPubspecYaml)) {
-        jsonObj.scripts.format += ` && yarn lerna run flutter-format`;
-      }
-      if (allConfigs.some((c) => c.containingPoetryLock)) {
-        jsonObj.scripts.format += ` && yarn lerna run python-format`;
-      }
     }
 
-    if (config.containingTypeScript) {
+    if (config.containingTypeScript || config.containingTypeScriptInPackages) {
       devDependencies.push('typescript');
     }
 
@@ -165,42 +167,44 @@ export async function generatePackageJson(
     jsonObj.license = 'UNLICENSED';
   }
 
-  if (!config.containingTypeScript) {
+  if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
     delete jsonObj.scripts.typecheck;
   }
 
-  if ((!config.containingJavaScript && !config.containingTypeScript) || config.containingPubspecYaml) {
-    delete jsonObj.scripts.lint;
-    delete jsonObj.scripts['lint-fix'];
-    jsonObj.scripts.cleanup = jsonObj.scripts.cleanup.substring(0, jsonObj.scripts.cleanup.lastIndexOf(' && '));
-    console.log(jsonObj.scripts.cleanup);
-  } else {
-    jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
-  }
-
-  if (config.containingPubspecYaml) {
-    jsonObj.scripts.lint = 'flutter analyze';
-    const dirs = ['lib', 'test', 'test_driver'].filter((dir) => fs.existsSync(path.resolve(config.dirPath, dir)));
-    if (dirs.length > 0) {
-      jsonObj.scripts['flutter-format'] = `flutter format $(find ${dirs.join(
-        ' '
-      )} -name generated -prune -o -name '*.freezed.dart' -prune -o -name '*.g.dart' -prune -o -name '*.dart' -print)`;
-      jsonObj.scripts.format += ` && yarn flutter-format`;
+  if (!config.containingSubPackages) {
+    if (!config.containingJavaScript && !config.containingTypeScript) {
+      delete jsonObj.scripts.lint;
+      delete jsonObj.scripts['lint-fix'];
+      jsonObj.scripts.cleanup = jsonObj.scripts.cleanup.replace(' && yarn lint-fix', '');
+    } else {
+      jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
     }
-  }
 
-  if (config.containingPoetryLock) {
-    jsonObj.scripts.postinstall = 'poetry install';
-    const dirNames = fs.readdirSync(config.dirPath).filter((dirName) => {
-      const dirPath = path.resolve(config.dirPath, dirName);
-      if (!fs.lstatSync(dirPath).isDirectory()) return false;
-      return fs.readdirSync(dirPath).some((fileName) => fileName.endsWith('.py'));
-    });
-    if (dirNames.length > 0) {
-      jsonObj.scripts['python-format'] = `poetry run black ${dirNames.join(' ')}`;
-      jsonObj.scripts['lint'] = `poetry run flake8 ${dirNames.join(' ')}`;
+    if (config.containingPubspecYaml) {
+      jsonObj.scripts.lint = 'flutter analyze';
       jsonObj.scripts['lint-fix'] = 'yarn lint';
-      jsonObj.scripts.format += ` && yarn python-format`;
+      const dirs = ['lib', 'test', 'test_driver'].filter((dir) => fs.existsSync(path.resolve(config.dirPath, dir)));
+      if (dirs.length > 0) {
+        jsonObj.scripts['format-code'] = `flutter format $(find ${dirs.join(
+          ' '
+        )} -name generated -prune -o -name '*.freezed.dart' -prune -o -name '*.g.dart' -prune -o -name '*.dart' -print)`;
+        jsonObj.scripts.format += ` && yarn format-code`;
+      }
+    }
+
+    if (config.containingPoetryLock) {
+      jsonObj.scripts.postinstall = 'poetry install';
+      const dirNames = fs.readdirSync(config.dirPath).filter((dirName) => {
+        const dirPath = path.resolve(config.dirPath, dirName);
+        if (!fs.lstatSync(dirPath).isDirectory()) return false;
+        return fs.readdirSync(dirPath).some((fileName) => fileName.endsWith('.py'));
+      });
+      if (dirNames.length > 0) {
+        jsonObj.scripts['format-code'] = `poetry run black ${dirNames.join(' ')}`;
+        jsonObj.scripts.lint = `poetry run flake8 ${dirNames.join(' ')}`;
+        jsonObj.scripts['lint-fix'] = 'yarn lint';
+        jsonObj.scripts.format += ` && yarn format-code`;
+      }
     }
   }
 

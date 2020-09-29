@@ -17,6 +17,9 @@ export interface PackageConfig {
   containingJavaScript: boolean;
   containingTypeScript: boolean;
   containingJsxOrTsx: boolean;
+  containingJavaScriptInPackages: boolean;
+  containingTypeScriptInPackages: boolean;
+  containingJsxOrTsxInPackages: boolean;
   depending: {
     firebase: boolean;
     reactNative: boolean;
@@ -48,7 +51,6 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
         !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackages: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
-      containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
       containingGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
       containingPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
@@ -56,8 +58,12 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
+      containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
       containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
       containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+      containingJavaScriptInPackages: glob.sync('packages/**/src/**/*.js?(x)', { cwd: dirPath }).length > 0,
+      containingTypeScriptInPackages: glob.sync('packages/**/src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+      containingJsxOrTsxInPackages: glob.sync('packages/**/src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
         reactNative: !!dependencies['react-native'],

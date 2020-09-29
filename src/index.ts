@@ -51,17 +51,13 @@ class GenConfigs extends Command {
       const allPackageConfigs = [rootConfig, ...subPackageConfigs];
       const allNodePackageConfigs = [rootConfig, ...subPackageConfigs.filter((config) => config.containingPackageJson)];
 
-      rootConfig.containingJavaScript = allPackageConfigs.some((c) => c.containingJavaScript);
-      rootConfig.containingTypeScript = allPackageConfigs.some((c) => c.containingTypeScript);
-      rootConfig.containingJsxOrTsx = allPackageConfigs.some((c) => c.containingJsxOrTsx);
-
       if (flags.verbose) {
         for (const config of allPackageConfigs) {
           console.log(config);
         }
       }
 
-      const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig, allPackageConfigs));
+      const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig));
       rootPromises.push(
         generateEditorconfig(rootConfig),
         generateGitattributes(rootConfig),
@@ -78,19 +74,22 @@ class GenConfigs extends Command {
 
       const promises: Promise<void>[] = [];
       for (const config of allNodePackageConfigs) {
-        promises.push(generatePrettierignore(config));
-        if (config.containingTypeScript) {
+        promises.push(generatePrettierignore(config), generateLintstagedrc(config));
+        if (config.containingTypeScript || config.containingTypeScriptInPackages) {
           promises.push(generateTsconfig(config));
         }
-        if (config.containingJavaScript || config.containingTypeScript) {
+        if (
+          config.containingJavaScript ||
+          config.containingJavaScriptInPackages ||
+          config.containingTypeScript ||
+          config.containingTypeScriptInPackages
+        ) {
           promises.push(generateEslintrc(config, rootConfig), generateEslintignore(config));
         }
       }
       await Promise.all(promises);
       for (const config of allNodePackageConfigs) {
-        if (config.containingPackageJson) {
-          await generatePackageJson(config, allNodePackageConfigs, flags.skipDeps);
-        }
+        await generatePackageJson(config, allNodePackageConfigs, flags.skipDeps);
       }
       spawnSync('yarn', ['cleanup'], rootDirPath);
     }

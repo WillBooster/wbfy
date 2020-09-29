@@ -18,11 +18,7 @@ dist/
 temp/
 `;
 
-export async function generateGitignore(
-  config: PackageConfig,
-  rootConfig: PackageConfig,
-  allPackageConfigs: PackageConfig[]
-): Promise<void> {
+export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.gitignore');
   let userContent = (IgnoreFileUtil.getUserContent(filePath) || defaultUserContent) + commonContent;
 
@@ -56,7 +52,7 @@ packaged.yaml
 `;
   }
   // Because .venv should be ignored on root directory
-  if ((config === rootConfig && allPackageConfigs.some((c) => c.containingPoetryLock)) || config.containingPoetryLock) {
+  if (config.containingPoetryLock) {
     names.push('python');
   }
   if (rootConfig.depending.firebase || config.depending.firebase) {
