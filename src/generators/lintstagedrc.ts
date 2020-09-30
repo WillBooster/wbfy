@@ -39,7 +39,7 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   }
   if (config.containingPoetryLock) {
     lines.push(`
-  './**/*.py': ['poetry run flake8', 'poetry run black'],`);
+  './**/*.py': ['poetry run black', 'poetry run flake8'],`);
   }
 
   const content = `const path = require('path');
