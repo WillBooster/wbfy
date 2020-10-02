@@ -92,6 +92,7 @@ export async function generatePackageJson(
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
+  const eslintPluginPrettierRemoved = jsonObj.devDependencies['eslint-plugin-prettier'];
   delete jsonObj.devDependencies['eslint-plugin-prettier'];
   delete jsonObj.scripts['flutter-format'];
   delete jsonObj.scripts['format-flutter'];
@@ -227,9 +228,16 @@ export async function generatePackageJson(
       spawnSync('yarn', ['add', '-W', '-D', ...new Set(devDependencies)], config.dirPath);
       yarnInstallRequired = false;
     }
+    if (devDependencies.length && eslintPluginPrettierRemoved) {
+      spawnSync('yarn', ['upgrade', '--latest', ...new Set(devDependencies)], config.dirPath);
+      yarnInstallRequired = false;
+    }
   }
   if (yarnInstallRequired) {
     spawnSync('yarn', ['install'], config.dirPath);
+  }
+  if (jsonObj.devDependencies['eslint-plugin-prettier']) {
+    spawnSync('yarn', ['add', '-W', ...new Set(dependencies)], config.dirPath);
   }
 }
 
