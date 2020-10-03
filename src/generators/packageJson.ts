@@ -124,17 +124,21 @@ export async function generatePackageJson(
 
     if (config.containingSubPackages) {
       devDependencies.push('lerna');
-      jsonObj.workspaces = jsonObj.workspaces || {};
-      if (jsonObj.workspaces instanceof Array) {
-        jsonObj.workspaces = {};
+      if (config.containingYarnrcYml) {
+        jsonObj.workspaces = ['packages/*'];
+      } else {
+        jsonObj.workspaces = jsonObj.workspaces || {};
+        if (jsonObj.workspaces instanceof Array) {
+          jsonObj.workspaces = {};
+        }
+        jsonObj.workspaces = merge(
+          jsonObj.workspaces,
+          {
+            packages: ['packages/*'],
+          },
+          { arrayMerge: overwriteMerge }
+        );
       }
-      jsonObj.workspaces = merge(
-        jsonObj.workspaces,
-        {
-          packages: ['packages/*'],
-        },
-        { arrayMerge: overwriteMerge }
-      );
     }
 
     if (config.containingTypeScript || config.containingTypeScriptInPackages) {
@@ -229,15 +233,13 @@ export async function generatePackageJson(
       yarnInstallRequired = false;
     }
     if (devDependencies.length && eslintPluginPrettierRemoved) {
-      spawnSync('yarn', ['upgrade', '--latest', ...new Set(devDependencies)], config.dirPath);
+      const params = config.containingYarnrcYml ? ['up'] : ['upgrade', '--latest'];
+      spawnSync('yarn', [...params, ...new Set(devDependencies)], config.dirPath);
       yarnInstallRequired = false;
     }
   }
   if (yarnInstallRequired) {
     spawnSync('yarn', ['install'], config.dirPath);
-  }
-  if (jsonObj.devDependencies['eslint-plugin-prettier']) {
-    spawnSync('yarn', ['add', '-W', ...new Set(dependencies)], config.dirPath);
   }
 }
 

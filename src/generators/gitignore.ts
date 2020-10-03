@@ -23,6 +23,9 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
   let userContent = (IgnoreFileUtil.getUserContent(filePath) || defaultUserContent) + commonContent;
 
   const names = [...defaultNames];
+  if (config.containingYarnrcYml) {
+    names.push('yarn');
+  }
   if (config.containingGemfile) {
     names.push('ruby');
   }
@@ -73,6 +76,9 @@ android/app/src/main/assets/
       })
     )
   ).join('');
+  if (config.containingYarnrcYml) {
+    content = content.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
+  }
   if (config.containingPomXml) {
     content = content
       .replace('# .idea/artifacts', '.idea/artifacts')

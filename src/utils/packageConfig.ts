@@ -14,6 +14,8 @@ export interface PackageConfig {
   containingPomXml: boolean;
   containingPubspecYaml: boolean;
   containingTemplateYaml: boolean;
+  containingYarnrcYml: boolean;
+
   containingJavaScript: boolean;
   containingTypeScript: boolean;
   containingJsxOrTsx: boolean;
@@ -57,6 +59,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       containingPoetryLock: fs.existsSync(path.resolve(dirPath, 'poetry.lock')),
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
+      containingYarnrcYml: fs.existsSync(path.resolve(dirPath, '.yarnrc.yml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
       containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
       containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
