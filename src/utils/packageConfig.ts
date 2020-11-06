@@ -28,6 +28,7 @@ export interface PackageConfig {
     tsnode: boolean;
   };
   eslintBase?: string;
+  requiringNodeModules: boolean;
 }
 
 export function getPackageConfig(dirPath: string): PackageConfig | null {
@@ -75,6 +76,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
           Object.keys(devDependencies).some((dep) => dep.includes('ts-node')) ||
           packageJson?.engines?.node?.startsWith('10'),
       },
+      requiringNodeModules: true,
     };
     if (
       config.containingGemfile ||

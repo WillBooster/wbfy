@@ -71,7 +71,7 @@ export async function generatePackageJson(
   config: PackageConfig,
   allConfigs: PackageConfig[],
   skipAddingDeps: boolean
-): Promise<void> {
+): Promise<boolean> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = fse.readFileSync(filePath).toString();
   const jsonObj = JSON.parse(jsonText);
@@ -97,6 +97,11 @@ export async function generatePackageJson(
   delete jsonObj.scripts['python-format'];
   delete jsonObj.scripts['format-python'];
   delete jsonObj.scripts['prettier'];
+  for (const deps of Object.values(devDeps)) {
+    for (const dep of deps) {
+      delete jsonObj.devDependencies[dep];
+    }
+  }
 
   if (jsonObj.name !== '@willbooster/prettier-config') {
     jsonObj.prettier = '@willbooster/prettier-config';
@@ -106,7 +111,7 @@ export async function generatePackageJson(
   jsonObj.scripts.prettify += generatePrettierSuffix(config.dirPath);
 
   let dependencies = [] as string[];
-  let devDependencies = [] as string[];
+  let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'] as string[];
 
   if (config.root) {
     // Cannot remove a version prefix in sub-packages because a version prefix is required to refer to another sub-package
@@ -114,14 +119,7 @@ export async function generatePackageJson(
       removeVersionPrefix(deps)
     );
 
-    devDependencies.push(
-      'husky',
-      'lint-staged',
-      'prettier',
-      'sort-package-json',
-      '@willbooster/prettier-config',
-      '@willbooster/renovate-config'
-    );
+    devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
 
     if (config.containingSubPackages) {
       devDependencies.push('lerna');
@@ -141,16 +139,14 @@ export async function generatePackageJson(
         );
       }
     }
+  }
 
-    if (config.containingTypeScript || config.containingTypeScriptInPackages) {
-      devDependencies.push('typescript');
-    }
+  if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+    devDependencies.push('typescript');
+  }
 
-    for (const config of allConfigs) {
-      if (config.eslintBase) {
-        devDependencies.push(...devDeps[config.eslintBase]);
-      }
-    }
+  if (config.eslintBase) {
+    devDependencies.push(...devDeps[config.eslintBase]);
   }
 
   if (config.willBoosterConfigs) {
@@ -239,9 +235,7 @@ export async function generatePackageJson(
       yarnInstallRequired = false;
     }
   }
-  if (yarnInstallRequired) {
-    spawnSync('yarn', ['install'], config.dirPath);
-  }
+  return yarnInstallRequired;
 }
 
 function removeVersionPrefix(deps: any): void {
