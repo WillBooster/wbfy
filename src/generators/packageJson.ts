@@ -11,20 +11,20 @@ import { EslintUtil } from '../utils/eslintUtil';
 
 const scriptsWithoutLerna = {
   cleanup: 'yarn format && yarn lint-fix',
-  format: `sort-package-json && yarn prettier`,
+  format: `sort-package-json && yarn prettify`,
   lint: `eslint "./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}" --color`,
   'lint-fix': 'yarn lint --fix',
-  prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**" --color`,
+  prettify: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**" --color`,
   typecheck: 'tsc --noEmit --Pretty',
 };
 
 const scriptsWithLerna = merge(
   { ...scriptsWithoutLerna },
   {
-    format: `sort-package-json && yarn prettier && lerna run format`,
+    format: `sort-package-json && yarn prettify && lerna run format`,
     lint: `lerna run lint`,
     'lint-fix': 'lerna run lint-fix',
-    prettier: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(
+    prettify: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(
       ','
     )}}" "!**/packages/**" "!**/test-fixtures/**" --color`,
     typecheck: 'lerna run typecheck',
@@ -39,7 +39,6 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint-plugin-import',
   ],
   '@willbooster/eslint-config-js-react': [
-    '@willbooster/eslint-config-js',
     '@willbooster/eslint-config-js-react',
     'eslint',
     'eslint-config-prettier',
@@ -56,7 +55,6 @@ const devDeps: { [prop: string]: string[] } = {
     '@typescript-eslint/parser',
   ],
   '@willbooster/eslint-config-ts-react': [
-    '@willbooster/eslint-config-ts',
     '@willbooster/eslint-config-ts-react',
     'eslint',
     'eslint-config-prettier',
@@ -98,11 +96,14 @@ export async function generatePackageJson(
   delete jsonObj.scripts['format-flutter'];
   delete jsonObj.scripts['python-format'];
   delete jsonObj.scripts['format-python'];
+  delete jsonObj.scripts['prettier'];
 
-  jsonObj.prettier = '@willbooster/prettier-config';
+  if (jsonObj.name !== '@willbooster/prettier-config') {
+    jsonObj.prettier = '@willbooster/prettier-config';
+  }
 
   jsonObj.scripts = merge(jsonObj.scripts, config.containingSubPackages ? scriptsWithLerna : scriptsWithoutLerna);
-  jsonObj.scripts.prettier += generatePrettierSuffix(config.dirPath);
+  jsonObj.scripts.prettify += generatePrettierSuffix(config.dirPath);
 
   let dependencies = [] as string[];
   let devDependencies = [] as string[];

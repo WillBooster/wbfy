@@ -18,7 +18,6 @@ export async function generateYarnrc(config: PackageConfig): Promise<void> {
     const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
     const doc = yaml.safeLoad(fse.readFileSync(yarnrcYmlPath, 'utf8')) as any;
     doc.defaultSemverRangePrefix = '';
-    doc.nodeLinker = doc.nodeLinker || 'node-modules';
     fse.writeFileSync(yarnrcYmlPath, yaml.safeDump(doc));
     if (
       (config.containingTypeScript || config.containingTypeScriptInPackages) &&
