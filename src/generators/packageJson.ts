@@ -111,7 +111,7 @@ export async function generatePackageJson(
   jsonObj.scripts.prettify += generatePrettierSuffix(config.dirPath);
 
   let dependencies = [] as string[];
-  let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'] as string[];
+  let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
 
   if (config.root) {
     // Cannot remove a version prefix in sub-packages because a version prefix is required to refer to another sub-package
