@@ -20,6 +20,7 @@ test-fixtures/
 *.config.js
 *.d.ts
 *.min.js
+.yarn/
 `;
 
 export async function generateEslintignore(config: PackageConfig): Promise<void> {

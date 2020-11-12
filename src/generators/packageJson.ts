@@ -120,6 +120,9 @@ export async function generatePackageJson(
     );
 
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
+    if (config.eslintBase) {
+      devDependencies.push('eslint-import-resolver-node');
+    }
 
     if (config.containingSubPackages) {
       devDependencies.push('lerna');
