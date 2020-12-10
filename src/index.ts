@@ -31,6 +31,8 @@ async function main(): Promise<void> {
     .default('verbose', false).argv;
 
   for (const rootDirPath of argv._) {
+    if (typeof rootDirPath === 'number') continue;
+
     const rootConfig = getPackageConfig(rootDirPath);
     if (rootConfig == null) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
