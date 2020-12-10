@@ -17,6 +17,7 @@ no-format/
 test-fixtures/
 *.d.ts
 *.min.js
+.yarn/
 `;
 
 export async function generatePrettierignore(config: PackageConfig): Promise<void> {
