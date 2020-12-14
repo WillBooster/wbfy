@@ -19,7 +19,7 @@ const jsonObjWithLerna = {
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
-  let newJsonObj: any = Object.assign({}, config.containingSubPackages ? jsonObjWithLerna : jsonObjWithoutLerna);
+  let newJsonObj: any = Object.assign({}, config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna);
   if (!config.containingTypeScriptInPackages && !config.containingTypeScript) {
     delete newJsonObj.hooks['pre-push'];
   }

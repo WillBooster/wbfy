@@ -39,7 +39,7 @@ async function main(): Promise<void> {
       continue;
     }
 
-    const subDirPaths = rootConfig.containingSubPackages
+    const subDirPaths = rootConfig.containingSubPackageJsons
       ? glob.sync('packages/*', { cwd: rootDirPath }).map((subDirPath) => path.resolve(rootDirPath, subDirPath))
       : [];
     const subPackageConfigs = subDirPaths
@@ -64,7 +64,7 @@ async function main(): Promise<void> {
       generateYarnrc(rootConfig),
       generateRenovateJson(rootConfig)
     );
-    if (rootConfig.containingSubPackages) {
+    if (rootConfig.containingSubPackageJsons) {
       rootPromises.push(generateLernaJson(rootConfig));
     }
     await Promise.all(rootPromises);

@@ -6,7 +6,7 @@ export interface PackageConfig {
   dirPath: string;
   root: boolean;
   willBoosterConfigs: boolean;
-  containingSubPackages: boolean;
+  containingSubPackageJsons: boolean;
   containingGemfile: boolean;
   containingGoMod: boolean;
   containingPackageJson: boolean;
@@ -53,7 +53,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
         path.basename(path.resolve(dirPath, '..')) != 'packages' ||
         !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
-      containingSubPackages: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
+      containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
       containingGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
       containingPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),

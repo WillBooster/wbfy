@@ -20,18 +20,23 @@ const rootJsonObj = {
     sourceMap: true,
     importHelpers: false,
     outDir: 'dist',
-    typeRoots: ['./node_modules/@types', './@types'],
   },
-  include: ['src/**/*', '__tests__/**/*', 'packages/*/src/**/*', 'packages/*/__tests__/**/*'],
+  include: [
+    'src/**/*',
+    '__tests__/**/*',
+    'packages/*/src/**/*',
+    'packages/*/__tests__/**/*',
+    './node_modules/@types',
+    './@types',
+  ],
 };
 
 const subJsonObj = {
   extends: '../../tsconfig.json',
   compilerOptions: {
     outDir: 'dist',
-    typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
   },
-  include: ['src/**/*', '__tests__/**/*'],
+  include: ['src/**/*', '__tests__/**/*', '../../node_modules/@types', '../../@types', './@types'],
 };
 
 export async function generateTsconfig(config: PackageConfig): Promise<void> {
@@ -44,6 +49,9 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     newJsonObj.compilerOptions.target = 'es2019';
     newJsonObj.compilerOptions.module = 'commonjs';
   }
+  if (config.root && !config.containingSubPackageJsons) {
+    newJsonObj.include = newJsonObj.include.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
+  }
 
   const filePath = path.resolve(config.dirPath, 'tsconfig.json');
   if (fse.existsSync(filePath)) {
@@ -53,6 +61,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       if (existingJsonObj.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
         delete existingJsonObj.extends;
       }
+      delete existingJsonObj.compilerOptions?.typeRoots;
       if (!config.depending.tsnode) {
         delete newJsonObj?.compilerOptions?.target;
         delete newJsonObj?.compilerOptions?.module;
