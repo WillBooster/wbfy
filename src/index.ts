@@ -87,7 +87,8 @@ async function main(): Promise<void> {
     await Promise.all(promises);
     let yarnInstallRequired = false;
     for (const config of allNodePackageConfigs) {
-      yarnInstallRequired ||= await generatePackageJson(config, allNodePackageConfigs, argv.skipDeps);
+      const ret = await generatePackageJson(config, allNodePackageConfigs, argv.skipDeps);
+      yarnInstallRequired ||= ret;
     }
     if (yarnInstallRequired) {
       spawnSync('yarn', ['install'], rootDirPath);

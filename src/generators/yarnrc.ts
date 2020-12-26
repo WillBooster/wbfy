@@ -26,6 +26,9 @@ export async function generateYarnrc(config: PackageConfig): Promise<void> {
     ) {
       spawnSync('yarn', ['plugin', 'import', 'typescript'], config.dirPath);
     }
+    if (config.containingSubPackageJsons) {
+      spawnSync('yarn', ['plugin', 'import', 'workspace-tools'], config.dirPath);
+    }
   } else {
     await FsUtil.generateFile(yarnrcPath, content);
   }

@@ -31,6 +31,19 @@ const scriptsWithLerna = merge(
   }
 );
 
+const scriptsWithWorkspaceTool = merge(
+  { ...scriptsWithoutLerna },
+  {
+    format: `sort-package-json && yarn prettify && lerna run format`,
+    lint: `lerna run lint`,
+    'lint-fix': 'lerna run lint-fix',
+    prettify: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(
+      ','
+    )}}" "!**/packages/**" "!**/test-fixtures/**" --color`,
+    typecheck: 'lerna run typecheck',
+  }
+);
+
 const devDeps: { [prop: string]: string[] } = {
   '@willbooster/eslint-config-js': [
     '@willbooster/eslint-config-js',
@@ -107,7 +120,14 @@ export async function generatePackageJson(
     jsonObj.prettier = '@willbooster/prettier-config';
   }
 
-  jsonObj.scripts = merge(jsonObj.scripts, config.containingSubPackageJsons ? scriptsWithLerna : scriptsWithoutLerna);
+  jsonObj.scripts = merge(
+    jsonObj.scripts,
+    config.containingSubPackageJsons
+      ? config.containingYarnrcYml
+        ? scriptsWithWorkspaceTool
+        : scriptsWithLerna
+      : scriptsWithoutLerna
+  );
   jsonObj.scripts.prettify += generatePrettierSuffix(config.dirPath);
 
   let dependencies = [] as string[];
@@ -120,8 +140,11 @@ export async function generatePackageJson(
     );
 
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
-    if (config.eslintBase) {
-      devDependencies.push('eslint-import-resolver-node');
+    if (config.containingJavaScriptInPackages || config.containingTypeScriptInPackages) {
+      devDependencies.push('eslint', 'eslint-import-resolver-node');
+      if (config.containingTypeScriptInPackages) {
+        devDependencies.push('@typescript-eslint/parser');
+      }
     }
 
     if (config.containingSubPackageJsons) {
@@ -233,7 +256,7 @@ export async function generatePackageJson(
 
   let yarnInstallRequired = true;
   if (!skipAddingDeps) {
-    const workspaceOption = config.containingSubPackageJsons ? ['-W'] : [];
+    const workspaceOption = config.containingSubPackageJsons && !config.containingYarnrcYml ? ['-W'] : [];
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {
       spawnSync('yarn', ['add', ...workspaceOption, ...new Set(dependencies)], config.dirPath);
       yarnInstallRequired = false;
