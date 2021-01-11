@@ -12,9 +12,9 @@ import { EslintUtil } from '../utils/eslintUtil';
 const scriptsWithoutLerna = {
   cleanup: 'yarn format && yarn lint-fix',
   format: `sort-package-json && yarn prettify`,
-  lint: `eslint "./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}" --color`,
+  lint: `eslint --color "./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}"`,
   'lint-fix': 'yarn lint --fix',
-  prettify: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**" --color`,
+  prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
   typecheck: 'tsc --noEmit --Pretty',
 };
 
@@ -24,9 +24,9 @@ const scriptsWithLerna = merge(
     format: `sort-package-json && yarn prettify && lerna run format`,
     lint: `lerna run lint`,
     'lint-fix': 'lerna run lint-fix',
-    prettify: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(
+    prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(
       ','
-    )}}" "!**/packages/**" "!**/test-fixtures/**" --color`,
+    )}}" "!**/packages/**" "!**/test-fixtures/**"`,
     typecheck: 'lerna run typecheck',
   }
 );
@@ -37,9 +37,9 @@ const scriptsWithWorkspaceTool = merge(
     format: `sort-package-json && yarn prettify && lerna run format`,
     lint: `lerna run lint`,
     'lint-fix': 'lerna run lint-fix',
-    prettify: `prettier --write "**/{.*/,}*.{${Extensions.prettier.join(
+    prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(
       ','
-    )}}" "!**/packages/**" "!**/test-fixtures/**" --color`,
+    )}}" "!**/packages/**" "!**/test-fixtures/**"`,
     typecheck: 'lerna run typecheck',
   }
 );
@@ -256,6 +256,9 @@ export async function generatePackageJson(
 
   let yarnInstallRequired = true;
   if (!skipAddingDeps) {
+    if (config.root && config.containingYarnrcYml) {
+      spawnSync('yarn', ['set', 'version', 'latest'], config.dirPath);
+    }
     const workspaceOption = config.containingSubPackageJsons && !config.containingYarnrcYml ? ['-W'] : [];
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {
       spawnSync('yarn', ['add', ...workspaceOption, ...new Set(dependencies)], config.dirPath);
@@ -297,5 +300,5 @@ function generatePrettierSuffix(dirPath: string): string {
     })
     .filter((l) => l && !l.startsWith('#') && !l.includes('/'));
 
-  return lines.map((line) => ` \\"!**/${line}/**\\"`).join('');
+  return lines.map((line) => ` "!**/${line}/**"`).join('');
 }

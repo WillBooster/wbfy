@@ -13,8 +13,9 @@
     "lint-fix": "yarn lint --fix",
     "prepack": "rimraf dist && yarn build",
     "prettier": "prettier --write \"**/{.*/,}*.{css,htm,html,js,json,jsx,md,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\" --color",
-    "start": "yarn ts-node src",
+    "start": "npm run ts-node src",
     "test-release": "dotenv yarn semantic-release -d",
+    "ts-node": "ts-node",
     "typecheck": "tsc --noEmit --Pretty"
   },
   "prettier": "@willbooster/prettier-config",
