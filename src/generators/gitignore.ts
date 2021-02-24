@@ -76,7 +76,7 @@ android/app/src/main/assets/
       })
     )
   ).join('');
-  if (config.containingYarnrcYml) {
+  if (config.containingYarnrcYml && !IgnoreFileUtil.isBerryZeroInstallEnabled(filePath)) {
     content = content.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
   }
   if (config.containingPomXml) {

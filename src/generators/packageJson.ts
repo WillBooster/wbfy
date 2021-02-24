@@ -140,7 +140,12 @@ export async function generatePackageJson(
     );
 
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
-    if (config.containingJavaScriptInPackages || config.containingTypeScriptInPackages) {
+    if (
+      config.containingJavaScript ||
+      config.containingJavaScriptInPackages ||
+      config.containingTypeScript ||
+      config.containingTypeScriptInPackages
+    ) {
       devDependencies.push('eslint', 'eslint-import-resolver-node');
       if (config.containingTypeScriptInPackages) {
         devDependencies.push('@typescript-eslint/parser');
@@ -257,7 +262,7 @@ export async function generatePackageJson(
   let yarnInstallRequired = true;
   if (!skipAddingDeps) {
     if (config.root && config.containingYarnrcYml) {
-      spawnSync('yarn', ['set', 'version', 'latest'], config.dirPath);
+      spawnSync('yarn', ['set', 'version', 'berry'], config.dirPath);
     }
     const workspaceOption = config.containingSubPackageJsons && !config.containingYarnrcYml ? ['-W'] : [];
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {

@@ -25,4 +25,11 @@ export const IgnoreFileUtil = {
     }
     return null;
   },
+  isBerryZeroInstallEnabled(filePath: string): boolean {
+    if (fs.existsSync(filePath)) {
+      const existingContent = fs.readFileSync(filePath).toString();
+      return existingContent.includes('\n!.yarn/cache');
+    }
+    return false;
+  },
 };
