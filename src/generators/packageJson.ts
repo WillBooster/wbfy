@@ -146,7 +146,10 @@ export async function generatePackageJson(
       config.containingTypeScript ||
       config.containingTypeScriptInPackages
     ) {
-      devDependencies.push('eslint', 'eslint-import-resolver-node');
+      devDependencies.push('eslint');
+      if (config.containingYarnrcYml) {
+        devDependencies.push('eslint-import-resolver-node');
+      }
       if (config.containingTypeScriptInPackages) {
         devDependencies.push('@typescript-eslint/parser');
       }
