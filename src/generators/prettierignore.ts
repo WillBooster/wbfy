@@ -18,6 +18,7 @@ test-fixtures/
 *.d.ts
 *.min.js
 .yarn/
+.pnp.js
 `;
 
 export async function generatePrettierignore(config: PackageConfig): Promise<void> {

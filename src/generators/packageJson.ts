@@ -265,7 +265,7 @@ export async function generatePackageJson(
   let yarnInstallRequired = true;
   if (!skipAddingDeps) {
     if (config.root && config.containingYarnrcYml) {
-      spawnSync('yarn', ['set', 'version', 'berry'], config.dirPath);
+      spawnSync('yarn', ['set', 'version', 'latest'], config.dirPath);
     }
     const workspaceOption = config.containingSubPackageJsons && !config.containingYarnrcYml ? ['-W'] : [];
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {
