@@ -19,7 +19,7 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "core-js": "^3.9.0",
+    "core-js": "3.9.0",
     "deepmerge": "4.2.2",
     "fs-extra": "9.0.1",
     "glob": "7.1.6",
