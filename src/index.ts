@@ -19,9 +19,9 @@ import { generateGitattributes } from './generators/gitattributes';
 import { generateIdeaSettings } from './generators/idea';
 
 async function main(): Promise<void> {
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  console.log("! Please use 'npm run start' instead of 'yarn start !");
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  console.log("! Please use 'npm run start' instead of 'yarn start' !");
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 
   const argv = yargs
     .command('willboosterify <paths...>', 'Generate/update project files for WillBooster')
