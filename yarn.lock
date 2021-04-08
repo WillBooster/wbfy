@@ -1250,20 +1250,20 @@
     "@typescript-eslint/types" "4.6.0"
     eslint-visitor-keys "^2.0.0"
 
-"@willbooster/eslint-config-ts@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@willbooster/eslint-config-ts/-/eslint-config-ts-5.0.0.tgz#ace3ab31e8c10f410ff9afc82e9ee7988828f8c5"
-  integrity sha512-Boh9VHjMecgkINmfGjnQQ1tZOTbIGtZbaKHEqonDR0xjIkDff6+ejVOGgMuEuhUvLY3bW4ryGjSss0wgll5+3g==
+"@willbooster/eslint-config-ts@6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@willbooster/eslint-config-ts/-/eslint-config-ts-6.2.1.tgz#caae0cb249fe458b3cbc160786280570ab7e06fd"
+  integrity sha512-FjnQs4PyW3zMyBLfv4GOvOS0XFPDzvHg4xLXnzuaDhanYtj0fY947gGLP+AoZHnbBicJniQC72ZK0U2Ta+5iTw==
 
-"@willbooster/prettier-config@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@willbooster/prettier-config/-/prettier-config-5.0.0.tgz#ced4015ce0b30f4066f953b9f178abad9c455b82"
-  integrity sha512-mmmJF6sAaJJ9BDGKZeSy/ate8HcIhqTwb2Y9xGAgqASx+HWro7Me5wqUNm5pD8EPrgoTJuwMcAdBJS1jxsJfGg==
+"@willbooster/prettier-config@6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@willbooster/prettier-config/-/prettier-config-6.2.1.tgz#dc5aa3919a5e2316f15604a40b1adae3084ed47d"
+  integrity sha512-5aJTMgUX5yaOFR9wIb1uDW0f/WDMSIctxb4U85iN6PKC5IpsJP+yzbcpoev8az1XZeGnMKRKAxGJseIANHL9dg==
 
-"@willbooster/renovate-config@5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@willbooster/renovate-config/-/renovate-config-5.0.0.tgz#50b0bf824166a3a7fa950d154dcb25acb7c15626"
-  integrity sha512-2KNLI8u6iB8aCPNlzCvMh8umpNUF4Kzu6F4JynRqbMkzVO7fFqgw979h6RXD/Cg8EI42AIcuW55uMCRDFevuZw==
+"@willbooster/renovate-config@6.2.1":
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/@willbooster/renovate-config/-/renovate-config-6.2.1.tgz#bac3c30424c5569ef84aa05ef3711e09e64169db"
+  integrity sha512-SlNa3K3nmvGHPmuu2OqhLvrJxO1fH9gNtblvC9JbUd7YtCRaoXCTXfPYsMmWK4BbLbnFZjkbV243laNZ1rE+GQ==
 
 JSONStream@^1.0.4, JSONStream@^1.3.4, JSONStream@^1.3.5:
   version "1.3.5"
