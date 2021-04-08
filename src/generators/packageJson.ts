@@ -1,13 +1,15 @@
-import path from 'path';
 import * as fs from 'fs';
+import path from 'path';
+
 import merge from 'deepmerge';
 import fse from 'fs-extra';
-import { PackageConfig } from '../utils/packageConfig';
-import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
-import { spawnSync } from '../utils/spawnUtil';
-import { overwriteMerge } from '../utils/mergeUtil';
-import { Extensions } from '../utils/extensions';
+
 import { EslintUtil } from '../utils/eslintUtil';
+import { Extensions } from '../utils/extensions';
+import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
+import { overwriteMerge } from '../utils/mergeUtil';
+import { PackageConfig } from '../utils/packageConfig';
+import { spawnSync } from '../utils/spawnUtil';
 
 const scriptsWithoutLerna = {
   cleanup: 'yarn format && yarn lint-fix',

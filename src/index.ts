@@ -1,22 +1,24 @@
 import path from 'path';
+
 import glob from 'glob';
 import yargs from 'yargs';
-import { generateGitignore } from './generators/gitignore';
-import { generatePrettierignore } from './generators/prettierignore';
-import { generateHuskyrc } from './generators/huskyrc';
-import { getPackageConfig, PackageConfig } from './utils/packageConfig';
-import { generateLintstagedrc } from './generators/lintstagedrc';
+
 import { generateEditorconfig } from './generators/editorconfig';
-import { generateYarnrc } from './generators/yarnrc';
-import { generateLernaJson } from './generators/lernaJson';
-import { generateTsconfig } from './generators/tsconfig';
-import { generateEslintrc } from './generators/eslintrc';
 import { generateEslintignore } from './generators/eslintignore';
-import { generatePackageJson } from './generators/packageJson';
-import { spawnSync } from './utils/spawnUtil';
-import { generateRenovateJson } from './generators/renovaterc';
+import { generateEslintrc } from './generators/eslintrc';
 import { generateGitattributes } from './generators/gitattributes';
+import { generateGitignore } from './generators/gitignore';
+import { generateHuskyrc } from './generators/huskyrc';
 import { generateIdeaSettings } from './generators/idea';
+import { generateLernaJson } from './generators/lernaJson';
+import { generateLintstagedrc } from './generators/lintstagedrc';
+import { generatePackageJson } from './generators/packageJson';
+import { generatePrettierignore } from './generators/prettierignore';
+import { generateRenovateJson } from './generators/renovaterc';
+import { generateTsconfig } from './generators/tsconfig';
+import { generateYarnrc } from './generators/yarnrc';
+import { getPackageConfig, PackageConfig } from './utils/packageConfig';
+import { spawnSync } from './utils/spawnUtil';
 
 async function main(): Promise<void> {
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');

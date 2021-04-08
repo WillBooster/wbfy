@@ -1,9 +1,11 @@
 import path from 'path';
+
 import merge from 'deepmerge';
 import fse from 'fs-extra';
-import { PackageConfig } from '../utils/packageConfig';
-import { overwriteMerge } from '../utils/mergeUtil';
+
 import { FsUtil } from '../utils/fsUtil';
+import { overwriteMerge } from '../utils/mergeUtil';
+import { PackageConfig } from '../utils/packageConfig';
 
 const rootJsonObj = {
   compilerOptions: {

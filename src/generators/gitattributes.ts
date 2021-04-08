@@ -1,7 +1,8 @@
 import path from 'path';
-import { PackageConfig } from '../utils/packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+
 import { Extensions } from '../utils/extensions';
+import { FsUtil } from '../utils/fsUtil';
+import { PackageConfig } from '../utils/packageConfig';
 
 const content = `* text=auto
 

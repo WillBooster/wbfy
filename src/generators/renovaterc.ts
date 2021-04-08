@@ -1,9 +1,11 @@
 import path from 'path';
-import fse from 'fs-extra';
+
 import merge from 'deepmerge';
-import { PackageConfig } from '../utils/packageConfig';
+import fse from 'fs-extra';
+
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
+import { PackageConfig } from '../utils/packageConfig';
 
 const jsonObj = {
   extends: ['@willbooster'],

@@ -1,8 +1,10 @@
 import path from 'path';
+
 import fse from 'fs-extra';
 import yaml from 'js-yaml';
-import { PackageConfig } from '../utils/packageConfig';
+
 import { FsUtil } from '../utils/fsUtil';
+import { PackageConfig } from '../utils/packageConfig';
 import { spawnSync } from '../utils/spawnUtil';
 
 const content = `save-prefix ""
