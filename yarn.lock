@@ -7974,7 +7974,7 @@ typescript@4.2.4:
     sort-package-json: 1.50.0
     ts-node: 9.1.1
     typescript: 4.2.4
-    yargs: 16.2.0
+    yargs: 17.0.1
   languageName: unknown
   linkType: soft
 
@@ -8068,7 +8068,22 @@ typescript@4.2.4:
   languageName: node
   linkType: hard
 
-"yargs@npm:16.2.0, yargs@npm:^16.2.0":
+"yargs@npm:17.0.1":
+  version: 17.0.1
+  resolution: "yargs@npm:17.0.1"
+  dependencies:
+    cliui: ^7.0.2
+    escalade: ^3.1.1
+    get-caller-file: ^2.0.5
+    require-directory: ^2.1.1
+    string-width: ^4.2.0
+    y18n: ^5.0.5
+    yargs-parser: ^20.2.2
+  checksum: a7969b48d2dea129a7d4fcc3f13e88d4f94bacbd24f720b2ce19946fa9facc42cfed89c059d953091241f4e9e9000ed9dbf86e4bb4b6ceb3a26af10ddebdd0b2
+  languageName: node
+  linkType: hard
+
+"yargs@npm:^16.2.0":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
   dependencies:
