@@ -14,7 +14,10 @@
     "start": "babel-node -x .ts -i /node_modules/ src",
     "test-release": "dotenv yarn semantic-release -d",
     "typecheck": "tsc --noEmit --Pretty",
-    "prettify": "prettier --color --write \"**/{.*/,}*.{css,htm,html,js,json,json5,jsx,md,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\""
+    "prettify": "prettier --color --write \"**/{.*/,}*.{css,htm,html,js,json,json5,jsx,md,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\"",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
@@ -51,9 +54,10 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-import-resolver-node": "0.3.4",
     "eslint-plugin-import": "2.22.1",
-    "husky": "4.3.8",
+    "husky": "6.0.0",
     "lint-staged": "11.0.0",
     "micromatch": "4.0.4",
+    "pinst": "2.1.6",
     "prettier": "2.3.0",
     "rimraf": "3.0.2",
     "semantic-release": "17.4.2",
