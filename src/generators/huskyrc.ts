@@ -1,40 +1,42 @@
+import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 
-import merge from 'deepmerge';
-import fse from 'fs-extra';
-
-import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { spawnSync } from '../utils/spawnUtil';
+
+const DEFAULT_COMMAND = 'npm test';
 
 const jsonObjWithoutLerna = {
-  hooks: {
-    'pre-commit': 'lint-staged',
-    'pre-push': 'yarn typecheck',
-  },
+  preCommit: 'yarn lint-staged',
+  prePush: 'yarn typecheck',
 };
 
 const jsonObjWithLerna = {
-  hooks: {
-    'pre-commit': 'lerna exec lint-staged --concurrency 1 --stream --since HEAD --exclude-dependents',
-    'pre-push': 'yarn typecheck',
-  },
+  preCommit: 'lerna exec lint-staged --concurrency 1 --stream --since HEAD --exclude-dependents',
+  prePush: 'yarn typecheck',
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
-  let newJsonObj: any = Object.assign({}, config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna);
-  if (!config.containingTypeScriptInPackages && !config.containingTypeScript) {
-    delete newJsonObj.hooks['pre-push'];
-  }
+  fsp.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }).then();
 
-  const filePath = path.resolve(config.dirPath, '.huskyrc.json');
-  if (fse.existsSync(filePath)) {
-    const existingContent = fse.readFileSync(filePath).toString();
-    try {
-      const existingJsonObj = JSON.parse(existingContent);
-      newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj]);
-    } catch (e) {
-      // do nothing
+  const dirPath = path.resolve(config.dirPath, '.husky');
+  if (!fs.existsSync(dirPath)) {
+    if (config.containingYarnrcYml) {
+      spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
+    } else {
+      spawnSync('npx', ['husky-init'], config.dirPath);
     }
+
+    const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
+    const content = (await fsp.readFile(preCommitFilePath)).toString();
+
+    const newJsonObj = config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna;
+    fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, newJsonObj.preCommit)).then();
+    fsp
+      .writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, newJsonObj.prePush), {
+        mode: 0o755,
+      })
+      .then();
   }
-  await FsUtil.generateFile(filePath, JSON.stringify(newJsonObj));
 }

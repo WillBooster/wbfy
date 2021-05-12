@@ -142,6 +142,9 @@ export async function generatePackageJson(
     );
 
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
+    if (config.containingYarnrcYml) {
+      devDependencies.push('pinst');
+    }
     if (
       config.containingJavaScript ||
       config.containingJavaScriptInPackages ||
@@ -275,19 +278,12 @@ export async function generatePackageJson(
       yarnInstallRequired = false;
     }
     if (devDependencies.length && devDependencies.some((dep) => !jsonObj.devDependencies?.[dep])) {
-      const devDependenciesSet = new Set(devDependencies);
-      if (devDependenciesSet.has('husky')) {
-        devDependenciesSet.delete('husky');
-        devDependenciesSet.add('husky@4.3.8');
-      }
-      spawnSync('yarn', ['add', ...workspaceOption, '-D', ...devDependenciesSet], config.dirPath);
+      spawnSync('yarn', ['add', ...workspaceOption, '-D', ...new Set(devDependencies)], config.dirPath);
       yarnInstallRequired = false;
     }
     if (devDependencies.length && eslintPluginPrettierRemoved) {
-      const devDependenciesSet = new Set(devDependencies);
-      devDependenciesSet.delete('husky');
       const params = config.containingYarnrcYml ? ['up'] : ['upgrade', '--latest'];
-      spawnSync('yarn', [...params, ...devDependenciesSet], config.dirPath);
+      spawnSync('yarn', [...params, ...new Set(devDependencies)], config.dirPath);
       yarnInstallRequired = false;
     }
   }
