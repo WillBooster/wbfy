@@ -23,7 +23,7 @@
   "dependencies": {
     "core-js": "3.12.0",
     "deepmerge": "4.2.2",
-    "fs-extra": "9.1.0",
+    "fs-extra": "10.0.0",
     "glob": "7.1.7",
     "js-yaml": "4.1.0",
     "node-fetch": "2.6.1",
