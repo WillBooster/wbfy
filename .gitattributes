@@ -8,6 +8,7 @@
 *.html text eol=lf
 *.js text eol=lf
 *.json text eol=lf
+*.json5 text eol=lf
 *.jsx text eol=lf
 *.pu text eol=lf
 *.puml text eol=lf

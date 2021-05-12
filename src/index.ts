@@ -21,10 +21,6 @@ import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { spawnSync } from './utils/spawnUtil';
 
 async function main(): Promise<void> {
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  console.log("! Please use 'npm run start' instead of 'yarn start' !");
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-
   const argv = yargs
     .command('willboosterify <paths...>', 'Generate/update project files for WillBooster')
     .demandCommand(1)
