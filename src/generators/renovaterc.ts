@@ -1,7 +1,8 @@
+import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
-import fse from 'fs-extra';
 
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
@@ -15,8 +16,8 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
   let newJsonObj: any = Object.assign({}, jsonObj);
 
   const filePath = path.resolve(config.dirPath, '.renovaterc.json');
-  if (fse.existsSync(filePath)) {
-    const existingContent = fse.readFileSync(filePath).toString();
+  if (fs.existsSync(filePath)) {
+    const existingContent = (await fsp.readFile(filePath)).toString();
     try {
       const existingJsonObj = JSON.parse(existingContent) as any;
       newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });
@@ -25,8 +26,8 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     }
   }
   await Promise.all([
-    fse.remove(path.resolve(config.dirPath, '.dependabot')),
-    fse.remove(path.resolve(config.dirPath, 'renovate.json')),
+    fsp.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }),
+    fsp.rm(path.resolve(config.dirPath, 'renovate.json'), { force: true }),
     FsUtil.generateFile(filePath, JSON.stringify(newJsonObj)),
   ]);
 }

@@ -1,7 +1,8 @@
+import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
-import fse from 'fs-extra';
 
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
@@ -56,8 +57,8 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
   }
 
   const filePath = path.resolve(config.dirPath, 'tsconfig.json');
-  if (fse.existsSync(filePath)) {
-    const existingContent = fse.readFileSync(filePath).toString();
+  if (fs.existsSync(filePath)) {
+    const existingContent = (await fsp.readFile(filePath)).toString();
     try {
       const existingJsonObj = JSON.parse(existingContent);
       if (existingJsonObj.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {

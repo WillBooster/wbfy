@@ -1,6 +1,5 @@
+import fsp from 'fs/promises';
 import path from 'path';
-
-import fse from 'fs-extra';
 
 import { EslintUtil } from '../utils/eslintUtil';
 import { Extensions } from '../utils/extensions';
@@ -53,7 +52,7 @@ module.exports = {${lines.join('')}
 
   const filePath = path.resolve(config.dirPath, '.lintstagedrc.js');
   await Promise.all([
-    fse.remove(path.resolve(config.dirPath, '.lintstagedrc.json')),
+    fsp.rm(path.resolve(config.dirPath, '.lintstagedrc.json'), { force: true }),
     FsUtil.generateFile(filePath, content),
   ]);
 }

@@ -1,6 +1,7 @@
+import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 
-import fse from 'fs-extra';
 import yaml from 'js-yaml';
 
 import { FsUtil } from '../utils/fsUtil';
@@ -13,15 +14,15 @@ const content = `save-prefix ""
 export async function generateYarnrc(config: PackageConfig): Promise<void> {
   const yarnrcPath = path.resolve(config.dirPath, '.yarnrc');
   if (config.containingYarnrcYml) {
-    if (fse.existsSync(yarnrcPath)) {
-      fse.unlinkSync(yarnrcPath);
+    if (fs.existsSync(yarnrcPath)) {
+      await fsp.rm(yarnrcPath, { force: true });
     }
 
     const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
-    const doc = yaml.load(fse.readFileSync(yarnrcYmlPath, 'utf8')) as any;
+    const doc = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
     doc.defaultSemverRangePrefix = '';
     config.requiringNodeModules = doc.nodeLinker !== 'node-modules';
-    fse.writeFileSync(yarnrcYmlPath, yaml.dump(doc));
+    await fsp.writeFile(yarnrcYmlPath, yaml.dump(doc));
     if (
       (config.containingTypeScript || config.containingTypeScriptInPackages) &&
       !(doc.plugins || []).some((p: any) => p.spec === '@yarnpkg/plugin-typescript')

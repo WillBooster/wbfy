@@ -1,7 +1,8 @@
+import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
-import fse from 'fs-extra';
 
 import { FsUtil } from '../utils/fsUtil';
 import { combineMerge } from '../utils/mergeUtil';
@@ -36,8 +37,8 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
   let newJsonObj: any = { root: true, extends: bases };
 
   const filePath = path.resolve(config.dirPath, '.eslintrc.json');
-  if (fse.existsSync(filePath)) {
-    const existingContent = fse.readFileSync(filePath).toString();
+  if (fs.existsSync(filePath)) {
+    const existingContent = (await fsp.readFile(filePath)).toString();
     try {
       const existingJsonObj = JSON.parse(existingContent);
       if (existingJsonObj.extends) {
