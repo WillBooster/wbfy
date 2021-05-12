@@ -1,8 +1,8 @@
-import * as fs from 'fs';
+import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
-import fse from 'fs-extra';
 
 import { EslintUtil } from '../utils/eslintUtil';
 import { Extensions } from '../utils/extensions';
@@ -88,7 +88,7 @@ export async function generatePackageJson(
   skipAddingDeps: boolean
 ): Promise<boolean> {
   const filePath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = fse.readFileSync(filePath).toString();
+  const jsonText = (await fsp.readFile(filePath)).toString();
   const jsonObj = JSON.parse(jsonText);
   jsonObj.scripts = jsonObj.scripts || {};
   jsonObj.dependencies = jsonObj.dependencies || {};
@@ -130,7 +130,7 @@ export async function generatePackageJson(
         : scriptsWithLerna
       : scriptsWithoutLerna
   );
-  jsonObj.scripts.prettify += generatePrettierSuffix(config.dirPath);
+  jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
 
   let dependencies = [] as string[];
   let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
@@ -265,7 +265,7 @@ export async function generatePackageJson(
     delete jsonObj.peerDependencies;
   }
 
-  fse.outputFileSync(filePath, JSON.stringify(jsonObj));
+  await fsp.writeFile(filePath, JSON.stringify(jsonObj));
 
   let yarnInstallRequired = true;
   if (!skipAddingDeps) {
@@ -298,9 +298,9 @@ function removeVersionPrefix(deps: any): void {
   }
 }
 
-function generatePrettierSuffix(dirPath: string): string {
+async function generatePrettierSuffix(dirPath: string): string {
   const filePath = path.resolve(dirPath, '.prettierignore');
-  const existingContent = fse.readFileSync(filePath).toString();
+  const existingContent = (await fsp.readFile(filePath)).toString();
   const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);
   if (index < 0) return '';
 

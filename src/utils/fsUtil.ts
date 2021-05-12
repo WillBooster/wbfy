@@ -1,8 +1,8 @@
-import fse from 'fs-extra';
+import fsp from 'fs/promises';
 
 export const FsUtil = {
   async generateFile(filePath: string, content: string): Promise<void> {
-    await fse.outputFile(filePath, content);
+    await fsp.writeFile(filePath, content);
     console.log(`Generated ${filePath}`);
   },
 };

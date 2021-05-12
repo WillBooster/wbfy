@@ -1,6 +1,6 @@
+import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
-
-import fse from 'fs-extra';
 
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
@@ -134,7 +134,7 @@ const content = `<?xml version="1.0" encoding="UTF-8"?>
 
 export async function generateIdeaSettings(config: PackageConfig): Promise<void> {
   const dirPath = path.resolve(config.dirPath, '.idea');
-  if (fse.existsSync(dirPath)) {
+  if (fs.existsSync(dirPath)) {
     const filePath = path.resolve(dirPath, 'watcherTasks.xml');
     if (
       config.containingJavaScript ||
@@ -149,7 +149,7 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
     ) {
       await FsUtil.generateFile(filePath, content);
     } else {
-      await fse.remove(filePath);
+      fsp.rm(filePath, { force: true }).then();
     }
   }
 }
