@@ -18,7 +18,7 @@ const jsonObjWithLerna = {
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
-  fsp.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }).then();
+  await fsp.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true });
 
   const dirPath = path.resolve(config.dirPath, '.husky');
   if (!fs.existsSync(dirPath)) {
@@ -32,11 +32,11 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     const content = (await fsp.readFile(preCommitFilePath)).toString();
 
     const newJsonObj = config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna;
-    fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, newJsonObj.preCommit)).then();
-    fsp
-      .writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, newJsonObj.prePush), {
+    await Promise.all([
+      fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, newJsonObj.preCommit)),
+      fsp.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, newJsonObj.prePush), {
         mode: 0o755,
-      })
-      .then();
+      }),
+    ]);
   }
 }

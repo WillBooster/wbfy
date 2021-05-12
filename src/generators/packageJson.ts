@@ -298,7 +298,7 @@ function removeVersionPrefix(deps: any): void {
   }
 }
 
-async function generatePrettierSuffix(dirPath: string): string {
+async function generatePrettierSuffix(dirPath: string): Promise<string> {
   const filePath = path.resolve(dirPath, '.prettierignore');
   const existingContent = (await fsp.readFile(filePath)).toString();
   const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);

@@ -15,7 +15,7 @@ export async function generateYarnrc(config: PackageConfig): Promise<void> {
   const yarnrcPath = path.resolve(config.dirPath, '.yarnrc');
   if (config.containingYarnrcYml) {
     if (fs.existsSync(yarnrcPath)) {
-      fsp.rm(yarnrcPath, { force: true }).then();
+      await fsp.rm(yarnrcPath, { force: true });
     }
 
     const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');

@@ -26,8 +26,8 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     }
   }
   await Promise.all([
-    fse.remove(path.resolve(config.dirPath, '.dependabot')),
-    fse.remove(path.resolve(config.dirPath, 'renovate.json')),
+    fsp.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }),
+    fsp.rm(path.resolve(config.dirPath, 'renovate.json'), { force: true }),
     FsUtil.generateFile(filePath, JSON.stringify(newJsonObj)),
   ]);
 }

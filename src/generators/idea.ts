@@ -149,7 +149,7 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
     ) {
       await FsUtil.generateFile(filePath, content);
     } else {
-      fsp.rm(filePath, { force: true }).then();
+      await fsp.rm(filePath, { force: true });
     }
   }
 }
