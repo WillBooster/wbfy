@@ -82,11 +82,7 @@ const devDeps: { [prop: string]: string[] } = {
   '../../.eslintrc.json': [],
 };
 
-export async function generatePackageJson(
-  config: PackageConfig,
-  allConfigs: PackageConfig[],
-  skipAddingDeps: boolean
-): Promise<boolean> {
+export async function generatePackageJson(config: PackageConfig, skipAddingDeps: boolean): Promise<boolean> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = (await fsp.readFile(filePath)).toString();
   const jsonObj = JSON.parse(jsonText);

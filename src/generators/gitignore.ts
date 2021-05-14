@@ -73,7 +73,7 @@ android/app/src/main/assets/
   let content = (
     await Promise.all(
       names.map(async (name) => {
-        const response = await fetch(`https://www.gitignore.io/api/${name}`);
+        const response = await fetch(`https://www.toptal.com/developers/gitignore/api/${name}`);
         return await response.text();
       })
     )

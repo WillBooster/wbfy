@@ -36,7 +36,7 @@ async function main(): Promise<void> {
     if (typeof rootDirPath === 'number') continue;
 
     const rootConfig = getPackageConfig(rootDirPath);
-    if (rootConfig == null) {
+    if (rootConfig === null) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
       continue;
     }
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
     for (const config of allNodePackageConfigs) {
       promises.push(generatePrettierignore(config), generateLintstagedrc(config));
       if (config.containingTypeScript || config.containingTypeScriptInPackages) {
-        promises.push(generateTsconfig(config));
+        promises.push(generateTsconfig(config, rootConfig));
       }
       if (
         config.containingJavaScript ||
@@ -89,7 +89,7 @@ async function main(): Promise<void> {
     await Promise.all(promises);
     let yarnInstallRequired = false;
     for (const config of allNodePackageConfigs) {
-      const ret = await generatePackageJson(config, allNodePackageConfigs, argv.skipDeps);
+      const ret = await generatePackageJson(config, argv.skipDeps);
       yarnInstallRequired ||= ret;
     }
     if (yarnInstallRequired) {

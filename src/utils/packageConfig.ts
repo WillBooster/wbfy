@@ -25,6 +25,7 @@ export interface PackageConfig {
   containingJsxOrTsxInPackages: boolean;
   depending: {
     firebase: boolean;
+    jestPlaywrightPreset: boolean;
     reactNative: boolean;
     tsnode: boolean;
   };
@@ -51,7 +52,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
     const config: PackageConfig = {
       dirPath,
       root:
-        path.basename(path.resolve(dirPath, '..')) != 'packages' ||
+        path.basename(path.resolve(dirPath, '..')) !== 'packages' ||
         !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
@@ -71,6 +72,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       containingJsxOrTsxInPackages: glob.sync('packages/**/src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
+        jestPlaywrightPreset: !!devDependencies['jest-playwright-preset'],
         reactNative: !!dependencies['react-native'],
         tsnode:
           Object.values(scripts).some((script) => script.includes('ts-node')) ||

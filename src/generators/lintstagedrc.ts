@@ -16,10 +16,11 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   '${eslintKey}': [${JSON.stringify(`eslint --fix${EslintUtil.getLintFixSuffix(config)}`)}, 'prettier --write'],`;
     lines.push(eslint);
   }
+  const packagesFilter = config.root ? " && !file.includes('/packages/')" : '';
   lines.push(`
   './**/*.{${Extensions.prettier.join(',')}}': files => {
     ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
-    const filteredFiles = files.filter(file => !file.includes('/test-fixtures/') && !file.includes('/packages/'))
+    const filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter})
       .map(file => path.relative('', file));
     if (filteredFiles.length === 0) return [];
     const commands = [\`prettier --write \${filteredFiles.join(' ')}\`];
