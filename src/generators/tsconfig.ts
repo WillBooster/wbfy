@@ -3,6 +3,7 @@ import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
+import cloneDeep from 'lodash.clonedeep';
 
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
@@ -43,7 +44,7 @@ const subJsonObj = {
 };
 
 export async function generateTsconfig(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
-  let newJsonObj: any = Object.assign({}, config.root ? rootJsonObj : subJsonObj);
+  let newJsonObj: any = cloneDeep(config.root ? rootJsonObj : subJsonObj);
   if (!config.containingJsxOrTsx && !config.containingJsxOrTsxInPackages) {
     delete newJsonObj.compilerOptions.jsx;
   }
@@ -56,7 +57,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     newJsonObj.include = newJsonObj.include.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
   }
   if (!config.root && (config.depending.jestPlaywrightPreset || rootConfig.depending.jestPlaywrightPreset)) {
-    const relativeDirPath = path.relative(rootConfig.dirPath, config.dirPath);
+    const relativeDirPath = path.relative(config.dirPath, rootConfig.dirPath);
     newJsonObj.include.push(
       ...[
         path.join(relativeDirPath, 'node_modules/jest-playwright-preset/types'),

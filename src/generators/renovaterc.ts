@@ -3,6 +3,7 @@ import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
+import cloneDeep from 'lodash.clonedeep';
 
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
@@ -13,7 +14,7 @@ const jsonObj = {
 };
 
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
-  let newJsonObj: any = Object.assign({}, jsonObj);
+  let newJsonObj: any = cloneDeep(jsonObj);
 
   const filePath = path.resolve(config.dirPath, '.renovaterc.json');
   if (fs.existsSync(filePath)) {

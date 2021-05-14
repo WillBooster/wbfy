@@ -13,7 +13,8 @@ const jsonObjWithoutLerna = {
 };
 
 const jsonObjWithLerna = {
-  preCommit: 'yarn lerna exec lint-staged --concurrency 1 --stream --since HEAD --exclude-dependents',
+  preCommit:
+    'yarn lint-staged && yarn lerna exec lint-staged --concurrency 1 --stream --since HEAD --exclude-dependents',
   prePush: 'yarn typecheck',
 };
 
