@@ -23,26 +23,26 @@ const scriptsWithoutLerna = {
 const scriptsWithLerna = merge(
   { ...scriptsWithoutLerna },
   {
-    format: `sort-package-json && yarn prettify && lerna run format`,
-    lint: `lerna run lint`,
-    'lint-fix': 'lerna run lint-fix',
+    format: `sort-package-json && yarn prettify && lerna run format --no-sort`,
+    lint: `lerna run lint --no-sort`,
+    'lint-fix': 'lerna run lint-fix --no-sort',
     prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(
       ','
     )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-    typecheck: 'lerna run typecheck',
+    typecheck: 'lerna run typecheck --no-sort',
   }
 );
 
 const scriptsWithWorkspaceTool = merge(
   { ...scriptsWithoutLerna },
   {
-    format: `sort-package-json && yarn prettify && lerna run format`,
-    lint: `lerna run lint`,
-    'lint-fix': 'lerna run lint-fix',
+    format: `sort-package-json && yarn prettify && lerna run format --no-sort`,
+    lint: `lerna run lint --no-sort`,
+    'lint-fix': 'lerna run lint-fix --no-sort',
     prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(
       ','
     )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-    typecheck: 'lerna run typecheck',
+    typecheck: 'lerna run typecheck --no-sort',
   }
 );
 
