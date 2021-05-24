@@ -45,7 +45,7 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
 `;
   }
   if (config.containingPubspecYaml) {
-    names.push('flutter', 'ruby');
+    names.push('flutter', 'AndroidStudio', 'ruby');
     userContent += `.flutter-plugins-dependencies
 android/key.properties
 ios/.bundle
@@ -81,7 +81,7 @@ android/app/src/main/assets/
   if (config.containingYarnrcYml && !IgnoreFileUtil.isBerryZeroInstallEnabled(filePath)) {
     content = content.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
   }
-  if (config.containingPomXml) {
+  if (config.containingPomXml || config.containingPubspecYaml) {
     content = content
       .replace('# .idea/artifacts', '.idea/artifacts')
       .replace('# .idea/compiler.xml', '.idea/compiler.xml')
