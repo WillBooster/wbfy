@@ -21,7 +21,7 @@ import glob from 'glob';
 import yargs from 'yargs';
 
 async function main(): Promise<void> {
-  const argv = yargs
+  const argv = await yargs
     .command('willboosterify <paths...>', 'Generate/update project files for WillBooster')
     .demandCommand(1)
     .alias('d', 'skipDeps')
