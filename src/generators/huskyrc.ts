@@ -33,11 +33,14 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     const content = (await fsp.readFile(preCommitFilePath)).toString();
 
     const newJsonObj = config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna;
-    await Promise.all([
-      fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, newJsonObj.preCommit)),
-      fsp.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, newJsonObj.prePush), {
-        mode: 0o755,
-      }),
-    ]);
+    const promises = [fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, newJsonObj.preCommit))];
+    if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+      promises.push(
+        fsp.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, newJsonObj.prePush), {
+          mode: 0o755,
+        })
+      );
+    }
+    await Promise.all(promises);
   }
 }
