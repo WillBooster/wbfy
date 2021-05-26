@@ -83,14 +83,19 @@ android/app/src/main/assets/
   }
   if (config.containingPomXml || config.containingPubspecYaml) {
     content = content
-      .replace('# .idea/artifacts', '.idea/artifacts')
-      .replace('# .idea/compiler.xml', '.idea/compiler.xml')
-      .replace('# .idea/jarRepositories.xml', '.idea/jarRepositories.xml')
-      .replace('# .idea/modules.xml', '.idea/modules.xml')
-      .replace('# .idea/*.iml', '.idea/*.iml')
-      .replace('# .idea/modules', '.idea/modules')
-      .replace('# *.iml', '*.iml')
-      .replace('# *.ipr', '*.ipr');
+      .replace(/^# .idea\/artifacts$/gm, '.idea/artifacts')
+      .replace(/^# .idea\/compiler.xml$/gm, '.idea/compiler.xml')
+      .replace(/^# .idea\/jarRepositories.xml$/gm, '.idea/jarRepositories.xml')
+      .replace(/^# .idea\/modules.xml$/gm, '.idea/modules.xml')
+      .replace(/^# .idea\/*.iml$/gm, '.idea/*.iml')
+      .replace(/^# .idea\/modules$/gm, '.idea/modules')
+      .replace(/^# *.iml$/gm, '*.iml')
+      .replace(/^# *.ipr$/gm, '*.ipr');
+    if (config.containingPubspecYaml) {
+      content = content
+        .replace(/^.idea\/misc.xml$/gm, '# .idea/misc.xml')
+        .replace(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
+    }
   }
   content = content.replace(/^.idea\/?$/gm, '# .idea');
   if (rootConfig.depending.reactNative || config.depending.reactNative || config.containingPubspecYaml) {
