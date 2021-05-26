@@ -2,12 +2,12 @@ import fs from 'fs';
 import fsp from 'fs/promises';
 import path from 'path';
 
-import merge from 'deepmerge';
-import cloneDeep from 'lodash.clonedeep';
-
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { PackageConfig } from '../utils/packageConfig';
+
+import merge from 'deepmerge';
+import cloneDeep from 'lodash.clonedeep';
 
 const jsonObj = {
   packages: ['packages/*'],

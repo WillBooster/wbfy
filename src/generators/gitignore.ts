@@ -1,10 +1,10 @@
 import path from 'path';
 
-import fetch from 'node-fetch';
-
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
+
+import fetch from 'node-fetch';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim'];
 

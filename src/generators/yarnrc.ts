@@ -2,11 +2,11 @@ import fs from 'fs';
 import fsp from 'fs/promises';
 import path from 'path';
 
-import yaml from 'js-yaml';
-
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { spawnSync } from '../utils/spawnUtil';
+
+import yaml from 'js-yaml';
 
 const content = `save-prefix ""
 `;
