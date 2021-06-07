@@ -49,6 +49,7 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
     userContent += `.flutter-plugins-dependencies
 android/key.properties
 ios/.bundle
+.idea/runConfigurations.xml
 `;
   }
   if (config.containingTemplateYaml) {
@@ -92,9 +93,7 @@ android/app/src/main/assets/
       .replace(/^# *.iml$/gm, '*.iml')
       .replace(/^# *.ipr$/gm, '*.ipr');
     if (config.containingPubspecYaml) {
-      content = content
-        .replace(/^.idea\/misc.xml$/gm, '# .idea/misc.xml')
-        .replace(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
+      content = content.replace(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
     }
   }
   content = content.replace(/^.idea\/?$/gm, '# .idea');
