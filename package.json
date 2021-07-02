@@ -21,7 +21,7 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "core-js": "3.15.1",
+    "core-js": "3.15.2",
     "deepmerge": "4.2.2",
     "glob": "7.1.7",
     "js-yaml": "4.1.0",
@@ -43,8 +43,8 @@
     "@types/micromatch": "4.0.1",
     "@types/node-fetch": "2.5.10",
     "@types/yargs": "17.0.0",
-    "@typescript-eslint/eslint-plugin": "4.28.0",
-    "@typescript-eslint/parser": "4.28.0",
+    "@typescript-eslint/eslint-plugin": "4.28.1",
+    "@typescript-eslint/parser": "4.28.1",
     "@willbooster/eslint-config-ts": "6.3.0",
     "@willbooster/prettier-config": "6.2.1",
     "@willbooster/renovate-config": "6.3.0",
@@ -58,12 +58,12 @@
     "lint-staged": "11.0.0",
     "micromatch": "4.0.4",
     "pinst": "2.1.6",
-    "prettier": "2.3.1",
+    "prettier": "2.3.2",
     "rimraf": "3.0.2",
     "semantic-release": "17.4.4",
     "sort-package-json": "1.50.0",
     "ts-node": "10.0.0",
-    "typescript": "4.3.4"
+    "typescript": "4.3.5"
   },
   "engines": {
     "node": ">=8.0.0"
