@@ -1785,7 +1785,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/glob@npm:7.1.3, @types/glob@npm:^7.1.1":
+"@types/glob@npm:7.1.4":
+  version: 7.1.4
+  resolution: "@types/glob@npm:7.1.4"
+  dependencies:
+    "@types/minimatch": "*"
+    "@types/node": "*"
+  checksum: 6911a956448f5eddea1e4371f814bf92072e8ceedba83de6ce2a6745938a6f0327376e1c0072fa0d7b3b73d84e255aafda53c1dff148225cfe542a8cc5d54b02
+  languageName: node
+  linkType: hard
+
+"@types/glob@npm:^7.1.1":
   version: 7.1.3
   resolution: "@types/glob@npm:7.1.3"
   dependencies:
@@ -1795,10 +1805,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-yaml@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@types/js-yaml@npm:4.0.1"
-  checksum: c1bc8a72272197d4dfb04c6b043346eff618be760116371b3d20b9e069e78b6964c58bcc75d5868afaa98055e1817ef3f6b57e76462c44f1f6edf54b784fe01d
+"@types/js-yaml@npm:4.0.2":
+  version: 4.0.2
+  resolution: "@types/js-yaml@npm:4.0.2"
+  checksum: bdc4b45e116d34cc0669ee0a3eee96113b60bc0447c48cd7e99d5227b304a5c65c227e3e83271a3ff6e96c32e769c52e376e8c8310414a35984e0ec226cc9b8a
   languageName: node
   linkType: hard
 
@@ -1832,12 +1842,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/micromatch@npm:4.0.1":
-  version: 4.0.1
-  resolution: "@types/micromatch@npm:4.0.1"
+"@types/micromatch@npm:4.0.2":
+  version: 4.0.2
+  resolution: "@types/micromatch@npm:4.0.2"
   dependencies:
     "@types/braces": "*"
-  checksum: 4f9fea285778c579055c83fbb025f576c3adc9541ec89e12f1e192e53c0885a04d1a5863b44001606f01964f12b26f8b08b033c06de11ca9de78d58e7a672850
+  checksum: 6c678e9c625d5b422c6d2c1001da1c502ecc4457248343bbd324b79fd798a6563e336a4d79630d80e8202312013dd7cf8b4440afa644d04477abd26fde6fba24
   languageName: node
   linkType: hard
 
@@ -1855,13 +1865,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:2.5.10":
-  version: 2.5.10
-  resolution: "@types/node-fetch@npm:2.5.10"
+"@types/node-fetch@npm:2.5.11":
+  version: 2.5.11
+  resolution: "@types/node-fetch@npm:2.5.11"
   dependencies:
     "@types/node": "*"
     form-data: ^3.0.0
-  checksum: 504d3834083fcbb90dc488618a60d078ff3b018c3c77e649b4990aff6dfafe9e41c82699ed474e01d9df40448240b6b455653d25afeecbc0eacb4154a217c253
+  checksum: a52ee9a205ce3130404a1c8eb0a163aa013fb94c5c93150735dda55bd4d21a556713834b11f6f031721ad7c82d9d7f77d45436010cefc11e851f518dfeeaca3e
   languageName: node
   linkType: hard
 
@@ -1900,12 +1910,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:17.0.1":
-  version: 17.0.1
-  resolution: "@types/yargs@npm:17.0.1"
+"@types/yargs@npm:17.0.2":
+  version: 17.0.2
+  resolution: "@types/yargs@npm:17.0.2"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: a2085751be04e26c03b80b951797a32350458b372fd6b3ca755a24a510dbf27e3bf1ff4096b5f56b9b8230d3f2371eb32dadc03dd0799476dd55954028370815
+  checksum: 6f4600d3b786c0eb083782f59c9ed61bb4c204269b0a07819bb9e9b1fc29deaf4fe28abde7dca5fbf3cf851beca9458cbcf63ebd128ebfe83d31002d84337b31
   languageName: node
   linkType: hard
 
@@ -7965,12 +7975,12 @@ typescript@4.3.5:
     "@babel/preset-env": 7.14.7
     "@babel/preset-typescript": 7.14.5
     "@types/eslint": 7.2.13
-    "@types/glob": 7.1.3
-    "@types/js-yaml": 4.0.1
+    "@types/glob": 7.1.4
+    "@types/js-yaml": 4.0.2
     "@types/lodash.clonedeep": 4.5.6
-    "@types/micromatch": 4.0.1
-    "@types/node-fetch": 2.5.10
-    "@types/yargs": 17.0.1
+    "@types/micromatch": 4.0.2
+    "@types/node-fetch": 2.5.11
+    "@types/yargs": 17.0.2
     "@typescript-eslint/eslint-plugin": 4.28.1
     "@typescript-eslint/parser": 4.28.1
     "@willbooster/eslint-config-ts": 6.3.0
