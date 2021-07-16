@@ -5035,9 +5035,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:11.0.0":
-  version: 11.0.0
-  resolution: "lint-staged@npm:11.0.0"
+"lint-staged@npm:11.0.1":
+  version: 11.0.1
+  resolution: "lint-staged@npm:11.0.1"
   dependencies:
     chalk: ^4.1.1
     cli-truncate: ^2.1.0
@@ -5056,7 +5056,7 @@ __metadata:
     stringify-object: ^3.3.0
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 3be24b4a88799264bbb9baeedfc5be278d25aa85dc766c5328da23d5d92300c0a163563b455d530ca2a74510a161f17623e846e1aca81e44f389108274ad2acd
+  checksum: 5046fbaa020e573ca31a4b7a3819cdd5383912c53dc55f5e68db4a525eba1fc23312f4cf0162742ef6a358464394e584b718049cd62b883b1d4f06fdfb163022
   languageName: node
   linkType: hard
 
@@ -7987,7 +7987,7 @@ typescript@4.3.5:
     glob: 7.1.7
     husky: 6.0.0
     js-yaml: 4.1.0
-    lint-staged: 11.0.0
+    lint-staged: 11.0.1
     lodash.clonedeep: 4.5.0
     micromatch: 4.0.4
     node-fetch: 2.6.1
