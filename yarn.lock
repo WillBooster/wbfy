@@ -1869,13 +1869,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:2.5.11":
-  version: 2.5.11
-  resolution: "@types/node-fetch@npm:2.5.11"
+"@types/node-fetch@npm:2.5.12":
+  version: 2.5.12
+  resolution: "@types/node-fetch@npm:2.5.12"
   dependencies:
     "@types/node": "*"
     form-data: ^3.0.0
-  checksum: a52ee9a205ce3130404a1c8eb0a163aa013fb94c5c93150735dda55bd4d21a556713834b11f6f031721ad7c82d9d7f77d45436010cefc11e851f518dfeeaca3e
+  checksum: ad63c85ba6a9477b8e057ec8682257738130d98e8ece4e31141789bd99df9d9147985cc8bc0cb5c8983ed5aa6bb95d46df23d1e055f4ad5cf8b82fc69cf626c7
   languageName: node
   linkType: hard
 
@@ -5038,9 +5038,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:11.0.1":
-  version: 11.0.1
-  resolution: "lint-staged@npm:11.0.1"
+"lint-staged@npm:11.1.0":
+  version: 11.1.0
+  resolution: "lint-staged@npm:11.1.0"
   dependencies:
     chalk: ^4.1.1
     cli-truncate: ^2.1.0
@@ -5059,7 +5059,7 @@ __metadata:
     stringify-object: ^3.3.0
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 5046fbaa020e573ca31a4b7a3819cdd5383912c53dc55f5e68db4a525eba1fc23312f4cf0162742ef6a358464394e584b718049cd62b883b1d4f06fdfb163022
+  checksum: a102f882d5708862b8f13bb0f9bab56ad00217f9058792c17500c83810faa04540fc481ba2b73efc4f71346a0e5f0554e285fb934b3985656109a4e7e2f4c937
   languageName: node
   linkType: hard
 
@@ -7972,7 +7972,7 @@ typescript@4.3.5:
     "@types/js-yaml": 4.0.2
     "@types/lodash.clonedeep": 4.5.6
     "@types/micromatch": 4.0.2
-    "@types/node-fetch": 2.5.11
+    "@types/node-fetch": 2.5.12
     "@types/yargs": 17.0.2
     "@typescript-eslint/eslint-plugin": 4.28.3
     "@typescript-eslint/parser": 4.28.3
@@ -7990,7 +7990,7 @@ typescript@4.3.5:
     glob: 7.1.7
     husky: 6.0.0
     js-yaml: 4.1.0
-    lint-staged: 11.0.1
+    lint-staged: 11.1.0
     lodash.clonedeep: 4.5.0
     micromatch: 4.0.4
     node-fetch: 2.6.1
