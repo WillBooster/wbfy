@@ -2964,7 +2964,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.15.2, core-js@npm:^3.15.0":
+"core-js@npm:3.16.0":
+  version: 3.16.0
+  resolution: "core-js@npm:3.16.0"
+  checksum: e215cf057fadd86e5386d8042c1bd0ddab1c7811d8f66d272c356ba9bae34c0897c3f5a80d19f93fd74cff832652354a0feb0c817234a066ae9177e28c6d865a
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.15.0":
   version: 3.15.2
   resolution: "core-js@npm:3.15.2"
   checksum: f8f61569c4c3bdf50679226f5a1045551192a2f4bc3fa46a873b6fa834cff6d1634ee138a6e4bae3eea99f1b1db2d588fa693de74640447476292b41f595a4c3
@@ -5063,9 +5070,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:11.1.0":
-  version: 11.1.0
-  resolution: "lint-staged@npm:11.1.0"
+"lint-staged@npm:11.1.1":
+  version: 11.1.1
+  resolution: "lint-staged@npm:11.1.1"
   dependencies:
     chalk: ^4.1.1
     cli-truncate: ^2.1.0
@@ -5084,7 +5091,7 @@ __metadata:
     stringify-object: ^3.3.0
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: a102f882d5708862b8f13bb0f9bab56ad00217f9058792c17500c83810faa04540fc481ba2b73efc4f71346a0e5f0554e285fb934b3985656109a4e7e2f4c937
+  checksum: 87d6654b71b898552712a6dba4689f40c887f1fd4b6a7b102a3e3e234cd8d6545c39e0f8b6380e26e5552ac788e2954d91eb7709ce6b5df9508584e2ddb8141f
   languageName: node
   linkType: hard
 
@@ -8017,7 +8024,7 @@ typescript@4.3.5:
     "@willbooster/prettier-config": 6.2.1
     "@willbooster/renovate-config": 6.3.0
     babel-plugin-transform-remove-console: 6.9.4
-    core-js: 3.15.2
+    core-js: 3.16.0
     deepmerge: 4.2.2
     dotenv-cli: 4.0.0
     eslint: 7.31.0
@@ -8027,7 +8034,7 @@ typescript@4.3.5:
     glob: 7.1.7
     husky: 6.0.0
     js-yaml: 4.1.0
-    lint-staged: 11.1.0
+    lint-staged: 11.1.1
     lodash.clonedeep: 4.5.0
     micromatch: 4.0.4
     node-fetch: 2.6.1
