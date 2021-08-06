@@ -3086,13 +3086,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dedent@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "dedent@npm:0.7.0"
-  checksum: 87de191050d9a40dd70cad01159a0bcf05ecb59750951242070b6abf9569088684880d00ba92a955b4058804f16eeaf91d604f283929b4f614d181cd7ae633d2
-  languageName: node
-  linkType: hard
-
 "deep-extend@npm:^0.6.0":
   version: 0.6.0
   resolution: "deep-extend@npm:0.6.0"
@@ -5076,16 +5069,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:11.1.1":
-  version: 11.1.1
-  resolution: "lint-staged@npm:11.1.1"
+"lint-staged@npm:11.1.2":
+  version: 11.1.2
+  resolution: "lint-staged@npm:11.1.2"
   dependencies:
     chalk: ^4.1.1
     cli-truncate: ^2.1.0
     commander: ^7.2.0
     cosmiconfig: ^7.0.0
     debug: ^4.3.1
-    dedent: ^0.7.0
     enquirer: ^2.3.6
     execa: ^5.0.0
     listr2: ^3.8.2
@@ -5097,7 +5089,7 @@ __metadata:
     stringify-object: ^3.3.0
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 87d6654b71b898552712a6dba4689f40c887f1fd4b6a7b102a3e3e234cd8d6545c39e0f8b6380e26e5552ac788e2954d91eb7709ce6b5df9508584e2ddb8141f
+  checksum: 0050d1836dda879c58561fa4efd100f5cd14fcbf8ee3fdeab7e89ec4219c019543bb5bf2442f760557ebe4bb8b7bfc56a9c98b9384acecfe0f8553f091723e36
   languageName: node
   linkType: hard
 
@@ -8051,7 +8043,7 @@ typescript@4.3.5:
     glob: 7.1.7
     husky: 6.0.0
     js-yaml: 4.1.0
-    lint-staged: 11.1.1
+    lint-staged: 11.1.2
     lodash.clonedeep: 4.5.0
     micromatch: 4.0.4
     node-fetch: 2.6.1
@@ -8062,7 +8054,7 @@ typescript@4.3.5:
     sort-package-json: 1.50.0
     ts-node: 10.1.0
     typescript: 4.3.5
-    yargs: 17.0.1
+    yargs: 17.1.0
   languageName: unknown
   linkType: soft
 
@@ -8156,9 +8148,9 @@ typescript@4.3.5:
   languageName: node
   linkType: hard
 
-"yargs@npm:17.0.1":
-  version: 17.0.1
-  resolution: "yargs@npm:17.0.1"
+"yargs@npm:17.1.0":
+  version: 17.1.0
+  resolution: "yargs@npm:17.1.0"
   dependencies:
     cliui: ^7.0.2
     escalade: ^3.1.1
@@ -8167,7 +8159,7 @@ typescript@4.3.5:
     string-width: ^4.2.0
     y18n: ^5.0.5
     yargs-parser: ^20.2.2
-  checksum: 4ffffa5a82647e5d07840b64bed88c365b901d3d4a4c51745dddb10d177902d85014026d7224aae18c42df9ca3f75a41c5aff556e5342e2f8ffc5177d149cd17
+  checksum: 259d496db8fd499debfb0e8676c1d4c0a8259c730ca31a4ca1047841c407aa4099f5f008c16b1adcf04b6015a4aa6c758a59d583aab9df89a288c75ce8a621e1
   languageName: node
   linkType: hard
 

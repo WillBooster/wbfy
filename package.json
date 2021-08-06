@@ -27,7 +27,7 @@
     "js-yaml": "4.1.0",
     "lodash.clonedeep": "4.5.0",
     "node-fetch": "2.6.1",
-    "yargs": "17.0.1"
+    "yargs": "17.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.14.8",
@@ -55,7 +55,7 @@
     "eslint-import-resolver-node": "0.3.4",
     "eslint-plugin-import": "2.23.4",
     "husky": "6.0.0",
-    "lint-staged": "11.1.1",
+    "lint-staged": "11.1.2",
     "micromatch": "4.0.4",
     "pinst": "2.1.6",
     "prettier": "2.3.2",
