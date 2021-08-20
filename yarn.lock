@@ -1832,10 +1832,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-yaml@npm:4.0.2":
-  version: 4.0.2
-  resolution: "@types/js-yaml@npm:4.0.2"
-  checksum: bdc4b45e116d34cc0669ee0a3eee96113b60bc0447c48cd7e99d5227b304a5c65c227e3e83271a3ff6e96c32e769c52e376e8c8310414a35984e0ec226cc9b8a
+"@types/js-yaml@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@types/js-yaml@npm:4.0.3"
+  checksum: 4be74c029f3fe4ab01f382481521c15bc79c96589747f588f8d3b92e97b8e04ffbe208451d24c99fd289593ff5325710eb83d267c8f2449d3248299f909003d7
   languageName: node
   linkType: hard
 
@@ -2989,7 +2989,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:3.16.1, core-js@npm:^3.16.0":
+"core-js@npm:3.16.2":
+  version: 3.16.2
+  resolution: "core-js@npm:3.16.2"
+  checksum: f48b988ab6d144aad1a7c09a73174946f797ec050b4566dee9bf0227560296cdd0f714b37f0ee065303eccf0e7fb8115ccca52ab3e80db12e0dcc20a88219483
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.16.0":
   version: 3.16.1
   resolution: "core-js@npm:3.16.1"
   checksum: 7924fa2a7f00e3a33bbe92fe42ba59fbbe7e01557a59824d000976300be3ba224cca20161f61654b3861ea80d244d6adfee6ed3ae6d6d9931210a37510fb7c9b
@@ -7667,9 +7674,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-node@npm:10.2.0":
-  version: 10.2.0
-  resolution: "ts-node@npm:10.2.0"
+"ts-node@npm:10.2.1":
+  version: 10.2.1
+  resolution: "ts-node@npm:10.2.1"
   dependencies:
     "@cspotcode/source-map-support": 0.6.1
     "@tsconfig/node10": ^1.0.7
@@ -7699,7 +7706,7 @@ __metadata:
     ts-node-script: dist/bin-script.js
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
-  checksum: da767e0fd5c1b4941f0b846c3532147f31cd2ac4d66a4809358e29ed5971a4e699720bd65f9e5a585a10bc7f9c55571a8fce9e485cedce6a224dcba3869bbd3a
+  checksum: f37d2827a583c51d012cdd3d9b96629fba7a5b5dfad2c26ca48c7c89f904118924689ca56f4b9b2136217194870a76f26aae06e3490ee613b0e960f02dc96bbe
   languageName: node
   linkType: hard
 
@@ -8060,7 +8067,7 @@ typescript@4.3.5:
     "@babel/preset-typescript": 7.15.0
     "@types/eslint": 7.28.0
     "@types/glob": 7.1.4
-    "@types/js-yaml": 4.0.2
+    "@types/js-yaml": 4.0.3
     "@types/lodash.clonedeep": 4.5.6
     "@types/micromatch": 4.0.2
     "@types/node-fetch": 2.5.12
@@ -8071,7 +8078,7 @@ typescript@4.3.5:
     "@willbooster/prettier-config": 6.2.1
     "@willbooster/renovate-config": 6.3.0
     babel-plugin-transform-remove-console: 6.9.4
-    core-js: 3.16.1
+    core-js: 3.16.2
     deepmerge: 4.2.2
     dotenv-cli: 4.0.0
     eslint: 7.32.0
@@ -8090,7 +8097,7 @@ typescript@4.3.5:
     rimraf: 3.0.2
     semantic-release: 17.4.5
     sort-package-json: 1.50.0
-    ts-node: 10.2.0
+    ts-node: 10.2.1
     typescript: 4.3.5
     yargs: 17.1.1
   languageName: unknown
