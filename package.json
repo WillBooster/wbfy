@@ -50,7 +50,7 @@
     "@willbooster/eslint-config-ts": "6.3.0",
     "@willbooster/prettier-config": "6.2.1",
     "@willbooster/renovate-config": "6.3.0",
-    "babel-jest": "27.0.6",
+    "babel-jest": "27.1.0",
     "babel-plugin-transform-remove-console": "6.9.4",
     "dotenv-cli": "4.0.0",
     "eslint": "7.32.0",
