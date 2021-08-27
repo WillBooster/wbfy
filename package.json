@@ -12,6 +12,7 @@
     "lint-fix": "yarn lint --fix",
     "prepack": "rimraf dist && yarn build",
     "start": "babel-node -x .ts -i /node_modules/ src",
+    "test": "jest",
     "test-release": "dotenv yarn semantic-release -d",
     "typecheck": "tsc --noEmit --Pretty",
     "prettify": "prettier --color --write \"**/{.*/,}*.{css,htm,html,js,json,json5,jsx,md,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\"",
@@ -38,6 +39,7 @@
     "@babel/preset-typescript": "7.15.0",
     "@types/eslint": "7.28.0",
     "@types/glob": "7.1.4",
+    "@types/jest": "27.0.1",
     "@types/js-yaml": "4.0.3",
     "@types/lodash.clonedeep": "4.5.6",
     "@types/micromatch": "4.0.2",
@@ -48,6 +50,7 @@
     "@willbooster/eslint-config-ts": "6.3.0",
     "@willbooster/prettier-config": "6.2.1",
     "@willbooster/renovate-config": "6.3.0",
+    "babel-jest": "27.0.6",
     "babel-plugin-transform-remove-console": "6.9.4",
     "dotenv-cli": "4.0.0",
     "eslint": "7.32.0",
@@ -55,6 +58,7 @@
     "eslint-import-resolver-node": "0.3.6",
     "eslint-plugin-import": "2.24.1",
     "husky": "6.0.0",
+    "jest": "27.0.6",
     "lint-staged": "11.1.2",
     "micromatch": "4.0.4",
     "pinst": "2.1.6",
@@ -67,5 +71,6 @@
   },
   "engines": {
     "node": ">=8.0.0"
-  }
+  },
+  "packageManager": "yarn@3.0.1"
 }
