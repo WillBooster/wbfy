@@ -139,19 +139,13 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
     if (config.containingYarnrcYml) {
       devDependencies.push('pinst');
-    }
-    if (
-      config.containingJavaScript ||
-      config.containingJavaScriptInPackages ||
-      config.containingTypeScript ||
-      config.containingTypeScriptInPackages
-    ) {
-      devDependencies.push('eslint');
-      if (config.containingYarnrcYml) {
+      if (
+        config.containingJavaScript ||
+        config.containingJavaScriptInPackages ||
+        config.containingTypeScript ||
+        config.containingTypeScriptInPackages
+      ) {
         devDependencies.push('eslint-import-resolver-node');
-      }
-      if (config.containingTypeScriptInPackages) {
-        devDependencies.push('@typescript-eslint/parser');
       }
     }
 
@@ -181,7 +175,10 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
     config.containingTypeScript ||
     config.containingTypeScriptInPackages
   ) {
-    devDependencies.push('micromatch');
+    devDependencies.push('eslint', 'micromatch');
+    if (config.containingTypeScriptInPackages) {
+      devDependencies.push('@typescript-eslint/parser');
+    }
   }
 
   if (config.containingTypeScript || config.containingTypeScriptInPackages) {

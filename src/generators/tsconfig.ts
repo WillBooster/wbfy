@@ -36,8 +36,19 @@ const rootJsonObj = {
 };
 
 const subJsonObj = {
-  extends: '../../tsconfig.json',
   compilerOptions: {
+    target: 'esnext',
+    module: 'esnext',
+    moduleResolution: 'node',
+    jsx: 'react',
+    alwaysStrict: true,
+    strict: true,
+    skipLibCheck: true,
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    resolveJsonModule: true,
+    sourceMap: true,
+    importHelpers: false,
     outDir: 'dist',
   },
   include: ['src/**/*', '__tests__/**/*', '../../node_modules/@types', '../../@types', './@types'],

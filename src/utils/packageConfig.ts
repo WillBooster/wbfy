@@ -64,12 +64,14 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingYarnrcYml: fs.existsSync(path.resolve(dirPath, '.yarnrc.yml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
-      containingJavaScript: glob.sync('src/**/*.js?(x)', { cwd: dirPath }).length > 0,
-      containingTypeScript: glob.sync('src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsx: glob.sync('src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
-      containingJavaScriptInPackages: glob.sync('packages/**/src/**/*.js?(x)', { cwd: dirPath }).length > 0,
-      containingTypeScriptInPackages: glob.sync('packages/**/src/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsxInPackages: glob.sync('packages/**/src/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+      containingJavaScript: glob.sync('@(src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
+      containingTypeScript: glob.sync('@(src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+      containingJsxOrTsx: glob.sync('@(src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+      containingJavaScriptInPackages:
+        glob.sync('packages/**/@(src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
+      containingTypeScriptInPackages:
+        glob.sync('packages/**/@(src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+      containingJsxOrTsxInPackages: glob.sync('packages/**/@(src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
         jestPlaywrightPreset: !!devDependencies['jest-playwright-preset'],

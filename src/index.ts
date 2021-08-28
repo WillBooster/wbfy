@@ -83,7 +83,10 @@ async function main(): Promise<void> {
         config.containingTypeScript ||
         config.containingTypeScriptInPackages
       ) {
-        promises.push(generateEslintrc(config, rootConfig), generateEslintignore(config));
+        if (!rootConfig.willBoosterConfigs) {
+          promises.push(generateEslintrc(config, rootConfig));
+        }
+        promises.push(generateEslintignore(config));
       }
     }
     await Promise.all(promises);
