@@ -132,11 +132,6 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
   let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
 
   if (config.root) {
-    // Cannot remove a version prefix in sub-packages because a version prefix is required to refer to another sub-package
-    [jsonObj.dependencies, jsonObj.devDependencies, jsonObj.peerDependencies].forEach((deps) =>
-      removeVersionPrefix(deps)
-    );
-
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
     if (config.containingYarnrcYml) {
       devDependencies.push('pinst');
@@ -284,14 +279,6 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
     }
   }
   return yarnInstallRequired;
-}
-
-function removeVersionPrefix(deps: any): void {
-  for (const [key, value] of Object.entries(deps)) {
-    if (typeof value === 'string' && value[0] === '^') {
-      deps[key] = value.substring(1);
-    }
-  }
 }
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {

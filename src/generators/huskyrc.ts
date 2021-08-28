@@ -22,12 +22,10 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   await fsp.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true });
 
   const dirPath = path.resolve(config.dirPath, '.husky');
-  if (!fs.existsSync(dirPath)) {
-    if (config.containingYarnrcYml) {
-      spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
-    } else {
-      spawnSync('npx', ['husky-init'], config.dirPath);
-    }
+  if (config.containingYarnrcYml) {
+    spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
+  } else {
+    spawnSync('npx', ['husky-init'], config.dirPath);
   }
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
