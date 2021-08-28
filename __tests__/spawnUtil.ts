@@ -1,7 +1,7 @@
 import child_process from 'child_process';
 import path from 'path';
 
-import { getSpawnSyncArgs } from '../src/utils/spawnUtil';
+import { getSpawnSyncArgs, spawnSync } from '../src/utils/spawnUtil';
 
 const testFixturePackageRoot = path.resolve('..', 'test-fixtures-for-wbfy', 'packages');
 
@@ -22,4 +22,8 @@ test.each`
   options.stdio = 'pipe';
   const p = child_process.spawnSync(commandAndArgs, options);
   expect(p.stdout.toString().trim()).toBe(expected);
+});
+
+test('spawnSync on willbooster-configs', () => {
+  spawnSync('yarn', ['install'], path.resolve('..', 'willbooster-configs'));
 });

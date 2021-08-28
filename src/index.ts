@@ -90,8 +90,10 @@ async function main(): Promise<void> {
     for (const config of allNodePackageConfigs) {
       await generatePackageJson(config, argv.skipDeps);
     }
-    spawnSync('yarn', ['install'], rootDirPath);
     spawnSync('yarn', ['cleanup'], rootDirPath);
+    // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock
+    // corresponding to the contents of dependant sub-package in monorepo
+    spawnSync('yarn', ['install'], rootDirPath);
   }
 }
 

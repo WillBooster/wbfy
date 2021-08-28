@@ -4,6 +4,7 @@ export function overwriteMerge(destinationArray: any[], sourceArray: any[]): any
   return sourceArray;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function combineMerge(target: any[], source: any[], options: any): any[] {
   const destination = target.slice();
 
