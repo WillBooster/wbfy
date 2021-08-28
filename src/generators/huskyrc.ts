@@ -28,19 +28,19 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     } else {
       spawnSync('npx', ['husky-init'], config.dirPath);
     }
-
-    const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
-    const content = (await fsp.readFile(preCommitFilePath)).toString();
-
-    const newJsonObj = config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna;
-    const promises = [fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, newJsonObj.preCommit))];
-    if (config.containingTypeScript || config.containingTypeScriptInPackages) {
-      promises.push(
-        fsp.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, newJsonObj.prePush), {
-          mode: 0o755,
-        })
-      );
-    }
-    await Promise.all(promises);
   }
+
+  const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
+  const content = (await fsp.readFile(preCommitFilePath)).toString();
+
+  const newJsonObj = config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna;
+  const promises = [fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, newJsonObj.preCommit))];
+  if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+    promises.push(
+      fsp.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, newJsonObj.prePush), {
+        mode: 0o755,
+      })
+    );
+  }
+  await Promise.all(promises);
 }
