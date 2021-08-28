@@ -82,7 +82,7 @@ const devDeps: { [prop: string]: string[] } = {
   '../../.eslintrc.json': [],
 };
 
-export async function generatePackageJson(config: PackageConfig, skipAddingDeps: boolean): Promise<boolean> {
+export async function generatePackageJson(config: PackageConfig, skipAddingDeps: boolean): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = (await fsp.readFile(filePath)).toString();
   const jsonObj = JSON.parse(jsonText);
@@ -101,7 +101,6 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
-  const eslintPluginPrettierRemoved = jsonObj.devDependencies['eslint-plugin-prettier'];
   delete jsonObj.devDependencies['eslint-plugin-prettier'];
   delete jsonObj.scripts['flutter-format'];
   delete jsonObj.scripts['format-flutter'];
@@ -277,7 +276,6 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
       spawnSync('yarn', ['up', ...new Set(devDependencies)], config.dirPath);
     }
   }
-  return eslintPluginPrettierRemoved;
 }
 
 function removeVersionPrefix(deps: any): void {

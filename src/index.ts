@@ -87,14 +87,10 @@ async function main(): Promise<void> {
       }
     }
     await Promise.all(promises);
-    let yarnInstallRequired = false;
     for (const config of allNodePackageConfigs) {
-      const ret = await generatePackageJson(config, argv.skipDeps);
-      yarnInstallRequired ||= ret;
+      await generatePackageJson(config, argv.skipDeps);
     }
-    if (yarnInstallRequired) {
-      spawnSync('yarn', ['install'], rootDirPath);
-    }
+    spawnSync('yarn', ['install'], rootDirPath);
     spawnSync('yarn', ['cleanup'], rootDirPath);
   }
 }
