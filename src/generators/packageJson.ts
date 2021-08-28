@@ -132,6 +132,11 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
   let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
 
   if (config.root) {
+    // Cannot remove a version prefix in sub-packages because a version prefix is required to refer to another sub-package
+    [jsonObj.dependencies, jsonObj.devDependencies, jsonObj.peerDependencies].forEach((deps) =>
+      removeVersionPrefix(deps)
+    );
+
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
     if (config.containingYarnrcYml) {
       devDependencies.push('pinst');
@@ -258,27 +263,29 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
 
   await fsp.writeFile(filePath, JSON.stringify(jsonObj));
 
-  let yarnInstallRequired = true;
   if (!skipAddingDeps) {
-    if (config.root && config.containingYarnrcYml) {
+    if (config.root) {
       spawnSync('yarn', ['set', 'version', 'latest'], config.dirPath);
     }
-    const workspaceOption = config.containingSubPackageJsons && !config.containingYarnrcYml ? ['-W'] : [];
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {
-      spawnSync('yarn', ['add', ...workspaceOption, ...new Set(dependencies)], config.dirPath);
-      yarnInstallRequired = false;
+      spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
     }
-    if (devDependencies.length && devDependencies.some((dep) => !jsonObj.devDependencies?.[dep])) {
-      spawnSync('yarn', ['add', ...workspaceOption, '-D', ...new Set(devDependencies)], config.dirPath);
-      yarnInstallRequired = false;
+    if (devDependencies.some((dep) => !jsonObj.devDependencies?.[dep])) {
+      spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
-    if (devDependencies.length && eslintPluginPrettierRemoved) {
-      const params = config.containingYarnrcYml ? ['up'] : ['upgrade', '--latest'];
-      spawnSync('yarn', [...params, ...new Set(devDependencies)], config.dirPath);
-      yarnInstallRequired = false;
+    if (devDependencies.length) {
+      spawnSync('yarn', ['up', ...new Set(devDependencies)], config.dirPath);
     }
   }
-  return yarnInstallRequired;
+  return eslintPluginPrettierRemoved;
+}
+
+function removeVersionPrefix(deps: any): void {
+  for (const [key, value] of Object.entries(deps)) {
+    if (typeof value === 'string' && value[0] === '^') {
+      deps[key] = value.substring(1);
+    }
+  }
 }
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {
