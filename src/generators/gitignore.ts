@@ -18,6 +18,7 @@ const commonContent = `
 .devcontainer/
 dist/
 temp/
+Icon[\r]
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
