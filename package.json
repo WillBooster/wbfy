@@ -22,12 +22,12 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "core-js": "3.16.2",
+    "core-js": "3.18.0",
     "deepmerge": "4.2.2",
-    "glob": "7.1.7",
+    "glob": "7.2.0",
     "js-yaml": "4.1.0",
     "lodash.clonedeep": "4.5.0",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.6.5",
     "yargs": "17.1.1"
   },
   "devDependencies": {
@@ -45,7 +45,7 @@
     "@types/micromatch": "4.0.2",
     "@types/node": "16.7.10",
     "@types/node-fetch": "2.5.12",
-    "@types/yargs": "17.0.2",
+    "@types/yargs": "17.0.3",
     "@typescript-eslint/eslint-plugin": "4.31.1",
     "@typescript-eslint/parser": "4.31.1",
     "@willbooster/eslint-config-ts": "6.3.0",
@@ -63,12 +63,12 @@
     "lint-staged": "11.1.2",
     "micromatch": "4.0.4",
     "pinst": "2.1.6",
-    "prettier": "2.3.2",
+    "prettier": "2.4.1",
     "rimraf": "3.0.2",
     "semantic-release": "17.4.7",
-    "sort-package-json": "1.50.0",
+    "sort-package-json": "1.51.0",
     "ts-node": "10.2.1",
-    "typescript": "4.3.5"
+    "typescript": "4.4.3"
   },
   "engines": {
     "node": ">=8.0.0"
