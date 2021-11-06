@@ -2,11 +2,11 @@ import fs from 'fs';
 import fsp from 'fs/promises';
 import path from 'path';
 
+import merge from 'deepmerge';
+
 import { FsUtil } from '../utils/fsUtil';
 import { combineMerge } from '../utils/mergeUtil';
 import { PackageConfig } from '../utils/packageConfig';
-
-import merge from 'deepmerge';
 
 function getExtensionBase(config: PackageConfig): string | undefined {
   if (config.containingTypeScript) {

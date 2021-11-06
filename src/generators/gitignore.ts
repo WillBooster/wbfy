@@ -1,10 +1,9 @@
 import path from 'path';
 
+import { fetchOnNode } from '../utils/fetchOnNode';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
-
-import fetch from 'node-fetch';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim'];
 
@@ -75,7 +74,7 @@ android/app/src/main/assets/
   let content = (
     await Promise.all(
       names.map(async (name) => {
-        const response = await fetch(`https://www.toptal.com/developers/gitignore/api/${name}`);
+        const response = await fetchOnNode(`https://www.toptal.com/developers/gitignore/api/${name}`);
         return await response.text();
       })
     )

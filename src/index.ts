@@ -1,5 +1,8 @@
 import path from 'path';
 
+import glob from 'glob';
+import yargs from 'yargs';
+
 import { generateEditorconfig } from './generators/editorconfig';
 import { generateEslintignore } from './generators/eslintignore';
 import { generateEslintrc } from './generators/eslintrc';
@@ -16,9 +19,6 @@ import { generateTsconfig } from './generators/tsconfig';
 import { generateYarnrc } from './generators/yarnrc';
 import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { spawnSync } from './utils/spawnUtil';
-
-import glob from 'glob';
-import yargs from 'yargs';
 
 async function main(): Promise<void> {
   const argv = await yargs

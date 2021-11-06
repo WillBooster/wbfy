@@ -4,8 +4,9 @@
       "@babel/preset-env",
       {
         "useBuiltIns": "usage",
-        "corejs": "3.9",
-        "bugfixes": true
+        "corejs": "3.19",
+        "bugfixes": true,
+        "exclude": ["proposal-dynamic-import"]
       }
     ],
     "@babel/typescript"

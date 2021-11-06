@@ -2298,12 +2298,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:3.0.2":
-  version: 3.0.2
-  resolution: "@types/node-fetch@npm:3.0.2"
+"@types/node-fetch@npm:3.0.3":
+  version: 3.0.3
+  resolution: "@types/node-fetch@npm:3.0.3"
   dependencies:
     node-fetch: "*"
-  checksum: b9f97bc4219c37f70299133b36389719cf4adacad46cea80df70f77d4a9f6999ea5be18a1ab90b34239b684cae032adeec10756cce8d2ae81c17f5e4c56fd4e9
+  checksum: 1d46abfda354d7d423f5873f6bd07550f170c869ca33740b0e170265d3b65f76f9cac5f83fa0c4aa7afee66a6e1b14d4c4edd0297133fd186fef21fb53727413
   languageName: node
   linkType: hard
 
@@ -9896,7 +9896,7 @@ __metadata:
     "@types/lodash.clonedeep": 4.5.6
     "@types/micromatch": 4.0.2
     "@types/node": 16.11.6
-    "@types/node-fetch": 3.0.2
+    "@types/node-fetch": 3.0.3
     "@types/yargs": 17.0.5
     "@typescript-eslint/eslint-plugin": 5.3.0
     "@typescript-eslint/parser": 5.3.0
