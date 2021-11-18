@@ -91,7 +91,7 @@ async function main(): Promise<void> {
     }
     await Promise.all(promises);
     for (const config of allNodePackageConfigs) {
-      await generatePackageJson(config, argv.skipDeps);
+      await generatePackageJson(config, rootConfig, argv.skipDeps);
     }
     spawnSync('yarn', ['cleanup'], rootDirPath);
     // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock

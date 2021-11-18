@@ -82,7 +82,11 @@ const devDeps: { [prop: string]: string[] } = {
   '../../.eslintrc.json': [],
 };
 
-export async function generatePackageJson(config: PackageConfig, skipAddingDeps: boolean): Promise<void> {
+export async function generatePackageJson(
+  config: PackageConfig,
+  rootConfig: PackageConfig,
+  skipAddingDeps: boolean
+): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = (await fsp.readFile(filePath)).toString();
   const jsonObj = JSON.parse(jsonText);
@@ -260,8 +264,8 @@ export async function generatePackageJson(config: PackageConfig, skipAddingDeps:
   await fsp.writeFile(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
-    const wflag = !config.containingYarnrcYml && config.root ? ['-W'] : [];
-    const upgrade = config.containingYarnrcYml ? 'up' : 'upgrade';
+    const wflag = !rootConfig.containingYarnrcYml && config.root ? ['-W'] : [];
+    const upgrade = rootConfig.containingYarnrcYml ? 'up' : 'upgrade';
     if (config.root) {
       spawnSync('yarn', ['set', 'version', 'latest'], config.dirPath);
     }
