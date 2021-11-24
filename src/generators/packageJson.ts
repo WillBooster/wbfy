@@ -265,18 +265,25 @@ export async function generatePackageJson(
 
   if (!skipAddingDeps) {
     const wflag = !rootConfig.containingYarnrcYml && config.root ? ['-W'] : [];
-    const upgrade = rootConfig.containingYarnrcYml ? 'up' : 'upgrade';
     if (config.root) {
       spawnSync('yarn', ['set', 'version', 'latest'], config.dirPath);
+      if (config.containingYarnrcYml) {
+        spawnSync(
+          'yarn',
+          [
+            'plugin',
+            'import',
+            'https://raw.githubusercontent.com/WillBooster/yarn-plugin-auto-install/main/dist/index.cjs',
+          ],
+          config.dirPath
+        );
+      }
     }
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {
       spawnSync('yarn', ['add', ...wflag, ...new Set(dependencies)], config.dirPath);
     }
-    if (devDependencies.some((dep) => !jsonObj.devDependencies?.[dep])) {
-      spawnSync('yarn', ['add', '-D', ...wflag, ...new Set(devDependencies)], config.dirPath);
-    }
     if (devDependencies.length) {
-      spawnSync('yarn', [upgrade, ...new Set(devDependencies)], config.dirPath);
+      spawnSync('yarn', ['add', '-D', ...wflag, ...new Set(devDependencies)], config.dirPath);
     }
   }
 }
