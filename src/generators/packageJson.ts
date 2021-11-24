@@ -121,6 +121,14 @@ export async function generatePackageJson(
     jsonObj.prettier = '@willbooster/prettier-config';
   }
 
+  if (rootConfig.containingYarnrcYml) {
+    for (const scriptKey of Object.keys(jsonObj.scripts)) {
+      jsonObj.scripts[scriptKey] = jsonObj.scripts[scriptKey]
+        .replace(/yarn\s*&&\s*/, '')
+        .replace(/yarn\s*install\s*&&\s*/, '');
+    }
+  }
+
   jsonObj.scripts = merge(
     jsonObj.scripts,
     config.containingSubPackageJsons
