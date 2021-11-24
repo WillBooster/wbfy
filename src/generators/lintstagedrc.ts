@@ -55,7 +55,7 @@ module.exports = {${lines.join('')}
 };
 `;
 
-  const filePath = path.resolve(config.dirPath, '.lintstagedrc.js');
+  const filePath = path.resolve(config.dirPath, '.lintstagedrc.cjs');
   await Promise.all([
     fsp.rm(path.resolve(config.dirPath, '.lintstagedrc.json'), { force: true }),
     FsUtil.generateFile(filePath, content),
