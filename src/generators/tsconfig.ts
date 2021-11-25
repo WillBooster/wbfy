@@ -79,7 +79,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
 
   const filePath = path.resolve(config.dirPath, 'tsconfig.json');
   if (fs.existsSync(filePath)) {
-    const existingContent = (await fsp.readFile(filePath)).toString();
+    const existingContent = await fsp.readFile(filePath, 'utf-8');
     try {
       const existingJsonObj = JSON.parse(existingContent);
       if (existingJsonObj.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {

@@ -17,7 +17,7 @@ export const IgnoreFileUtil = {
   },
   getUserContent(filePath: string): string | null {
     if (fs.existsSync(filePath)) {
-      const existingContent = fs.readFileSync(filePath).toString();
+      const existingContent = fs.readFileSync(filePath, 'utf-8');
       const index = existingContent.indexOf(this.separatorPrefix);
       if (index >= 0) {
         return existingContent.substr(0, existingContent.indexOf('\n', index) + 1);
@@ -27,7 +27,7 @@ export const IgnoreFileUtil = {
   },
   isBerryZeroInstallEnabled(filePath: string): boolean {
     if (fs.existsSync(filePath)) {
-      const existingContent = fs.readFileSync(filePath).toString();
+      const existingContent = fs.readFileSync(filePath, 'utf-8');
       return existingContent.includes('\n!.yarn/cache');
     }
     return false;

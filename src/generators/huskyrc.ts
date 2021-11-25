@@ -26,7 +26,7 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   }
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
-  const content = (await fsp.readFile(preCommitFilePath)).toString();
+  const content = await fsp.readFile(preCommitFilePath, 'utf-8');
 
   const newJsonObj = config.containingSubPackageJsons ? jsonObjWithLerna : jsonObjWithoutLerna;
   const promises = [

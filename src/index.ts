@@ -3,6 +3,7 @@ import path from 'path';
 import glob from 'glob';
 import yargs from 'yargs';
 
+import { generateVersionConfigs } from './generators/asdf';
 import { generateEditorconfig } from './generators/editorconfig';
 import { generateEslintignore } from './generators/eslintignore';
 import { generateEslintrc } from './generators/eslintrc';
@@ -63,8 +64,9 @@ async function main(): Promise<void> {
       generateHuskyrc(rootConfig),
       generateIdeaSettings(rootConfig),
       generateLintstagedrc(rootConfig),
-      generateYarnrc(rootConfig),
-      generateRenovateJson(rootConfig)
+      generateRenovateJson(rootConfig),
+      generateVersionConfigs(rootConfig),
+      generateYarnrc(rootConfig)
     );
     if (rootConfig.containingSubPackageJsons) {
       rootPromises.push(generateLernaJson(rootConfig));
@@ -90,6 +92,7 @@ async function main(): Promise<void> {
       }
     }
     await Promise.all(promises);
+
     for (const config of allNodePackageConfigs) {
       await generatePackageJson(config, rootConfig, argv.skipDeps);
     }

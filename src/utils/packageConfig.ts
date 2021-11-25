@@ -42,7 +42,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
     let scripts: { [key: string]: string } = {};
     let packageJson: any = {};
     if (containingPackageJson) {
-      const packageJsonText = fs.readFileSync(packageJsonPath).toString();
+      const packageJsonText = fs.readFileSync(packageJsonPath, 'utf-8');
       packageJson = JSON.parse(packageJsonText);
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
@@ -83,6 +83,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       },
       requiringNodeModules: true,
     };
+    config.eslintBase = getEslintExtensionBase(config);
     if (
       config.containingGemfile ||
       config.containingGoMod ||
@@ -98,4 +99,21 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
     // do nothing
   }
   return null;
+}
+
+function getEslintExtensionBase(config: PackageConfig): string | undefined {
+  if (config.containingTypeScript) {
+    if (config.containingJsxOrTsx) {
+      return '@willbooster/eslint-config-ts-react';
+    } else {
+      return '@willbooster/eslint-config-ts';
+    }
+  } else {
+    if (config.containingJsxOrTsx) {
+      return '@willbooster/eslint-config-js-react';
+    } else if (config.containingJavaScript) {
+      return '@willbooster/eslint-config-js';
+    }
+  }
+  return undefined;
 }

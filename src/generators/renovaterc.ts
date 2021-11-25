@@ -18,7 +18,7 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
 
   const filePath = path.resolve(config.dirPath, '.renovaterc.json');
   if (fs.existsSync(filePath)) {
-    const existingContent = (await fsp.readFile(filePath)).toString();
+    const existingContent = await fsp.readFile(filePath, 'utf-8');
     try {
       const existingJsonObj = JSON.parse(existingContent) as any;
       newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });

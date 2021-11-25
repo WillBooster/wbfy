@@ -24,7 +24,7 @@ export async function generateLernaJson(config: PackageConfig): Promise<void> {
 
   const filePath = path.resolve(config.dirPath, 'lerna.json');
   if (fs.existsSync(filePath)) {
-    const existingContent = (await fsp.readFile(filePath)).toString();
+    const existingContent = await fsp.readFile(filePath, 'utf-8');
     try {
       const existingJsonObj = JSON.parse(existingContent) as any;
       const version = existingJsonObj.version;

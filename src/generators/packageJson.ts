@@ -88,7 +88,7 @@ export async function generatePackageJson(
   skipAddingDeps: boolean
 ): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = (await fsp.readFile(filePath)).toString();
+  const jsonText = await fsp.readFile(filePath, 'utf-8');
   const jsonObj = JSON.parse(jsonText);
   jsonObj.scripts = jsonObj.scripts || {};
   jsonObj.dependencies = jsonObj.dependencies || {};
@@ -306,7 +306,7 @@ function removeVersionPrefix(deps: any): void {
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {
   const filePath = path.resolve(dirPath, '.prettierignore');
-  const existingContent = (await fsp.readFile(filePath)).toString();
+  const existingContent = await fsp.readFile(filePath, 'utf-8');
   const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);
   if (index < 0) return '';
 

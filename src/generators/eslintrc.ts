@@ -8,26 +8,8 @@ import { FsUtil } from '../utils/fsUtil';
 import { combineMerge } from '../utils/mergeUtil';
 import { PackageConfig } from '../utils/packageConfig';
 
-function getExtensionBase(config: PackageConfig): string | undefined {
-  if (config.containingTypeScript) {
-    if (config.containingJsxOrTsx) {
-      return '@willbooster/eslint-config-ts-react';
-    } else {
-      return '@willbooster/eslint-config-ts';
-    }
-  } else {
-    if (config.containingJsxOrTsx) {
-      return '@willbooster/eslint-config-js-react';
-    } else if (config.containingJavaScript) {
-      return '@willbooster/eslint-config-js';
-    }
-  }
-  return undefined;
-}
-
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   const bases = [];
-  config.eslintBase = getExtensionBase(config);
   if (config.eslintBase) {
     bases.push(config.eslintBase);
   }
@@ -38,7 +20,7 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
 
   const filePath = path.resolve(config.dirPath, '.eslintrc.json');
   if (fs.existsSync(filePath)) {
-    const existingContent = (await fsp.readFile(filePath)).toString();
+    const existingContent = await fsp.readFile(filePath, 'utf-8');
     try {
       const existingJsonObj = JSON.parse(existingContent);
       if (existingJsonObj.extends) {
