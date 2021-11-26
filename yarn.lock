@@ -1959,7 +1959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semantic-release/commit-analyzer@npm:^9.0.0":
+"@semantic-release/commit-analyzer@npm:^9.0.2":
   version: 9.0.2
   resolution: "@semantic-release/commit-analyzer@npm:9.0.2"
   dependencies:
@@ -2307,17 +2307,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:16.11.10":
   version: 16.11.10
   resolution: "@types/node@npm:16.11.10"
   checksum: 9c79419c5c3d92d5825bffa30f3668533f598d8b63a73ea7fc24e47f162bdbed92b0f8e4f4261cc3314b39cee050e303366d2aa154abc95c63a572a110b8c160
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:16.11.9":
-  version: 16.11.9
-  resolution: "@types/node@npm:16.11.9"
-  checksum: baec2e6471ee58fd1e9874e6f47ab95a918a0f46b42424392e4c13e3e07f078f8b72b6b48073b0b14f710ed66c5f1b2e497df43f28151000f11f5f299382cfe2
   languageName: node
   linkType: hard
 
@@ -8036,12 +8029,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.4.1":
-  version: 2.4.1
-  resolution: "prettier@npm:2.4.1"
+"prettier@npm:2.5.0":
+  version: 2.5.0
+  resolution: "prettier@npm:2.5.0"
   bin:
     prettier: bin-prettier.js
-  checksum: cc6830588b401b0d742862fe9c46bc9118204fb307c3abe0e49e95b35ed23629573807ffdf9cdd65289c252a0bb51fc0171437f6626ee36378dea80f0ee80b91
+  checksum: aad1b35b73e7c14596d389d90977a83dad0db689ba5802a0ef319c357b7867f55b885db197972aa6a56c30f53088c9f8e0d7f7930ae074c275a4e9cbe091d21d
   languageName: node
   linkType: hard
 
@@ -8580,11 +8573,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semantic-release@npm:18.0.0":
-  version: 18.0.0
-  resolution: "semantic-release@npm:18.0.0"
+"semantic-release@npm:18.0.1":
+  version: 18.0.1
+  resolution: "semantic-release@npm:18.0.1"
   dependencies:
-    "@semantic-release/commit-analyzer": ^9.0.0
+    "@semantic-release/commit-analyzer": ^9.0.2
     "@semantic-release/error": ^3.0.0
     "@semantic-release/github": ^8.0.0
     "@semantic-release/npm": ^8.0.0
@@ -8614,7 +8607,7 @@ __metadata:
     yargs: ^16.2.0
   bin:
     semantic-release: bin/semantic-release.js
-  checksum: 3fee100afea9f5285329a782ba7d89b4119ac164dec12f746eb905ff9cd06e69a117911400b005060db7860612a28eb7b96e5ae5fbd8e1119659b6474b6a5693
+  checksum: e99634d2fd392d007cd83cc28318cd4b0781825b550e75486676941b8f67a32c1b907c53de2761440b38ead220629cc3778c22373aacce4ee291dba43971b0d6
   languageName: node
   linkType: hard
 
@@ -9569,11 +9562,11 @@ __metadata:
 
 "typescript@patch:typescript@4.5.2#~builtin<compat/typescript>":
   version: 4.5.2
-  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=ddd1e8"
+  resolution: "typescript@patch:typescript@npm%3A4.5.2#~builtin<compat/typescript>::version=4.5.2&hash=493e53"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 24a439e062a05e3285a4f0e8a40644116ecdca89f3e908bed01e5a01b9aee747e3bcf0e85fe9e017e5ebf0c0863437c39479f2616f55a244c2d82d37022cdc4f
+  checksum: 53838d56aba6fcc947d63aa0771e5d966b1b648fddafed6e221d7f38c71219c4e036ece8cfe9e35ed80cf5a35ff4eb958934c993f99c3233773ec4f9ccd53f69
   languageName: node
   linkType: hard
 
@@ -9923,7 +9916,7 @@ __metadata:
     "@types/js-yaml": 4.0.5
     "@types/lodash.clonedeep": 4.5.6
     "@types/micromatch": 4.0.2
-    "@types/node": 16.11.9
+    "@types/node": 16.11.10
     "@types/node-fetch": 3.0.3
     "@types/yargs": 17.0.7
     "@typescript-eslint/eslint-plugin": 5.4.0
@@ -9949,9 +9942,9 @@ __metadata:
     micromatch: 4.0.4
     node-fetch: 3.1.0
     pinst: 2.1.6
-    prettier: 2.4.1
+    prettier: 2.5.0
     rimraf: 3.0.2
-    semantic-release: 18.0.0
+    semantic-release: 18.0.1
     sort-package-json: 1.53.1
     ts-node: 10.4.0
     typescript: 4.5.2
