@@ -1,7 +1,9 @@
 import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 
 import glob from 'glob';
+import yaml from 'js-yaml';
 
 export interface PackageConfig {
   dirPath: string;
@@ -33,7 +35,7 @@ export interface PackageConfig {
   requiringNodeModules: boolean;
 }
 
-export function getPackageConfig(dirPath: string): PackageConfig | null {
+export async function getPackageConfig(dirPath: string): Promise<PackageConfig | null> {
   const packageJsonPath = path.resolve(dirPath, 'package.json');
   try {
     const containingPackageJson = fs.existsSync(packageJsonPath);
@@ -47,6 +49,15 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
       scripts = packageJson.scripts ?? {};
+    }
+
+    let requiringNodeModules = true;
+    try {
+      const yarnrcYmlPath = path.resolve(dirPath, '.yarnrc.yml');
+      const doc = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
+      requiringNodeModules = !doc.nodeLinker || doc.nodeLinker === 'node-modules';
+    } catch (_) {
+      // do nothing
     }
 
     const config: PackageConfig = {
@@ -81,7 +92,7 @@ export function getPackageConfig(dirPath: string): PackageConfig | null {
           Object.keys(devDependencies).some((dep) => dep.includes('ts-node')) ||
           packageJson?.engines?.node?.startsWith('10'),
       },
-      requiringNodeModules: true,
+      requiringNodeModules,
     };
     config.eslintBase = getEslintExtensionBase(config);
     if (

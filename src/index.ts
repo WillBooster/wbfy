@@ -36,7 +36,7 @@ async function main(): Promise<void> {
   for (const rootDirPath of argv._) {
     if (typeof rootDirPath === 'number') continue;
 
-    const rootConfig = getPackageConfig(rootDirPath);
+    const rootConfig = await getPackageConfig(rootDirPath);
     if (rootConfig === null) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
       continue;
@@ -45,9 +45,9 @@ async function main(): Promise<void> {
     const subDirPaths = rootConfig.containingSubPackageJsons
       ? glob.sync('packages/*', { cwd: rootDirPath }).map((subDirPath) => path.resolve(rootDirPath, subDirPath))
       : [];
-    const subPackageConfigs = subDirPaths
-      .map((subDirPath) => getPackageConfig(subDirPath))
-      .filter((config) => !!config) as PackageConfig[];
+    const subPackageConfigs = (await Promise.all(subDirPaths.map((subDirPath) => getPackageConfig(subDirPath)))).filter(
+      (config) => !!config
+    ) as PackageConfig[];
     const allPackageConfigs = [rootConfig, ...subPackageConfigs];
     const allNodePackageConfigs = [rootConfig, ...subPackageConfigs.filter((config) => config.containingPackageJson)];
 

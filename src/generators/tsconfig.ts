@@ -95,5 +95,10 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
       // do nothing
     }
   }
+  const sortedCompilerOptions: Record<string, unknown> = {};
+  for (const key of Object.keys(newJsonObj.compilerOptions).sort()) {
+    sortedCompilerOptions[key] = newJsonObj.compilerOptions[key];
+  }
+  newJsonObj.compilerOptions = sortedCompilerOptions;
   await FsUtil.generateFile(filePath, JSON.stringify(newJsonObj));
 }

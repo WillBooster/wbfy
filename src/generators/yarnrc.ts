@@ -21,7 +21,6 @@ export async function generateYarnrc(config: PackageConfig): Promise<void> {
     const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
     const doc = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
     doc.defaultSemverRangePrefix = '';
-    config.requiringNodeModules = doc.nodeLinker !== 'node-modules';
     if (config.requiringNodeModules) {
       doc.nmMode = 'hardlinks-global';
     }
