@@ -246,7 +246,9 @@ export async function generatePackageJson(
         return fs.readdirSync(dirPath).some((fileName) => fileName.endsWith('.py'));
       });
       if (dirNames.length > 0) {
-        jsonObj.scripts['format-code'] = `poetry run black ${dirNames.join(' ')}`;
+        jsonObj.scripts['format-code'] = `poetry run isort --profile black ${dirNames.join(
+          ' '
+        )} && poetry run black ${dirNames.join(' ')}`;
         jsonObj.scripts.lint = `poetry run flake8 ${dirNames.join(' ')}`;
         jsonObj.scripts['lint-fix'] = 'yarn lint';
         jsonObj.scripts.format += ` && yarn format-code`;
