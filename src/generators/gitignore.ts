@@ -5,7 +5,7 @@ import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
 
-const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim'];
+const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 
 const defaultUserContent = `${IgnoreFileUtil.header}
 
@@ -25,9 +25,6 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
   let userContent = (IgnoreFileUtil.getUserContent(filePath) || defaultUserContent) + commonContent;
 
   const names = [...defaultNames];
-  if (config.containingYarnrcYml) {
-    names.push('yarn');
-  }
   if (config.containingGemfile) {
     names.push('ruby');
   }
@@ -79,7 +76,7 @@ android/app/src/main/assets/
       })
     )
   ).join('');
-  if (config.containingYarnrcYml && !IgnoreFileUtil.isBerryZeroInstallEnabled(filePath)) {
+  if (!IgnoreFileUtil.isBerryZeroInstallEnabled(filePath)) {
     content = content.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
   }
   if (config.containingPomXml || config.containingPubspecYaml) {

@@ -11,13 +11,12 @@ import { generateGitattributes } from './generators/gitattributes';
 import { generateGitignore } from './generators/gitignore';
 import { generateHuskyrc } from './generators/huskyrc';
 import { generateIdeaSettings } from './generators/idea';
-import { generateLernaJson } from './generators/lernaJson';
 import { generateLintstagedrc } from './generators/lintstagedrc';
 import { generatePackageJson } from './generators/packageJson';
 import { generatePrettierignore } from './generators/prettierignore';
 import { generateRenovateJson } from './generators/renovaterc';
 import { generateTsconfig } from './generators/tsconfig';
-import { generateYarnrc } from './generators/yarnrc';
+import { generateYarnrcYml } from './generators/yarnrc';
 import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { spawnSync } from './utils/spawnUtil';
 
@@ -58,6 +57,8 @@ async function main(): Promise<void> {
     }
 
     const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig));
+    // Install yarn berry at first
+    await generateYarnrcYml(rootConfig);
     rootPromises.push(
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),
@@ -65,12 +66,8 @@ async function main(): Promise<void> {
       generateIdeaSettings(rootConfig),
       generateLintstagedrc(rootConfig),
       generateRenovateJson(rootConfig),
-      generateVersionConfigs(rootConfig),
-      generateYarnrc(rootConfig)
+      generateVersionConfigs(rootConfig)
     );
-    if (rootConfig.containingSubPackageJsons) {
-      rootPromises.push(generateLernaJson(rootConfig));
-    }
     await Promise.all(rootPromises);
 
     const promises: Promise<void>[] = [];

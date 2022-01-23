@@ -7,11 +7,10 @@ import merge from 'deepmerge';
 import { EslintUtil } from '../utils/eslintUtil';
 import { Extensions } from '../utils/extensions';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
-import { overwriteMerge } from '../utils/mergeUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { spawnSync } from '../utils/spawnUtil';
 
-const scriptsWithoutLerna = {
+const scriptsWithoutWorkspace = {
   cleanup: 'yarn format && yarn lint-fix',
   format: `sort-package-json && yarn prettify`,
   lint: `eslint --color "./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}"`,
@@ -20,29 +19,17 @@ const scriptsWithoutLerna = {
   typecheck: 'tsc --noEmit --Pretty',
 };
 
-const scriptsWithLerna = merge(
-  { ...scriptsWithoutLerna },
+const scriptsWithWorkspace = merge(
+  { ...scriptsWithoutWorkspace },
   {
-    format: `sort-package-json && yarn prettify && lerna run format --no-sort`,
-    lint: `lerna run lint --no-sort`,
-    'lint-fix': 'lerna run lint-fix --no-sort',
+    format: `sort-package-json && yarn prettify && yarn workspaces foreach --parallel --verbose run format`,
+    lint: `yarn workspaces foreach --parallel --verbose run lint`,
+    'lint-fix': 'yarn workspaces foreach --parallel --verbose run lint-fix',
     prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(
       ','
     )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-    typecheck: 'lerna run typecheck --no-sort',
-  }
-);
-
-const scriptsWithWorkspaceTool = merge(
-  { ...scriptsWithoutLerna },
-  {
-    format: `sort-package-json && yarn prettify && lerna run format --no-sort`,
-    lint: `lerna run lint --no-sort`,
-    'lint-fix': 'lerna run lint-fix --no-sort',
-    prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(
-      ','
-    )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-    typecheck: 'lerna run typecheck --no-sort',
+    test: 'yarn workspaces foreach --verbose run test',
+    typecheck: 'yarn workspaces foreach --parallel --verbose run typecheck',
   }
 );
 
@@ -62,22 +49,24 @@ const devDeps: { [prop: string]: string[] } = {
     'eslint-plugin-react-hooks',
   ],
   '@willbooster/eslint-config-ts': [
+    '@typescript-eslint/eslint-plugin',
+    '@typescript-eslint/parser',
     '@willbooster/eslint-config-ts',
     'eslint',
     'eslint-config-prettier',
+    'eslint-import-resolver-typescript',
     'eslint-plugin-import',
-    '@typescript-eslint/eslint-plugin',
-    '@typescript-eslint/parser',
   ],
   '@willbooster/eslint-config-ts-react': [
+    '@typescript-eslint/eslint-plugin',
+    '@typescript-eslint/parser',
     '@willbooster/eslint-config-ts-react',
     'eslint',
     'eslint-config-prettier',
+    'eslint-import-resolver-typescript',
     'eslint-plugin-import',
     'eslint-plugin-react',
     'eslint-plugin-react-hooks',
-    '@typescript-eslint/eslint-plugin',
-    '@typescript-eslint/parser',
   ],
   '../../.eslintrc.json': [],
 };
@@ -95,47 +84,21 @@ export async function generatePackageJson(
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   jsonObj.peerDependencies = jsonObj.peerDependencies || {};
 
-  // TODO: remove the following migration code in future
-  if (jsonObj.author === 'WillBooster LLC') {
-    jsonObj.author = 'WillBooster Inc.';
-  }
-  delete jsonObj.scripts['sort-package-json'];
-  delete jsonObj.scripts['sort-all-package-json'];
-  delete jsonObj.dependencies['tslib'];
-  delete jsonObj.devDependencies['@willbooster/eslint-config'];
-  delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
-  delete jsonObj.devDependencies['@willbooster/tsconfig'];
-  delete jsonObj.devDependencies['eslint-plugin-prettier'];
-  delete jsonObj.scripts['flutter-format'];
-  delete jsonObj.scripts['format-flutter'];
-  delete jsonObj.scripts['python-format'];
-  delete jsonObj.scripts['format-python'];
-  delete jsonObj.scripts['prettier'];
-  for (const deps of Object.values(devDeps)) {
-    for (const dep of deps) {
-      delete jsonObj.devDependencies[dep];
-    }
-  }
+  removeDeprecatedStuff(jsonObj);
 
   if (jsonObj.name !== '@willbooster/prettier-config') {
     jsonObj.prettier = '@willbooster/prettier-config';
   }
 
-  if (rootConfig.containingYarnrcYml) {
-    for (const scriptKey of Object.keys(jsonObj.scripts)) {
-      jsonObj.scripts[scriptKey] = jsonObj.scripts[scriptKey]
-        .replace(/yarn\s*&&\s*/, '')
-        .replace(/yarn\s*install\s*&&\s*/, '');
-    }
+  for (const scriptKey of Object.keys(jsonObj.scripts)) {
+    jsonObj.scripts[scriptKey] = jsonObj.scripts[scriptKey]
+      .replace(/yarn\s*&&\s*/, '')
+      .replace(/yarn\s*install\s*&&\s*/, '');
   }
 
   jsonObj.scripts = merge(
     jsonObj.scripts,
-    config.containingSubPackageJsons
-      ? config.containingYarnrcYml
-        ? scriptsWithWorkspaceTool
-        : scriptsWithLerna
-      : scriptsWithoutLerna
+    config.containingSubPackageJsons ? scriptsWithWorkspace : scriptsWithoutWorkspace
   );
   jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
 
@@ -144,35 +107,12 @@ export async function generatePackageJson(
 
   if (config.root) {
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
-    if (config.containingYarnrcYml) {
-      devDependencies.push('pinst');
-      if (
-        config.containingJavaScript ||
-        config.containingJavaScriptInPackages ||
-        config.containingTypeScript ||
-        config.containingTypeScriptInPackages
-      ) {
-        devDependencies.push('eslint-import-resolver-node');
-      }
-    }
+    // if (config.containingYarnrcYml) {
+    //   devDependencies.push('pinst');
+    // }
 
     if (config.containingSubPackageJsons) {
-      devDependencies.push('lerna');
-      if (config.containingYarnrcYml) {
-        jsonObj.workspaces = ['packages/*'];
-      } else {
-        jsonObj.workspaces = jsonObj.workspaces || {};
-        if (jsonObj.workspaces instanceof Array) {
-          jsonObj.workspaces = {};
-        }
-        jsonObj.workspaces = merge(
-          jsonObj.workspaces,
-          {
-            packages: ['packages/*'],
-          },
-          { arrayMerge: overwriteMerge }
-        );
-      }
+      jsonObj.workspaces = ['packages/*'];
     }
   }
 
@@ -269,28 +209,40 @@ export async function generatePackageJson(
   await fsp.writeFile(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
-    const wflag = !rootConfig.containingYarnrcYml && config.root ? ['-W'] : [];
-    if (config.root) {
-      spawnSync('yarn', ['set', 'version', 'latest'], config.dirPath);
-      if (config.containingYarnrcYml) {
-        spawnSync(
-          'yarn',
-          [
-            'plugin',
-            'import',
-            'https://raw.githubusercontent.com/WillBooster/yarn-plugin-auto-install/main/dist/index.cjs',
-          ],
-          config.dirPath
-        );
-      }
-    }
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {
-      spawnSync('yarn', ['add', ...wflag, ...new Set(dependencies)], config.dirPath);
+      spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
     }
     if (devDependencies.length) {
-      spawnSync('yarn', ['add', '-D', ...wflag, ...new Set(devDependencies)], config.dirPath);
+      spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
   }
+}
+
+function removeDeprecatedStuff(jsonObj: any): void {
+  // TODO: remove the following migration code in future
+  if (jsonObj.author === 'WillBooster LLC') {
+    jsonObj.author = 'WillBooster Inc.';
+  }
+  delete jsonObj.scripts['sort-package-json'];
+  delete jsonObj.scripts['sort-all-package-json'];
+  delete jsonObj.dependencies['tslib'];
+  delete jsonObj.devDependencies['@willbooster/eslint-config'];
+  delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
+  delete jsonObj.devDependencies['@willbooster/tsconfig'];
+  delete jsonObj.devDependencies['eslint-import-resolver-node'];
+  delete jsonObj.devDependencies['eslint-plugin-prettier'];
+  delete jsonObj.devDependencies['lerna'];
+  delete jsonObj.scripts['flutter-format'];
+  delete jsonObj.scripts['format-flutter'];
+  delete jsonObj.scripts['python-format'];
+  delete jsonObj.scripts['format-python'];
+  delete jsonObj.scripts['prettier'];
+  for (const deps of Object.values(devDeps)) {
+    for (const dep of deps) {
+      delete jsonObj.devDependencies[dep];
+    }
+  }
+  fsp.rm('lerna.json', { force: true }).then();
 }
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {

@@ -12,18 +12,22 @@ const jsonObjWithoutLerna = {
 };
 
 const jsonObjWithLerna = {
-  preCommit:
-    'yarn lint-staged && yarn lerna exec lint-staged --concurrency 1 --stream --since HEAD --exclude-dependents',
+  preCommit: 'yarn workspaces foreach --jobs 1 --since --verbose exec lint-staged',
   prePush: 'yarn typecheck',
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
+  const packageJsonPath = path.resolve(config.dirPath, 'package.json');
+  const jsonText = await fsp.readFile(packageJsonPath, 'utf-8');
+  const jsonObj = JSON.parse(jsonText);
+  delete jsonObj.scripts['postinstall'];
+  delete jsonObj.scripts['postpublish'];
+  delete jsonObj.scripts['prepare'];
+  delete jsonObj.scripts['prepublishOnly'];
+  await fsp.writeFile(packageJsonPath, JSON.stringify(jsonObj, undefined, 2));
+
   const dirPath = path.resolve(config.dirPath, '.husky');
-  if (config.containingYarnrcYml) {
-    spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
-  } else {
-    spawnSync('npx', ['husky-init'], config.dirPath);
-  }
+  spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
   const content = await fsp.readFile(preCommitFilePath, 'utf-8');

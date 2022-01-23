@@ -8,6 +8,13 @@ export function spawnSync(command: string, args: string[], cwd: string): void {
   child_process.spawnSync(commandAndArgs, options);
 }
 
+export function spawnSyncWithStringResult(command: string, args: string[], cwd: string): string {
+  const [commandAndArgs, options] = getSpawnSyncArgs(command, args, cwd);
+  options.stdio = 'pipe';
+  const proc = child_process.spawnSync(commandAndArgs, options);
+  return proc.stdout.toString().trim();
+}
+
 export function getSpawnSyncArgs(command: string, args: string[], cwd: string): [string, any] {
   const env = { ...process.env };
   // Remove berry from PATH

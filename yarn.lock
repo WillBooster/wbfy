@@ -9349,6 +9349,58 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wbfy@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "wbfy@workspace:."
+  dependencies:
+    "@babel/core": 7.16.7
+    "@babel/node": 7.16.7
+    "@babel/plugin-proposal-class-properties": 7.16.7
+    "@babel/plugin-proposal-numeric-separator": 7.16.7
+    "@babel/preset-env": 7.16.7
+    "@babel/preset-typescript": 7.16.7
+    "@types/eslint": 8.2.2
+    "@types/glob": 7.2.0
+    "@types/jest": 27.4.0
+    "@types/js-yaml": 4.0.5
+    "@types/lodash.clonedeep": 4.5.6
+    "@types/micromatch": 4.0.2
+    "@types/node": 16.11.19
+    "@types/node-fetch": 3.0.3
+    "@types/yargs": 17.0.8
+    "@typescript-eslint/eslint-plugin": 5.9.0
+    "@typescript-eslint/parser": 5.9.0
+    "@willbooster/eslint-config-ts": 6.5.0
+    "@willbooster/prettier-config": 6.5.0
+    "@willbooster/renovate-config": 6.5.0
+    babel-jest: 27.4.6
+    babel-plugin-transform-remove-console: 6.9.4
+    core-js: 3.20.2
+    deepmerge: 4.2.2
+    dotenv-cli: 4.1.1
+    eslint: 8.6.0
+    eslint-config-prettier: 8.3.0
+    eslint-import-resolver-node: 0.3.6
+    eslint-plugin-import: 2.25.4
+    glob: 7.2.0
+    husky: 7.0.4
+    jest: 27.4.7
+    js-yaml: 4.1.0
+    lint-staged: 12.1.7
+    lodash.clonedeep: 4.5.0
+    micromatch: 4.0.4
+    node-fetch: 3.1.0
+    pinst: 2.1.6
+    prettier: 2.5.1
+    rimraf: 3.0.2
+    semantic-release: 18.0.1
+    sort-package-json: 1.53.1
+    ts-node: 10.4.0
+    typescript: 4.5.4
+    yargs: 17.3.1
+  languageName: unknown
+  linkType: soft
+
 "wcwidth@npm:^1.0.0":
   version: 1.0.1
   resolution: "wcwidth@npm:1.0.1"
@@ -9455,58 +9507,6 @@ __metadata:
   checksum: d5fc37cd561f9daee3c80e03b92ed3e84d80dde3365a8767263d03dacfc8fa06b065ffe1df00d8c2a09f731482fcacae745abfbb478d4af36d0a891fad4834d3
   languageName: node
   linkType: hard
-
-"willboosterify@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "willboosterify@workspace:."
-  dependencies:
-    "@babel/core": 7.16.7
-    "@babel/node": 7.16.7
-    "@babel/plugin-proposal-class-properties": 7.16.7
-    "@babel/plugin-proposal-numeric-separator": 7.16.7
-    "@babel/preset-env": 7.16.7
-    "@babel/preset-typescript": 7.16.7
-    "@types/eslint": 8.2.2
-    "@types/glob": 7.2.0
-    "@types/jest": 27.4.0
-    "@types/js-yaml": 4.0.5
-    "@types/lodash.clonedeep": 4.5.6
-    "@types/micromatch": 4.0.2
-    "@types/node": 16.11.19
-    "@types/node-fetch": 3.0.3
-    "@types/yargs": 17.0.8
-    "@typescript-eslint/eslint-plugin": 5.9.0
-    "@typescript-eslint/parser": 5.9.0
-    "@willbooster/eslint-config-ts": 6.5.0
-    "@willbooster/prettier-config": 6.5.0
-    "@willbooster/renovate-config": 6.5.0
-    babel-jest: 27.4.6
-    babel-plugin-transform-remove-console: 6.9.4
-    core-js: 3.20.2
-    deepmerge: 4.2.2
-    dotenv-cli: 4.1.1
-    eslint: 8.6.0
-    eslint-config-prettier: 8.3.0
-    eslint-import-resolver-node: 0.3.6
-    eslint-plugin-import: 2.25.4
-    glob: 7.2.0
-    husky: 7.0.4
-    jest: 27.4.7
-    js-yaml: 4.1.0
-    lint-staged: 12.1.7
-    lodash.clonedeep: 4.5.0
-    micromatch: 4.0.4
-    node-fetch: 3.1.0
-    pinst: 2.1.6
-    prettier: 2.5.1
-    rimraf: 3.0.2
-    semantic-release: 18.0.1
-    sort-package-json: 1.53.1
-    ts-node: 10.4.0
-    typescript: 4.5.4
-    yargs: 17.3.1
-  languageName: unknown
-  linkType: soft
 
 "word-wrap@npm:^1.2.3, word-wrap@npm:~1.2.3":
   version: 1.2.3
