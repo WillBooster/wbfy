@@ -1,9 +1,14 @@
 {
   "name": "wbfy",
-  "version": "0.0.0-development",
+  "version": "0.0.0-semantically-released",
   "description": "A tool for applying WillBooster's conventional configures to npm packages",
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
+  "bin": "./bin/index.cjs",
+  "files": [
+    "bin/",
+    "dist/"
+  ],
   "scripts": {
     "build": "node esbuild.js",
     "cleanup": "yarn format && yarn lint-fix",

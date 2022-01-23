@@ -21,8 +21,8 @@ import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { spawnSync } from './utils/spawnUtil';
 
 async function main(): Promise<void> {
-  const argv = await yargs
-    .command('willboosterify <paths...>', 'Generate/update project files for WillBooster')
+  const argv = await yargs(process.argv.slice(2))
+    .command('wbfy <paths...>', 'Generate/update project files for WillBooster')
     .demandCommand(1)
     .alias('d', 'skipDeps')
     .boolean('skipDeps')
