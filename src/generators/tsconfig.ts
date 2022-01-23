@@ -60,7 +60,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     delete newJsonObj.compilerOptions.jsx;
   }
   if (config.depending.tsnode) {
-    // We expect Node version is 12+
+    // We expect Node version is 14+
     newJsonObj.compilerOptions.target = 'es2019';
     newJsonObj.compilerOptions.module = 'commonjs';
   }

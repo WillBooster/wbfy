@@ -94,10 +94,6 @@ export async function generatePackageJson(
 
   if (config.root) {
     devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
-    // if (config.containingYarnrcYml) {
-    //   devDependencies.push('pinst');
-    // }
-
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
     }
