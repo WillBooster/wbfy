@@ -35,6 +35,7 @@ function buildCode(filename) {
     platform: 'node',
     sourcemap: true,
     write: false,
+    target: 'node14',
   });
   // Try cleaning-up workers in esbuild
   delete require.cache[require.resolve('esbuild')];
