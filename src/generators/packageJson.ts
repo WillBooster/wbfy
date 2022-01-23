@@ -93,7 +93,9 @@ export async function generatePackageJson(
   let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
 
   if (config.root) {
-    devDependencies.push('husky', 'lint-staged', '@willbooster/renovate-config');
+    // To install the latest pinst
+    devDependencies.push('husky', 'lint-staged', 'pinst', '@willbooster/renovate-config');
+
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
     }
@@ -215,6 +217,8 @@ function removeDeprecatedStuff(jsonObj: any): void {
   delete jsonObj.devDependencies['eslint-import-resolver-node'];
   delete jsonObj.devDependencies['eslint-plugin-prettier'];
   delete jsonObj.devDependencies['lerna'];
+  // To install the latest pinst
+  delete jsonObj.devDependencies['pinst'];
   delete jsonObj.scripts['flutter-format'];
   delete jsonObj.scripts['format-flutter'];
   delete jsonObj.scripts['python-format'];
