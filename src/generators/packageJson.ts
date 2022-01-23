@@ -33,41 +33,28 @@ const scriptsWithWorkspace = merge(
   }
 );
 
+const jsCommonDeps = [
+  'eslint',
+  'eslint-config-prettier',
+  'eslint-plugin-import',
+  'eslint-plugin-sort-class-members',
+  'eslint-plugin-sort-destructure-keys',
+];
+
+const tsCommonDeps = [
+  ...jsCommonDeps,
+  '@typescript-eslint/eslint-plugin',
+  '@typescript-eslint/parser',
+  'eslint-import-resolver-typescript',
+];
+
+const reactCommonDeps = ['eslint-plugin-react', 'eslint-plugin-react-hooks'];
+
 const devDeps: { [prop: string]: string[] } = {
-  '@willbooster/eslint-config-js': [
-    '@willbooster/eslint-config-js',
-    'eslint',
-    'eslint-config-prettier',
-    'eslint-plugin-import',
-  ],
-  '@willbooster/eslint-config-js-react': [
-    '@willbooster/eslint-config-js-react',
-    'eslint',
-    'eslint-config-prettier',
-    'eslint-plugin-import',
-    'eslint-plugin-react',
-    'eslint-plugin-react-hooks',
-  ],
-  '@willbooster/eslint-config-ts': [
-    '@typescript-eslint/eslint-plugin',
-    '@typescript-eslint/parser',
-    '@willbooster/eslint-config-ts',
-    'eslint',
-    'eslint-config-prettier',
-    'eslint-import-resolver-typescript',
-    'eslint-plugin-import',
-  ],
-  '@willbooster/eslint-config-ts-react': [
-    '@typescript-eslint/eslint-plugin',
-    '@typescript-eslint/parser',
-    '@willbooster/eslint-config-ts-react',
-    'eslint',
-    'eslint-config-prettier',
-    'eslint-import-resolver-typescript',
-    'eslint-plugin-import',
-    'eslint-plugin-react',
-    'eslint-plugin-react-hooks',
-  ],
+  '@willbooster/eslint-config-js': ['@willbooster/eslint-config-js', ...jsCommonDeps],
+  '@willbooster/eslint-config-js-react': ['@willbooster/eslint-config-js-react', ...jsCommonDeps, ...reactCommonDeps],
+  '@willbooster/eslint-config-ts': ['@willbooster/eslint-config-ts', ...tsCommonDeps],
+  '@willbooster/eslint-config-ts-react': ['@willbooster/eslint-config-ts-react', ...tsCommonDeps, ...reactCommonDeps],
   '../../.eslintrc.json': [],
 };
 
