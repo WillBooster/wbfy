@@ -1,4 +1,4 @@
-# willboosterify
+# wbfy
 
 :books::rocket: A tool for applying WillBooster's conventional configurations to npm packages
 
@@ -16,5 +16,4 @@ This tool must keep idempotency, i.e., it always yields the same result when a u
 
 ## How to Use
 
-1. `yarn`
-1. `yarn start <project directory>`
+1. `yarn dlx wbfy <project directory>`

@@ -24,9 +24,12 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   delete jsonObj.scripts['postpublish'];
   delete jsonObj.scripts['prepare'];
   delete jsonObj.scripts['prepublishOnly'];
-  await fsp.writeFile(packageJsonPath, JSON.stringify(jsonObj, undefined, 2));
 
   const dirPath = path.resolve(config.dirPath, '.husky');
+  await Promise.all([
+    fsp.writeFile(packageJsonPath, JSON.stringify(jsonObj, undefined, 2)),
+    fsp.rm(dirPath, { force: true, recursive: true }),
+  ]);
   spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
