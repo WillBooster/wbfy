@@ -20,8 +20,7 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   lines.push(`
   './**/*.{${Extensions.prettier.join(',')}}': files => {
     ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
-    const filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter})
-      .map(file => path.relative('', file));
+    const filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});
     if (filteredFiles.length === 0) return [];
     const commands = [\`prettier --write \${filteredFiles.join(' ')}\`];
     if (filteredFiles.some(file => file.endsWith('package.json'))) {
@@ -33,8 +32,7 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
     lines.push(`
   './{lib,test,test_driver}/**/*.dart': files => {
     const filteredFiles = files.filter(file => !file.includes('generated'))
-      .filter(file => !file.endsWith('.freezed.dart') && !file.endsWith('.g.dart'))
-      .map(file => path.relative('', file));
+      .filter(file => !file.endsWith('.freezed.dart') && !file.endsWith('.g.dart'));
     if (filteredFiles.length === 0) return [];
     return [\`flutter format \${filteredFiles.join(' ')}\`];
   },`);

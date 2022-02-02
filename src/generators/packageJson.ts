@@ -90,11 +90,11 @@ export async function generatePackageJson(
   jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
 
   let dependencies = [] as string[];
-  let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
+  let devDependencies = ['lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config'];
 
   if (config.root) {
     // To install the latest pinst
-    devDependencies.push('husky', 'lint-staged', 'pinst', '@willbooster/renovate-config');
+    devDependencies.push('husky', 'pinst', '@willbooster/renovate-config');
 
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];

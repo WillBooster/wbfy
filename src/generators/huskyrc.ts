@@ -12,7 +12,7 @@ const jsonObjWithoutLerna = {
 };
 
 const jsonObjWithLerna = {
-  preCommit: 'yarn workspaces foreach --jobs 1 --since --verbose exec lint-staged',
+  preCommit: 'yarn lint-staged',
   prePush: 'yarn typecheck',
 };
 
