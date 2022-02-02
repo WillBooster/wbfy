@@ -90,6 +90,12 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
         delete newJsonObj?.compilerOptions?.target;
         delete newJsonObj?.compilerOptions?.module;
       }
+      if (existingJsonObj.jsx) {
+        delete newJsonObj.jsx;
+      }
+      if (existingJsonObj.include?.includes?.('blitz-env.d.ts')) {
+        delete newJsonObj.include;
+      }
       newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });
     } catch (e) {
       // do nothing

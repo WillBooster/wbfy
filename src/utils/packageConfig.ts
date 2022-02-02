@@ -8,6 +8,7 @@ import yaml from 'js-yaml';
 export interface PackageConfig {
   dirPath: string;
   root: boolean;
+  private: boolean;
   willBoosterConfigs: boolean;
   containingSubPackageJsons: boolean;
   containingGemfile: boolean;
@@ -59,11 +60,19 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       // do nothing
     }
 
+    const isPrivate =
+      packageJson.private &&
+      glob.sync('packages/**/package.json', { cwd: dirPath }).map((p) => {
+        const packageJsonText = fs.readFileSync(path.join(dirPath, p), 'utf-8');
+        return JSON.parse(packageJsonText).private;
+      });
+
     const config: PackageConfig = {
       dirPath,
       root:
         path.basename(path.resolve(dirPath, '..')) !== 'packages' ||
         !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
+      private: !!isPrivate,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
@@ -73,14 +82,15 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
-      containingJavaScript: glob.sync('@(src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
-      containingTypeScript: glob.sync('@(src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsx: glob.sync('@(src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+      containingJavaScript: glob.sync('@(app|src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
+      containingTypeScript: glob.sync('@(app|src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+      containingJsxOrTsx: glob.sync('@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       containingJavaScriptInPackages:
-        glob.sync('packages/**/@(src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
+        glob.sync('packages/**/@(app|src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
       containingTypeScriptInPackages:
-        glob.sync('packages/**/@(src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsxInPackages: glob.sync('packages/**/@(src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+        glob.sync('packages/**/@(app|src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+      containingJsxOrTsxInPackages:
+        glob.sync('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
         firebase: !!devDependencies['firebase-tools'],
         jestPlaywrightPreset: !!devDependencies['jest-playwright-preset'],

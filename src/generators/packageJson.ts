@@ -98,6 +98,8 @@ export async function generatePackageJson(
 
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
+    } else {
+      delete jsonObj.workspaces;
     }
   }
 

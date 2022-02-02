@@ -31,9 +31,13 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     if (!config.requiringNodeModules) {
       spawnSync('yarn', ['dlx', '@yarnpkg/sdks', 'vscode'], config.dirPath);
     }
+  } else {
+    spawnSync('yarn', ['plugin', 'remove', 'typescript'], config.dirPath);
   }
   if (config.containingSubPackageJsons) {
     spawnSync('yarn', ['plugin', 'import', '@yarnpkg/plugin-workspace-tools'], config.dirPath);
+  } else {
+    spawnSync('yarn', ['plugin', 'remove', '@yarnpkg/plugin-workspace-tools'], config.dirPath);
   }
   spawnSync('yarn', ['dlx', 'yarn-plugin-auto-install'], config.dirPath);
 }

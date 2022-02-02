@@ -20,6 +20,7 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   const packageJsonPath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fsp.readFile(packageJsonPath, 'utf-8');
   const jsonObj = JSON.parse(jsonText);
+  jsonObj.scripts ||= {};
   delete jsonObj.scripts['postinstall'];
   delete jsonObj.scripts['postpublish'];
   delete jsonObj.scripts['prepare'];
