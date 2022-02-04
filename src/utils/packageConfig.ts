@@ -32,7 +32,6 @@ export interface PackageConfig {
     prisma: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
-    tsnode: boolean;
   };
   release: {
     branches: string[];
@@ -49,14 +48,13 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
     const containingPackageJson = fs.existsSync(packageJsonPath);
     let dependencies: { [key: string]: string } = {};
     let devDependencies: { [key: string]: string } = {};
-    let scripts: { [key: string]: string } = {};
+    const scripts: { [key: string]: string } = {};
     let packageJson: any = {};
     if (containingPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath, 'utf-8');
       packageJson = JSON.parse(packageJsonText);
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
-      scripts = packageJson.scripts ?? {};
     }
 
     let requiringNodeModules = true;
@@ -117,10 +115,6 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
         semanticRelease: !!devDependencies['semantic-release'],
-        tsnode:
-          Object.values(scripts).some((script) => script.includes('ts-node')) ||
-          Object.keys(devDependencies).some((dep) => dep.includes('ts-node')) ||
-          packageJson?.engines?.node?.startsWith('10'),
       },
       release: {
         branches: releaseBranches,

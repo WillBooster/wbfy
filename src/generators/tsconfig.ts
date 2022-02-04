@@ -59,11 +59,6 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
   if (!config.containingJsxOrTsx && !config.containingJsxOrTsxInPackages) {
     delete newJsonObj.compilerOptions.jsx;
   }
-  if (config.depending.tsnode) {
-    // We expect Node version is 14+
-    newJsonObj.compilerOptions.target = 'es2019';
-    newJsonObj.compilerOptions.module = 'commonjs';
-  }
   if (config.root && !config.containingSubPackageJsons) {
     newJsonObj.include = newJsonObj.include.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
   }
@@ -86,14 +81,12 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
         delete existingJsonObj.extends;
       }
       delete existingJsonObj.compilerOptions?.typeRoots;
-      if (!config.depending.tsnode) {
-        delete newJsonObj?.compilerOptions?.target;
-        delete newJsonObj?.compilerOptions?.module;
-      }
+      delete newJsonObj?.compilerOptions?.target;
+      delete newJsonObj?.compilerOptions?.module;
       if (existingJsonObj.jsx) {
         delete newJsonObj.jsx;
       }
-      if (existingJsonObj.include?.includes?.('blitz-env.d.ts')) {
+      if (!config.depending.blitz) {
         delete newJsonObj.include;
       }
       newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });
