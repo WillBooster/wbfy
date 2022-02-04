@@ -95,7 +95,9 @@ export async function generatePackageJson(
   if (config.root) {
     // To install the latest pinst
     devDependencies.push('husky', 'pinst', '@willbooster/renovate-config');
-
+    if (config.depending.semanticRelease) {
+      devDependencies.push('conventional-changelog-conventionalcommits');
+    }
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
     } else {

@@ -26,10 +26,18 @@ export interface PackageConfig {
   containingTypeScriptInPackages: boolean;
   containingJsxOrTsxInPackages: boolean;
   depending: {
+    blitz: boolean;
     firebase: boolean;
     jestPlaywrightPreset: boolean;
+    prisma: boolean;
     reactNative: boolean;
+    semanticRelease: boolean;
     tsnode: boolean;
+  };
+  release: {
+    branches: string[];
+    github: boolean;
+    npm: boolean;
   };
   eslintBase?: string;
   requiringNodeModules: boolean;
@@ -56,6 +64,17 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       const yarnrcYmlPath = path.resolve(dirPath, '.yarnrc.yml');
       const doc = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
       requiringNodeModules = !doc.nodeLinker || doc.nodeLinker === 'node-modules';
+    } catch (_) {
+      // do nothing
+    }
+
+    let releaseBranches: string[] = [];
+    let releasePlugins: string[] = [];
+    try {
+      const releasercJsonPath = path.resolve(dirPath, '.releaserc.json');
+      const json = JSON.parse(await fsp.readFile(releasercJsonPath, 'utf8'));
+      releaseBranches = json?.branches || [];
+      releasePlugins = json?.plugins?.flat() || [];
     } catch (_) {
       // do nothing
     }
@@ -92,13 +111,21 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingJsxOrTsxInPackages:
         glob.sync('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
+        blitz: !!(dependencies['blitz'] || devDependencies['blitz']),
         firebase: !!devDependencies['firebase-tools'],
         jestPlaywrightPreset: !!devDependencies['jest-playwright-preset'],
+        prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
+        semanticRelease: !!devDependencies['semantic-release'],
         tsnode:
           Object.values(scripts).some((script) => script.includes('ts-node')) ||
           Object.keys(devDependencies).some((dep) => dep.includes('ts-node')) ||
           packageJson?.engines?.node?.startsWith('10'),
+      },
+      release: {
+        branches: releaseBranches,
+        github: releasePlugins.includes('@semantic-release/github'),
+        npm: releasePlugins.includes('@semantic-release/npm'),
       },
       requiringNodeModules,
     };

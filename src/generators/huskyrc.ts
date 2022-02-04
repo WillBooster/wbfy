@@ -9,6 +9,7 @@ const DEFAULT_COMMAND = 'npm test';
 const settings = {
   preCommit: 'yarn lint-staged',
   prePush: 'yarn typecheck',
+  postMerge: 'yarn',
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
@@ -35,6 +36,7 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     fsp.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }),
     fsp.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, settings.preCommit)),
   ];
+
   if (config.containingTypeScript || config.containingTypeScriptInPackages) {
     promises.push(
       fsp.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, settings.prePush), {
@@ -42,5 +44,18 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
       })
     );
   }
+
+  let postMergeContent = content.replace(DEFAULT_COMMAND, settings.postMerge).trim();
+  if (config.depending.blitz) {
+    postMergeContent += ' && yarn blitz codegen';
+  } else if (config.depending.prisma) {
+    postMergeContent += ' && yarn prisma generate';
+  }
+  promises.push(
+    fsp.writeFile(path.resolve(dirPath, 'post-merge'), postMergeContent, {
+      mode: 0o755,
+    })
+  );
+
   await Promise.all(promises);
 }

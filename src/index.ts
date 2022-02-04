@@ -14,8 +14,10 @@ import { generateIdeaSettings } from './generators/idea';
 import { generateLintstagedrc } from './generators/lintstagedrc';
 import { generatePackageJson } from './generators/packageJson';
 import { generatePrettierignore } from './generators/prettierignore';
+import { generateReleaserc } from './generators/releaserc';
 import { generateRenovateJson } from './generators/renovaterc';
 import { generateTsconfig } from './generators/tsconfig';
+import { generateWorkflow } from './generators/workflow';
 import { generateYarnrcYml } from './generators/yarnrc';
 import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { spawnSync } from './utils/spawnUtil';
@@ -66,7 +68,9 @@ async function main(): Promise<void> {
       generateIdeaSettings(rootConfig),
       generateLintstagedrc(rootConfig),
       generateRenovateJson(rootConfig),
-      generateVersionConfigs(rootConfig)
+      generateReleaserc(rootConfig),
+      generateVersionConfigs(rootConfig),
+      generateWorkflow(rootConfig)
     );
     await Promise.all(rootPromises);
 

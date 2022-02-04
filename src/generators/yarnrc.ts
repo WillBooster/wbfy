@@ -23,21 +23,19 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     doc.nmMode = 'hardlinks-global';
   }
   await fsp.writeFile(yarnrcYmlPath, yaml.dump(doc));
-  if (
-    (config.containingTypeScript || config.containingTypeScriptInPackages) &&
-    !(doc.plugins || []).some((p: any) => p.spec === '@yarnpkg/plugin-typescript')
-  ) {
-    spawnSync('yarn', ['plugin', 'import', 'typescript'], config.dirPath);
-    if (!config.requiringNodeModules) {
-      spawnSync('yarn', ['dlx', '@yarnpkg/sdks', 'vscode'], config.dirPath);
-    }
-  } else {
-    spawnSync('yarn', ['plugin', 'remove', 'typescript'], config.dirPath);
+
+  const plugins = (doc.plugins || []).map((p: any) => p.spec as string);
+  const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;
+  importOrRemovePlugin(config, plugins, requireTypeScript, '@yarnpkg/plugin-typescript');
+  if (requireTypeScript && !config.requiringNodeModules) {
+    spawnSync('yarn', ['dlx', '@yarnpkg/sdks', 'vscode'], config.dirPath);
   }
-  if (config.containingSubPackageJsons) {
-    spawnSync('yarn', ['plugin', 'import', '@yarnpkg/plugin-workspace-tools'], config.dirPath);
-  } else {
-    spawnSync('yarn', ['plugin', 'remove', '@yarnpkg/plugin-workspace-tools'], config.dirPath);
-  }
+  importOrRemovePlugin(config, plugins, config.containingSubPackageJsons, '@yarnpkg/plugin-workspace-tools');
   spawnSync('yarn', ['dlx', 'yarn-plugin-auto-install'], config.dirPath);
+}
+
+function importOrRemovePlugin(config: PackageConfig, plugins: string[], requirePlugin: boolean, plugin: string): void {
+  if (requirePlugin !== plugins.includes(plugin)) {
+    spawnSync('yarn', ['plugin', requirePlugin ? 'import' : 'remove', plugin], config.dirPath);
+  }
 }
