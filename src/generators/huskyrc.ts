@@ -51,6 +51,7 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   } else if (config.depending.prisma) {
     postMergeContent += ' && yarn prisma generate';
   }
+  postMergeContent += '\n';
   promises.push(
     fsp.writeFile(path.resolve(dirPath, 'post-merge'), postMergeContent, {
       mode: 0o755,

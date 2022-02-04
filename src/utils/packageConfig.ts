@@ -48,7 +48,6 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
     const containingPackageJson = fs.existsSync(packageJsonPath);
     let dependencies: { [key: string]: string } = {};
     let devDependencies: { [key: string]: string } = {};
-    const scripts: { [key: string]: string } = {};
     let packageJson: any = {};
     if (containingPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath, 'utf-8');
