@@ -30,9 +30,8 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     }
     const stdio = child_process.execSync('asdf current nodejs || true', { cwd, stdio: 'pipe' }).toString();
     if (stdio && !stdio.includes(' Not ')) {
-      commandAndArgs = `bash -l -c '. /usr/local/opt/asdf/asdf.sh && ${commandAndArgs}'`;
+      commandAndArgs = `bash -l -c '${commandAndArgs}'`;
     }
   }
-  console.info(JSON.stringify(env, undefined, 2), cwd);
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
 }
