@@ -1,7 +1,5 @@
 import child_process from 'child_process';
 
-const cwdToInstalled = new Map<string, boolean>();
-
 export function spawnSync(command: string, args: string[], cwd: string): void {
   const [commandAndArgs, options] = getSpawnSyncArgs(command, args, cwd);
   console.log(`$ ${commandAndArgs} at ${options.cwd}`);
@@ -24,43 +22,6 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   delete env.BERRY_BIN_FOLDER;
   delete env.npm_execpath;
 
-  let commandAndArgs = `${command} ${args.join(' ')}`;
-  if (process.platform !== 'win32') {
-    if (cwdToInstalled.get(cwd)) {
-      cwdToInstalled.set(cwd, true);
-      child_process.execSync('asdf install', { cwd, stdio: 'inherit' });
-    }
-    const stdio = child_process.execSync('asdf current nodejs || true', { cwd, stdio: 'pipe' }).toString();
-    if (stdio && !stdio.includes(' Not ')) {
-      commandAndArgs = `bash -l -c '${commandAndArgs}'`;
-    }
-  }
-  console.info(JSON.stringify(env, undefined, 2), cwd);
-  console.info(
-    child_process
-      .spawnSync('which asdf', {
-        cwd: '/',
-        env,
-        shell: true,
-        stdio: 'pipe',
-      })
-      .stdout.toString(),
-    child_process
-      .spawnSync('which yarn', {
-        cwd: '/',
-        env,
-        shell: true,
-        stdio: 'pipe',
-      })
-      .stdout.toString(),
-    child_process
-      .spawnSync('yarn --version', {
-        cwd: '/',
-        env,
-        shell: true,
-        stdio: 'pipe',
-      })
-      .stdout.toString()
-  );
+  const commandAndArgs = `bash -l -c '${command} ${args.join(' ')}'`;
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
 }
