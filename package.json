@@ -20,7 +20,7 @@
     "prepublishOnly": "pinst --disable",
     "prettify": "prettier --color --write \"**/{.*/,}*.{cjs,css,htm,html,js,json,json5,jsx,md,mjs,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\"",
     "postpublish": "pinst --enable",
-    "setup-ci": "cd .. && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
+    "setup-ci": "cd .. && rm -Rf test-fixtures-for-wbfy && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
     "start": "node -r esbuild-register src",
     "test": "yarn jest --color __tests__",
     "typecheck": "tsc --noEmit --Pretty"
