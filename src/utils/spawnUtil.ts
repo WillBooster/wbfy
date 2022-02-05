@@ -21,6 +21,8 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   if (env.PATH && env.BERRY_BIN_FOLDER) {
     env.PATH = env.PATH.replace(`${env.BERRY_BIN_FOLDER}:`, '');
   }
+  delete env.BERRY_BIN_FOLDER;
+  delete env.npm_execpath;
 
   let commandAndArgs = `${command} ${args.join(' ')}`;
   if (process.platform !== 'win32') {
@@ -37,7 +39,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   console.info(
     child_process
       .spawnSync('which asdf', {
-        cwd,
+        cwd: '/',
         env,
         shell: true,
         stdio: 'pipe',
@@ -45,7 +47,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
       .stdout.toString(),
     child_process
       .spawnSync('which yarn', {
-        cwd,
+        cwd: '/',
         env,
         shell: true,
         stdio: 'pipe',
@@ -53,7 +55,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
       .stdout.toString(),
     child_process
       .spawnSync('yarn --version', {
-        cwd,
+        cwd: '/',
         env,
         shell: true,
         stdio: 'pipe',
