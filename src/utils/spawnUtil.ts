@@ -34,5 +34,8 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     }
   }
   console.info(JSON.stringify(env, undefined, 2), cwd);
+  console.info(child_process.spawnSync('which asdf', { cwd, env, shell: true, stdio: 'inherit' }));
+  console.info(child_process.spawnSync('which yarn', { cwd, env, shell: true, stdio: 'inherit' }));
+  console.info(child_process.spawnSync('yarn --version', { cwd, env, shell: true, stdio: 'inherit' }));
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
 }
