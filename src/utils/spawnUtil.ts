@@ -20,6 +20,33 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     env.PATH = env.PATH.replace(`${env.BERRY_BIN_FOLDER}:`, '');
   }
 
-  const commandAndArgs = `bash -l -c '${command} ${args.join(' ')}'`;
+  const commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${command} ${args.join(' ')}'`;
+  console.info(JSON.stringify(env, undefined, 2), cwd);
+  console.info(
+    child_process
+      .spawnSync('which asdf', {
+        cwd: '/',
+        env,
+        shell: true,
+        stdio: 'pipe',
+      })
+      .stdout.toString(),
+    child_process
+      .spawnSync('which yarn', {
+        cwd: '/',
+        env,
+        shell: true,
+        stdio: 'pipe',
+      })
+      .stdout.toString(),
+    child_process
+      .spawnSync('yarn --version', {
+        cwd: '/',
+        env,
+        shell: true,
+        stdio: 'pipe',
+      })
+      .stdout.toString()
+  );
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
 }
