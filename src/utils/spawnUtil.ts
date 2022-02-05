@@ -24,7 +24,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   console.info(JSON.stringify(env, undefined, 2), cwd);
   console.info(
     child_process
-      .spawnSync('which asdf', {
+      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && which asdf'`, {
         cwd: '/',
         env,
         shell: true,
@@ -32,7 +32,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
       })
       .stdout.toString(),
     child_process
-      .spawnSync('which yarn', {
+      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && which yarn'`, {
         cwd: '/',
         env,
         shell: true,
@@ -40,7 +40,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
       })
       .stdout.toString(),
     child_process
-      .spawnSync('yarn --version', {
+      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && yarn --version'`, {
         cwd: '/',
         env,
         shell: true,
