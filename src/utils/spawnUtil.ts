@@ -19,8 +19,6 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   if (env.PATH && env.BERRY_BIN_FOLDER) {
     env.PATH = env.PATH.replace(`${env.BERRY_BIN_FOLDER}:`, '');
   }
-  delete env.BERRY_BIN_FOLDER;
-  delete env.npm_execpath;
 
   const commandAndArgs = `bash -l -c '${command} ${args.join(' ')}'`;
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
