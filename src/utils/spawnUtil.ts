@@ -21,6 +21,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   if (env.PATH && env.BERRY_BIN_FOLDER) {
     env.PATH = env.PATH.replace(`${env.BERRY_BIN_FOLDER}:`, '');
   }
+  console.info(JSON.stringify(env, undefined, 2));
 
   let commandAndArgs = `${command} ${args.join(' ')}`;
   if (process.platform !== 'win32') {
