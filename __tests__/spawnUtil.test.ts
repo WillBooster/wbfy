@@ -18,7 +18,6 @@ test.each`
 `('spawnSync on $dirPath repo', ({ dirPath, expected }: { dirPath: string; expected: string }) => {
   const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
   const version = spawnSyncWithStringResult('yarn', ['--version'], packageDirPath);
-  console.info(version, expected);
   expect(version).toBe(expected);
 });
 
