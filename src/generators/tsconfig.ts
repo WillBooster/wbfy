@@ -55,6 +55,8 @@ const subJsonObj = {
 };
 
 export async function generateTsconfig(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
+  if (rootConfig.depending.blitz) return;
+
   let newJsonObj: any = cloneDeep(config.root ? rootJsonObj : subJsonObj);
   if (!config.containingJsxOrTsx && !config.containingJsxOrTsxInPackages) {
     delete newJsonObj.compilerOptions.jsx;

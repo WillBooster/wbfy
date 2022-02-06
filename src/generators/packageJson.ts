@@ -33,6 +33,14 @@ const scriptsWithWorkspace = merge(
   }
 );
 
+const scriptsForBlitz = merge(
+  { ...scriptsWithoutWorkspace },
+  {
+    lint: `eslint --color "./**/*.{${Extensions.eslint.join(',')}}"`,
+    typecheck: `tsc --noEmit --Pretty || echo 'Please try "yarn blitz codegen" if you face unknown type errors.'`,
+  }
+);
+
 const jsCommonDeps = [
   'eslint',
   'eslint-config-prettier',
@@ -85,7 +93,11 @@ export async function generatePackageJson(
 
   jsonObj.scripts = merge(
     jsonObj.scripts,
-    config.containingSubPackageJsons ? scriptsWithWorkspace : scriptsWithoutWorkspace
+    config.containingSubPackageJsons
+      ? scriptsWithWorkspace
+      : config.depending.blitz
+      ? scriptsForBlitz
+      : scriptsWithoutWorkspace
   );
   jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
 
