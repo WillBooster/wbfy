@@ -20,26 +20,9 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     env.PATH = env.PATH.replace(`${env.BERRY_BIN_FOLDER}:`, '');
   }
 
-  const commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${command} ${args.join(' ')}'`;
-  // console.info(JSON.stringify(env, undefined, 2), cwd);
-  // console.info(
-  //   run(env, 'which asdf', cwd),
-  //   run(env, 'which yarn', cwd),
-  //   run(env, 'asdf current', cwd),
-  //   run(env, 'yarn --version', cwd),
-  //   run(env, 'asdf install', cwd),
-  //   run(env, 'asdf current', cwd),
-  //   run(env, 'yarn --version', cwd)
-  // );
+  let commandAndArgs = `${command} ${args.join(' ')}`;
+  if (env.ASDF_DIR) {
+    commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${commandAndArgs}'`;
+  }
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
-}
-
-function run(env: any, cmd: string, cwd: string): any {
-  const p = child_process.spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${cmd}'`, {
-    cwd,
-    env,
-    shell: true,
-    stdio: 'pipe',
-  });
-  return { stdin: p.stdout.toString(), stderr: p.stderr.toString() };
 }
