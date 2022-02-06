@@ -46,6 +46,7 @@ const wbfyWorkflow = {
         cron: '0 5 * * 0',
       },
     ],
+    workflow_dispatch: null,
   },
   jobs: {
     wbfy: {
@@ -78,7 +79,12 @@ function getTestWorkflow(config: PackageConfig, kind: 'test' | 'release' | 'wbfy
     job.secrets ||= {};
     job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
   }
-  return yaml.dump(workflow, { noCompatMode: true });
+  return yaml.dump(workflow, {
+    styles: {
+      '!!null': 'empty',
+    },
+    noCompatMode: true,
+  });
 }
 
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
