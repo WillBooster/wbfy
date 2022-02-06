@@ -4,7 +4,7 @@ import path from 'path';
 import { spawnSyncWithStringResult } from '../src/utils/spawnUtil';
 
 const testFixturePackageRoot = path.resolve('..', 'test-fixtures-for-wbfy', 'packages');
-fs.writeFileSync(path.resolve('..', 'test-fixtures-for-wbfy', '.tool-versions'), 'nodejs system\n' + 'yarn 1.22.17\n');
+fs.writeFileSync(path.resolve('..', 'test-fixtures-for-wbfy', '.tool-versions'), 'yarn 1.22.17\n');
 
 test.each`
   dirPath                       | expected

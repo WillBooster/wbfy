@@ -21,16 +21,16 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   }
 
   const commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${command} ${args.join(' ')}'`;
-  console.info(JSON.stringify(env, undefined, 2), cwd);
-  console.info(
-    run(env, 'which asdf', cwd),
-    run(env, 'which yarn', cwd),
-    run(env, 'asdf current', cwd),
-    run(env, 'yarn --version', cwd),
-    run(env, 'asdf install', cwd),
-    run(env, 'asdf current', cwd),
-    run(env, 'yarn --version', cwd)
-  );
+  // console.info(JSON.stringify(env, undefined, 2), cwd);
+  // console.info(
+  //   run(env, 'which asdf', cwd),
+  //   run(env, 'which yarn', cwd),
+  //   run(env, 'asdf current', cwd),
+  //   run(env, 'yarn --version', cwd),
+  //   run(env, 'asdf install', cwd),
+  //   run(env, 'asdf current', cwd),
+  //   run(env, 'yarn --version', cwd)
+  // );
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
 }
 
