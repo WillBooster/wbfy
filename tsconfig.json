@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2019",
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "esModuleInterop": true,
+    "importHelpers": false,
     "module": "commonjs",
     "moduleResolution": "node",
-    "alwaysStrict": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "outDir": "dist",
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": true,
-    "importHelpers": false,
-    "outDir": "dist"
+    "strict": true,
+    "target": "es2019"
   },
   "include": ["src/**/*", "__tests__/**/*", "./node_modules/@types", "./@types"]
 }

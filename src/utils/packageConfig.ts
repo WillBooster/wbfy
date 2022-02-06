@@ -8,6 +8,7 @@ import yaml from 'js-yaml';
 export interface PackageConfig {
   dirPath: string;
   root: boolean;
+  private: boolean;
   willBoosterConfigs: boolean;
   containingSubPackageJsons: boolean;
   containingGemfile: boolean;
@@ -17,7 +18,6 @@ export interface PackageConfig {
   containingPomXml: boolean;
   containingPubspecYaml: boolean;
   containingTemplateYaml: boolean;
-  containingYarnrcYml: boolean;
 
   containingJavaScript: boolean;
   containingTypeScript: boolean;
@@ -26,10 +26,17 @@ export interface PackageConfig {
   containingTypeScriptInPackages: boolean;
   containingJsxOrTsxInPackages: boolean;
   depending: {
+    blitz: boolean;
     firebase: boolean;
     jestPlaywrightPreset: boolean;
+    prisma: boolean;
     reactNative: boolean;
-    tsnode: boolean;
+    semanticRelease: boolean;
+  };
+  release: {
+    branches: string[];
+    github: boolean;
+    npm: boolean;
   };
   eslintBase?: string;
   requiringNodeModules: boolean;
@@ -41,14 +48,12 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
     const containingPackageJson = fs.existsSync(packageJsonPath);
     let dependencies: { [key: string]: string } = {};
     let devDependencies: { [key: string]: string } = {};
-    let scripts: { [key: string]: string } = {};
     let packageJson: any = {};
     if (containingPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath, 'utf-8');
       packageJson = JSON.parse(packageJsonText);
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
-      scripts = packageJson.scripts ?? {};
     }
 
     let requiringNodeModules = true;
@@ -60,11 +65,30 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       // do nothing
     }
 
+    let releaseBranches: string[] = [];
+    let releasePlugins: string[] = [];
+    try {
+      const releasercJsonPath = path.resolve(dirPath, '.releaserc.json');
+      const json = JSON.parse(await fsp.readFile(releasercJsonPath, 'utf8'));
+      releaseBranches = json?.branches || [];
+      releasePlugins = json?.plugins?.flat() || [];
+    } catch (_) {
+      // do nothing
+    }
+
+    const isPrivate =
+      packageJson.private &&
+      glob.sync('packages/**/package.json', { cwd: dirPath }).map((p) => {
+        const packageJsonText = fs.readFileSync(path.join(dirPath, p), 'utf-8');
+        return JSON.parse(packageJsonText).private;
+      });
+
     const config: PackageConfig = {
       dirPath,
       root:
         path.basename(path.resolve(dirPath, '..')) !== 'packages' ||
         !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
+      private: !!isPrivate,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
@@ -73,24 +97,28 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingPoetryLock: fs.existsSync(path.resolve(dirPath, 'poetry.lock')),
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
-      containingYarnrcYml: fs.existsSync(path.resolve(dirPath, '.yarnrc.yml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
-      containingJavaScript: glob.sync('@(src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
-      containingTypeScript: glob.sync('@(src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsx: glob.sync('@(src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+      containingJavaScript: glob.sync('@(app|src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
+      containingTypeScript: glob.sync('@(app|src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+      containingJsxOrTsx: glob.sync('@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       containingJavaScriptInPackages:
-        glob.sync('packages/**/@(src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
+        glob.sync('packages/**/@(app|src|__tests__)/**/*.js?(x)', { cwd: dirPath }).length > 0,
       containingTypeScriptInPackages:
-        glob.sync('packages/**/@(src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
-      containingJsxOrTsxInPackages: glob.sync('packages/**/@(src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+        glob.sync('packages/**/@(app|src|__tests__)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+      containingJsxOrTsxInPackages:
+        glob.sync('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
+        blitz: !!(dependencies['blitz'] || devDependencies['blitz']),
         firebase: !!devDependencies['firebase-tools'],
         jestPlaywrightPreset: !!devDependencies['jest-playwright-preset'],
+        prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
-        tsnode:
-          Object.values(scripts).some((script) => script.includes('ts-node')) ||
-          Object.keys(devDependencies).some((dep) => dep.includes('ts-node')) ||
-          packageJson?.engines?.node?.startsWith('10'),
+        semanticRelease: !!devDependencies['semantic-release'],
+      },
+      release: {
+        branches: releaseBranches,
+        github: releasePlugins.includes('@semantic-release/github'),
+        npm: releasePlugins.includes('@semantic-release/npm'),
       },
       requiringNodeModules,
     };

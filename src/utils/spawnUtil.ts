@@ -6,6 +6,13 @@ export function spawnSync(command: string, args: string[], cwd: string): void {
   child_process.spawnSync(commandAndArgs, options);
 }
 
+export function spawnSyncWithStringResult(command: string, args: string[], cwd: string): string {
+  const [commandAndArgs, options] = getSpawnSyncArgs(command, args, cwd);
+  options.stdio = 'pipe';
+  const proc = child_process.spawnSync(commandAndArgs, options);
+  return proc.stdout.toString().trim();
+}
+
 export function getSpawnSyncArgs(command: string, args: string[], cwd: string): [string, any] {
   const env = { ...process.env };
   // Remove berry from PATH
@@ -14,15 +21,8 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   }
 
   let commandAndArgs = `${command} ${args.join(' ')}`;
-  if (process.platform !== 'win32') {
-    const [, version] = child_process
-      .execSync('asdf current nodejs || true', { cwd, stdio: 'pipe' })
-      .toString()
-      .split(' ')
-      .filter((s) => !!s);
-    if (version && !version.includes(' no ')) {
-      commandAndArgs = `zsh -l -c '. /usr/local/opt/asdf/asdf.sh && ${commandAndArgs}'`;
-    }
+  if (env.ASDF_DIR) {
+    commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${commandAndArgs}'`;
   }
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
 }
