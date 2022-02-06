@@ -23,38 +23,23 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   const commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${command} ${args.join(' ')}'`;
   // console.info(JSON.stringify(env, undefined, 2), cwd);
   console.info(
-    child_process
-      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && which asdf'`, {
-        cwd: '/',
-        env,
-        shell: true,
-        stdio: 'pipe',
-      })
-      .stdout.toString(),
-    child_process
-      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && which yarn'`, {
-        cwd: '/',
-        env,
-        shell: true,
-        stdio: 'pipe',
-      })
-      .stdout.toString(),
-    child_process
-      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && asdf current'`, {
-        cwd: '/',
-        env,
-        shell: true,
-        stdio: 'pipe',
-      })
-      .stdout.toString(),
-    child_process
-      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && yarn --version'`, {
-        cwd: '/',
-        env,
-        shell: true,
-        stdio: 'pipe',
-      })
-      .stdout.toString()
+    run(env, 'which asdf'),
+    run(env, 'which yarn'),
+    run(env, 'asdf current'),
+    run(env, 'yarn --version'),
+    run(env, 'asdf install'),
+    run(env, 'asdf current'),
+    run(env, 'yarn --version')
   );
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
+}
+
+function run(env: any, cmd: string): any {
+  const p = child_process.spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${cmd}'`, {
+    cwd: '/',
+    env,
+    shell: true,
+    stdio: 'pipe',
+  });
+  return { stdin: p.stdout.toString(), stderr: p.stderr.toString() };
 }
