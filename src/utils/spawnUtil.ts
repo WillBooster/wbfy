@@ -21,7 +21,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   }
 
   const commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${command} ${args.join(' ')}'`;
-  console.info(JSON.stringify(env, undefined, 2), cwd);
+  // console.info(JSON.stringify(env, undefined, 2), cwd);
   console.info(
     child_process
       .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && which asdf'`, {
