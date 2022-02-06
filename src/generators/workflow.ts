@@ -38,17 +38,35 @@ const releaseWorkflow = {
   },
 };
 
-function getTestWorkflow(config: PackageConfig, kind: 'test' | 'release'): string {
-  const workflow = cloneDeep(kind === 'test' ? testWorkflow : releaseWorkflow) as any;
+const wbfyWorkflow = {
+  name: 'Willboosterify',
+  on: {
+    schedule: [
+      {
+        cron: '0 5 * * 0',
+      },
+    ],
+  },
+  jobs: {
+    wbfy: {
+      uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy.yml@main',
+    },
+  },
+};
+
+function getTestWorkflow(config: PackageConfig, kind: 'test' | 'release' | 'wbfy'): string {
+  const workflow = cloneDeep(
+    kind === 'test' ? testWorkflow : kind === 'release' ? releaseWorkflow : wbfyWorkflow
+  ) as any;
   if (kind === 'release') {
     workflow.on.push.branches = config.release.branches;
   }
-  const job = workflow.jobs.test || workflow.jobs.release;
+  const job = workflow.jobs.test || workflow.jobs.release || workflow.jobs.wbfy;
   if (!config.private) {
     job.with ||= {};
     job.with['non_self_hosted'] = true;
   }
-  if (config.release.github) {
+  if (config.release.github || kind === 'wbfy') {
     job.secrets ||= {};
     if (config.private) {
       job.secrets['GH_TOKEN'] = '${{ secrets.GH_BOT_PAT }}';
@@ -68,12 +86,16 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
   fs.mkdirSync(workflowsPath, { recursive: true });
   const promises: Promise<void>[] = [];
   if (rootConfig.depending.semanticRelease) {
-    const releaseYml = getTestWorkflow(rootConfig, 'release');
-    promises.push(fsp.writeFile(path.join(workflowsPath, 'release.yml'), releaseYml));
+    const yml = getTestWorkflow(rootConfig, 'release');
+    promises.push(fsp.writeFile(path.join(workflowsPath, 'release.yml'), yml));
   }
   {
-    const testYml = getTestWorkflow(rootConfig, 'test');
-    promises.push(fsp.writeFile(path.join(workflowsPath, 'test.yml'), testYml));
+    const yml = getTestWorkflow(rootConfig, 'test');
+    promises.push(fsp.writeFile(path.join(workflowsPath, 'test.yml'), yml));
+  }
+  {
+    const yml = getTestWorkflow(rootConfig, 'wbfy');
+    promises.push(fsp.writeFile(path.join(workflowsPath, 'wbfy.yml'), yml));
   }
   await Promise.all(promises);
 }
