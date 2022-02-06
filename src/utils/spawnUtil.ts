@@ -21,22 +21,22 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   }
 
   const commandAndArgs = `bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${command} ${args.join(' ')}'`;
-  // console.info(JSON.stringify(env, undefined, 2), cwd);
+  console.info(JSON.stringify(env, undefined, 2), cwd);
   console.info(
-    run(env, 'which asdf'),
-    run(env, 'which yarn'),
-    run(env, 'asdf current'),
-    run(env, 'yarn --version'),
-    run(env, 'asdf install'),
-    run(env, 'asdf current'),
-    run(env, 'yarn --version')
+    run(env, 'which asdf', cwd),
+    run(env, 'which yarn', cwd),
+    run(env, 'asdf current', cwd),
+    run(env, 'yarn --version', cwd),
+    run(env, 'asdf install', cwd),
+    run(env, 'asdf current', cwd),
+    run(env, 'yarn --version', cwd)
   );
   return [commandAndArgs, { cwd, env, shell: true, stdio: 'inherit' }];
 }
 
-function run(env: any, cmd: string): any {
+function run(env: any, cmd: string, cwd: string): any {
   const p = child_process.spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && ${cmd}'`, {
-    cwd: '/',
+    cwd,
     env,
     shell: true,
     stdio: 'pipe',
