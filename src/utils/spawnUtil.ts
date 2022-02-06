@@ -40,6 +40,14 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
       })
       .stdout.toString(),
     child_process
+      .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && asdf current'`, {
+        cwd: '/',
+        env,
+        shell: true,
+        stdio: 'pipe',
+      })
+      .stdout.toString(),
+    child_process
       .spawnSync(`bash -l -c '. ${env.ASDF_DIR}/asdf.sh && yarn --version'`, {
         cwd: '/',
         env,
