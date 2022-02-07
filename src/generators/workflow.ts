@@ -67,17 +67,19 @@ function getTestWorkflow(config: PackageConfig, kind: 'test' | 'release' | 'wbfy
     job.with ||= {};
     job.with['non_self_hosted'] = true;
   }
-  if (config.release.github || kind === 'wbfy') {
-    job.secrets ||= {};
-    if (config.private) {
-      job.secrets['GH_TOKEN'] = '${{ secrets.GH_BOT_PAT }}';
-    } else {
-      job.secrets['GH_TOKEN'] = '${{ secrets.PUBLIC_GH_BOT_PAT }}';
+  if (kind === 'release' || kind === 'test') {
+    if (config.release.github) {
+      job.secrets ||= {};
+      if (config.private) {
+        job.secrets['GH_TOKEN'] = '${{ secrets.GH_BOT_PAT }}';
+      } else {
+        job.secrets['GH_TOKEN'] = '${{ secrets.PUBLIC_GH_BOT_PAT }}';
+      }
     }
-  }
-  if (config.release.npm) {
-    job.secrets ||= {};
-    job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
+    if (config.release.npm) {
+      job.secrets ||= {};
+      job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
+    }
   }
   return yaml.dump(workflow, {
     styles: {
