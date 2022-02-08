@@ -17,14 +17,15 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   fsp.rm(yarnrcPath, { force: true }).then();
 
   const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
-  const doc = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
-  doc.defaultSemverRangePrefix = '';
+  const settings = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
+  settings.defaultSemverRangePrefix = '';
   if (config.requiringNodeModules) {
-    doc.nmMode = 'hardlinks-global';
+    settings.nodeLinker = 'node-modules';
+    settings.nmMode = 'hardlinks-global';
   }
-  await fsp.writeFile(yarnrcYmlPath, yaml.dump(doc));
+  await fsp.writeFile(yarnrcYmlPath, yaml.dump(settings));
 
-  const plugins = (doc.plugins || []).map((p: any) => p.spec as string);
+  const plugins = (settings.plugins || []).map((p: any) => p.spec as string);
   const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;
   importOrRemovePlugin(config, plugins, requireTypeScript, '@yarnpkg/plugin-typescript');
   if (requireTypeScript && !config.requiringNodeModules) {
