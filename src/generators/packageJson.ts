@@ -197,6 +197,10 @@ export async function generatePackageJson(
     }
   }
 
+  // These cause an error of eslint-plugin-import loading
+  if (config.depending.blitz) {
+    devDependencies = devDependencies.filter((dep) => !dep.includes('@typescript-eslint/'));
+  }
   if (!Object.keys(jsonObj.dependencies).length) {
     delete jsonObj.dependencies;
   }

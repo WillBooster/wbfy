@@ -35,6 +35,9 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       newJsonObj.extends = existingJsonObj.extends;
       existingJsonObj.extends = newExtends;
       newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: combineMerge });
+      if (config.depending.blitz) {
+        newJsonObj.extends = [...newJsonObj.extends.filter((e: string) => e !== 'blitz'), 'blitz'];
+      }
     } catch (e) {
       // do nothing
     }

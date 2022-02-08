@@ -67,6 +67,9 @@ packaged.yaml
 android/app/src/main/assets/
 `;
   }
+  if (rootConfig.depending.storybook) {
+    names.push('storybookjs');
+  }
 
   let content = (
     await Promise.all(

@@ -32,6 +32,7 @@ export interface PackageConfig {
     prisma: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
+    storybook: boolean;
   };
   release: {
     branches: string[];
@@ -114,6 +115,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
         semanticRelease: !!devDependencies['semantic-release'],
+        storybook: !!devDependencies['@storybook/react'],
       },
       release: {
         branches: releaseBranches,
