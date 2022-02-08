@@ -26,6 +26,9 @@
     "typecheck": "tsc --noEmit --Pretty"
   },
   "prettier": "@willbooster/prettier-config",
+  "resolutions": {
+    "npm/chalk": "^4.1.2"
+  },
   "dependencies": {
     "deepmerge": "4.2.2",
     "glob": "7.2.0",
