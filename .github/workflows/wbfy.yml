@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   wbfy:
-    uses: WillBooster/reusable-workflows/.github/workflows/debug-wbfy.yml@main
+    uses: WillBooster/reusable-workflows/.github/workflows/wbfy.yml@main
     with:
       non_self_hosted: true
     secrets:
