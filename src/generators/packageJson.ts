@@ -86,9 +86,12 @@ export async function generatePackageJson(
   }
 
   for (const scriptKey of Object.keys(jsonObj.scripts)) {
-    jsonObj.scripts[scriptKey] = jsonObj.scripts[scriptKey]
-      .replace(/yarn\s*&&\s*/, '')
-      .replace(/yarn\s*install\s*&&\s*/, '');
+    // Fresh repo still requires 'yarn install'
+    if (!jsonObj.scripts[scriptKey].includes('git clone')) {
+      jsonObj.scripts[scriptKey] = jsonObj.scripts[scriptKey]
+        .replace(/yarn\s*&&\s*/, '')
+        .replace(/yarn\s*install\s*&&\s*/, '');
+    }
   }
 
   jsonObj.scripts = merge(
