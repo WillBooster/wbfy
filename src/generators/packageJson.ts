@@ -101,8 +101,9 @@ export async function generatePackageJson(
   );
   jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
 
-  let dependencies = [] as string[];
+  let dependencies: string[] = [];
   let devDependencies = ['lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config'];
+  const poetryDependencies: string[] = [];
 
   if (config.root) {
     // To install the latest pinst
@@ -186,7 +187,9 @@ export async function generatePackageJson(
     }
 
     if (config.containingPoetryLock) {
-      jsonObj.scripts.postinstall = 'poetry install';
+      if (jsonObj.scripts.postinstall === 'poetry install') {
+        delete jsonObj.scripts.postinstall;
+      }
       const dirNames = fs.readdirSync(config.dirPath).filter((dirName) => {
         const dirPath = path.resolve(config.dirPath, dirName);
         if (!fs.lstatSync(dirPath).isDirectory()) return false;
@@ -199,6 +202,7 @@ export async function generatePackageJson(
         jsonObj.scripts.lint = `poetry run flake8 ${dirNames.join(' ')}`;
         jsonObj.scripts['lint-fix'] = 'yarn lint';
         jsonObj.scripts.format += ` && yarn format-code`;
+        poetryDependencies.push('black', 'isort', 'flake8');
       }
     }
   }
@@ -225,6 +229,9 @@ export async function generatePackageJson(
     }
     if (devDependencies.length) {
       spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
+    }
+    if (poetryDependencies.length) {
+      spawnSync('poetry', ['add', ...new Set(poetryDependencies)], config.dirPath);
     }
   }
 }
