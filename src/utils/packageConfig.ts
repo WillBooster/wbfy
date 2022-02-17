@@ -41,6 +41,7 @@ export interface PackageConfig {
   };
   eslintBase?: string;
   requiringNodeModules: boolean;
+  versionsText?: string;
 }
 
 export async function getPackageConfig(dirPath: string): Promise<PackageConfig | null> {
@@ -84,6 +85,14 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         return JSON.parse(packageJsonText).private;
       });
 
+    const toolVersionsPath = path.resolve(dirPath, '.tool-versions');
+    let versionsText: string | undefined;
+    try {
+      versionsText = await fsp.readFile(toolVersionsPath, 'utf-8');
+    } catch (_) {
+      // do nothing
+    }
+
     const config: PackageConfig = {
       dirPath,
       root:
@@ -123,6 +132,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         npm: releasePlugins.includes('@semantic-release/npm'),
       },
       requiringNodeModules,
+      versionsText,
     };
     config.eslintBase = getEslintExtensionBase(config);
     if (

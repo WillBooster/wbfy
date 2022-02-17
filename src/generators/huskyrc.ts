@@ -45,15 +45,24 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     );
   }
 
-  let postMergeContent = content.replace(DEFAULT_COMMAND, settings.postMerge).trim();
-  if (config.depending.blitz) {
-    postMergeContent += ' && yarn blitz codegen';
-  } else if (config.depending.prisma) {
-    postMergeContent += ' && yarn prisma generate';
+  const postMergeContents: string[] = [];
+  if (config.versionsText?.includes('python ')) {
+    postMergeContents.push('asdf install python');
   }
-  postMergeContent += '\n';
+  if (config.versionsText) {
+    postMergeContents.push('asdf install');
+  }
+  postMergeContents.push(settings.postMerge);
+  if (config.versionsText?.includes('poetry ')) {
+    postMergeContents.push('poetry install');
+  }
+  if (config.depending.blitz) {
+    postMergeContents.push('yarn blitz codegen');
+  } else if (config.depending.prisma) {
+    postMergeContents.push('yarn prisma generate');
+  }
   promises.push(
-    fsp.writeFile(path.resolve(dirPath, 'post-merge'), postMergeContent, {
+    fsp.writeFile(path.resolve(dirPath, 'post-merge'), postMergeContents.join(' && ') + '\n', {
       mode: 0o755,
     })
   );
