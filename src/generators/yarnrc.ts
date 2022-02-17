@@ -10,7 +10,18 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   const currentVersion = spawnSyncWithStringResult('yarn', ['--version'], config.dirPath);
   const latestVersion = spawnSyncWithStringResult('npm', ['show', '@yarnpkg/cli', 'version'], config.dirPath);
   if (currentVersion !== latestVersion) {
-    spawnSync('yarn', ['set', 'version', latestVersion], config.dirPath);
+    spawnSync('yarn', ['set', 'version', latestVersion], config.dirPath, 1);
+  }
+
+  const releasesPath = path.join(config.dirPath, '.yarn', 'releases');
+  try {
+    for (const file of await fsp.readdir(releasesPath)) {
+      if (file.startsWith('yarn-') && !file.startsWith(`yarn-${latestVersion}`)) {
+        fsp.rm(path.join(releasesPath, file)).then();
+      }
+    }
+  } catch (_) {
+    // do nothign
   }
 
   const yarnrcPath = path.resolve(config.dirPath, '.yarnrc');
