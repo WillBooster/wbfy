@@ -1587,10 +1587,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/renovate-config@npm:9.1.0":
-  version: 9.1.0
-  resolution: "@willbooster/renovate-config@npm:9.1.0"
-  checksum: 8514315b828274d79a179d03e91b97e63de91a9b88b829b2ef5d131e4ff3f77dc0901c59bca0d9c78738a6f64baf0e8687a6572940eb7b5b8846c80ee57ff876
+"@willbooster/renovate-config@npm:9.2.0":
+  version: 9.2.0
+  resolution: "@willbooster/renovate-config@npm:9.2.0"
+  checksum: 27291f8c7e2b32e80fa85e64a6c01b05b26f7634f0f09581093277c7a7cb2f4242e3f74e19df3e65b1c812f1f36b7d073e0e2a3ed268d5052ee4482c4057911e
   languageName: node
   linkType: hard
 
@@ -8280,7 +8280,7 @@ __metadata:
     "@typescript-eslint/parser": 5.12.0
     "@willbooster/eslint-config-ts": 9.0.0
     "@willbooster/prettier-config": 9.0.0
-    "@willbooster/renovate-config": 9.1.0
+    "@willbooster/renovate-config": 9.2.0
     conventional-changelog-conventionalcommits: 4.6.3
     deepmerge: 4.2.2
     esbuild: 0.14.22
