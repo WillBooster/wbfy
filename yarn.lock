@@ -694,6 +694,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@kwsites/file-exists@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@kwsites/file-exists@npm:1.1.1"
+  dependencies:
+    debug: ^4.1.1
+  checksum: 4ff945de7293285133aeae759caddc71e73c4a44a12fac710fdd4f574cce2671a3f89d8165fdb03d383cfc97f3f96f677d8de3c95133da3d0e12a123a23109fe
+  languageName: node
+  linkType: hard
+
+"@kwsites/promise-deferred@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@kwsites/promise-deferred@npm:1.1.1"
+  checksum: 07455477a0123d9a38afb503739eeff2c5424afa8d3dbdcc7f9502f13604488a4b1d9742fc7288832a52a6422cf1e1c0a1d51f69a39052f14d27c9a0420b6629
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -7345,6 +7361,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"simple-git@npm:3.2.6":
+  version: 3.2.6
+  resolution: "simple-git@npm:3.2.6"
+  dependencies:
+    "@kwsites/file-exists": ^1.1.1
+    "@kwsites/promise-deferred": ^1.1.1
+    debug: ^4.3.3
+  checksum: 2b64645db3dc31c8de73cfe1d2efa05bec5a6cd23603f2f0320ce6af3e672d1ea716b3424b9aaefb08141f2cc10189f29c17314951c855fa11d5cdd1ad049b4b
+  languageName: node
+  linkType: hard
+
 "sisteransi@npm:^1.0.5":
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
@@ -8302,6 +8329,7 @@ __metadata:
     pinst: 2.1.6
     prettier: 2.5.1
     semantic-release: 19.0.2
+    simple-git: 3.2.6
     sort-package-json: 1.54.0
     typescript: 4.5.5
     yargs: 17.3.1

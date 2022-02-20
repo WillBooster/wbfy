@@ -208,6 +208,10 @@ export async function generatePackageJson(
         poetryDependencies.push('black', 'isort', 'flake8');
       }
     }
+
+    if (config.repository) {
+      jsonObj.repository = config.repository;
+    }
   }
 
   // These cause an error of eslint-plugin-import loading

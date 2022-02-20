@@ -63,16 +63,16 @@ function getTestWorkflow(config: PackageConfig, kind: 'test' | 'release' | 'wbfy
     workflow.on.push.branches = config.release.branches;
   }
   const job = workflow.jobs.test || workflow.jobs.release || workflow.jobs.wbfy;
-  if (!config.private) {
+  if (config.publicRepo) {
     job.with ||= {};
     job.with['non_self_hosted'] = true;
   }
   if (config.release.github || kind === 'wbfy') {
     job.secrets ||= {};
-    if (config.private) {
-      job.secrets['GH_TOKEN'] = '${{ secrets.GH_BOT_PAT }}';
-    } else {
+    if (config.publicRepo) {
       job.secrets['GH_TOKEN'] = '${{ secrets.PUBLIC_GH_BOT_PAT }}';
+    } else {
+      job.secrets['GH_TOKEN'] = '${{ secrets.GH_BOT_PAT }}';
     }
   }
   if (config.release.npm && kind !== 'wbfy') {

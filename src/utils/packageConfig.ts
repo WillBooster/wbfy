@@ -4,11 +4,15 @@ import path from 'path';
 
 import glob from 'glob';
 import yaml from 'js-yaml';
+import simpleGit from 'simple-git';
+
+import { fetchOnNode } from './fetchOnNode';
 
 export interface PackageConfig {
   dirPath: string;
   root: boolean;
-  private: boolean;
+  publicRepo: boolean;
+  repository?: string;
   willBoosterConfigs: boolean;
   containingSubPackageJsons: boolean;
   containingGemfile: boolean;
@@ -78,12 +82,14 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       // do nothing
     }
 
-    const isPrivate =
-      packageJson.private &&
-      glob.sync('packages/**/package.json', { cwd: dirPath }).map((p) => {
-        const packageJsonText = fs.readFileSync(path.join(dirPath, p), 'utf-8');
-        return JSON.parse(packageJsonText).private;
-      });
+    const isRoot =
+      path.basename(path.resolve(dirPath, '..')) !== 'packages' ||
+      !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json'));
+
+    let repoInfo: Record<string, any> | undefined;
+    if (isRoot) {
+      repoInfo = getRepoInfo(dirPath, packageJson);
+    }
 
     const toolVersionsPath = path.resolve(dirPath, '.tool-versions');
     let versionsText: string | undefined;
@@ -95,10 +101,9 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
 
     const config: PackageConfig = {
       dirPath,
-      root:
-        path.basename(path.resolve(dirPath, '..')) !== 'packages' ||
-        !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json')),
-      private: !!isPrivate,
+      root: isRoot,
+      publicRepo: repoInfo?.private === false,
+      repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
@@ -167,4 +172,41 @@ function getEslintExtensionBase(config: PackageConfig): string | undefined {
     }
   }
   return undefined;
+}
+
+async function getRepoInfo(dirPath: string, packageJson: any): Promise<Record<string, any> | undefined> {
+  const url = packageJson.repository?.url ?? packageJson.repository;
+  if (typeof url === 'string') {
+    const json = await fetchRepoInfo(url);
+    if (json) return json;
+  }
+
+  const git = simpleGit(dirPath);
+  const remotes = await git.getRemotes(true);
+  const origin = remotes.find((r) => r.name === 'origin');
+  const remoteUrl = origin?.refs?.fetch ?? origin?.refs?.push;
+  if (typeof remoteUrl === 'string') {
+    const json = await fetchRepoInfo(remoteUrl);
+    if (json) return json;
+  }
+}
+
+async function fetchRepoInfo(urlOrFullName: string): Promise<Record<string, any> | undefined> {
+  const urlWithoutProtocol = urlOrFullName.split(':').at(-1);
+  const names = urlWithoutProtocol?.split('/');
+  const org = names?.at(-2);
+  const name = names?.at(-1)?.replace(/.git$/, '');
+  if (!org || !name) return;
+
+  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+  const opts = token
+    ? {
+        headers: {
+          Authorization: `token ${process.env.GITHUB_TOKEN}`,
+        },
+      }
+    : undefined;
+  const res = await fetchOnNode(`https://api.github.com/repos/${org}/${name}`, opts);
+  const json = (await res.json()) as any;
+  return json || undefined;
 }
