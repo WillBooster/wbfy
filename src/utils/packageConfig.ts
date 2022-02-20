@@ -88,7 +88,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
 
     let repoInfo: Record<string, any> | undefined;
     if (isRoot) {
-      repoInfo = getRepoInfo(dirPath, packageJson);
+      repoInfo = await getRepoInfo(dirPath, packageJson);
     }
 
     const toolVersionsPath = path.resolve(dirPath, '.tool-versions');
