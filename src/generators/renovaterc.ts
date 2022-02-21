@@ -1,4 +1,3 @@
-import fs from 'fs';
 import fsp from 'fs/promises';
 import path from 'path';
 
@@ -14,21 +13,19 @@ const jsonObj = {
 };
 
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
-  let newJsonObj: any = cloneDeep(jsonObj);
+  let newSettings: any = cloneDeep(jsonObj);
 
   const filePath = path.resolve(config.dirPath, '.renovaterc.json');
-  if (fs.existsSync(filePath)) {
-    const existingContent = await fsp.readFile(filePath, 'utf-8');
-    try {
-      const existingJsonObj = JSON.parse(existingContent) as any;
-      newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });
-    } catch (e) {
-      // do nothing
-    }
+  const oldContent = await fsp.readFile(filePath, 'utf-8');
+  try {
+    const oldSettings = JSON.parse(oldContent) as any;
+    newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
+  } catch (e) {
+    // do nothing
   }
   await Promise.all([
     fsp.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }),
     fsp.rm(path.resolve(config.dirPath, 'renovate.json'), { force: true }),
-    FsUtil.generateFile(filePath, JSON.stringify(newJsonObj)),
+    FsUtil.generateFile(filePath, JSON.stringify(newSettings)),
   ]);
 }
