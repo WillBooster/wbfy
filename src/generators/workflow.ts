@@ -93,7 +93,7 @@ async function getWorkflowYaml(
   job.secrets ||= {};
 
   if (config.containingDockerfile) {
-    job.with['cpu_type'] = 'X64';
+    job.with['cpu_arch'] = 'X64';
   }
   if (config.release.github || kind === 'wbfy') {
     if (config.publicRepo) {
