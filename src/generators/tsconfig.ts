@@ -7,6 +7,7 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
+import { sortKeys } from '../utils/objectUtil';
 import { PackageConfig } from '../utils/packageConfig';
 
 const rootJsonObj = {
@@ -57,16 +58,16 @@ const subJsonObj = {
 export async function generateTsconfig(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   if (rootConfig.depending.blitz) return;
 
-  let newJsonObj: any = cloneDeep(config.root ? rootJsonObj : subJsonObj);
+  let newSettings: any = cloneDeep(config.root ? rootJsonObj : subJsonObj);
   if (!config.containingJsxOrTsx && !config.containingJsxOrTsxInPackages) {
-    delete newJsonObj.compilerOptions.jsx;
+    delete newSettings.compilerOptions.jsx;
   }
   if (config.root && !config.containingSubPackageJsons) {
-    newJsonObj.include = newJsonObj.include.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
+    newSettings.include = newSettings.include.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
   }
   if (!config.root && (config.depending.jestPlaywrightPreset || rootConfig.depending.jestPlaywrightPreset)) {
     const relativeDirPath = path.relative(config.dirPath, rootConfig.dirPath);
-    newJsonObj.include.push(
+    newSettings.include.push(
       ...[
         path.join(relativeDirPath, 'node_modules/jest-playwright-preset/types'),
         path.join(relativeDirPath, 'node_modules/expect-playwright'),
@@ -75,31 +76,25 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
   }
 
   const filePath = path.resolve(config.dirPath, 'tsconfig.json');
-  if (fs.existsSync(filePath)) {
+  try {
     const existingContent = await fsp.readFile(filePath, 'utf-8');
-    try {
-      const existingJsonObj = JSON.parse(existingContent);
-      if (existingJsonObj.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
-        delete existingJsonObj.extends;
-      }
-      delete existingJsonObj.compilerOptions?.typeRoots;
-      delete newJsonObj?.compilerOptions?.target;
-      delete newJsonObj?.compilerOptions?.module;
-      if (existingJsonObj.jsx) {
-        delete newJsonObj.jsx;
-      }
-      if (!config.depending.blitz) {
-        delete newJsonObj.include;
-      }
-      newJsonObj = merge.all([newJsonObj, existingJsonObj, newJsonObj], { arrayMerge: overwriteMerge });
-    } catch (e) {
-      // do nothing
+    const oldSettings = JSON.parse(existingContent);
+    if (oldSettings.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
+      delete oldSettings.extends;
     }
+    delete oldSettings.compilerOptions?.typeRoots;
+    delete newSettings?.compilerOptions?.target;
+    delete newSettings?.compilerOptions?.module;
+    if (oldSettings.jsx) {
+      delete newSettings.jsx;
+    }
+    if (!config.depending.blitz) {
+      delete newSettings.include;
+    }
+    newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
+  } catch (e) {
+    // do nothing
   }
-  const sortedCompilerOptions: Record<string, unknown> = {};
-  for (const key of Object.keys(newJsonObj.compilerOptions).sort()) {
-    sortedCompilerOptions[key] = newJsonObj.compilerOptions[key];
-  }
-  newJsonObj.compilerOptions = sortedCompilerOptions;
-  await FsUtil.generateFile(filePath, JSON.stringify(newJsonObj));
+  sortKeys(newSettings.compilerOptions);
+  await FsUtil.generateFile(filePath, JSON.stringify(newSettings));
 }

@@ -15,6 +15,7 @@ export interface PackageConfig {
   repository?: string;
   willBoosterConfigs: boolean;
   containingSubPackageJsons: boolean;
+  containingDockerfile: boolean;
   containingGemfile: boolean;
   containingGoMod: boolean;
   containingPackageJson: boolean;
@@ -106,6 +107,9 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
+      containingDockerfile:
+        fs.existsSync(path.resolve(dirPath, 'Dockerfile')) ||
+        fs.existsSync(path.resolve(dirPath, 'docker-compose.yml')),
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
       containingGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
       containingPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
