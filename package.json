@@ -2,6 +2,7 @@
   "name": "wbfy",
   "version": "0.0.0-semantically-released",
   "description": "A tool for applying WillBooster's conventional configures to npm packages",
+  "repository": "github:WillBooster/wbfy",
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
   "bin": "./bin/index.cjs",
@@ -16,10 +17,9 @@
     "postinstall": "husky install",
     "lint": "eslint --color \"./{src,__tests__}/**/*.{cjs,js,jsx,mjs,ts,tsx}\"",
     "lint-fix": "yarn lint --fix",
-    "prepack": "rimraf dist && yarn build",
-    "prepublishOnly": "pinst --disable",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
     "prettify": "prettier --color --write \"**/{.*/,}*.{cjs,css,htm,html,js,json,json5,jsx,md,mjs,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\"",
-    "postpublish": "pinst --enable",
     "release": "yarn build && semantic-release",
     "setup-ci": "cd .. && pwd && rm -Rf test-fixtures-for-wbfy && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
     "start": "node -r esbuild-register src",
@@ -58,7 +58,7 @@
     "esbuild": "0.14.23",
     "esbuild-register": "3.3.2",
     "eslint": "8.9.0",
-    "eslint-config-prettier": "8.3.0",
+    "eslint-config-prettier": "8.4.0",
     "eslint-import-resolver-typescript": "2.5.0",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-sort-class-members": "1.14.1",
@@ -67,7 +67,7 @@
     "jest": "27.5.1",
     "lint-staged": "12.3.4",
     "micromatch": "4.0.4",
-    "pinst": "2.1.6",
+    "pinst": "3.0.0",
     "prettier": "2.5.1",
     "semantic-release": "19.0.2",
     "sort-package-json": "1.54.0",
@@ -76,5 +76,5 @@
   "engines": {
     "node": ">=16.6.0"
   },
-  "packageManager": "yarn@3.2.0-rc.15"
+  "packageManager": "yarn@3.2.0"
 }
