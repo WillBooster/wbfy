@@ -21,6 +21,8 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   delete packageJson.scripts['postpublish'];
   delete packageJson.scripts['prepare'];
   delete packageJson.scripts['prepublishOnly'];
+  delete packageJson.scripts['prepack'];
+  delete packageJson.scripts['postpack'];
 
   const dirPath = path.resolve(config.dirPath, '.husky');
   await Promise.all([
