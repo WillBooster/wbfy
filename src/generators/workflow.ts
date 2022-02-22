@@ -92,7 +92,7 @@ async function getWorkflowYaml(
   job.with ||= {};
   job.secrets ||= {};
   if (config.repository?.startsWith('github:WillBoosterLab/')) {
-    job.use = job.use.replace('WillBooster/', 'WillBoosterLab/');
+    job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
   }
 
   if (config.containingDockerfile) {
