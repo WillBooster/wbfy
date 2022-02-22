@@ -91,6 +91,9 @@ async function getWorkflowYaml(
   let job = newSettings.jobs.test || newSettings.jobs.release || newSettings.jobs.wbfy;
   job.with ||= {};
   job.secrets ||= {};
+  if (config.repository?.startsWith('github:WillBoosterLab/')) {
+    job.use = job.use.replace('WillBooster/', 'WillBoosterLab/');
+  }
 
   if (config.containingDockerfile) {
     job.with['cpu_arch'] = 'X64';
