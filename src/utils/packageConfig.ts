@@ -206,7 +206,7 @@ async function fetchRepoInfo(urlOrFullName: string): Promise<Record<string, any>
   const opts = token
     ? {
         headers: {
-          Authorization: `token ${process.env.GITHUB_TOKEN}`,
+          Authorization: `token ${token}`,
         },
       }
     : undefined;
