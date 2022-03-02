@@ -1,12 +1,14 @@
-import fsp from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
+import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 export async function generateReleaserc(rootConfig: PackageConfig): Promise<void> {
-  const releasercJsonPath = path.resolve(rootConfig.dirPath, '.releaserc.json');
+  const filePath = path.resolve(rootConfig.dirPath, '.releaserc.json');
   try {
-    const settings = JSON.parse(await fsp.readFile(releasercJsonPath, 'utf8'));
+    const settings = JSON.parse(await fs.promises.readFile(filePath, 'utf8'));
     const plugins = settings?.plugins || [];
     for (let i = 0; i < plugins.length; i++) {
       if (plugins[i] === '@semantic-release/commit-analyzer' || plugins[i][0] === '@semantic-release/commit-analyzer') {
@@ -18,7 +20,8 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
         ];
       }
     }
-    return fsp.writeFile(releasercJsonPath, JSON.stringify(settings));
+    const newContent = JSON.stringify(settings);
+    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
   } catch (_) {
     // do nothing
   }

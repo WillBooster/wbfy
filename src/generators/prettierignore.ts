@@ -3,6 +3,7 @@ import path from 'path';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 const defaultUserContent = `${IgnoreFileUtil.header}
 
@@ -38,5 +39,6 @@ pubspec.yaml
 `;
   }
 
-  await FsUtil.generateFile(filePath, userContent + commonContent + additionalContent + gitignoreContent);
+  const newContent = userContent + commonContent + additionalContent + gitignoreContent;
+  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }

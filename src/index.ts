@@ -16,10 +16,12 @@ import { generatePackageJson } from './generators/packageJson';
 import { generatePrettierignore } from './generators/prettierignore';
 import { generateReleaserc } from './generators/releaserc';
 import { generateRenovateJson } from './generators/renovaterc';
+import { generateSemanticYml } from './generators/semanticRelease';
 import { generateTsconfig } from './generators/tsconfig';
 import { generateWorkflow } from './generators/workflow';
 import { generateYarnrcYml } from './generators/yarnrc';
 import { getPackageConfig, PackageConfig } from './utils/packageConfig';
+import { promisePool } from './utils/promisePool';
 import { spawnSync } from './utils/spawnUtil';
 
 async function main(): Promise<void> {
@@ -69,10 +71,12 @@ async function main(): Promise<void> {
       generateLintstagedrc(rootConfig),
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
+      generateSemanticYml(rootConfig),
       generateVersionConfigs(rootConfig),
       generateWorkflow(rootConfig)
     );
     await Promise.all(rootPromises);
+    await promisePool.promiseAll();
 
     const promises: Promise<void>[] = [];
     for (const config of allNodePackageConfigs) {
@@ -93,6 +97,7 @@ async function main(): Promise<void> {
       }
     }
     await Promise.all(promises);
+    await promisePool.promiseAll();
 
     for (const config of allNodePackageConfigs) {
       await generatePackageJson(config, rootConfig, argv.skipDeps);

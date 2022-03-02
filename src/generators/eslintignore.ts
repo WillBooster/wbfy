@@ -3,6 +3,7 @@ import path from 'path';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 const defaultUserContent = `${IgnoreFileUtil.header}
 
@@ -32,5 +33,6 @@ export async function generateEslintignore(config: PackageConfig): Promise<void>
   const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
   const gitignoreContent = IgnoreFileUtil.getExistingContent(gitignoreFilePath) || '';
 
-  await FsUtil.generateFile(filePath, userContent + commonContent + gitignoreContent);
+  const newContent = userContent + commonContent + gitignoreContent;
+  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }

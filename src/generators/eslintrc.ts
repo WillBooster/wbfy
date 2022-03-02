@@ -1,4 +1,4 @@
-import fsp from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
 import merge from 'deepmerge';
@@ -6,6 +6,7 @@ import merge from 'deepmerge';
 import { FsUtil } from '../utils/fsUtil';
 import { combineMerge } from '../utils/mergeUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   const bases = [];
@@ -19,7 +20,7 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
 
   const filePath = path.resolve(config.dirPath, '.eslintrc.json');
   try {
-    const oldContent = await fsp.readFile(filePath, 'utf-8');
+    const oldContent = await fs.promises.readFile(filePath, 'utf-8');
     const oldSettings = JSON.parse(oldContent);
     if (oldSettings.extends) {
       oldSettings.extends = oldSettings.extends.filter(
@@ -39,5 +40,6 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
   } catch (e) {
     // do nothing
   }
-  await FsUtil.generateFile(filePath, JSON.stringify(newSettings));
+  const newContent = JSON.stringify(newSettings);
+  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }

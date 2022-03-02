@@ -3,8 +3,9 @@ import path from 'path';
 import { Extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
-const content = `root = true
+const newContent = `root = true
 
 [*]
 charset = utf-8
@@ -34,7 +35,7 @@ indent_style = tab
 
 export async function generateEditorconfig(config: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.editorconfig');
-  await FsUtil.generateFile(filePath, content);
+  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }
 
 function generateExtensions(extensions: string[]): string {

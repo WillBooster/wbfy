@@ -1,10 +1,11 @@
-import fsp from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
 import { EslintUtil } from '../utils/eslintUtil';
 import { Extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 const eslintKey = `./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}`;
 const eslintFilterForPrettier = `files = micromatch.not(files, '${eslintKey}');`;
@@ -46,7 +47,7 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
   ],`);
   }
 
-  const content = `${
+  const newContent = `${
     config.containingJavaScript || config.containingTypeScript ? "const micromatch = require('micromatch');" : ''
   }
 
@@ -55,9 +56,7 @@ module.exports = {${lines.join('')}
 `;
 
   const filePath = path.resolve(config.dirPath, '.lintstagedrc.cjs');
-  await Promise.all([
-    fsp.rm(path.resolve(config.dirPath, '.lintstagedrc.js'), { force: true }),
-    fsp.rm(path.resolve(config.dirPath, '.lintstagedrc.json'), { force: true }),
-    FsUtil.generateFile(filePath, content),
-  ]);
+  await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.js'), { force: true }));
+  await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.json'), { force: true }));
+  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }

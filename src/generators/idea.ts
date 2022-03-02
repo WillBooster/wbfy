@@ -1,11 +1,11 @@
 import fs from 'fs';
-import fsp from 'fs/promises';
 import path from 'path';
 
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
-const content = `<?xml version="1.0" encoding="UTF-8"?>
+const newContent = `<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
@@ -147,9 +147,9 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
         !config.containingGoMod &&
         !config.containingPomXml)
     ) {
-      await FsUtil.generateFile(filePath, content);
+      await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
     } else {
-      await fsp.rm(filePath, { force: true });
+      await promisePool.run(() => fs.promises.rm(filePath, { force: true }));
     }
   }
 }

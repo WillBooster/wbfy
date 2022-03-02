@@ -212,5 +212,5 @@ async function fetchRepoInfo(urlOrFullName: string): Promise<Record<string, any>
     : undefined;
   const res = await fetchOnNode(`https://api.github.com/repos/${org}/${name}`, opts);
   const json = (await res.json()) as any;
-  return json || undefined;
+  return { full_name: `${org}/${name}`, ...(json ?? {}) };
 }

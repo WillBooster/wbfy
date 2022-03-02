@@ -1,4 +1,4 @@
-import fsp from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
 import merge from 'deepmerge';
@@ -8,6 +8,7 @@ import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 const rootJsonObj = {
   compilerOptions: {
@@ -76,7 +77,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
 
   const filePath = path.resolve(config.dirPath, 'tsconfig.json');
   try {
-    const existingContent = await fsp.readFile(filePath, 'utf-8');
+    const existingContent = await fs.promises.readFile(filePath, 'utf-8');
     const oldSettings = JSON.parse(existingContent);
     if (oldSettings.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
       delete oldSettings.extends;
@@ -95,5 +96,6 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     // do nothing
   }
   sortKeys(newSettings.compilerOptions);
-  await FsUtil.generateFile(filePath, JSON.stringify(newSettings));
+  const newContent = JSON.stringify(newSettings);
+  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }

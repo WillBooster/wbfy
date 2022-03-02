@@ -1,9 +1,10 @@
-import fsp from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
 import yaml from 'js-yaml';
 
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
 
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
@@ -14,27 +15,24 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   }
 
   const releasesPath = path.join(config.dirPath, '.yarn', 'releases');
-  try {
-    for (const file of await fsp.readdir(releasesPath)) {
-      if (file.startsWith('yarn-') && !file.startsWith(`yarn-${latestVersion}`)) {
-        fsp.rm(path.join(releasesPath, file)).then();
-      }
+  await fs.promises.mkdir(releasesPath, { recursive: true });
+  for (const file of await fs.promises.readdir(releasesPath)) {
+    if (file.startsWith('yarn-') && !file.startsWith(`yarn-${latestVersion}`)) {
+      await promisePool.run(() => fs.promises.rm(path.join(releasesPath, file)));
     }
-  } catch (_) {
-    // do nothign
   }
 
   const yarnrcPath = path.resolve(config.dirPath, '.yarnrc');
-  fsp.rm(yarnrcPath, { force: true }).then();
+  await promisePool.run(() => fs.promises.rm(yarnrcPath, { force: true }));
 
   const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
-  const settings = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
+  const settings = yaml.load(await fs.promises.readFile(yarnrcYmlPath, 'utf8')) as any;
   settings.defaultSemverRangePrefix = '';
   if (config.requiringNodeModules) {
     settings.nodeLinker = 'node-modules';
     settings.nmMode = 'hardlinks-global';
   }
-  await fsp.writeFile(yarnrcYmlPath, yaml.dump(settings));
+  await fs.promises.writeFile(yarnrcYmlPath, yaml.dump(settings));
 
   const plugins = (settings.plugins || []).map((p: any) => p.spec as string);
   const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;

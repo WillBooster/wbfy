@@ -1,5 +1,4 @@
 import fs from 'fs';
-import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
@@ -9,6 +8,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { combineMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 const testWorkflow = {
   name: 'Test',
@@ -60,21 +60,21 @@ const wbfyWorkflow = {
 
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
   const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
-  fs.mkdirSync(workflowsPath, { recursive: true });
-  const promises: Promise<void>[] = [];
+  await fs.promises.mkdir(workflowsPath, { recursive: true });
   if (rootConfig.depending.semanticRelease) {
-    const yml = await getWorkflowYaml(rootConfig, workflowsPath, 'release');
-    promises.push(fsp.writeFile(path.join(workflowsPath, 'release.yml'), yml));
+    await promisePool.run(async () => {
+      const yml = await getWorkflowYaml(rootConfig, workflowsPath, 'release');
+      await fs.promises.writeFile(path.join(workflowsPath, 'release.yml'), yml);
+    });
   }
-  {
+  await promisePool.run(async () => {
     const yml = await getWorkflowYaml(rootConfig, workflowsPath, 'test');
-    promises.push(fsp.writeFile(path.join(workflowsPath, 'test.yml'), yml));
-  }
-  {
+    await fs.promises.writeFile(path.join(workflowsPath, 'test.yml'), yml);
+  });
+  await promisePool.run(async () => {
     const yml = await getWorkflowYaml(rootConfig, workflowsPath, 'wbfy');
-    promises.push(fsp.writeFile(path.join(workflowsPath, 'wbfy.yml'), yml));
-  }
-  await Promise.all(promises);
+    await fs.promises.writeFile(path.join(workflowsPath, 'wbfy.yml'), yml);
+  });
 }
 
 async function getWorkflowYaml(
@@ -111,7 +111,7 @@ async function getWorkflowYaml(
 
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
-    const oldContent = await fsp.readFile(filePath, 'utf-8');
+    const oldContent = await fs.promises.readFile(filePath, 'utf-8');
     const oldSettings = yaml.load(oldContent);
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
   } catch (e) {
@@ -132,7 +132,7 @@ async function getWorkflowYaml(
   }
   if (kind === 'release' && newSettings.on.schedule) delete newSettings.on.push;
   if (kind === 'release') {
-    await fsp.rm('semantic-release.yml', { force: true });
+    await promisePool.run(() => fs.promises.rm('semantic-release.yml', { force: true }));
   }
 
   return yaml.dump(newSettings, {

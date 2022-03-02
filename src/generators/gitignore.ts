@@ -4,6 +4,7 @@ import { fetchOnNode } from '../utils/fetchOnNode';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 
@@ -71,7 +72,7 @@ android/app/src/main/assets/
     names.push('storybookjs');
   }
 
-  let content = (
+  let generated = (
     await Promise.all(
       names.map(async (name) => {
         const response = await fetchOnNode(`https://www.toptal.com/developers/gitignore/api/${name}`);
@@ -80,10 +81,10 @@ android/app/src/main/assets/
     )
   ).join('');
   if (!IgnoreFileUtil.isBerryZeroInstallEnabled(filePath)) {
-    content = content.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
+    generated = generated.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
   }
   if (config.containingPomXml || config.containingPubspecYaml) {
-    content = content
+    generated = generated
       .replace(/^# .idea\/artifacts$/gm, '.idea/artifacts')
       .replace(/^# .idea\/compiler.xml$/gm, '.idea/compiler.xml')
       .replace(/^# .idea\/jarRepositories.xml$/gm, '.idea/jarRepositories.xml')
@@ -93,12 +94,13 @@ android/app/src/main/assets/
       .replace(/^# *.iml$/gm, '*.iml')
       .replace(/^# *.ipr$/gm, '*.ipr');
     if (config.containingPubspecYaml) {
-      content = content.replace(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
+      generated = generated.replace(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
     }
   }
-  content = content.replace(/^.idea\/?$/gm, '# .idea');
+  generated = generated.replace(/^.idea\/?$/gm, '# .idea');
   if (rootConfig.depending.reactNative || config.depending.reactNative || config.containingPubspecYaml) {
-    content = content.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
+    generated = generated.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
   }
-  await FsUtil.generateFile(filePath, userContent + content);
+  const newContent = userContent + generated;
+  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }

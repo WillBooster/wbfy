@@ -1,5 +1,4 @@
 import fs from 'fs';
-import fsp from 'fs/promises';
 import path from 'path';
 
 import merge from 'deepmerge';
@@ -8,6 +7,7 @@ import { EslintUtil } from '../utils/eslintUtil';
 import { Extensions } from '../utils/extensions';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 import { spawnSync } from '../utils/spawnUtil';
 
 const scriptsWithoutWorkspace = {
@@ -72,14 +72,14 @@ export async function generatePackageJson(
   skipAddingDeps: boolean
 ): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = await fsp.readFile(filePath, 'utf-8');
+  const jsonText = await fs.promises.readFile(filePath, 'utf-8');
   const jsonObj = JSON.parse(jsonText);
   jsonObj.scripts = jsonObj.scripts || {};
   jsonObj.dependencies = jsonObj.dependencies || {};
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   jsonObj.peerDependencies = jsonObj.peerDependencies || {};
 
-  removeDeprecatedStuff(jsonObj);
+  await removeDeprecatedStuff(jsonObj);
 
   if (jsonObj.name !== '@willbooster/prettier-config') {
     jsonObj.prettier = '@willbooster/prettier-config';
@@ -133,7 +133,7 @@ export async function generatePackageJson(
     }
   }
 
-  if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+  if ((config.containingTypeScript || config.containingTypeScriptInPackages) && !config.depending.blitz) {
     devDependencies.push('typescript');
   }
 
@@ -193,7 +193,7 @@ export async function generatePackageJson(
       if (jsonObj.scripts.postinstall === 'poetry install') {
         delete jsonObj.scripts.postinstall;
       }
-      const dirNames = fs.readdirSync(config.dirPath).filter((dirName) => {
+      const dirNames = (await fs.promises.readdir(config.dirPath)).filter((dirName) => {
         const dirPath = path.resolve(config.dirPath, dirName);
         if (!fs.lstatSync(dirPath).isDirectory()) return false;
         return fs.readdirSync(dirPath).some((fileName) => fileName.endsWith('.py'));
@@ -214,9 +214,11 @@ export async function generatePackageJson(
     }
   }
 
-  // These cause an error of eslint-plugin-import loading
   if (config.depending.blitz) {
+    // These cause an error of eslint-plugin-import loading
     devDependencies = devDependencies.filter((dep) => !dep.includes('@typescript-eslint/'));
+    // This causes eslint errors
+    devDependencies = devDependencies.filter((d) => d !== 'eslint-plugin-react');
   }
   if (!Object.keys(jsonObj.dependencies).length) {
     delete jsonObj.dependencies;
@@ -228,7 +230,7 @@ export async function generatePackageJson(
     delete jsonObj.peerDependencies;
   }
 
-  await fsp.writeFile(filePath, JSON.stringify(jsonObj));
+  await fs.promises.writeFile(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
     if (dependencies.length && dependencies.some((dep) => !jsonObj.dependencies?.[dep])) {
@@ -243,7 +245,7 @@ export async function generatePackageJson(
   }
 }
 
-function removeDeprecatedStuff(jsonObj: any): void {
+async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
   // TODO: remove the following migration code in future
   if (jsonObj.author === 'WillBooster LLC') {
     jsonObj.author = 'WillBooster Inc.';
@@ -269,12 +271,12 @@ function removeDeprecatedStuff(jsonObj: any): void {
       delete jsonObj.devDependencies[dep];
     }
   }
-  fsp.rm('lerna.json', { force: true }).then();
+  await promisePool.run(() => fs.promises.rm('lerna.json', { force: true }));
 }
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {
   const filePath = path.resolve(dirPath, '.prettierignore');
-  const existingContent = await fsp.readFile(filePath, 'utf-8');
+  const existingContent = await fs.promises.readFile(filePath, 'utf-8');
   const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);
   if (index < 0) return '';
 
