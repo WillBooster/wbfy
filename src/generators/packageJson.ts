@@ -218,7 +218,13 @@ export async function generatePackageJson(
     // These cause an error of eslint-plugin-import loading
     devDependencies = devDependencies.filter((dep) => !dep.includes('@typescript-eslint/'));
     // This causes eslint errors
-    devDependencies = devDependencies.filter((d) => d !== 'eslint-plugin-react');
+    devDependencies = devDependencies.filter(
+      (d) =>
+        d !== 'eslint-plugin-react' &&
+        d !== 'eslint-import-resolver-typescript' &&
+        d !== 'eslint-plugin-import' &&
+        d !== 'eslint-plugin-react-hooks'
+    );
   }
   if (!Object.keys(jsonObj.dependencies).length) {
     delete jsonObj.dependencies;
