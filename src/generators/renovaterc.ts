@@ -17,8 +17,8 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
   let newSettings: any = cloneDeep(jsonObj);
 
   const filePath = path.resolve(config.dirPath, '.renovaterc.json');
-  const oldContent = await fs.promises.readFile(filePath, 'utf-8');
   try {
+    const oldContent = await fs.promises.readFile(filePath, 'utf-8');
     const oldSettings = JSON.parse(oldContent) as any;
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
   } catch (e) {
