@@ -31,9 +31,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     commandAndArgs,
     {
       cwd,
-      env: {
-        PATH: env.PATH,
-      },
+      env,
       shell: true,
       stdio: 'inherit',
     },
