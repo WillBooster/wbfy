@@ -71,6 +71,9 @@ android/app/src/main/assets/
   if (rootConfig.depending.storybook) {
     names.push('storybookjs');
   }
+  if (rootConfig.depending.blitz) {
+    names.push('nextjs');
+  }
 
   let generated = (
     await Promise.all(
