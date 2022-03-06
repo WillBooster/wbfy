@@ -9,7 +9,15 @@ const DEFAULT_COMMAND = 'npm test';
 
 const settings = {
   preCommit: 'yarn lint-staged',
-  prePush: 'yarn typecheck',
+  prePush: `
+if [[ $(git branch --show-current) = "main" ]]; then
+  echo "************************************************"
+  echo "*** Don't push main branch directly. Use PR! ***"
+  echo "************************************************"
+  exit 1
+fi
+
+yarn typecheck`.trim(),
   postMerge: 'yarn',
 };
 
