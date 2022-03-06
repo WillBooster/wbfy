@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 
 import glob from 'glob';
@@ -106,6 +107,14 @@ async function main(): Promise<void> {
     // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock
     // corresponding to the contents of dependant sub-package in monorepo
     spawnSync('yarn', ['install'], rootDirPath);
+
+    try {
+      const releasesPath = path.join(rootDirPath, '.yarn', 'releases');
+      const yarnReleaseFiles = await fs.promises.readdir(releasesPath);
+      console.log('.yarn/releases', yarnReleaseFiles);
+    } catch (_) {
+      // do nothing
+    }
   }
 }
 
