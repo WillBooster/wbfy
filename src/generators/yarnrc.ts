@@ -16,9 +16,12 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
 
   const releasesPath = path.join(config.dirPath, '.yarn', 'releases');
   await fs.promises.mkdir(releasesPath, { recursive: true });
-  for (const file of await fs.promises.readdir(releasesPath)) {
+  const yarnReleaseFiles = await fs.promises.readdir(releasesPath);
+  console.log('.yarn/releases', yarnReleaseFiles);
+  for (const file of yarnReleaseFiles) {
     if (file.startsWith('yarn-') && !file.startsWith(`yarn-${latestVersion}`)) {
       await promisePool.run(() => fs.promises.rm(path.join(releasesPath, file)));
+      console.log('Removed', path.join(releasesPath, file));
     }
   }
 
