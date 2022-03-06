@@ -46,7 +46,7 @@ const wbfyWorkflow = {
   on: {
     schedule: [
       {
-        cron: '0 5 * * 0',
+        cron: '0 5 * * *',
       },
     ],
     workflow_dispatch: null,
