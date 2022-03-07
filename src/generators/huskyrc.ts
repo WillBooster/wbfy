@@ -9,7 +9,8 @@ const DEFAULT_COMMAND = 'npm test';
 
 const settings = {
   preCommit: 'yarn lint-staged',
-  prePush: `
+  prePush: `yarn typecheck`,
+  prePushForLab: `
 if [[ $(git branch --show-current) = "main" ]]; then
   echo "************************************************"
   echo "*** Don't push main branch directly. Use PR! ***"
@@ -49,8 +50,9 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   );
 
   if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+    const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? settings.prePushForLab : settings.prePush;
     await promisePool.run(() =>
-      fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, settings.prePush), {
+      fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, prePush), {
         mode: 0o755,
       })
     );
