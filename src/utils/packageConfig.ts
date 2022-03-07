@@ -182,7 +182,7 @@ async function getRepoInfo(dirPath: string, packageJson: any): Promise<Record<st
   const url = packageJson.repository?.url ?? packageJson.repository;
   if (typeof url === 'string') {
     const json = await fetchRepoInfo(url);
-    if (json) return json;
+    if (json && json.message !== 'Not Found') return json;
   }
 
   const git = simpleGit(dirPath);
