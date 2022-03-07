@@ -19,6 +19,8 @@ const commonContent = `
 dist/
 temp/
 Icon[\r]
+*.sqlite3
+*.sqlite3-journal
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
@@ -73,6 +75,9 @@ android/app/src/main/assets/
   }
   if (rootConfig.depending.blitz) {
     names.push('nextjs');
+    userContent += `.blitz/
+.blitz**
+`;
   }
 
   let generated = (
