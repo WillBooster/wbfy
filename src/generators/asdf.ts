@@ -19,7 +19,7 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
     await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
   }
   if (config.containingPoetryLock) {
-    updateLine('poetry 1.1.12', 0, lines);
+    updateLine('poetry 1.1.13', 0, lines);
     updateLine('python 3.9.10', 0, lines);
   }
   if (config.depending.firebase) {
