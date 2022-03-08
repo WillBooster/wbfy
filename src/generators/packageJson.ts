@@ -128,6 +128,7 @@ export async function generatePackageJson(
     config.containingTypeScriptInPackages
   ) {
     devDependencies.push('eslint', 'micromatch');
+    // TODO: not needed anymore?
     if (config.containingTypeScriptInPackages) {
       devDependencies.push('@typescript-eslint/parser');
     }
