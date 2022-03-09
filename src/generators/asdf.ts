@@ -8,9 +8,9 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
   if (!config.versionsText) return;
 
   const lines: string[] = [];
-  for (const versionText of config.versionsText.split('\n')) {
+  for (const versionText of config.versionsText.trim().split('\n')) {
     const line = versionText.trim();
-    if (!line.startsWith('nodejs ')) {
+    if (line && line.split(/\s+/)[0] !== 'nodejs') {
       lines.push(line);
       continue;
     }
@@ -31,15 +31,15 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
 
   const toolVersionsPath = path.resolve(config.dirPath, '.tool-versions');
   if (lines.length) {
-    await promisePool.run(() => fs.promises.writeFile(toolVersionsPath, lines.join('\n')));
+    await promisePool.run(() => fs.promises.writeFile(toolVersionsPath, lines.join('\n') + '\n'));
   } else {
     await promisePool.run(() => fs.promises.rm(toolVersionsPath, { force: true }));
   }
 }
 
 function updateLine(line: string, insertionIndex: number, lines: string[]): void {
-  const prefix = line.split(' ') + ' ';
-  const index = lines.findIndex((l) => l.startsWith(prefix));
+  const [prefix] = line.split(' ');
+  const index = lines.findIndex((l) => l.split(/\s+/)[0] === prefix);
   if (index >= 0) {
     lines[index] = line;
   } else {
