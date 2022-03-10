@@ -179,12 +179,6 @@ function getEslintExtensionBase(config: PackageConfig): string | undefined {
 }
 
 async function getRepoInfo(dirPath: string, packageJson: any): Promise<Record<string, any> | undefined> {
-  const url = packageJson.repository?.url ?? packageJson.repository;
-  if (typeof url === 'string') {
-    const json = await fetchRepoInfo(url);
-    if (json && json.message !== 'Not Found') return json;
-  }
-
   const git = simpleGit(dirPath);
   const remotes = await git.getRemotes(true);
   const origin = remotes.find((r) => r.name === 'origin');
@@ -192,6 +186,12 @@ async function getRepoInfo(dirPath: string, packageJson: any): Promise<Record<st
   if (typeof remoteUrl === 'string') {
     const json = await fetchRepoInfo(remoteUrl);
     if (json) return json;
+  }
+
+  const url = packageJson.repository?.url ?? packageJson.repository;
+  if (typeof url === 'string') {
+    const json = await fetchRepoInfo(url);
+    if (json && json.message !== 'Not Found') return json;
   }
 }
 
