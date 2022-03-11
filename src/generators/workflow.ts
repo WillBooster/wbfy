@@ -118,10 +118,11 @@ async function writeWorkflowYaml(
     await promisePool.run(() => fs.promises.rm('semantic-release.yml', { force: true }));
   }
   const ymlText = yaml.dump(newSettings, {
+    lineWidth: -1,
+    noCompatMode: true,
     styles: {
       '!!null': 'empty',
     },
-    noCompatMode: true,
   });
   await fs.promises.writeFile(filePath, ymlText);
 }
@@ -129,7 +130,7 @@ async function writeWorkflowYaml(
 function normalizeJob(config: PackageConfig, job: any, kind: string): void {
   job.with ||= {};
   job.secrets ||= {};
-  if (config.release.github || kind === 'wbfy') {
+  if ((config.release.github && kind === 'test') || kind === 'release' || kind === 'wbfy') {
     if (config.publicRepo) {
       job.secrets['GH_TOKEN'] = '${{ secrets.PUBLIC_GH_BOT_PAT }}';
     } else {

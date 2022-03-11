@@ -15,6 +15,6 @@ export async function generateSemanticYml(rootConfig: PackageConfig): Promise<vo
   const githubPath = path.resolve(rootConfig.dirPath, '.github');
   await fs.promises.mkdir(githubPath, { recursive: true });
   const filePath = path.join(githubPath, 'semantic.yml');
-  const newContent = yaml.dump(newSettings);
+  const newContent = yaml.dump(newSettings, { lineWidth: -1 });
   await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
 }
