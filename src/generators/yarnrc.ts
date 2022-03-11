@@ -33,7 +33,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.nodeLinker = 'node-modules';
     settings.nmMode = 'hardlinks-global';
   }
-  await fs.promises.writeFile(yarnrcYmlPath, yaml.dump(settings));
+  await fs.promises.writeFile(yarnrcYmlPath, yaml.dump(settings, { lineWidth: -1 }));
 
   const plugins = (settings.plugins || []).map((p: any) => p.spec as string);
   const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;
