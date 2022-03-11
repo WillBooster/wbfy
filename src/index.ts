@@ -52,7 +52,6 @@ async function main(): Promise<void> {
       (config) => !!config
     ) as PackageConfig[];
     const allPackageConfigs = [rootConfig, ...subPackageConfigs];
-    const allNodePackageConfigs = [rootConfig, ...subPackageConfigs.filter((config) => config.containingPackageJson)];
 
     if (argv.verbose) {
       for (const config of allPackageConfigs) {
@@ -60,10 +59,9 @@ async function main(): Promise<void> {
       }
     }
 
-    const rootPromises = allPackageConfigs.map((config) => generateGitignore(config, rootConfig));
     // Install yarn berry at first
     await generateYarnrcYml(rootConfig);
-    rootPromises.push(
+    await Promise.all([
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),
       generateHuskyrc(rootConfig),
@@ -73,13 +71,19 @@ async function main(): Promise<void> {
       generateReleaserc(rootConfig),
       generateSemanticYml(rootConfig),
       generateVersionConfigs(rootConfig),
-      generateWorkflow(rootConfig)
-    );
-    await Promise.all(rootPromises);
+      generateWorkflow(rootConfig),
+    ]);
     await promisePool.promiseAll();
 
     const promises: Promise<void>[] = [];
-    for (const config of allNodePackageConfigs) {
+    for (const config of allPackageConfigs) {
+      const gitignorePromise = generateGitignore(config, rootConfig);
+      if (!config.root && !config.containingPackageJson) {
+        await gitignorePromise;
+        continue;
+      }
+      await Promise.all([gitignorePromise, generatePackageJson(config, rootConfig, argv.skipDeps)]);
+
       promises.push(generatePrettierignore(config), generateLintstagedrc(config));
       if (config.containingTypeScript || config.containingTypeScriptInPackages) {
         promises.push(generateTsconfig(config, rootConfig));
@@ -99,9 +103,6 @@ async function main(): Promise<void> {
     await Promise.all(promises);
     await promisePool.promiseAll();
 
-    for (const config of allNodePackageConfigs) {
-      await generatePackageJson(config, rootConfig, argv.skipDeps);
-    }
     spawnSync('yarn', ['cleanup'], rootDirPath);
     // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock
     // corresponding to the contents of dependant sub-package in monorepo

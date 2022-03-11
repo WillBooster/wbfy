@@ -4,7 +4,6 @@ import { fetchOnNode } from '../utils/fetchOnNode';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
-import { promisePool } from '../utils/promisePool';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 
@@ -22,6 +21,8 @@ Icon[\r]
 *.sqlite3
 *.sqlite3-journal
 `;
+
+const gitignoreCache = new Map<string, string>();
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.gitignore');
@@ -80,14 +81,20 @@ android/app/src/main/assets/
 `;
   }
 
-  let generated = (
-    await Promise.all(
-      names.map(async (name) => {
-        const response = await fetchOnNode(`https://www.toptal.com/developers/gitignore/api/${name}`);
-        return await response.text();
-      })
-    )
-  ).join('');
+  let generated = '';
+  for (const name of names) {
+    if (!gitignoreCache.has(name)) {
+      const url = `https://www.toptal.com/developers/gitignore/api/${name}`;
+      const response = await fetchOnNode(url);
+      const responseText = await response.text();
+      if (responseText.includes('Attention Required!')) {
+        console.error(`Failed to fetch ${url}`);
+        return;
+      }
+      gitignoreCache.set(name, responseText);
+    }
+    generated += gitignoreCache.get(name);
+  }
   if (!IgnoreFileUtil.isBerryZeroInstallEnabled(filePath)) {
     generated = generated.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
   }
@@ -110,5 +117,5 @@ android/app/src/main/assets/
     generated = generated.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
   }
   const newContent = userContent + generated;
-  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+  await FsUtil.generateFile(filePath, newContent);
 }

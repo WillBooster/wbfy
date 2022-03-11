@@ -44,11 +44,6 @@ const releaseWorkflow = {
 const wbfyWorkflow = {
   name: 'Willboosterify',
   on: {
-    schedule: [
-      {
-        cron: '0 20 * * *',
-      },
-    ],
     workflow_dispatch: null,
   },
   jobs: {
@@ -105,6 +100,14 @@ async function writeWorkflowYaml(
       delete newSettings.on.push;
     } else {
       newSettings.on.push.branches = config.release.branches;
+    }
+  } else if (kind === 'wbfy') {
+    const firstCharOfCron = newSettings.on.schedule?.[0]?.cron?.[0];
+    if (!firstCharOfCron || firstCharOfCron === '0') {
+      const min = 1 + Math.floor(Math.random() * 59);
+      const hour = (3 + Math.floor(Math.random() * 6) + 9) % 24;
+      const cron = `${min} ${hour} * * *`;
+      newSettings.on.schedule = [{ cron }];
     }
   }
 
