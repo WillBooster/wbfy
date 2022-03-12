@@ -6046,7 +6046,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:*, node-fetch@npm:3.2.1":
+"node-fetch@npm:*":
   version: 3.2.1
   resolution: "node-fetch@npm:3.2.1"
   dependencies:
@@ -6054,6 +6054,17 @@ __metadata:
     fetch-blob: ^3.1.4
     formdata-polyfill: ^4.0.10
   checksum: 2eb19f38c089a8697206210966e8555d7fc452a32da6ee1310552278ce4dda7412bf035d615335c52b0265dff701ac5e0236e9c7a56983b29f30bda15c144c2e
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:3.2.3":
+  version: 3.2.3
+  resolution: "node-fetch@npm:3.2.3"
+  dependencies:
+    data-uri-to-buffer: ^4.0.0
+    fetch-blob: ^3.1.4
+    formdata-polyfill: ^4.0.10
+  checksum: 6f702b2683d6e1c097e99888bedaac4625d6895f2a8a60573a2bc04916f5577ea61d274f26e308c08cfb724b23d45de7d3514c14b59e0293e9809c66c88ac12c
   languageName: node
   linkType: hard
 
@@ -7335,14 +7346,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-git@npm:3.2.6":
-  version: 3.2.6
-  resolution: "simple-git@npm:3.2.6"
+"simple-git@npm:3.3.0":
+  version: 3.3.0
+  resolution: "simple-git@npm:3.3.0"
   dependencies:
     "@kwsites/file-exists": ^1.1.1
     "@kwsites/promise-deferred": ^1.1.1
     debug: ^4.3.3
-  checksum: 2b64645db3dc31c8de73cfe1d2efa05bec5a6cd23603f2f0320ce6af3e672d1ea716b3424b9aaefb08141f2cc10189f29c17314951c855fa11d5cdd1ad049b4b
+  checksum: ae4c541a8b8cdac79ed8ca6bc899877b28b475207762a41866ddd4d31be3dd82cd5ddd4c16f0536e7a9a72f13a6472300481ac64523177425955f6b4c680bd1e
   languageName: node
   linkType: hard
 
@@ -8300,11 +8311,11 @@ __metadata:
     lodash.clonedeep: 4.5.0
     micromatch: 4.0.4
     minimal-promise-pool: 1.1.4
-    node-fetch: 3.2.1
+    node-fetch: 3.2.3
     pinst: 3.0.0
     prettier: 2.5.1
     semantic-release: 19.0.2
-    simple-git: 3.2.6
+    simple-git: 3.3.0
     sort-package-json: 1.54.0
     typescript: 4.6.2
     yargs: 17.3.1
