@@ -240,11 +240,11 @@ export async function generatePackageJson(
   await fs.promises.writeFile(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
-    dependencies = dependencies.filter((dep) => !jsonObj.dependencies?.[dep] && !jsonObj.devDependencies?.[dep]);
+    dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
     if (dependencies.length) {
       spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
     }
-    devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep] && !jsonObj.devDependencies?.[dep]);
+    devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length) {
       spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
