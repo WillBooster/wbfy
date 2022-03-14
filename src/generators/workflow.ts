@@ -71,10 +71,21 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
   }
 }
 
+async function writeYaml(newSettings: any, filePath: string): Promise<void> {
+  const yamlText = yaml.dump(newSettings, {
+    lineWidth: -1,
+    noCompatMode: true,
+    styles: {
+      '!!null': 'empty',
+    },
+  });
+  await promisePool.run(() => fs.promises.writeFile(filePath, yamlText));
+}
+
 async function writeWorkflowYaml(
   config: PackageConfig,
   workflowsPath: string,
-  kind: 'test' | 'release' | 'wbfy' | string
+  kind: 'test' | 'release' | 'sync' | 'wbfy' | string
 ): Promise<void> {
   let newSettings: any = {};
   if (kind === 'test') {
@@ -95,6 +106,13 @@ async function writeWorkflowYaml(
     // do nothing
   }
 
+  for (const job of Object.values(newSettings.jobs) as any[]) {
+    // Ignore non-reusable workflows
+    if (!job.uses?.includes?.('/reusable-workflows/')) return;
+
+    normalizeJob(config, job, kind);
+  }
+
   if (kind === 'release') {
     if (newSettings.on.schedule) {
       delete newSettings.on.push;
@@ -110,29 +128,30 @@ async function writeWorkflowYaml(
       newSettings.on.schedule = [{ cron }];
     }
   }
-
-  for (const job of Object.values(newSettings.jobs) as any[]) {
-    if (!job.uses?.includes?.('/reusable-workflows/')) break;
-
-    normalizeJob(config, job, kind);
-  }
+  await writeYaml(newSettings, filePath);
 
   if (kind === 'release') {
-    await promisePool.run(() => fs.promises.rm('semantic-release.yml', { force: true }));
+    await promisePool.run(() => fs.promises.rm(path.join(workflowsPath, 'semantic-release.yml'), { force: true }));
+  } else if (kind === 'sync') {
+    await promisePool.run(() => fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true }));
+    if (!newSettings.jobs.sync) return;
+
+    newSettings.jobs['sync-force'] = newSettings.jobs.sync;
+    const params = newSettings.jobs.sync.with.sync_params_without_dest;
+    if (!params) return;
+
+    newSettings.jobs.sync.with.sync_params_without_dest = `--force ${params}`;
+    newSettings.name = 'Force to Sync';
+    newSettings.on = { workflow_dispatch: null };
+    delete newSettings.jobs.sync;
+    await writeYaml(newSettings, path.join(workflowsPath, 'sync-force.yml'));
   }
-  const ymlText = yaml.dump(newSettings, {
-    lineWidth: -1,
-    noCompatMode: true,
-    styles: {
-      '!!null': 'empty',
-    },
-  });
-  await fs.promises.writeFile(filePath, ymlText);
 }
 
 function normalizeJob(config: PackageConfig, job: any, kind: string): void {
   job.with ||= {};
   job.secrets ||= {};
+
   if ((config.release.github && kind === 'test') || kind === 'release' || kind === 'wbfy') {
     if (config.publicRepo) {
       job.secrets['GH_TOKEN'] = '${{ secrets.PUBLIC_GH_BOT_PAT }}';
@@ -144,16 +163,24 @@ function normalizeJob(config: PackageConfig, job: any, kind: string): void {
     job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
   }
 
+  if (kind === 'sync') {
+    const params = job.with?.sync_params_without_dest;
+    if (params) {
+      job.with.sync_params_without_dest = params.replace('sync ', '');
+    }
+  }
+
   if (config.repository?.startsWith('github:WillBooster/')) {
     job.uses = job.uses.replace('WillBoosterLab/', 'WillBooster/');
   } else if (config.repository?.startsWith('github:WillBoosterLab/')) {
     job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
   }
 
-  if (config.containingDockerfile) {
+  delete job.with['cpu_arch'];
+  delete job.with['non_self_hosted'];
+  if (config.containingDockerfile && kind.startsWith('deploy')) {
     job.with['cpu_arch'] = 'X64';
   }
-  delete job.with['non_self_hosted'];
   if (Object.keys(job.with).length) {
     sortKeys(job.with);
   } else {
