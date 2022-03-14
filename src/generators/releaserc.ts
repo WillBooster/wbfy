@@ -11,13 +11,16 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
     const settings = JSON.parse(await fs.promises.readFile(filePath, 'utf8'));
     const plugins = settings?.plugins || [];
     for (let i = 0; i < plugins.length; i++) {
-      if (plugins[i] === '@semantic-release/commit-analyzer' || plugins[i][0] === '@semantic-release/commit-analyzer') {
+      const plugin = Array.isArray(plugins[i]) ? plugins[i][0] : plugins[i];
+      if (plugin === '@semantic-release/commit-analyzer') {
         plugins[i] = [
           '@semantic-release/commit-analyzer',
           {
             preset: 'conventionalcommits',
           },
         ];
+      } else if (plugin === '@semantic-release/github' && !rootConfig.publicRepo) {
+        plugins[i] = ['@semantic-release/github', { successComment: false }];
       }
     }
     const newContent = JSON.stringify(settings);

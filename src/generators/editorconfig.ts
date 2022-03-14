@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { Extensions } from '../utils/extensions';
+import { extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
@@ -13,19 +13,19 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-${generateExtensions(Extensions.codeWith2IndentSize)}
+${generateExtensions(extensions.codeWith2IndentSize)}
 indent_size = 2
 indent_style = space
 
-${generateExtensions(Extensions.codeWith4IndentSize)}
+${generateExtensions(extensions.codeWith4IndentSize)}
 indent_size = 4
 indent_style = space
 
-${generateExtensions(Extensions.codeWith8IndentSize)}
+${generateExtensions(extensions.codeWith8IndentSize)}
 indent_size = 8
 indent_style = space
 
-${generateExtensions(Extensions.markdownLike)}
+${generateExtensions(extensions.markdownLike)}
 max_line_length = off
 trim_trailing_whitespace = false
 

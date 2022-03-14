@@ -4,42 +4,12 @@ import path from 'path';
 import merge from 'deepmerge';
 
 import { EslintUtil } from '../utils/eslintUtil';
-import { Extensions } from '../utils/extensions';
+import { extensions } from '../utils/extensions';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync } from '../utils/spawnUtil';
-
-const scriptsWithoutWorkspace = {
-  cleanup: 'yarn format && yarn lint-fix',
-  format: `sort-package-json && yarn prettify`,
-  lint: `eslint --color "./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}"`,
-  'lint-fix': 'yarn lint --fix',
-  prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
-  typecheck: 'tsc --noEmit --Pretty',
-};
-
-const scriptsWithWorkspace = merge(
-  { ...scriptsWithoutWorkspace },
-  {
-    format: `sort-package-json && yarn prettify && yarn workspaces foreach --parallel --verbose run format`,
-    lint: `yarn workspaces foreach --parallel --verbose run lint`,
-    'lint-fix': 'yarn workspaces foreach --parallel --verbose run lint-fix',
-    prettify: `prettier --color --write "**/{.*/,}*.{${Extensions.prettier.join(
-      ','
-    )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-    test: 'yarn workspaces foreach --verbose run test',
-    typecheck: 'yarn workspaces foreach --parallel --verbose run typecheck',
-  }
-);
-
-const scriptsForBlitz = merge(
-  { ...scriptsWithoutWorkspace },
-  {
-    lint: `eslint --color "./**/*.{${Extensions.eslint.join(',')}}"`,
-    typecheck: `tsc --noEmit --Pretty || echo 'Please try "yarn blitz codegen" if you face unknown type errors.'`,
-  }
-);
+import { getSrcDirs } from '../utils/srcDirectories';
 
 const jsCommonDeps = [
   'eslint',
@@ -94,14 +64,7 @@ export async function generatePackageJson(
     }
   }
 
-  jsonObj.scripts = merge(
-    jsonObj.scripts,
-    config.containingSubPackageJsons
-      ? scriptsWithWorkspace
-      : config.depending.blitz
-      ? scriptsForBlitz
-      : scriptsWithoutWorkspace
-  );
+  jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config));
   jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
 
   let dependencies: string[] = [];
@@ -281,6 +244,40 @@ async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
     }
   }
   await promisePool.run(() => fs.promises.rm('lerna.json', { force: true }));
+}
+
+function generateScripts(config: PackageConfig): Record<string, string> {
+  let scripts = {
+    cleanup: 'yarn format && yarn lint-fix',
+    format: `sort-package-json && yarn prettify`,
+    lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
+    'lint-fix': 'yarn lint --fix',
+    prettify: `prettier --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
+    typecheck: 'tsc --noEmit --Pretty',
+  };
+  if (config.containingSubPackageJsons) {
+    scripts = merge(
+      { ...scripts },
+      {
+        format: `sort-package-json && yarn prettify && yarn workspaces foreach --parallel --verbose run format`,
+        lint: `yarn workspaces foreach --parallel --verbose run lint`,
+        'lint-fix': 'yarn workspaces foreach --parallel --verbose run lint-fix',
+        prettify: `prettier --color --write "**/{.*/,}*.{${extensions.prettier.join(
+          ','
+        )}}" "!**/packages/**" "!**/test-fixtures/**"`,
+        test: 'yarn workspaces foreach --verbose run test',
+        typecheck: 'yarn workspaces foreach --parallel --verbose run typecheck',
+      }
+    );
+  }
+  if (config.depending.blitz) {
+    scripts.typecheck = `${scripts.typecheck} || yarn run typecheck/warn`;
+    (scripts as any)[
+      'typecheck/warn'
+    ] = `echo 'Please try "yarn blitz codegen" if you face unknown type errors.' && exit 1`;
+    (scripts as any)['typecheck:codegen'] = 'blitz codegen && tsc --noEmit --Pretty';
+  }
+  return scripts;
 }
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {

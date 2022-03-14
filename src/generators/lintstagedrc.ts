@@ -2,25 +2,25 @@ import fs from 'fs';
 import path from 'path';
 
 import { EslintUtil } from '../utils/eslintUtil';
-import { Extensions } from '../utils/extensions';
+import { extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
-
-const eslintKey = `./{src,__tests__}/**/*.{${Extensions.eslint.join(',')}}`;
-const eslintFilterForPrettier = `files = micromatch.not(files, '${eslintKey}');`;
+import { getSrcDirs } from '../utils/srcDirectories';
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
     const eslint = `
-  '${eslintKey}': [${JSON.stringify(`eslint --fix${EslintUtil.getLintFixSuffix(config)}`)}, 'prettier --write'],`;
+  '${getEslintKey(config)}': [${JSON.stringify(
+      `eslint --fix${EslintUtil.getLintFixSuffix(config)}`
+    )}, 'prettier --write'],`;
     lines.push(eslint);
   }
   const packagesFilter = config.root ? " && !file.includes('/packages/')" : '';
   lines.push(`
-  './**/*.{${Extensions.prettier.join(',')}}': files => {
-    ${config.containingJavaScript || config.containingTypeScript ? eslintFilterForPrettier : ''}
+  './**/*.{${extensions.prettier.join(',')}}': files => {
+    ${config.containingJavaScript || config.containingTypeScript ? getEslintFilterForPrettier(config) : ''}
     const filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});
     if (filteredFiles.length === 0) return [];
     const commands = [\`prettier --write \${filteredFiles.join(' ')}\`];
@@ -59,4 +59,13 @@ module.exports = {${lines.join('')}
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.js'), { force: true }));
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.json'), { force: true }));
   await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+}
+
+function getEslintKey(config: PackageConfig): string {
+  const dirs = getSrcDirs(config);
+  return `./{${dirs.join(',')}}/**/*.{${extensions.eslint.join(',')}}`;
+}
+
+function getEslintFilterForPrettier(config: PackageConfig): string {
+  return `files = micromatch.not(files, '${getEslintKey(config)}');`;
 }

@@ -1,4 +1,4 @@
-export const Extensions = {
+export const extensions = {
   codeWith2IndentSize: [
     'cjs',
     'mjs',

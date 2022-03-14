@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { Extensions } from '../utils/extensions';
+import { extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
@@ -9,9 +9,9 @@ const newContent = `* text=auto
 
 *.vcproj text eol=crlf
 
-${Extensions.codeWith2IndentSize
-  .concat(Extensions.codeWith4IndentSize)
-  .concat(Extensions.markdownLike)
+${extensions.codeWith2IndentSize
+  .concat(extensions.codeWith4IndentSize)
+  .concat(extensions.markdownLike)
   .map((ext) => `*.${ext} text eol=lf`)
   .join('\n')}
 `;
