@@ -189,6 +189,13 @@ export async function generatePackageJson(
         d !== 'eslint-plugin-import' &&
         d !== 'eslint-plugin-react-hooks'
     );
+    if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
+      jsonObj.scripts['gen-code'] = 'blitz codegen';
+    }
+  } else if (config.depending.prisma) {
+    if (!jsonObj.scripts['gen-code']?.startsWith('prisma generate')) {
+      jsonObj.scripts['gen-code'] = 'prisma generate';
+    }
   }
   if (!Object.keys(jsonObj.dependencies).length) {
     delete jsonObj.dependencies;
@@ -224,6 +231,7 @@ async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
   }
   delete jsonObj.scripts['sort-package-json'];
   delete jsonObj.scripts['sort-all-package-json'];
+  delete jsonObj.scripts['typecheck:codegen'];
   delete jsonObj.dependencies['tslib'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
@@ -272,10 +280,8 @@ function generateScripts(config: PackageConfig): Record<string, string> {
   }
   if (config.depending.blitz) {
     scripts.typecheck = `${scripts.typecheck} || yarn run typecheck/warn`;
-    (scripts as any)[
-      'typecheck/warn'
-    ] = `echo 'Please try "yarn blitz codegen" if you face unknown type errors.' && exit 1`;
-    (scripts as any)['typecheck:codegen'] = 'blitz codegen && tsc --noEmit --Pretty';
+    (scripts as any)['typecheck/warn'] = `echo 'Please try "yarn gen-code" if you face unknown type errors.' && exit 1`;
+    (scripts as any)['typecheck:gen-code'] = 'yarn gen-code && tsc --noEmit --Pretty';
   }
   return scripts;
 }

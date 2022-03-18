@@ -123,6 +123,7 @@ async function writeWorkflowYaml(
     const firstCharOfCron = newSettings.on.schedule?.[0]?.cron?.[0];
     if (!firstCharOfCron || firstCharOfCron === '0') {
       const min = 1 + Math.floor(Math.random() * 59);
+      // 3:00 AM (UTC) (12:00 PM (JST)) - 9:00 AM (UTC) (18:00 PM (JST))
       const hour = (3 + Math.floor(Math.random() * 6) + 9) % 24;
       const cron = `${min} ${hour} * * *`;
       newSettings.on.schedule = [{ cron }];

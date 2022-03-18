@@ -69,10 +69,8 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
   if (config.versionsText?.includes('poetry ')) {
     postMergeCommands.push('poetry install');
   }
-  if (config.depending.blitz) {
-    postMergeCommands.push('yarn blitz codegen');
-  } else if (config.depending.prisma) {
-    postMergeCommands.push('yarn prisma generate');
+  if (config.depending.blitz || config.depending.prisma) {
+    postMergeCommands.push('yarn gen-code');
   }
   const postMergeCommand = content.replace(DEFAULT_COMMAND, postMergeCommands.join(' && '));
   await promisePool.run(() =>
