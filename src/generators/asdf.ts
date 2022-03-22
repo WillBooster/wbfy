@@ -3,6 +3,7 @@ import path from 'path';
 
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
+import { spawnSyncWithStringResult } from '../utils/spawnUtil';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
   if (!config.versionsText) return;
@@ -26,7 +27,8 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
     updateLine('java adoptopenjdk-11.0.14+9', 0, lines);
   }
   if (config.containingPackageJson) {
-    updateLine('yarn 1.22.17', lines.length, lines);
+    const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
+    updateLine(`yarn ${version}`, lines.length, lines);
   }
 
   const toolVersionsPath = path.resolve(config.dirPath, '.tool-versions');
