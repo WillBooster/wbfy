@@ -77,14 +77,14 @@ async function main(): Promise<void> {
 
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
-      const gitignorePromise = generateGitignore(config, rootConfig);
+      await generateGitignore(config, rootConfig);
       if (!config.root && !config.containingPackageJson) {
-        await gitignorePromise;
         continue;
       }
-      await Promise.all([gitignorePromise, generatePackageJson(config, rootConfig, argv.skipDeps)]);
+      await generatePrettierignore(config);
+      await generatePackageJson(config, rootConfig, argv.skipDeps);
 
-      promises.push(generatePrettierignore(config), generateLintstagedrc(config));
+      promises.push(generateLintstagedrc(config));
       if (config.containingTypeScript || config.containingTypeScriptInPackages) {
         promises.push(generateTsconfig(config, rootConfig));
       }

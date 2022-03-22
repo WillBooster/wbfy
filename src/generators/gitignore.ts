@@ -26,7 +26,7 @@ const gitignoreCache = new Map<string, string>();
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.gitignore');
-  let userContent = (IgnoreFileUtil.getUserContent(filePath) || defaultUserContent) + commonContent;
+  let userContent = ((await IgnoreFileUtil.getUserContent(filePath)) || defaultUserContent) + commonContent;
 
   const names = [...defaultNames];
   if (config.containingGemfile) {
@@ -95,7 +95,7 @@ android/app/src/main/assets/
     }
     generated += gitignoreCache.get(name);
   }
-  if (!IgnoreFileUtil.isBerryZeroInstallEnabled(filePath)) {
+  if (!(await IgnoreFileUtil.isBerryZeroInstallEnabled(filePath))) {
     generated = generated.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
   }
   if (config.containingPomXml || config.containingPubspecYaml) {

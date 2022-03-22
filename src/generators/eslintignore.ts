@@ -28,10 +28,10 @@ test-fixtures/
 
 export async function generateEslintignore(config: PackageConfig): Promise<void> {
   const filePath = path.resolve(config.dirPath, '.eslintignore');
-  const userContent = IgnoreFileUtil.getUserContent(filePath) || defaultUserContent;
+  const userContent = (await IgnoreFileUtil.getUserContent(filePath)) || defaultUserContent;
 
   const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
-  const gitignoreContent = IgnoreFileUtil.getExistingContent(gitignoreFilePath) || '';
+  const gitignoreContent = (await IgnoreFileUtil.getExistingContent(gitignoreFilePath)) || '';
 
   const newContent = userContent + commonContent + gitignoreContent;
   await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
