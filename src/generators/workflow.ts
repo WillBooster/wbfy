@@ -171,11 +171,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: string): void {
     }
   }
 
-  if (config.repository?.startsWith('github:WillBooster/')) {
-    job.uses = job.uses.replace('WillBoosterLab/', 'WillBooster/');
-  } else if (config.repository?.startsWith('github:WillBoosterLab/')) {
-    job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
-  }
+  job.uses = job.uses.replace('WillBoosterLab/', 'WillBooster/');
 
   delete job.with['cpu_arch'];
   delete job.with['non_self_hosted'];
