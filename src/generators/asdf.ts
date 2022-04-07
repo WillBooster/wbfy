@@ -3,7 +3,7 @@ import path from 'path';
 
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
-import { spawnSyncWithStringResult } from '../utils/spawnUtil';
+import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
   if (!config.versionsText) return;
@@ -24,7 +24,7 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
     updateLine('python 3.9.10', 0, lines);
   }
   if (config.depending.firebase) {
-    updateLine('java adoptopenjdk-11.0.14+9', 0, lines);
+    updateLine('java adoptopenjdk-17.0.2+8', 0, lines);
   }
   if (config.containingPackageJson) {
     const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
@@ -37,6 +37,8 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
   } else {
     await promisePool.run(() => fs.promises.rm(toolVersionsPath, { force: true }));
   }
+  await promisePool.promiseAll();
+  spawnSync('asdf', ['install'], config.dirPath);
 }
 
 function updateLine(line: string, insertionIndex: number, lines: string[]): void {

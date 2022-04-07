@@ -177,7 +177,6 @@ function normalizeJob(config: PackageConfig, job: any, kind: string): void {
     job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
   }
 
-  delete job.with['cpu_arch'];
   delete job.with['non_self_hosted'];
   if (config.containingDockerfile && kind.startsWith('deploy')) {
     job.with['cpu_arch'] = 'X64';

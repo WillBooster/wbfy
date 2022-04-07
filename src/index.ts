@@ -59,7 +59,9 @@ async function main(): Promise<void> {
       }
     }
 
-    // Install yarn berry at first
+    // Install tools via asdf at first
+    await generateVersionConfigs(rootConfig);
+    // Install yarn berry
     await generateYarnrcYml(rootConfig);
     await Promise.all([
       generateEditorconfig(rootConfig),
@@ -70,7 +72,6 @@ async function main(): Promise<void> {
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
       generateSemanticYml(rootConfig),
-      generateVersionConfigs(rootConfig),
       generateWorkflow(rootConfig),
     ]);
     await promisePool.promiseAll();

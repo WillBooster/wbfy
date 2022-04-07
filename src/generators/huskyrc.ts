@@ -66,7 +66,7 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
     postMergeCommands.push('asdf install');
   }
   postMergeCommands.push(settings.postMerge);
-  if (config.versionsText?.includes('poetry ')) {
+  if (config.containingPoetryLock) {
     postMergeCommands.push('poetry install');
   }
   if (config.depending.blitz || config.depending.prisma) {

@@ -29,8 +29,10 @@ const rootJsonObj = {
   include: [
     'src/**/*',
     '__tests__/**/*',
+    'scripts/**/*',
     'packages/*/src/**/*',
     'packages/*/__tests__/**/*',
+    'packages/*/scripts/**/*',
     './node_modules/@types',
     './@types',
   ],
@@ -52,7 +54,7 @@ const subJsonObj = {
     importHelpers: false,
     outDir: 'dist',
   },
-  include: ['src/**/*', '__tests__/**/*', '../../node_modules/@types', '../../@types', './@types'],
+  include: ['src/**/*', '__tests__/**/*', 'scripts/**/*', '../../node_modules/@types', '../../@types', './@types'],
 };
 
 export async function generateTsconfig(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
@@ -88,7 +90,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     if (oldSettings.jsx) {
       delete newSettings.jsx;
     }
-    if (!config.depending.blitz) {
+    if (config.depending.blitz) {
       delete newSettings.include;
     }
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
