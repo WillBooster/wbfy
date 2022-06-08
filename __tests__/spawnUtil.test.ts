@@ -23,5 +23,5 @@ test.each`
 
 test('get latest version of yarn berry', () => {
   const version = spawnSyncWithStringResult('npm', ['show', '@yarnpkg/cli', 'version'], process.cwd());
-  expect(version).toMatch(/^3./);
+  expect(version).toMatch(/^[4-9]./);
 });
