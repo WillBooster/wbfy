@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 
 import { spawnSyncWithStringResult } from '../src/utils/spawnUtil';
@@ -17,6 +18,7 @@ test.each`
   ${'yarn3-with-tool-versions'} | ${'3.1.1'}
 `('spawnSync on $dirPath repo', ({ dirPath, expected }: { dirPath: string; expected: string }) => {
   const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
+  expect(fs.existsSync(packageDirPath)).toBe(true);
   const version = spawnSyncWithStringResult('yarn', ['--version'], packageDirPath);
   expect(version).toBe(expected);
 });
