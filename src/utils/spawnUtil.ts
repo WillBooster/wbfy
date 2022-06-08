@@ -33,7 +33,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     {
       cwd,
       env,
-      shell: true,
+      shell: false,
       stdio: 'inherit',
     },
   ];
