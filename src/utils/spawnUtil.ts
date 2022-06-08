@@ -13,6 +13,7 @@ export function spawnSyncWithStringResult(command: string, args: string[], cwd: 
   const [commandAndArgs, options] = getSpawnSyncArgs(command, args, cwd);
   options.stdio = 'pipe';
   const proc = child_process.spawnSync(commandAndArgs, options);
+  console.log(proc);
   return proc.stdout.toString().trim();
 }
 
