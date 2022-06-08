@@ -3,7 +3,7 @@ import child_process from 'child_process';
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {
     const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
-    console.log(`$ ${newCmd} ${newArgs} at ${options.cwd}`);
+    console.log(`$ ${newCmd} ${newArgs.join(' ')} at ${options.cwd}`);
     const ret = child_process.spawnSync(newCmd, newArgs, options);
     if (ret.status === 0) break;
   } while (--retry >= 0);
@@ -13,7 +13,6 @@ export function spawnSyncWithStringResult(command: string, args: string[], cwd: 
   const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
   options.stdio = 'pipe';
   const proc = child_process.spawnSync(newCmd, newArgs, options);
-  console.log(proc);
   return proc.stdout.toString().trim();
 }
 
