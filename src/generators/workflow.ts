@@ -13,11 +13,9 @@ import { promisePool } from '../utils/promisePool';
 const testWorkflow = {
   name: 'Test',
   on: {
-    pull_request: {
-      branches: ['main', '!renovate/**'],
-    },
+    pull_request: null,
     push: {
-      branches: ['main', 'renovate/**'],
+      branches: ['main', 'wbfy', 'renovate/**'],
     },
   },
   jobs: {
