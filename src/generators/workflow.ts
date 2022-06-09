@@ -53,6 +53,34 @@ const wbfyWorkflow = {
   },
 };
 
+const wbfyMergeWorkflow = {
+  name: 'Merge wbfy',
+  on: {
+    workflow_dispatch: null,
+  },
+  jobs: {
+    'wbfy-merge': {
+      uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy-merge.yml@main',
+    },
+  },
+};
+
+const semanticPullRequestWorkflow = {
+  name: 'Lint PR title',
+  on: {
+    pull_request_target: {
+      types: ['opened', 'edited', 'synchronize'],
+    },
+  },
+  jobs: {
+    'semantic-pr': {
+      uses: 'WillBooster/reusable-workflows/.github/workflows/semantic-pr.yml@main',
+    },
+  },
+};
+
+type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr';
+
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
   const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
   await fs.promises.mkdir(workflowsPath, { recursive: true });
@@ -85,7 +113,7 @@ async function writeYaml(newSettings: any, filePath: string): Promise<void> {
 async function writeWorkflowYaml(
   config: PackageConfig,
   workflowsPath: string,
-  kind: 'test' | 'release' | 'sync' | 'wbfy' | string
+  kind: KnownKind | string
 ): Promise<void> {
   let newSettings: any = {};
   if (kind === 'test') {
@@ -94,6 +122,10 @@ async function writeWorkflowYaml(
     newSettings = releaseWorkflow;
   } else if (kind === 'wbfy') {
     newSettings = wbfyWorkflow;
+  } else if (kind === 'wbfy-merge') {
+    newSettings = wbfyMergeWorkflow;
+  } else if (kind === 'semantic-pr') {
+    newSettings = semanticPullRequestWorkflow;
   }
   newSettings = cloneDeep(newSettings);
 
@@ -120,14 +152,9 @@ async function writeWorkflowYaml(
       newSettings.on.push.branches = config.release.branches;
     }
   } else if (kind === 'wbfy') {
-    const firstCharOfCron = newSettings.on.schedule?.[0]?.cron?.[0];
-    if (!firstCharOfCron || firstCharOfCron === '0') {
-      const min = 1 + Math.floor(Math.random() * 59);
-      // 3:00 AM (UTC) (12:00 PM (JST)) - 9:00 AM (UTC) (18:00 PM (JST))
-      const hour = (3 + Math.floor(Math.random() * 6) + 9) % 24;
-      const cron = `${min} ${hour} * * *`;
-      newSettings.on.schedule = [{ cron }];
-    }
+    setSchedule(newSettings, 20, 24);
+  } else if (kind === 'wbfy-merge') {
+    setSchedule(newSettings, 0, 4);
   }
   await writeYaml(newSettings, filePath);
 
@@ -149,11 +176,11 @@ async function writeWorkflowYaml(
   }
 }
 
-function normalizeJob(config: PackageConfig, job: any, kind: string): void {
+function normalizeJob(config: PackageConfig, job: any, kind: KnownKind | string): void {
   job.with ||= {};
   job.secrets ||= {};
 
-  if ((config.release.github && kind === 'test') || kind === 'release' || kind === 'wbfy') {
+  if ((config.release.github && kind === 'test') || kind === 'release' || kind === 'wbfy' || kind === 'wbfy-merge') {
     if (config.publicRepo) {
       job.secrets['GH_TOKEN'] = '${{ secrets.PUBLIC_GH_BOT_PAT }}';
     } else {
@@ -192,4 +219,21 @@ function normalizeJob(config: PackageConfig, job: any, kind: string): void {
   } else {
     delete job.secrets;
   }
+}
+
+function setSchedule(newSettings: any, inclusiveMinHourJst: number, exclusiveMaxHourJst: number): void {
+  const [minuteUtc, hourUtc] = ((newSettings.on.schedule?.[0]?.cron as string) ?? '').split(' ').map(Number);
+  if (minuteUtc !== 0 && Number.isInteger(hourUtc)) {
+    const hourJst = (hourUtc + 9) % 24;
+    const inRange =
+      inclusiveMinHourJst < exclusiveMaxHourJst
+        ? inclusiveMinHourJst <= hourJst && hourJst < exclusiveMaxHourJst
+        : inclusiveMinHourJst <= hourJst || hourJst < exclusiveMaxHourJst;
+    if (inRange) return;
+  }
+
+  const minJst = 1 + Math.floor(Math.random() * 59);
+  const hourJst = inclusiveMinHourJst + Math.floor(Math.random() * (exclusiveMaxHourJst - inclusiveMinHourJst));
+  const cron = `${minJst} ${(hourJst - 9 + 24) % 24} * * *`;
+  newSettings.on.schedule = [{ cron }];
 }
