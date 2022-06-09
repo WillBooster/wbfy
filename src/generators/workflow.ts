@@ -89,7 +89,7 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
   if (rootConfig.depending.semanticRelease) {
     fileNames.push('release.yml');
   }
-  fileNames.push('test.yml', 'wbfy.yml');
+  fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml');
 
   for (const fileName of fileNames) {
     const kind = path.basename(fileName, '.yml');
