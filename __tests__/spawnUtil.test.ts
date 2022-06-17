@@ -7,15 +7,12 @@ const testFixturePackageRoot = path.resolve('..', 'test-fixtures-for-wbfy', 'pac
 
 test.each`
   dirPath                       | expected
-  ${'yarn1'}                    | ${'1.22.17'}
-  ${'yarn1-with-node-version'}  | ${'1.22.17'}
-  ${'yarn1-with-tool-versions'} | ${'1.22.17'}
-  ${'yarn2'}                    | ${'2.4.2'}
-  ${'yarn2-with-node-version'}  | ${'2.4.2'}
-  ${'yarn2-with-tool-versions'} | ${'2.4.2'}
-  ${'yarn3'}                    | ${'3.1.1'}
-  ${'yarn3-with-node-version'}  | ${'3.1.1'}
-  ${'yarn3-with-tool-versions'} | ${'3.1.1'}
+  ${'yarn1'}                    | ${'1.22.19'}
+  ${'yarn1-with-node-version'}  | ${'1.22.19'}
+  ${'yarn1-with-tool-versions'} | ${'1.22.19'}
+  ${'berry'}                    | ${'3.2.1'}
+  ${'berry-with-node-version'}  | ${'3.2.1'}
+  ${'berry-with-tool-versions'} | ${'3.2.1'}
 `('spawnSync on $dirPath repo', ({ dirPath, expected }: { dirPath: string; expected: string }) => {
   const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
   expect(fs.existsSync(packageDirPath)).toBe(true);
