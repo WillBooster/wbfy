@@ -83,6 +83,10 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
   const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
   await fs.promises.mkdir(workflowsPath, { recursive: true });
 
+  // Remove config of semantic pull request
+  const semanticYmlPath = path.resolve(rootConfig.dirPath, '.github', 'semantic.yml');
+  void fs.promises.rm(semanticYmlPath, { recursive: true });
+
   const fileNames = (await fs.promises.readdir(workflowsPath, { withFileTypes: true }))
     .filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml'))
     .map((dirent) => dirent.name);

@@ -16,7 +16,6 @@ import { generatePackageJson } from './generators/packageJson';
 import { generatePrettierignore } from './generators/prettierignore';
 import { generateReleaserc } from './generators/releaserc';
 import { generateRenovateJson } from './generators/renovaterc';
-import { generateSemanticYml } from './generators/semanticPullRequest';
 import { generateTsconfig } from './generators/tsconfig';
 import { generateWorkflow } from './generators/workflow';
 import { generateYarnrcYml } from './generators/yarnrc';
@@ -71,7 +70,6 @@ async function main(): Promise<void> {
       generateLintstagedrc(rootConfig),
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
-      generateSemanticYml(rootConfig),
       generateWorkflow(rootConfig),
     ]);
     await promisePool.promiseAll();
