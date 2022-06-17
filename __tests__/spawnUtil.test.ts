@@ -19,6 +19,7 @@ test.each`
 `('spawnSync on $dirPath repo', ({ dirPath, expected }: { dirPath: string; expected: string }) => {
   const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
   expect(fs.existsSync(packageDirPath)).toBe(true);
+  spawnSyncWithStringResult('asdf', ['insatll'], packageDirPath);
   const version = spawnSyncWithStringResult('yarn', ['--version'], packageDirPath);
   expect(version).toBe(expected);
 });
