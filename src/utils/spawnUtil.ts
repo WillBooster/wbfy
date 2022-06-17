@@ -13,6 +13,10 @@ export function spawnSyncWithStringResult(command: string, args: string[], cwd: 
   const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
   options.stdio = 'pipe';
   const proc = child_process.spawnSync(newCmd, newArgs, options);
+  const error = proc.stderr.toString().trim();
+  if (error) {
+    console.error(`${newCmd} [${newArgs.map((s) => `"${s}"`)}] caused the following error:\n ${error}`);
+  }
   return proc.stdout.toString().trim();
 }
 
