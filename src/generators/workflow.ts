@@ -85,7 +85,7 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
 
   // Remove config of semantic pull request
   const semanticYmlPath = path.resolve(rootConfig.dirPath, '.github', 'semantic.yml');
-  void fs.promises.rm(semanticYmlPath, { recursive: true });
+  void fs.promises.rm(semanticYmlPath, { force: true, recursive: true });
 
   const fileNames = (await fs.promises.readdir(workflowsPath, { withFileTypes: true }))
     .filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml'))
