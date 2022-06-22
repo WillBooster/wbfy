@@ -91,8 +91,9 @@ android/app/src/main/assets/
         console.error(`Failed to fetch ${url}`);
         return;
       }
-      gitignoreCache.set(name, responseText);
+      gitignoreCache.set(name, responseText.trim());
     }
+    if (generated) generated += '\n\n';
     generated += gitignoreCache.get(name);
   }
   if (!(await IgnoreFileUtil.isBerryZeroInstallEnabled(filePath))) {
