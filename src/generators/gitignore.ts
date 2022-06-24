@@ -93,8 +93,8 @@ android/app/src/main/assets/
       }
       gitignoreCache.set(name, responseText.trim());
     }
-    if (generated) generated += '\n\n';
-    generated += gitignoreCache.get(name);
+    if (generated) generated += '\n';
+    generated += gitignoreCache.get(name) + '\n';
   }
   if (!(await IgnoreFileUtil.isBerryZeroInstallEnabled(filePath))) {
     generated = generated.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
