@@ -21,7 +21,7 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
   }
   if (config.containingPoetryLock) {
     updateLine('poetry 1.1.13', 0, lines);
-    updateLine('python 3.9.10', 0, lines);
+    updateLine('python 3.9.13', 0, lines);
   }
   if (config.depending.firebase) {
     updateLine('java adoptopenjdk-17.0.2+8', 0, lines);
