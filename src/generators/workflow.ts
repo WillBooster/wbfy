@@ -210,6 +210,9 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind | string)
   if (config.containingDockerfile && kind.startsWith('deploy')) {
     job.with['cpu_arch'] = 'X64';
   }
+  if (config.publicRepo) {
+    job.with['github_hosted_runner'] = true;
+  }
   if (Object.keys(job.with).length) {
     sortKeys(job.with);
   } else {
