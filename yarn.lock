@@ -5962,7 +5962,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:*":
+"node-fetch@npm:*, node-fetch@npm:3.2.10":
   version: 3.2.10
   resolution: "node-fetch@npm:3.2.10"
   dependencies:
@@ -5970,17 +5970,6 @@ __metadata:
     fetch-blob: "npm:^3.1.4"
     formdata-polyfill: "npm:^4.0.10"
   checksum: 0fe1115952074cf7ac4192654e0ffd4704fb5e92ff5af793d547775806b47b335287bb1114f5c3a1899c5f0de9f075f7babd1bd0eb8739ea8987d5db0251f433
-  languageName: node
-  linkType: hard
-
-"node-fetch@npm:3.2.9":
-  version: 3.2.9
-  resolution: "node-fetch@npm:3.2.9"
-  dependencies:
-    data-uri-to-buffer: "npm:^4.0.0"
-    fetch-blob: "npm:^3.1.4"
-    formdata-polyfill: "npm:^4.0.10"
-  checksum: 52842860711a6c5fee7d13ae999b0540221f11d1b122634a4093e152e9c24485dec9a45bacd39e8ec80a6c236a24cd929b431874527014def2e9a6c625071176
   languageName: node
   linkType: hard
 
@@ -8207,7 +8196,7 @@ __metadata:
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.5"
     minimal-promise-pool: "npm:1.1.4"
-    node-fetch: "npm:3.2.9"
+    node-fetch: "npm:3.2.10"
     pinst: "npm:3.0.0"
     prettier: "npm:2.7.1"
     semantic-release: "npm:19.0.3"
