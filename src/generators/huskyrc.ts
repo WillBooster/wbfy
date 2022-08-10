@@ -11,7 +11,7 @@ const settings = {
   preCommit: 'yarn lint-staged',
   prePush: `yarn typecheck`,
   prePushForLab: `
-if [ $(git branch --show-current) = "main" ]; then
+if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
   echo "************************************************"
   echo "*** Don't push main branch directly. Use PR! ***"
   echo "************************************************"
