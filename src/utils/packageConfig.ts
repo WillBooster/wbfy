@@ -4,7 +4,7 @@ import path from 'path';
 
 import glob from 'glob';
 import yaml from 'js-yaml';
-import simpleGit from 'simple-git';
+import { simpleGit } from 'simple-git';
 
 import { fetchOnNode } from './fetchOnNode';
 

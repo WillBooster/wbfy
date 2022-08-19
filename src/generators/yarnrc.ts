@@ -3,11 +3,18 @@ import path from 'path';
 
 import yaml from 'js-yaml';
 
+import { logger } from '../logger';
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
 
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
+  return logger.function('generateYarnrcYml', async () => {
+    await core(config);
+  });
+}
+
+async function core(config: PackageConfig): Promise<void> {
   const currentVersion = spawnSyncWithStringResult('yarn', ['--version'], config.dirPath);
   const latestVersion = spawnSyncWithStringResult('npm', ['show', '@yarnpkg/cli', 'version'], config.dirPath);
   if (currentVersion !== latestVersion) {

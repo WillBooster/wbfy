@@ -1,11 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 
+import { logger } from '../logger';
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
+  return logger.function('generateVersionConfigs', async () => {
+    await core(config);
+  });
+}
+
+async function core(config: PackageConfig): Promise<void> {
   if (!config.versionsText) return;
 
   const lines: string[] = [];

@@ -5,6 +5,7 @@ import merge from 'deepmerge';
 import yaml from 'js-yaml';
 import cloneDeep from 'lodash.clonedeep';
 
+import { logger } from '../logger';
 import { combineMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
 import { PackageConfig } from '../utils/packageConfig';
@@ -80,36 +81,27 @@ const semanticPullRequestWorkflow = {
 type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr';
 
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
-  const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
-  await fs.promises.mkdir(workflowsPath, { recursive: true });
+  return logger.function('generateWorkflow', async () => {
+    const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
+    await fs.promises.mkdir(workflowsPath, { recursive: true });
 
-  // Remove config of semantic pull request
-  const semanticYmlPath = path.resolve(rootConfig.dirPath, '.github', 'semantic.yml');
-  void fs.promises.rm(semanticYmlPath, { force: true, recursive: true });
+    // Remove config of semantic pull request
+    const semanticYmlPath = path.resolve(rootConfig.dirPath, '.github', 'semantic.yml');
+    await promisePool.run(() => fs.promises.rm(semanticYmlPath, { force: true, recursive: true }));
 
-  const fileNames = (await fs.promises.readdir(workflowsPath, { withFileTypes: true }))
-    .filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml'))
-    .map((dirent) => dirent.name);
-  if (rootConfig.depending.semanticRelease) {
-    fileNames.push('release.yml');
-  }
-  fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml');
+    const fileNames = (await fs.promises.readdir(workflowsPath, { withFileTypes: true }))
+      .filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml'))
+      .map((dirent) => dirent.name);
+    if (rootConfig.depending.semanticRelease) {
+      fileNames.push('release.yml');
+    }
+    fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml');
 
-  for (const fileName of fileNames) {
-    const kind = path.basename(fileName, '.yml');
-    await promisePool.run(() => writeWorkflowYaml(rootConfig, workflowsPath, kind));
-  }
-}
-
-async function writeYaml(newSettings: any, filePath: string): Promise<void> {
-  const yamlText = yaml.dump(newSettings, {
-    lineWidth: -1,
-    noCompatMode: true,
-    styles: {
-      '!!null': 'empty',
-    },
+    for (const fileName of fileNames) {
+      const kind = path.basename(fileName, '.yml');
+      await promisePool.run(() => writeWorkflowYaml(rootConfig, workflowsPath, kind));
+    }
   });
-  await promisePool.run(() => fs.promises.writeFile(filePath, yamlText));
 }
 
 async function writeWorkflowYaml(
@@ -161,9 +153,9 @@ async function writeWorkflowYaml(
   await writeYaml(newSettings, filePath);
 
   if (kind === 'release') {
-    await promisePool.run(() => fs.promises.rm(path.join(workflowsPath, 'semantic-release.yml'), { force: true }));
+    await fs.promises.rm(path.join(workflowsPath, 'semantic-release.yml'), { force: true });
   } else if (kind === 'sync') {
-    await promisePool.run(() => fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true }));
+    await fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true });
     if (!newSettings.jobs.sync) return;
 
     newSettings.jobs['sync-force'] = newSettings.jobs.sync;
@@ -241,4 +233,15 @@ function setSchedule(newSettings: any, inclusiveMinHourJst: number, exclusiveMax
   const hourJst = inclusiveMinHourJst + Math.floor(Math.random() * (exclusiveMaxHourJst - inclusiveMinHourJst));
   const cron = `${minJst} ${(hourJst - 9 + 24) % 24} * * *`;
   newSettings.on.schedule = [{ cron }];
+}
+
+async function writeYaml(newSettings: any, filePath: string): Promise<void> {
+  const yamlText = yaml.dump(newSettings, {
+    lineWidth: -1,
+    noCompatMode: true,
+    styles: {
+      '!!null': 'empty',
+    },
+  });
+  await fs.promises.writeFile(filePath, yamlText);
 }

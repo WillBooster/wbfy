@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { logger } from '../logger';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
@@ -24,21 +25,23 @@ test-fixtures/
 `;
 
 export async function generatePrettierignore(config: PackageConfig): Promise<void> {
-  const filePath = path.resolve(config.dirPath, '.prettierignore');
-  const userContent = (await IgnoreFileUtil.getUserContent(filePath)) || defaultUserContent;
+  return logger.function('generatePrettierignore', async () => {
+    const filePath = path.resolve(config.dirPath, '.prettierignore');
+    const userContent = (await IgnoreFileUtil.getUserContent(filePath)) || defaultUserContent;
 
-  const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
-  const gitignoreContent = (await IgnoreFileUtil.getExistingContent(gitignoreFilePath)) || '';
+    const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
+    const gitignoreContent = (await IgnoreFileUtil.getExistingContent(gitignoreFilePath)) || '';
 
-  let additionalContent = '';
-  if (config.containingPubspecYaml) {
-    additionalContent = `
+    let additionalContent = '';
+    if (config.containingPubspecYaml) {
+      additionalContent = `
 android/app/
 ios/Runner/Assets.xcassets/
 pubspec.yaml
 `;
-  }
+    }
 
-  const newContent = userContent + commonContent + additionalContent + gitignoreContent;
-  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+    const newContent = userContent + commonContent + additionalContent + gitignoreContent;
+    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+  });
 }

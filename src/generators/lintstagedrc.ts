@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import { logger } from '../logger';
 import { EslintUtil } from '../utils/eslintUtil';
 import { extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
@@ -9,6 +10,12 @@ import { promisePool } from '../utils/promisePool';
 import { getSrcDirs } from '../utils/srcDirectories';
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
+  return logger.function('generateLintstagedrc', async () => {
+    await core(config);
+  });
+}
+
+async function core(config: PackageConfig): Promise<void> {
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
     const eslint = `

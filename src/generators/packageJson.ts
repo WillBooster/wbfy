@@ -3,6 +3,7 @@ import path from 'path';
 
 import merge from 'deepmerge';
 
+import { logger } from '../logger';
 import { EslintUtil } from '../utils/eslintUtil';
 import { extensions } from '../utils/extensions';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
@@ -41,6 +42,12 @@ export async function generatePackageJson(
   rootConfig: PackageConfig,
   skipAddingDeps: boolean
 ): Promise<void> {
+  return logger.function('generatePackageJson', async () => {
+    await core(config, skipAddingDeps);
+  });
+}
+
+async function core(config: PackageConfig, skipAddingDeps: boolean): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fs.promises.readFile(filePath, 'utf-8');
   const jsonObj = JSON.parse(jsonText);

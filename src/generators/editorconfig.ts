@@ -1,5 +1,6 @@
 import path from 'path';
 
+import { logger } from '../logger';
 import { extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
 import { PackageConfig } from '../utils/packageConfig';
@@ -34,8 +35,10 @@ indent_style = tab
 `;
 
 export async function generateEditorconfig(config: PackageConfig): Promise<void> {
-  const filePath = path.resolve(config.dirPath, '.editorconfig');
-  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+  return logger.function('generateEditorconfig', async () => {
+    const filePath = path.resolve(config.dirPath, '.editorconfig');
+    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+  });
 }
 
 function generateExtensions(extensions: string[]): string {

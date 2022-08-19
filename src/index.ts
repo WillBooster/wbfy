@@ -19,6 +19,7 @@ import { generateRenovateJson } from './generators/renovaterc';
 import { generateTsconfig } from './generators/tsconfig';
 import { generateWorkflow } from './generators/workflow';
 import { generateYarnrcYml } from './generators/yarnrc';
+import { options } from './options';
 import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { promisePool } from './utils/promisePool';
 import { spawnSync } from './utils/spawnUtil';
@@ -34,6 +35,7 @@ async function main(): Promise<void> {
     .alias('v', 'verbose')
     .boolean('verbose')
     .default('verbose', false).argv;
+  options.isVerbose = argv.verbose;
 
   for (const rootDirPath of argv._) {
     if (typeof rootDirPath === 'number') continue;
@@ -52,9 +54,9 @@ async function main(): Promise<void> {
     ) as PackageConfig[];
     const allPackageConfigs = [rootConfig, ...subPackageConfigs];
 
-    if (argv.verbose) {
+    if (options.isVerbose) {
       for (const config of allPackageConfigs) {
-        console.log(config);
+        console.info(config);
       }
     }
 

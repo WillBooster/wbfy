@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import { logger } from '../logger';
 import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync } from '../utils/spawnUtil';
@@ -23,6 +24,12 @@ yarn typecheck`.trim(),
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
+  return logger.function('generateHuskyrc', async () => {
+    await core(config);
+  });
+}
+
+async function core(config: PackageConfig): Promise<void> {
   const packageJsonPath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fs.promises.readFile(packageJsonPath, 'utf-8');
   const packageJson = JSON.parse(jsonText);
