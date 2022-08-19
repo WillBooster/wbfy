@@ -1,10 +1,14 @@
+import fs from 'fs';
+import os from 'os';
 import path from 'path';
 
 import { logger } from '../logger';
+import { options } from '../options';
 import { fetchOnNode } from '../utils/fetchOnNode';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { PackageConfig } from '../utils/packageConfig';
+import { promisePool } from '../utils/promisePool';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 
@@ -22,8 +26,6 @@ Icon[\r]
 *.sqlite3
 *.sqlite3-journal
 `;
-
-const gitignoreCache = new Map<string, string>();
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateGitignore', async () => {
@@ -85,7 +87,8 @@ android/app/src/main/assets/
 
     let generated = '';
     for (const name of names) {
-      if (!gitignoreCache.has(name)) {
+      let content = (await readCache(name)) ?? '';
+      if (!content) {
         const url = `https://www.toptal.com/developers/gitignore/api/${name}`;
         const response = await fetchOnNode(url);
         const responseText = await response.text();
@@ -93,10 +96,14 @@ android/app/src/main/assets/
           console.error(`Failed to fetch ${url}`);
           return;
         }
-        gitignoreCache.set(name, responseText.trim());
+        content = responseText.trim();
+        await promisePool.run(() => writeCache(name, content));
+        if (options.isVerbose) {
+          console.info(`Fetched ${url}`);
+        }
       }
       if (generated) generated += '\n';
-      generated += gitignoreCache.get(name) + '\n';
+      generated += content + '\n';
     }
     if (!(await IgnoreFileUtil.isBerryZeroInstallEnabled(filePath))) {
       generated = generated.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
@@ -120,6 +127,25 @@ android/app/src/main/assets/
       generated = generated.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
     }
     const newContent = userContent + generated;
-    await FsUtil.generateFile(filePath, newContent);
+    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
   });
+}
+
+const dirPath = path.join(os.homedir(), '.cache', 'wbfy', 'gitignore');
+
+async function writeCache(name: string, content: string): Promise<void> {
+  await fs.promises.mkdir(dirPath, { recursive: true });
+  await fs.promises.writeFile(path.join(dirPath, name), content);
+}
+
+async function readCache(name: string): Promise<string | undefined> {
+  try {
+    const stat = await fs.promises.stat(path.join(dirPath, name));
+    if (Date.now() - stat.mtimeMs > 6 * 60 * 60 * 1000) {
+      return;
+    }
+    return await fs.promises.readFile(path.join(dirPath, name), 'utf-8');
+  } catch {
+    // do nothing
+  }
 }
