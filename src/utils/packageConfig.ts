@@ -6,7 +6,7 @@ import glob from 'glob';
 import yaml from 'js-yaml';
 import { simpleGit } from 'simple-git';
 
-import { fetchOnNode } from './fetchOnNode';
+import { gitHubUtil, octokit } from './githubUtil';
 
 export interface PackageConfig {
   dirPath: string;
@@ -196,21 +196,18 @@ async function getRepoInfo(dirPath: string, packageJson: any): Promise<Record<st
 }
 
 async function fetchRepoInfo(urlOrFullName: string): Promise<Record<string, any> | undefined> {
-  const urlWithoutProtocol = urlOrFullName.split(':').at(-1);
-  const names = urlWithoutProtocol?.split('/');
-  const org = names?.at(-2);
-  const name = names?.at(-1)?.replace(/.git$/, '');
+  const [org, name] = gitHubUtil.getOrgAndName(urlOrFullName);
   if (!org || !name) return;
 
-  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
-  const opts = token
-    ? {
-        headers: {
-          Authorization: `token ${token}`,
-        },
-      }
-    : undefined;
-  const res = await fetchOnNode(`https://api.github.com/repos/${org}/${name}`, opts);
-  const json = (await res.json()) as any;
-  return { full_name: `${org}/${name}`, ...(json ?? {}) };
+  const ret = { full_name: `${org}/${name}` };
+  try {
+    const response = await octokit.request('GET /repos/{owner}/{repo}', {
+      owner: org,
+      repo: name,
+    });
+    Object.assign(ret, response.data);
+  } catch (e) {
+    // do nothing
+  }
+  return ret;
 }

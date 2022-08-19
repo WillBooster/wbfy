@@ -78,7 +78,24 @@ const semanticPullRequestWorkflow = {
   },
 };
 
-type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr';
+const notifyReadyWorkflow = {
+  name: 'Notify ready',
+  on: {
+    issues: {
+      types: ['labeled'],
+    },
+  },
+  jobs: {
+    'notify-ready': {
+      uses: 'WillBoosterLab/reusable-workflows/.github/workflows/notify-ready.yml@main',
+      secrets: {
+        DISCORD_WEBHOOK_URL: '${{ secrets.READY_DISCORD_WEBHOOK_URL }}',
+      },
+    },
+  },
+};
+
+type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready';
 
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateWorkflow', async () => {
@@ -94,6 +111,9 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
       .map((dirent) => dirent.name);
     if (rootConfig.depending.semanticRelease) {
       fileNames.push('release.yml');
+    }
+    if (rootConfig.publicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
+      fileNames.push('notify-ready.yml');
     }
     fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml');
 
@@ -120,6 +140,8 @@ async function writeWorkflowYaml(
     newSettings = wbfyMergeWorkflow;
   } else if (kind === 'semantic-pr') {
     newSettings = semanticPullRequestWorkflow;
+  } else if (kind === 'notify-ready') {
+    newSettings = notifyReadyWorkflow;
   }
   newSettings = cloneDeep(newSettings);
 

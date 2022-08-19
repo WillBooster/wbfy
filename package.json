@@ -21,7 +21,7 @@
     "postpack": "pinst --enable",
     "prettify": "prettier --color --write \"**/{.*/,}*.{cjs,css,htm,html,js,json,json5,jsx,md,mjs,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\"",
     "release": "yarn build && semantic-release",
-    "start": "node -r esbuild-register src",
+    "start": "dotenv -- node -r esbuild-register src",
     "test": "yarn jest --color __tests__",
     "test/ci-setup": "cd .. && pwd && rm -Rf test-fixtures-for-wbfy && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
     "typecheck": "tsc --noEmit --Pretty"
@@ -31,9 +31,13 @@
     "npm/chalk": "^4.1.2"
   },
   "dependencies": {
+    "@octokit/core": "4.0.5",
     "deepmerge": "4.2.2",
+    "dotenv": "16.0.1",
+    "dotenv-cli": "6.0.0",
     "glob": "8.0.3",
     "js-yaml": "4.1.0",
+    "libsodium-wrappers": "0.7.10",
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "1.1.4",
     "node-fetch": "3.2.10",
@@ -45,6 +49,7 @@
     "@types/glob": "7.2.0",
     "@types/jest": "28.1.6",
     "@types/js-yaml": "4.0.5",
+    "@types/libsodium-wrappers": "0.7.9",
     "@types/lodash.clonedeep": "4.5.7",
     "@types/micromatch": "4.0.2",
     "@types/node": "16.11.48",

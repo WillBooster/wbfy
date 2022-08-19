@@ -1029,6 +1029,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/core@npm:4.0.5":
+  version: 4.0.5
+  resolution: "@octokit/core@npm:4.0.5"
+  dependencies:
+    "@octokit/auth-token": "npm:^3.0.0"
+    "@octokit/graphql": "npm:^5.0.0"
+    "@octokit/request": "npm:^6.0.0"
+    "@octokit/request-error": "npm:^3.0.0"
+    "@octokit/types": "npm:^7.0.0"
+    before-after-hook: "npm:^2.2.0"
+    universal-user-agent: "npm:^6.0.0"
+  checksum: 35f3f2b934405ebe84d739be382524cd69401c0995fb9e1639856fa08d2beee63b98f90e8209a03f426d31a3f1a94a8ae2e2c0b80c2528503d6639604cb7cfc0
+  languageName: node
+  linkType: hard
+
 "@octokit/core@npm:^4.0.0":
   version: 4.0.4
   resolution: "@octokit/core@npm:4.0.4"
@@ -1070,6 +1085,13 @@ __metadata:
   version: 12.11.0
   resolution: "@octokit/openapi-types@npm:12.11.0"
   checksum: cec1e031fc1764afd7dd5e7211bd1fb430d9ed4e1409ee5955a375921ce757705bb711797536a77f732ea12e8ee9a1324c7012dbac54c8bc63b25ebc063f501b
+  languageName: node
+  linkType: hard
+
+"@octokit/openapi-types@npm:^13.1.0":
+  version: 13.2.0
+  resolution: "@octokit/openapi-types@npm:13.2.0"
+  checksum: df32cc26f02af98cbbb11e01907dddfc3b5b31f5ee65e93ddf7bc20a067c169446c565751a4b84e79d45385496ba62dc7e1b117520298e19e413fa433f96cbb3
   languageName: node
   linkType: hard
 
@@ -1148,6 +1170,15 @@ __metadata:
   dependencies:
     "@octokit/openapi-types": "npm:^12.11.0"
   checksum: 05c2d20e08578dbd5978e640a55282cbbb8ed0cbdc6ea3707b20572bac4e32a2ca70f9d5c4589fc6d87dd3fee677039a8fab51f1ecce626e519a4b520e2ce9e4
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^7.0.0":
+  version: 7.1.0
+  resolution: "@octokit/types@npm:7.1.0"
+  dependencies:
+    "@octokit/openapi-types": "npm:^13.1.0"
+  checksum: 8812f4626148e2dcf00ebf1471daf100ca8c380f28e2233d293a8ae927ba4399e75af966f582d9bd26c217f3e8eb5d05dc3ada24732bbe0ebd4586c3bf7b0874
   languageName: node
   linkType: hard
 
@@ -1434,6 +1465,13 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 4f7f0667d7573ce2888e01e5e887c9661bb2a7e7fd79aae3c57391e812e87cc2fadc4dc1616530f33e63798a011fabe816f41730b511050aba702688466765fd
+  languageName: node
+  linkType: hard
+
+"@types/libsodium-wrappers@npm:0.7.9":
+  version: 0.7.9
+  resolution: "@types/libsodium-wrappers@npm:0.7.9"
+  checksum: 36542ddd4d51ab25b67b3ac50584ed84115c60815cbee4a97d38555f356133e71141533da2e488fbcc5c28050221f56a8943fef5cc428d8a6fc4f4a1021a195f
   languageName: node
   linkType: hard
 
@@ -2853,6 +2891,34 @@ __metadata:
   dependencies:
     is-obj: "npm:^2.0.0"
   checksum: 640302936faf887e4772e97f33efdc1d12adc33183503497687f0400ef832f1596e81f19a9d0f641a8e3312e9cbaa1a5d6620783dda0113871064dc9dec4a30d
+  languageName: node
+  linkType: hard
+
+"dotenv-cli@npm:6.0.0":
+  version: 6.0.0
+  resolution: "dotenv-cli@npm:6.0.0"
+  dependencies:
+    cross-spawn: "npm:^7.0.3"
+    dotenv: "npm:^16.0.0"
+    dotenv-expand: "npm:^8.0.1"
+    minimist: "npm:^1.2.5"
+  bin:
+    dotenv: cli.js
+  checksum: 5d0c5aaa1ca219d5cee1b02066b29e017772da088062a8069954ba9c5a0bb491c3390fd36ebdbdcd713b34819202bf2a04a94f57bf721f40237abbfc146efaad
+  languageName: node
+  linkType: hard
+
+"dotenv-expand@npm:^8.0.1":
+  version: 8.0.3
+  resolution: "dotenv-expand@npm:8.0.3"
+  checksum: 8861e588d50a81f155ae67dde4b22caba01eb7b87c20d6eecb5d9d7de0682fddfbc4357de5345e2e1efd94909d978d6af33125f39dec6de609a5dc472f8dbb68
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:16.0.1, dotenv@npm:^16.0.0":
+  version: 16.0.1
+  resolution: "dotenv@npm:16.0.1"
+  checksum: beb53488e342583049efbd1afb4488e97fbcecf2052607e512a3871239a3976fc437a01a8ed9e6fcef6adc316796895c89f95fe0a7faa08c77ba8c22794ea1fc
   languageName: node
   linkType: hard
 
@@ -5468,6 +5534,22 @@ __metadata:
     proc-log: "npm:^2.0.0"
     semver: "npm:^7.3.7"
   checksum: 9be53a188cc05aba1810f22175e785596ca9736572e2cbef38f869d4c31fbacfab302599356e1508d9de563645d96c807dee34f58a565c5199c28127db89bd10
+  languageName: node
+  linkType: hard
+
+"libsodium-wrappers@npm:0.7.10":
+  version: 0.7.10
+  resolution: "libsodium-wrappers@npm:0.7.10"
+  dependencies:
+    libsodium: "npm:^0.7.0"
+  checksum: 8f7d97a706b4912d8c896c1ef40f08333b12c996d7b16004db88c8ca15815ca123efbc07e2649055a2ad4d24365a98e21ca5f8bf60671aef63af2c85435598b7
+  languageName: node
+  linkType: hard
+
+"libsodium@npm:^0.7.0":
+  version: 0.7.10
+  resolution: "libsodium@npm:0.7.10"
+  checksum: 1d151eefa88b72faaf92857c211d731a9510c1404fc95b92bedfbadf69e2266d60e2147c622a426bb3077d76fea884973b014994e511710ecc4052c1d7273a91
   languageName: node
   linkType: hard
 
@@ -8275,10 +8357,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "wbfy@workspace:."
   dependencies:
+    "@octokit/core": "npm:4.0.5"
     "@types/eslint": "npm:8.4.5"
     "@types/glob": "npm:7.2.0"
     "@types/jest": "npm:28.1.6"
     "@types/js-yaml": "npm:4.0.5"
+    "@types/libsodium-wrappers": "npm:0.7.9"
     "@types/lodash.clonedeep": "npm:4.5.7"
     "@types/micromatch": "npm:4.0.2"
     "@types/node": "npm:16.11.48"
@@ -8291,6 +8375,8 @@ __metadata:
     "@willbooster/renovate-config": "npm:9.3.0"
     conventional-changelog-conventionalcommits: "npm:5.0.0"
     deepmerge: "npm:4.2.2"
+    dotenv: "npm:16.0.1"
+    dotenv-cli: "npm:6.0.0"
     esbuild: "npm:0.15.2"
     esbuild-register: "npm:3.3.3"
     eslint: "npm:8.21.0"
@@ -8303,6 +8389,7 @@ __metadata:
     husky: "npm:8.0.1"
     jest: "npm:28.1.3"
     js-yaml: "npm:4.1.0"
+    libsodium-wrappers: "npm:0.7.10"
     lint-staged: "npm:13.0.3"
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.5"

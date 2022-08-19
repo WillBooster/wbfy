@@ -19,6 +19,7 @@ import { generateRenovateJson } from './generators/renovaterc';
 import { generateTsconfig } from './generators/tsconfig';
 import { generateWorkflow } from './generators/workflow';
 import { generateYarnrcYml } from './generators/yarnrc';
+import { setupSecrets } from './github/secrets';
 import { options } from './options';
 import { getPackageConfig, PackageConfig } from './utils/packageConfig';
 import { promisePool } from './utils/promisePool';
@@ -73,6 +74,7 @@ async function main(): Promise<void> {
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
       generateWorkflow(rootConfig),
+      setupSecrets(rootConfig),
     ]);
     await promisePool.promiseAll();
 
