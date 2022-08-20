@@ -83,6 +83,7 @@ async function main(): Promise<void> {
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
       await generateGitignore(config, rootConfig);
+      await promisePool.promiseAll();
       if (!config.root && !config.containingPackageJson) {
         continue;
       }
