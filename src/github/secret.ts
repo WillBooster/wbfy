@@ -2,11 +2,13 @@ import dotenv from 'dotenv';
 import sodium from 'libsodium-wrappers';
 
 import { logger } from '../logger';
-import { gitHubUtil, octokit } from '../utils/githubUtil';
+import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil';
 import { PackageConfig } from '../utils/packageConfig';
 
 export async function setupSecrets(config: PackageConfig): Promise<void> {
   return logger.function('setupSecrets', async () => {
+    if (!hasGitHubToken) return;
+
     const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');
     if (!owner || !repo || owner !== 'WillBoosterLab') return;
 
@@ -45,7 +47,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
         });
       }
     } catch (e) {
-      console.warn('Skip setupSecrets due to no admin rights.');
+      console.warn('Skip setupSecrets due to:', (e as Error)?.stack ?? e);
     }
   });
 }
