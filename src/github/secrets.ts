@@ -14,8 +14,9 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
     if (Object.keys(parsed).length === 0) return;
 
     try {
-      const response = await octokit.request('GET /orgs/{org}/actions/secrets/public-key', {
-        org: owner,
+      const response = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', {
+        owner,
+        repo,
       });
       const { key, key_id: keyId } = response.data;
 
