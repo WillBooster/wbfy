@@ -118,17 +118,14 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
     fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml');
 
     for (const fileName of fileNames) {
-      const kind = path.basename(fileName, '.yml');
+      // 実際はKnownKind以外の値も代入されることに注意
+      const kind = path.basename(fileName, '.yml') as KnownKind;
       await promisePool.run(() => writeWorkflowYaml(rootConfig, workflowsPath, kind));
     }
   });
 }
 
-async function writeWorkflowYaml(
-  config: PackageConfig,
-  workflowsPath: string,
-  kind: KnownKind | string
-): Promise<void> {
+async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
   let newSettings: any = {};
   if (kind === 'test') {
     newSettings = testWorkflow;
@@ -192,7 +189,7 @@ async function writeWorkflowYaml(
   }
 }
 
-function normalizeJob(config: PackageConfig, job: any, kind: KnownKind | string): void {
+function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   job.with ||= {};
   job.secrets ||= {};
 
@@ -224,8 +221,13 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind | string)
   if (config.containingDockerfile && kind.startsWith('deploy')) {
     job.with['cpu_arch'] = 'X64';
   }
-  if (config.publicRepo) {
-    job.with['github_hosted_runner'] = true;
+  // Because github.event.repository.private is always true if job is scheduled
+  if (kind === 'release' || kind === 'test' || kind === 'wbfy' || kind === 'wbfy-merge' || kind.startsWith('deploy')) {
+    if (config.publicRepo) {
+      job.with['github_hosted_runner'] = true;
+    }
+  } else {
+    delete job.with['github_hosted_runner'];
   }
   if (Object.keys(job.with).length) {
     sortKeys(job.with);
