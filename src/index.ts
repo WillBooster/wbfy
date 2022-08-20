@@ -14,6 +14,7 @@ import { generateIdeaSettings } from './generators/idea';
 import { generateLintstagedrc } from './generators/lintstagedrc';
 import { generatePackageJson } from './generators/packageJson';
 import { generatePrettierignore } from './generators/prettierignore';
+import { generateReadme } from './generators/readme';
 import { generateReleaserc } from './generators/releaserc';
 import { generateRenovateJson } from './generators/renovaterc';
 import { generateTsconfig } from './generators/tsconfig';
@@ -22,7 +23,7 @@ import { generateYarnrcYml } from './generators/yarnrc';
 import { setupLabels } from './github/label';
 import { setupSecrets } from './github/secret';
 import { options } from './options';
-import { getPackageConfig, PackageConfig } from './utils/packageConfig';
+import { getPackageConfig, PackageConfig } from './packageConfig';
 import { promisePool } from './utils/promisePool';
 import { spawnSync } from './utils/spawnUtil';
 
@@ -72,6 +73,7 @@ async function main(): Promise<void> {
       generateHuskyrc(rootConfig),
       generateIdeaSettings(rootConfig),
       generateLintstagedrc(rootConfig),
+      generateReadme(rootConfig),
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
       generateWorkflow(rootConfig),

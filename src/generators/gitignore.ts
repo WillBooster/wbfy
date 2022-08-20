@@ -4,10 +4,10 @@ import path from 'path';
 
 import { logger } from '../logger';
 import { options } from '../options';
+import { PackageConfig } from '../packageConfig';
 import { fetchOnNode } from '../utils/fetchOnNode';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];

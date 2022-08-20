@@ -4,7 +4,7 @@ import path from 'path';
 import yaml from 'js-yaml';
 
 import { logger } from '../logger';
-import { PackageConfig } from '../utils/packageConfig';
+import { PackageConfig } from '../packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
 

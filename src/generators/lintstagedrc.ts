@@ -2,10 +2,10 @@ import fs from 'fs';
 import path from 'path';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { EslintUtil } from '../utils/eslintUtil';
 import { extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { getSrcDirs } from '../utils/srcDirectories';
 

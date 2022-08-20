@@ -1,9 +1,9 @@
 import path from 'path';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 
 const defaultUserContent = `${IgnoreFileUtil.header}

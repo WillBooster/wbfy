@@ -1,6 +1,6 @@
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil';
-import { PackageConfig } from '../utils/packageConfig';
 
 export async function setupLabels(config: PackageConfig): Promise<void> {
   return logger.function('setupLabels', async () => {

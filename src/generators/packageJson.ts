@@ -4,10 +4,10 @@ import path from 'path';
 import merge from 'deepmerge';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { EslintUtil } from '../utils/eslintUtil';
 import { extensions } from '../utils/extensions';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync } from '../utils/spawnUtil';
 import { getSrcDirs } from '../utils/srcDirectories';

@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 import sodium from 'libsodium-wrappers';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil';
-import { PackageConfig } from '../utils/packageConfig';
 
 export async function setupSecrets(config: PackageConfig): Promise<void> {
   return logger.function('setupSecrets', async () => {

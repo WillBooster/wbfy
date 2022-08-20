@@ -6,9 +6,9 @@ import yaml from 'js-yaml';
 import cloneDeep from 'lodash.clonedeep';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { combineMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 
 const testWorkflow = {

@@ -6,7 +6,7 @@ import glob from 'glob';
 import yaml from 'js-yaml';
 import { simpleGit } from 'simple-git';
 
-import { gitHubUtil, octokit } from './githubUtil';
+import { gitHubUtil, octokit } from './utils/githubUtil';
 
 export interface PackageConfig {
   dirPath: string;

@@ -5,10 +5,10 @@ import merge from 'deepmerge';
 import cloneDeep from 'lodash.clonedeep';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 
 const rootJsonObj = {

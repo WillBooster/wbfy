@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { FsUtil } from '../utils/fsUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 
 export async function generateReleaserc(rootConfig: PackageConfig): Promise<void> {

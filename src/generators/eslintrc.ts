@@ -4,9 +4,9 @@ import path from 'path';
 import merge from 'deepmerge';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { FsUtil } from '../utils/fsUtil';
 import { combineMerge } from '../utils/mergeUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {

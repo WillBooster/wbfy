@@ -1,9 +1,9 @@
 import path from 'path';
 
 import { logger } from '../logger';
+import { PackageConfig } from '../packageConfig';
 import { extensions } from '../utils/extensions';
 import { FsUtil } from '../utils/fsUtil';
-import { PackageConfig } from '../utils/packageConfig';
 import { promisePool } from '../utils/promisePool';
 
 const newContent = `root = true
