@@ -236,7 +236,9 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   }
 
   if (Object.keys(job.secrets).length) {
-    sortKeys(job.secrets);
+    const newSecrets = sortKeys(job.secrets);
+    delete job.secrets;
+    job.secrets = newSecrets;
   } else {
     delete job.secrets;
   }

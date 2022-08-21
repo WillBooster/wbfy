@@ -9,7 +9,7 @@ import { promisePool } from '../utils/promisePool';
 export async function generateReadme(config: PackageConfig): Promise<void> {
   return logger.function('generateReadme', async () => {
     const filePath = path.resolve(config.dirPath, 'README.md');
-    let newContent = JSON.parse(await fs.promises.readFile(filePath, 'utf8'));
+    let newContent = await fs.promises.readFile(filePath, 'utf8');
 
     const useSemanticRelease = fs.existsSync(path.resolve(config.dirPath, '.releaserc.json'));
     if (useSemanticRelease) {
