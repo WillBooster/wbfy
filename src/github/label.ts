@@ -11,12 +11,19 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
     if (!config.publicRepo && owner === 'WillBooster') return;
 
     try {
-      // TODO: create `ready` and `review requested` labels
-      // c.f. https://docs.github.com/ja/rest/issues/labels#create-a-label
-      // const response = await octokit.request('XXXXXXXX', {
-      //   owner,
-      //   repo,
-      // });
+      await octokit.request('POST /repos/{owner}/{repo}/labels', {
+        owner: owner,
+        repo: repo,
+        name: 'ready',
+        color: '1B8D81',
+      });
+
+      await octokit.request('POST /repos/{owner}/{repo}/labels', {
+        owner: owner,
+        repo: repo,
+        name: 'review requested',
+        color: 'FBCA04',
+      });
     } catch (e) {
       console.warn('Skip setupLabels due to:', (e as Error)?.stack ?? e);
     }
