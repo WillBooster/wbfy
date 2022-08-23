@@ -13,15 +13,15 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
     try {
       try {
         await octokit.request('POST /repos/{owner}/{repo}/labels', {
-          owner: owner,
-          repo: repo,
+          owner,
+          repo,
           name: 'ready',
           color: '0E8A16',
         });
       } catch (e) {
         await octokit.request('PATCH /repos/{owner}/{repo}/labels/{name}', {
-          owner: owner,
-          repo: repo,
+          owner,
+          repo,
           name: 'ready',
           color: '0E8A16',
         });
@@ -29,15 +29,15 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
 
       try {
         await octokit.request('POST /repos/{owner}/{repo}/labels', {
-          owner: owner,
-          repo: repo,
+          owner,
+          repo,
           name: 'review requested',
           color: 'FBCA04',
         });
       } catch (e) {
         await octokit.request('PATCH /repos/{owner}/{repo}/labels/{name}', {
-          owner: owner,
-          repo: repo,
+          owner,
+          repo,
           name: 'review requested',
           color: 'FBCA04',
         });
