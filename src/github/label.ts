@@ -16,14 +16,14 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
           owner: owner,
           repo: repo,
           name: 'ready',
-          color: '1B8D81',
+          color: '0E8A16',
         });
       } catch (e) {
         await octokit.request('PATCH /repos/{owner}/{repo}/labels/{name}', {
           owner: owner,
           repo: repo,
           name: 'ready',
-          color: '1B8D81',
+          color: '0E8A16',
         });
       }
 
