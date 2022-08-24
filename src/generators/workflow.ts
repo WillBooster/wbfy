@@ -95,7 +95,21 @@ const notifyReadyWorkflow = {
   },
 };
 
-type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready';
+const closeComment = {
+  name: 'editComment',
+  on: {
+    pull_request: {
+      types: ['opened'],
+    },
+  },
+  jobs: {
+    'close-comment': {
+      uses: 'WillBoosterLab / reusable - workflows /.github / workflows / close - comment.yml@main',
+    },
+  },
+}
+
+type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready' | 'close-comment';
 
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateWorkflow', async () => {
