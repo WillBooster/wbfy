@@ -107,7 +107,7 @@ const closeComment = {
       uses: 'WillBoosterLab / reusable - workflows /.github / workflows / close - comment.yml@main',
     },
   },
-}
+};
 
 type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready' | 'close-comment';
 
@@ -153,6 +153,8 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     newSettings = semanticPullRequestWorkflow;
   } else if (kind === 'notify-ready') {
     newSettings = notifyReadyWorkflow;
+  } else if (kind === 'close-comment') {
+    newSettings = closeComment;
   }
   newSettings = cloneDeep(newSettings);
 
