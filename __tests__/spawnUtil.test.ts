@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
+import { getLatestVersion } from '../src/generators/yarnrc';
 import { spawnSyncWithStringResult } from '../src/utils/spawnUtil';
 
 const testFixturePackageRoot = path.resolve('..', 'test-fixtures-for-wbfy', 'packages');
@@ -22,6 +23,6 @@ test.each`
 });
 
 test('get latest version of yarn berry', () => {
-  const version = spawnSyncWithStringResult('npm', ['show', '@yarnpkg/cli', 'version'], process.cwd());
-  expect(version).toMatch(/^[3-9]./);
+  const version = getLatestVersion('@yarnpkg/cli', process.cwd());
+  expect(version).toMatch(/^[4-9]./);
 });

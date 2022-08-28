@@ -11,7 +11,7 @@ import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   return logger.function('generateYarnrcYml', async () => {
     const currentVersion = spawnSyncWithStringResult('yarn', ['--version'], config.dirPath);
-    const latestVersion = spawnSyncWithStringResult('npm', ['show', '@yarnpkg/cli', 'version'], config.dirPath);
+    const latestVersion = getLatestVersion('@yarnpkg/cli', config.dirPath);
     if (getMajorNumber(currentVersion) <= getMajorNumber(latestVersion) && currentVersion !== latestVersion) {
       spawnSync('yarn', ['set', 'version', latestVersion], config.dirPath, 1);
     }
@@ -46,6 +46,12 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     importOrRemovePlugin(config, plugins, config.containingSubPackageJsons, '@yarnpkg/plugin-workspace-tools');
     spawnSync('yarn', ['dlx', 'yarn-plugin-auto-install'], config.dirPath);
   });
+}
+
+export function getLatestVersion(packageName: string, dirPath: string): string {
+  const versionsJson = spawnSyncWithStringResult('npm', ['show', packageName, 'versions', '--json'], dirPath);
+  const versions = JSON.parse(versionsJson) as string[];
+  return versions[versions.length - 1];
 }
 
 function importOrRemovePlugin(config: PackageConfig, plugins: string[], requirePlugin: boolean, plugin: string): void {
