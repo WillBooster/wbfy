@@ -95,7 +95,21 @@ const notifyReadyWorkflow = {
   },
 };
 
-type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready';
+const closeComment = {
+  name: 'editComment',
+  on: {
+    pull_request: {
+      types: ['opened'],
+    },
+  },
+  jobs: {
+    'close-comment': {
+      uses: 'WillBoosterLab/reusable-workflows/.github/ workflows/close-comment.yml@main',
+    },
+  },
+};
+
+type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready' | 'close-comment';
 
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateWorkflow', async () => {
@@ -115,7 +129,7 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
     if (rootConfig.publicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
       fileNames.push('notify-ready.yml');
     }
-    fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml');
+    fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml', 'close-comment.yml');
 
     for (const fileName of fileNames) {
       // 実際はKnownKind以外の値も代入されることに注意
@@ -139,6 +153,8 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     newSettings = semanticPullRequestWorkflow;
   } else if (kind === 'notify-ready') {
     newSettings = notifyReadyWorkflow;
+  } else if (kind === 'close-comment') {
+    newSettings = closeComment;
   }
   newSettings = cloneDeep(newSettings);
 
@@ -150,7 +166,6 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   } catch (e) {
     // do nothing
   }
-
   for (const job of Object.values(newSettings.jobs) as any[]) {
     // Ignore non-reusable workflows
     if (!job.uses?.includes?.('/reusable-workflows/')) return;
