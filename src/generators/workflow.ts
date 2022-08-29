@@ -218,6 +218,10 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
     job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
   }
+  if (job.secrets['FIREBASE_TOKEN']) {
+    job.secrets['GCP_SA_KEY_JSON_FOR_FIREBASE'] = '${{ secrets.GCP_SA_KEY_JSON_FOR_FIREBASE }}';
+    delete job.secrets['FIREBASE_TOKEN'];
+  }
 
   if (kind === 'sync') {
     const params = job.with?.sync_params_without_dest;
