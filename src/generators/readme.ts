@@ -17,7 +17,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
     const useSemanticRelease = fs.existsSync(path.resolve(config.dirPath, '.releaserc.json'));
     if (useSemanticRelease) {
       if (newContent.includes(badgeUrl)) {
-        //既にbadgeがある場合には削除
+        // 既にbadgeがある場合は削除
         const badgePos = newContent.indexOf(badgeUrl);
         newContent = newContent.substring(0, badgePos) + newContent.substring(badgePos + badgeUrl.length);
       }
