@@ -87,7 +87,7 @@ const notifyReadyWorkflow = {
   },
   jobs: {
     'notify-ready': {
-      uses: 'WillBoosterLab/reusable-workflows/.github/workflows/notify-ready.yml@main',
+      uses: 'WillBooster/reusable-workflows/.github/workflows/notify-ready.yml@main',
       secrets: {
         DISCORD_WEBHOOK_URL: '${{ secrets.READY_DISCORD_WEBHOOK_URL }}',
       },
@@ -104,7 +104,7 @@ const closeComment = {
   },
   jobs: {
     'close-comment': {
-      uses: 'WillBoosterLab/reusable-workflows/.github/ workflows/close-comment.yml@main',
+      uses: 'WillBooster/reusable-workflows/.github/workflows/close-comment.yml@main',
     },
   },
 };
