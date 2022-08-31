@@ -95,8 +95,8 @@ const notifyReadyWorkflow = {
   },
 };
 
-const closeComment = {
-  name: 'editComment',
+const closeCommentWorkflow = {
+  name: 'Add close comment',
   on: {
     pull_request: {
       types: ['opened'],
@@ -154,7 +154,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   } else if (kind === 'notify-ready') {
     newSettings = notifyReadyWorkflow;
   } else if (kind === 'close-comment') {
-    newSettings = closeComment;
+    newSettings = closeCommentWorkflow;
   }
   newSettings = cloneDeep(newSettings);
 
