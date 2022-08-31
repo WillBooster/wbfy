@@ -53,6 +53,9 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await deleteLabel(owner, repo, 'invalid');
       await deleteLabel(owner, repo, 'question');
       await deleteLabel(owner, repo, 'wontfix');
+      
+      await deleteLabel(owner, repo, 'ready');
+      await deleteLabel(owner, repo, 'review requested');
     } catch (e) {
       console.warn('Skip setupLabels due to:', (e as Error)?.stack ?? e);
     }
@@ -85,6 +88,6 @@ async function deleteLabel(owner: string, repo: string, name: string): Promise<v
       name,
     });
   } catch (e) {
-    return;
+    // do nothing
   }
 }
