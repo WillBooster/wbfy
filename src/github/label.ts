@@ -43,6 +43,16 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await setupLabel(owner, repo, 't: refactor :recycle:', 'BFDBFE');
       await setupLabel(owner, repo, 't: style :lipstick:', 'BFDBFE');
       await setupLabel(owner, repo, 't: test :test_tube:', 'BFDBFE');
+
+      await deleteLabel(owner, repo, 'bug');
+      await deleteLabel(owner, repo, 'documentation');
+      await deleteLabel(owner, repo, 'duplicate');
+      await deleteLabel(owner, repo, 'enhancement');
+      await deleteLabel(owner, repo, 'good first issue');
+      await deleteLabel(owner, repo, 'help wanted');
+      await deleteLabel(owner, repo, 'invalid');
+      await deleteLabel(owner, repo, 'question');
+      await deleteLabel(owner, repo, 'wontfix');
     } catch (e) {
       console.warn('Skip setupLabels due to:', (e as Error)?.stack ?? e);
     }
@@ -64,5 +74,17 @@ async function setupLabel(owner: string, repo: string, name: string, color: stri
       name,
       color,
     });
+  }
+}
+
+async function deleteLabel(owner: string, repo: string, name: string): Promise<void> {
+  try {
+    await octokit.request('DELETE /repos/{owner}/{repo}/labels/{name}', {
+      owner,
+      repo,
+      name,
+    });
+  } catch (e) {
+    return;
   }
 }
