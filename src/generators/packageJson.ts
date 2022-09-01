@@ -43,11 +43,11 @@ export async function generatePackageJson(
   skipAddingDeps: boolean
 ): Promise<void> {
   return logger.function('generatePackageJson', async () => {
-    await core(config, skipAddingDeps);
+    await core(config, rootConfig, skipAddingDeps);
   });
 }
 
-async function core(config: PackageConfig, skipAddingDeps: boolean): Promise<void> {
+async function core(config: PackageConfig, rootConfig: PackageConfig, skipAddingDeps: boolean): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fs.promises.readFile(filePath, 'utf-8');
   const jsonObj = JSON.parse(jsonText);
@@ -127,7 +127,7 @@ async function core(config: PackageConfig, skipAddingDeps: boolean): Promise<voi
   if (!jsonObj.license) {
     jsonObj.license = 'UNLICENSED';
   }
-  if (!jsonObj.private && jsonObj.license !== 'UNLICENSED' && config.publicRepo) {
+  if (!jsonObj.private && jsonObj.license !== 'UNLICENSED' && rootConfig.publicRepo) {
     jsonObj.publishConfig ??= {};
     jsonObj.publishConfig.access ??= 'public';
   }
