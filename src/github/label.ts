@@ -53,7 +53,7 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await deleteLabel(owner, repo, 'invalid');
       await deleteLabel(owner, repo, 'question');
       await deleteLabel(owner, repo, 'wontfix');
-      
+
       await deleteLabel(owner, repo, 'ready');
       await deleteLabel(owner, repo, 'review requested');
     } catch (e) {
