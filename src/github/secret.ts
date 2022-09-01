@@ -5,6 +5,8 @@ import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil';
 
+const deprecatedSecretNames = ['READY_DISCORD_WEBHOOK_URL'];
+
 export async function setupSecrets(config: PackageConfig): Promise<void> {
   return logger.function('setupSecrets', async () => {
     if (!hasGitHubToken) return;
@@ -16,6 +18,14 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
     if (Object.keys(parsed).length === 0) return;
 
     try {
+      for (const secretName of deprecatedSecretNames) {
+        await octokit.request('DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
+          owner,
+          repo,
+          secret_name: secretName,
+        });
+      }
+
       const response = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', {
         owner,
         repo,

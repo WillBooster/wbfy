@@ -89,7 +89,7 @@ const notifyReadyWorkflow = {
     'notify-ready': {
       uses: 'WillBooster/reusable-workflows/.github/workflows/notify-ready.yml@main',
       secrets: {
-        DISCORD_WEBHOOK_URL: '${{ secrets.READY_DISCORD_WEBHOOK_URL }}',
+        DISCORD_WEBHOOK_URL: '${{ secrets.DISCORD_WEBHOOK_URL_READY }}',
       },
     },
   },
