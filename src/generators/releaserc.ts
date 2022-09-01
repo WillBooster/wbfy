@@ -21,8 +21,15 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
               preset: 'conventionalcommits',
             },
           ];
-        } else if (plugin === '@semantic-release/github' && !rootConfig.publicRepo) {
-          plugins[i] = ['@semantic-release/github', { successComment: false }];
+        } else if (plugin === '@semantic-release/github') {
+          plugins[i] = [
+            '@semantic-release/github',
+            {
+              successComment: false,
+              labels: ['r: semantic-release'],
+              releasedLabels: ['released :bookmark:'],
+            },
+          ];
         }
       }
       const newContent = JSON.stringify(settings);

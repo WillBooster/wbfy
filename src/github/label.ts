@@ -24,8 +24,10 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await setupLabel(owner, repo, 'r: prisma', '0c344b');
       await setupLabel(owner, repo, 'r: react', '61dafb');
       await setupLabel(owner, repo, 'r: svelte', 'ff3e00');
+      await setupLabel(owner, repo, 'r: semantic-release', '494949');
       await setupLabel(owner, repo, 'ready :rocket:', '22C55E');
       await setupLabel(owner, repo, 'review requested :mag:', 'FBCA04');
+      await setupLabel(owner, repo, 'released :bookmark:', '6366F1');
       await setupLabel(owner, repo, 's: 0.5h :clock1230:', 'F3F4F6');
       await setupLabel(owner, repo, 's: 1h :clock1:', 'E5E7EB');
       await setupLabel(owner, repo, 's: 2h :clock2:', 'D1D5DB');
@@ -56,6 +58,8 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
 
       await deleteLabel(owner, repo, 'ready');
       await deleteLabel(owner, repo, 'review requested');
+      await deleteLabel(owner, repo, 'released');
+      await deleteLabel(owner, repo, 'semantic-release');
     } catch (e) {
       console.warn('Skip setupLabels due to:', (e as Error)?.stack ?? e);
     }
