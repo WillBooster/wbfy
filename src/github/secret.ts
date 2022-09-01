@@ -19,11 +19,15 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
 
     try {
       for (const secretName of deprecatedSecretNames) {
-        await octokit.request('DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
-          owner,
-          repo,
-          secret_name: secretName,
-        });
+        try {
+          await octokit.request('DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
+            owner,
+            repo,
+            secret_name: secretName,
+          });
+        } catch (_) {
+          // do nothing
+        }
       }
 
       const response = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', {
