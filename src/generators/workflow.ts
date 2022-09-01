@@ -236,7 +236,15 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
     job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
   }
 
+  // Remove deprecated parameters
   delete job.with['non_self_hosted'];
+  delete job.with['notify_discord'];
+  delete job.with['require_fly'];
+  delete job.with['require_gcloud'];
+  if (job.with['dot_env_path'] === '.env') {
+    delete job.with['dot_env_path'];
+  }
+
   if (config.containingDockerfile && kind.startsWith('deploy')) {
     job.with['cpu_arch'] = 'X64';
   }
@@ -248,13 +256,14 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   } else {
     delete job.with['github_hosted_runner'];
   }
+
   if (Object.keys(job.with).length) {
     sortKeys(job.with);
   } else {
     delete job.with;
   }
-
   if (Object.keys(job.secrets).length) {
+    // Move secrets prop after with prop
     const newSecrets = sortKeys(job.secrets);
     delete job.secrets;
     job.secrets = newSecrets;
