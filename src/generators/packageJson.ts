@@ -124,9 +124,12 @@ async function core(config: PackageConfig, skipAddingDeps: boolean): Promise<voi
   if (config.containingSubPackageJsons) {
     jsonObj.private = true;
   }
-
   if (!jsonObj.license) {
     jsonObj.license = 'UNLICENSED';
+  }
+  if (!jsonObj.private && jsonObj.license !== 'UNLICENSED' && config.publicRepo) {
+    jsonObj.publishConfig ??= {};
+    jsonObj.publishConfig.access ??= 'public';
   }
 
   if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
