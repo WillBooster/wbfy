@@ -92,12 +92,15 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       repoInfo = await getRepoInfo(dirPath, packageJson);
     }
 
-    const toolVersionsPath = path.resolve(dirPath, '.tool-versions');
     let versionsText: string | undefined;
     try {
-      versionsText = await fsp.readFile(toolVersionsPath, 'utf-8');
+      versionsText = await fsp.readFile(path.resolve(dirPath, '.tool-versions'), 'utf-8');
     } catch (_) {
-      // do nothing
+      try {
+        versionsText = 'nodejs ' + (await fsp.readFile(path.resolve(dirPath, '.node-version'), 'utf-8')).trim();
+      } catch (_) {
+        // do nothing
+      }
     }
 
     const config: PackageConfig = {
