@@ -27,7 +27,7 @@ async function core(config: PackageConfig): Promise<void> {
     await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
   }
   if (config.containingPoetryLock) {
-    updateLine('poetry 1.1.14', 0, lines);
+    updateLine('poetry 1.1.15', 0, lines);
     updateLine('python 3.9.13', 0, lines);
   }
   if (config.depending.firebase) {
