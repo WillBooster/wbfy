@@ -66,6 +66,9 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   const postMergeCommands: string[] = [];
+  if (config.versionsText) {
+    postMergeCommands.push('asdf plugin update --all');
+  }
   // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
   if (config.versionsText?.includes('python ')) {
     postMergeCommands.push('asdf install python');

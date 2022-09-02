@@ -45,6 +45,7 @@ async function core(config: PackageConfig): Promise<void> {
     await promisePool.run(() => fs.promises.rm(toolVersionsPath, { force: true }));
   }
   await promisePool.promiseAll();
+  spawnSync('asdf', ['plugin', 'update', '--all'], config.dirPath);
   spawnSync('asdf', ['install'], config.dirPath);
 }
 
