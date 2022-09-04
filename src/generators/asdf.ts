@@ -27,11 +27,11 @@ async function core(config: PackageConfig): Promise<void> {
     await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
   }
   if (config.containingPoetryLock) {
-    updateLine('poetry 1.1.15', 0, lines);
+    updateLine('poetry 1.2.0', 0, lines);
     updateLine('python 3.9.13', 0, lines);
   }
   if (config.depending.firebase) {
-    updateLine('java adoptopenjdk-17.0.2+8', 0, lines);
+    updateLine('java adoptopenjdk-17.0.4+101', 0, lines);
   }
   if (config.containingPackageJson) {
     const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
