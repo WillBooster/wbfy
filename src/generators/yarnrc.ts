@@ -34,6 +34,8 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     if (config.requiringNodeModules) {
       settings.nodeLinker = 'node-modules';
       settings.nmMode = 'hardlinks-global';
+      // c.f. https://github.com/yarnpkg/berry/pull/4698
+      settings.enableGlobalCache = true;
     }
     await fs.promises.writeFile(yarnrcYmlPath, yaml.dump(settings, { lineWidth: -1 }));
 
