@@ -8,7 +8,7 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
 
     const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');
     if (!owner || !repo) return;
-    if (!config.publicRepo && owner === 'WillBooster') return;
+    if (owner !== 'WillBooster' && owner !== 'WillBoosterLab') return;
 
     try {
       await setupLabel(owner, repo, 'd1: x-easy :hedgehog:', 'EDE9FE');
