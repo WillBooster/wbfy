@@ -133,7 +133,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         firebase: !!devDependencies['firebase-tools'],
         prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
-        semanticRelease: !!devDependencies['semantic-release'] || !releaseBranches.length || !releasePlugins.length,
+        semanticRelease: !!(devDependencies['semantic-release'] || releaseBranches.length || releasePlugins.length),
         storybook: !!devDependencies['@storybook/react'],
       },
       release: {
