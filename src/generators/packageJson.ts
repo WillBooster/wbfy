@@ -83,6 +83,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     devDependencies.push('husky', 'pinst', '@willbooster/renovate-config');
     if (config.depending.semanticRelease) {
       devDependencies.push('conventional-changelog-conventionalcommits');
+      if (
+        !jsonObj.devDependencies['semantic-release'] &&
+        !jsonObj.devDependencies['multi-semantic-release'] &&
+        !jsonObj.devDependencies['@qiwi/multi-semantic-release']
+      ) {
+        devDependencies.push('semantic-release');
+      }
     }
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];

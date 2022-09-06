@@ -69,15 +69,6 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     if (config.root && !config.containingSubPackageJsons) {
       newSettings.include = newSettings.include.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
     }
-    if (!config.root && (config.depending.jestPlaywrightPreset || rootConfig.depending.jestPlaywrightPreset)) {
-      const relativeDirPath = path.relative(config.dirPath, rootConfig.dirPath);
-      newSettings.include.push(
-        ...[
-          path.join(relativeDirPath, 'node_modules/jest-playwright-preset/types'),
-          path.join(relativeDirPath, 'node_modules/expect-playwright'),
-        ]
-      );
-    }
 
     const filePath = path.resolve(config.dirPath, 'tsconfig.json');
     try {

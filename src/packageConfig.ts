@@ -33,7 +33,6 @@ export interface PackageConfig {
   depending: {
     blitz: boolean;
     firebase: boolean;
-    jestPlaywrightPreset: boolean;
     prisma: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
@@ -132,10 +131,9 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       depending: {
         blitz: !!(dependencies['blitz'] || devDependencies['blitz']),
         firebase: !!devDependencies['firebase-tools'],
-        jestPlaywrightPreset: !!devDependencies['jest-playwright-preset'],
         prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
-        semanticRelease: !!devDependencies['semantic-release'],
+        semanticRelease: !!devDependencies['semantic-release'] || !releaseBranches.length || !releasePlugins.length,
         storybook: !!devDependencies['@storybook/react'],
       },
       release: {
