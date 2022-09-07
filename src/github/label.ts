@@ -21,6 +21,7 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await setupLabel(owner, repo, 'p3: important :fire:', 'FCA5A5');
       await setupLabel(owner, repo, 'p4: nice to have :droplet:', 'FECACA');
       await setupLabel(owner, repo, 'r: blitz', '5300bc');
+      await setupLabel(owner, repo, 'r: firebase', 'ffca28');
       await setupLabel(owner, repo, 'r: prisma', '0c344b');
       await setupLabel(owner, repo, 'r: react', '61dafb');
       await setupLabel(owner, repo, 'r: svelte', 'ff3e00');
