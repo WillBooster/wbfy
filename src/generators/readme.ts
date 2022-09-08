@@ -8,8 +8,6 @@ import { promisePool } from '../utils/promisePool';
 
 const semanticReleaseBadgeUrl =
   '[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)';
-const testBadgeUrl =
-  '[![Test](https://github.com/WillBooster/wbfy/actions/workflows/test.yml/badge.svg)](https://github.com/WillBooster/wbfy/actions/workflows/test.yml)';
 
 function addBadge(config: PackageConfig, newContent: string, badgeUrl: string, fileName: string): string {
   if (fs.existsSync(path.resolve(config.dirPath, fileName))) {
@@ -37,7 +35,18 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
     let newContent = await fs.promises.readFile(filePath, 'utf8');
 
     newContent = addBadge(config, newContent, semanticReleaseBadgeUrl, '.releaserc.json');
-    newContent = addBadge(config, newContent, testBadgeUrl, '.github/workflows/test.yml');
+
+    const fileNames = fs.readdirSync(`${config.dirPath}/.github/workflows`);
+    const repository = config.repository?.substring(config.repository?.indexOf(':') + 1);
+    fileNames.forEach((fileName) => {
+      if (fileName.startsWith('test') || fileName.startsWith('deploy')) {
+        let badgeName = fileName;
+        badgeName = badgeName.charAt(0).toUpperCase() + badgeName.substring(1, badgeName.indexOf('.'));
+        badgeName = badgeName.replace('-', ' ');
+        const badgeUrl = `[![${badgeName}](https://github.com/${repository}/actions/workflows/${fileName}/badge.svg)](https://github.com/${repository}/actions/workflows/${fileName})`;
+        newContent = addBadge(config, newContent, badgeUrl, `.github/workflows/${fileName}`);
+      }
+    });
 
     await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
   });
