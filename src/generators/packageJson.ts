@@ -18,6 +18,7 @@ const jsCommonDeps = [
   'eslint-plugin-import',
   'eslint-plugin-sort-class-members',
   'eslint-plugin-sort-destructure-keys',
+  'eslint-plugin-unicorn',
 ];
 
 const tsCommonDeps = [
@@ -80,7 +81,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.root) {
     // To install the latest pinst
-    devDependencies.push('husky', 'pinst', '@willbooster/renovate-config');
+    devDependencies.push('husky', '@willbooster/renovate-config');
+    if (config.publicRepo) {
+      devDependencies.push('pinst');
+    }
     if (config.depending.semanticRelease) {
       devDependencies.push('conventional-changelog-conventionalcommits');
       if (
