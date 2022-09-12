@@ -22,6 +22,7 @@ import { generateWorkflow } from './generators/workflow';
 import { generateYarnrcYml } from './generators/yarnrc';
 import { setupLabels } from './github/label';
 import { setupSecrets } from './github/secret';
+import { setupSettings } from './github/settings';
 import { options } from './options';
 import { getPackageConfig, PackageConfig } from './packageConfig';
 import { promisePool } from './utils/promisePool';
@@ -77,8 +78,9 @@ async function main(): Promise<void> {
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
       generateWorkflow(rootConfig),
-      setupSecrets(rootConfig),
       setupLabels(rootConfig),
+      setupSecrets(rootConfig),
+      setupSettings(rootConfig),
     ]);
     await promisePool.promiseAll();
 
