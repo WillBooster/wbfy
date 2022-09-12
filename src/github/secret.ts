@@ -25,7 +25,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
             repo,
             secret_name: secretName,
           });
-        } catch (_) {
+        } catch {
           // do nothing
         }
       }
@@ -60,8 +60,8 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
           key_id: keyId,
         });
       }
-    } catch (e) {
-      console.warn('Skip setupSecrets due to:', (e as Error)?.stack ?? e);
+    } catch (error) {
+      console.warn('Skip setupSecrets due to:', (error as Error)?.stack ?? error);
     }
   });
 }

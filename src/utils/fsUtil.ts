@@ -1,4 +1,4 @@
-import fsp from 'fs/promises';
+import fsp from 'node:fs/promises';
 
 export const FsUtil = {
   async generateFile(filePath: string, content: string): Promise<void> {

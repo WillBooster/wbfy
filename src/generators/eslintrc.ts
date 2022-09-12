@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import merge from 'deepmerge';
 
@@ -22,14 +22,14 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
 
     const filePath = path.resolve(config.dirPath, '.eslintrc.json');
     try {
-      const oldContent = await fs.promises.readFile(filePath, 'utf-8');
+      const oldContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(oldContent);
       if (oldSettings.extends) {
         oldSettings.extends = oldSettings.extends.filter(
           (ext: string) => !ext.startsWith('@willbooster/') && ext !== '../../.eslintrc.json'
         );
       }
-      if (!bases.length) {
+      if (bases.length === 0) {
         oldSettings.extends = [];
       }
       const newExtends = newSettings.extends;
@@ -39,7 +39,7 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       if (config.depending.blitz) {
         newSettings.extends = [...newSettings.extends.filter((e: string) => e !== 'blitz'), 'blitz'];
       }
-    } catch (e) {
+    } catch {
       // do nothing
     }
     const newContent = JSON.stringify(newSettings);

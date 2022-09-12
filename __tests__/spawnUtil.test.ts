@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { getLatestVersion } from '../src/generators/yarnrc';
 import { spawnSyncWithStringResult } from '../src/utils/spawnUtil';

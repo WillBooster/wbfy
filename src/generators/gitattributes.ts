@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
@@ -10,9 +10,7 @@ const newContent = `* text=auto
 
 *.vcproj text eol=crlf
 
-${extensions.codeWith2IndentSize
-  .concat(extensions.codeWith4IndentSize)
-  .concat(extensions.markdownLike)
+${[...extensions.codeWith2IndentSize, ...extensions.codeWith4IndentSize, ...extensions.markdownLike]
   .map((ext) => `*.${ext} text eol=lf`)
   .join('\n')}
 `;

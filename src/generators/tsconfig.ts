@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import merge from 'deepmerge';
 import cloneDeep from 'lodash.clonedeep';
@@ -72,7 +72,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
 
     const filePath = path.resolve(config.dirPath, 'tsconfig.json');
     try {
-      const existingContent = await fs.promises.readFile(filePath, 'utf-8');
+      const existingContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(existingContent);
       if (oldSettings.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
         delete oldSettings.extends;
@@ -87,7 +87,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
         delete newSettings.include;
       }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
-    } catch (e) {
+    } catch {
       // do nothing
     }
     sortKeys(newSettings.compilerOptions);

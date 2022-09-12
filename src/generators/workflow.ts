@@ -1,5 +1,7 @@
-import fs from 'fs';
-import path from 'path';
+/* eslint-disable unicorn/no-null */
+
+import fs from 'node:fs';
+import path from 'node:path';
 
 import merge from 'deepmerge';
 import yaml from 'js-yaml';
@@ -120,7 +122,8 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
     const semanticYmlPath = path.resolve(rootConfig.dirPath, '.github', 'semantic.yml');
     await promisePool.run(() => fs.promises.rm(semanticYmlPath, { force: true, recursive: true }));
 
-    const fileNames = (await fs.promises.readdir(workflowsPath, { withFileTypes: true }))
+    const entries = await fs.promises.readdir(workflowsPath, { withFileTypes: true });
+    const fileNames = entries
       .filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml'))
       .map((dirent) => dirent.name);
     if (rootConfig.depending.semanticRelease) {
@@ -141,29 +144,52 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
   let newSettings: any = {};
-  if (kind === 'test') {
-    newSettings = testWorkflow;
-  } else if (kind === 'release') {
-    newSettings = releaseWorkflow;
-  } else if (kind === 'wbfy') {
-    newSettings = wbfyWorkflow;
-  } else if (kind === 'wbfy-merge') {
-    newSettings = wbfyMergeWorkflow;
-  } else if (kind === 'semantic-pr') {
-    newSettings = semanticPullRequestWorkflow;
-  } else if (kind === 'notify-ready') {
-    newSettings = notifyReadyWorkflow;
-  } else if (kind === 'close-comment') {
-    newSettings = closeCommentWorkflow;
+  switch (kind) {
+    case 'test': {
+      newSettings = testWorkflow;
+
+      break;
+    }
+    case 'release': {
+      newSettings = releaseWorkflow;
+
+      break;
+    }
+    case 'wbfy': {
+      newSettings = wbfyWorkflow;
+
+      break;
+    }
+    case 'wbfy-merge': {
+      newSettings = wbfyMergeWorkflow;
+
+      break;
+    }
+    case 'semantic-pr': {
+      newSettings = semanticPullRequestWorkflow;
+
+      break;
+    }
+    case 'notify-ready': {
+      newSettings = notifyReadyWorkflow;
+
+      break;
+    }
+    case 'close-comment': {
+      newSettings = closeCommentWorkflow;
+
+      break;
+    }
+    // No default
   }
   newSettings = cloneDeep(newSettings);
 
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
-    const oldContent = await fs.promises.readFile(filePath, 'utf-8');
+    const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const oldSettings = yaml.load(oldContent);
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-  } catch (e) {
+  } catch {
     // do nothing
   }
   for (const job of Object.values(newSettings.jobs) as any[]) {
@@ -173,16 +199,27 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     normalizeJob(config, job, kind);
   }
 
-  if (kind === 'release') {
-    if (newSettings.on.schedule) {
-      delete newSettings.on.push;
-    } else {
-      newSettings.on.push.branches = config.release.branches;
+  switch (kind) {
+    case 'release': {
+      if (newSettings.on.schedule) {
+        delete newSettings.on.push;
+      } else {
+        newSettings.on.push.branches = config.release.branches;
+      }
+
+      break;
     }
-  } else if (kind === 'wbfy') {
-    setSchedule(newSettings, 20, 24);
-  } else if (kind === 'wbfy-merge') {
-    setSchedule(newSettings, 0, 4);
+    case 'wbfy': {
+      setSchedule(newSettings, 20, 24);
+
+      break;
+    }
+    case 'wbfy-merge': {
+      setSchedule(newSettings, 0, 4);
+
+      break;
+    }
+    // No default
   }
   await writeYaml(newSettings, filePath);
 
@@ -209,11 +246,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   job.secrets ||= {};
 
   if ((config.release.github && kind === 'test') || kind === 'release' || kind === 'wbfy' || kind === 'wbfy-merge') {
-    if (config.publicRepo) {
-      job.secrets['GH_TOKEN'] = '${{ secrets.PUBLIC_GH_BOT_PAT }}';
-    } else {
-      job.secrets['GH_TOKEN'] = '${{ secrets.GH_BOT_PAT }}';
-    }
+    job.secrets['GH_TOKEN'] = config.publicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
     job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
@@ -257,12 +290,12 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
     delete job.with['github_hosted_runner'];
   }
 
-  if (Object.keys(job.with).length) {
+  if (Object.keys(job.with).length > 0) {
     sortKeys(job.with);
   } else {
     delete job.with;
   }
-  if (Object.keys(job.secrets).length) {
+  if (Object.keys(job.secrets).length > 0) {
     // Move secrets prop after with prop
     const newSecrets = sortKeys(job.secrets);
     delete job.secrets;

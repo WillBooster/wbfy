@@ -18,6 +18,6 @@ Promise.all([
     outfile: 'dist/index.min.cjs',
     platform: 'node',
     sourcemap: true,
-    target: 'node14',
+    target: 'node16',
   }),
 ]).then();

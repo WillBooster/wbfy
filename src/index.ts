@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 
 import glob from 'glob';
 import yargs from 'yargs';
@@ -45,7 +45,7 @@ async function main(): Promise<void> {
     if (typeof rootDirPath === 'number') continue;
 
     const rootConfig = await getPackageConfig(rootDirPath);
-    if (rootConfig === null) {
+    if (!rootConfig) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
       continue;
     }
@@ -53,9 +53,8 @@ async function main(): Promise<void> {
     const subDirPaths = rootConfig.containingSubPackageJsons
       ? glob.sync('packages/*', { cwd: rootDirPath }).map((subDirPath) => path.resolve(rootDirPath, subDirPath))
       : [];
-    const subPackageConfigs = (await Promise.all(subDirPaths.map((subDirPath) => getPackageConfig(subDirPath)))).filter(
-      (config) => !!config
-    ) as PackageConfig[];
+    const nullableSubPackageConfigs = await Promise.all(subDirPaths.map((subDirPath) => getPackageConfig(subDirPath)));
+    const subPackageConfigs = nullableSubPackageConfigs.filter((config) => !!config) as PackageConfig[];
     const allPackageConfigs = [rootConfig, ...subPackageConfigs];
 
     if (options.isVerbose) {

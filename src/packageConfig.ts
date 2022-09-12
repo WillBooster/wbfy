@@ -1,6 +1,6 @@
-import fs from 'fs';
-import fsp from 'fs/promises';
-import path from 'path';
+import fs from 'node:fs';
+import fsp from 'node:fs/promises';
+import path from 'node:path';
 
 import glob from 'glob';
 import yaml from 'js-yaml';
@@ -48,7 +48,7 @@ export interface PackageConfig {
   versionsText?: string;
 }
 
-export async function getPackageConfig(dirPath: string): Promise<PackageConfig | null> {
+export async function getPackageConfig(dirPath: string): Promise<PackageConfig | undefined> {
   const packageJsonPath = path.resolve(dirPath, 'package.json');
   try {
     const containingPackageJson = fs.existsSync(packageJsonPath);
@@ -56,7 +56,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
     let devDependencies: { [key: string]: string } = {};
     let packageJson: any = {};
     if (containingPackageJson) {
-      const packageJsonText = fs.readFileSync(packageJsonPath, 'utf-8');
+      const packageJsonText = fs.readFileSync(packageJsonPath, 'utf8');
       packageJson = JSON.parse(packageJsonText);
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
@@ -67,7 +67,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       const yarnrcYmlPath = path.resolve(dirPath, '.yarnrc.yml');
       const doc = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
       requiringNodeModules = !doc.nodeLinker || doc.nodeLinker === 'node-modules';
-    } catch (_) {
+    } catch {
       // do nothing
     }
 
@@ -78,7 +78,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       const json = JSON.parse(await fsp.readFile(releasercJsonPath, 'utf8'));
       releaseBranches = json?.branches || [];
       releasePlugins = json?.plugins?.flat() || [];
-    } catch (_) {
+    } catch {
       // do nothing
     }
 
@@ -93,11 +93,12 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
 
     let versionsText: string | undefined;
     try {
-      versionsText = await fsp.readFile(path.resolve(dirPath, '.tool-versions'), 'utf-8');
-    } catch (_) {
+      versionsText = await fsp.readFile(path.resolve(dirPath, '.tool-versions'), 'utf8');
+    } catch {
       try {
-        versionsText = 'nodejs ' + (await fsp.readFile(path.resolve(dirPath, '.node-version'), 'utf-8')).trim();
-      } catch (_) {
+        const nodeVersionContent = await fsp.readFile(path.resolve(dirPath, '.node-version'), 'utf8');
+        versionsText = 'nodejs ' + nodeVersionContent.trim();
+      } catch {
         // do nothing
       }
     }
@@ -133,7 +134,11 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         firebase: !!devDependencies['firebase-tools'],
         prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
-        semanticRelease: !!(devDependencies['semantic-release'] || releaseBranches.length || releasePlugins.length),
+        semanticRelease: !!(
+          devDependencies['semantic-release'] ||
+          releaseBranches.length > 0 ||
+          releasePlugins.length > 0
+        ),
         storybook: !!devDependencies['@storybook/react'],
       },
       release: {
@@ -156,19 +161,14 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
     ) {
       return config;
     }
-  } catch (e) {
+  } catch {
     // do nothing
   }
-  return null;
 }
 
 function getEslintExtensionBase(config: PackageConfig): string | undefined {
   if (config.containingTypeScript) {
-    if (config.containingJsxOrTsx) {
-      return '@willbooster/eslint-config-ts-react';
-    } else {
-      return '@willbooster/eslint-config-ts';
-    }
+    return config.containingJsxOrTsx ? '@willbooster/eslint-config-ts-react' : '@willbooster/eslint-config-ts';
   } else {
     if (config.containingJsxOrTsx) {
       return '@willbooster/eslint-config-js-react';
@@ -176,7 +176,6 @@ function getEslintExtensionBase(config: PackageConfig): string | undefined {
       return '@willbooster/eslint-config-js';
     }
   }
-  return undefined;
 }
 
 async function getRepoInfo(dirPath: string, packageJson: any): Promise<Record<string, any> | undefined> {
@@ -207,7 +206,7 @@ async function fetchRepoInfo(urlOrFullName: string): Promise<Record<string, any>
       repo: name,
     });
     Object.assign(ret, response.data);
-  } catch (e) {
+  } catch {
     // do nothing
   }
   return ret;

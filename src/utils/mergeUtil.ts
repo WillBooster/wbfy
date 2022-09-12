@@ -6,16 +6,16 @@ export function overwriteMerge(destinationArray: any[], sourceArray: any[]): any
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function combineMerge(target: any[], source: any[], options: any): any[] {
-  const destination = target.slice();
+  const destination = [...target];
 
-  source.forEach((item, index) => {
+  for (const [index, item] of source.entries()) {
     if (typeof destination[index] === 'undefined') {
       destination[index] = options.cloneUnlessOtherwiseSpecified(item, options);
     } else if (options.isMergeableObject(item)) {
       destination[index] = merge(target[index], item, options);
-    } else if (target.indexOf(item) === -1) {
+    } else if (!target.includes(item)) {
       destination.push(item);
     }
-  });
+  }
   return destination;
 }

@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-asdf install && yarn
+asdf plugin update --all && asdf install && yarn

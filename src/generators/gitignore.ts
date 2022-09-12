@@ -1,6 +1,6 @@
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 import { logger } from '../logger';
 import { options } from '../options';
@@ -144,7 +144,7 @@ async function readCache(name: string): Promise<string | undefined> {
     if (Date.now() - stat.mtimeMs > 6 * 60 * 60 * 1000) {
       return;
     }
-    return await fs.promises.readFile(path.join(dirPath, name), 'utf-8');
+    return await fs.promises.readFile(path.join(dirPath, name), 'utf8');
   } catch {
     // do nothing
   }

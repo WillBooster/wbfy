@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
@@ -39,11 +39,9 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   const toolVersionsPath = path.resolve(config.dirPath, '.tool-versions');
-  if (lines.length) {
-    await promisePool.run(() => fs.promises.writeFile(toolVersionsPath, lines.join('\n') + '\n'));
-  } else {
-    await promisePool.run(() => fs.promises.rm(toolVersionsPath, { force: true }));
-  }
+  await (lines.length > 0
+    ? promisePool.run(() => fs.promises.writeFile(toolVersionsPath, lines.join('\n') + '\n'))
+    : promisePool.run(() => fs.promises.rm(toolVersionsPath, { force: true })));
   await promisePool.promiseAll();
   spawnSync('asdf', ['plugin', 'update', '--all'], config.dirPath);
   spawnSync('asdf', ['install'], config.dirPath);

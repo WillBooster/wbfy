@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
@@ -31,7 +31,7 @@ export async function generateHuskyrc(config: PackageConfig): Promise<void> {
 
 async function core(config: PackageConfig): Promise<void> {
   const packageJsonPath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = await fs.promises.readFile(packageJsonPath, 'utf-8');
+  const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
   const packageJson = JSON.parse(jsonText);
   packageJson.scripts ||= {};
   delete packageJson.scripts['postinstall'];
@@ -49,7 +49,7 @@ async function core(config: PackageConfig): Promise<void> {
   spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
-  const content = await fs.promises.readFile(preCommitFilePath, 'utf-8');
+  const content = await fs.promises.readFile(preCommitFilePath, 'utf8');
 
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }));
   await promisePool.run(() =>

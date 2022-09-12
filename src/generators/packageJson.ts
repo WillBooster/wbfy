@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import merge from 'deepmerge';
 
@@ -50,7 +50,7 @@ export async function generatePackageJson(
 
 async function core(config: PackageConfig, rootConfig: PackageConfig, skipAddingDeps: boolean): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = await fs.promises.readFile(filePath, 'utf-8');
+  const jsonText = await fs.promises.readFile(filePath, 'utf8');
   const jsonObj = JSON.parse(jsonText);
   jsonObj.scripts = jsonObj.scripts || {};
   jsonObj.dependencies = jsonObj.dependencies || {};
@@ -178,11 +178,15 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       if (jsonObj.scripts.postinstall === 'poetry install') {
         delete jsonObj.scripts.postinstall;
       }
-      const dirNames = (await fs.promises.readdir(config.dirPath)).filter((dirName) => {
-        const dirPath = path.resolve(config.dirPath, dirName);
-        if (!fs.lstatSync(dirPath).isDirectory()) return false;
-        return fs.readdirSync(dirPath).some((fileName) => fileName.endsWith('.py'));
-      });
+      const entries = await fs.promises.readdir(config.dirPath, { withFileTypes: true });
+      const dirNames = await Promise.all(
+        entries.filter(async (entry) => {
+          if (!entry.isDirectory()) return false;
+          const dirPath = path.resolve(config.dirPath, entry.name);
+          const fileNames = await fs.promises.readdir(dirPath);
+          return fileNames.some((fileName) => fileName.endsWith('.py'));
+        })
+      );
       if (dirNames.length > 0) {
         jsonObj.scripts['format-code'] = `poetry run isort --profile black ${dirNames.join(
           ' '
@@ -213,18 +217,16 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
       jsonObj.scripts['gen-code'] = 'blitz codegen';
     }
-  } else if (config.depending.prisma) {
-    if (!jsonObj.scripts['gen-code']?.startsWith('prisma generate')) {
-      jsonObj.scripts['gen-code'] = 'prisma generate';
-    }
+  } else if (config.depending.prisma && !jsonObj.scripts['gen-code']?.startsWith('prisma generate')) {
+    jsonObj.scripts['gen-code'] = 'prisma generate';
   }
-  if (!Object.keys(jsonObj.dependencies).length) {
+  if (Object.keys(jsonObj.dependencies).length === 0) {
     delete jsonObj.dependencies;
   }
-  if (!Object.keys(jsonObj.devDependencies).length) {
+  if (Object.keys(jsonObj.devDependencies).length === 0) {
     delete jsonObj.devDependencies;
   }
-  if (!Object.keys(jsonObj.peerDependencies).length) {
+  if (Object.keys(jsonObj.peerDependencies).length === 0) {
     delete jsonObj.peerDependencies;
   }
 
@@ -232,14 +234,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (!skipAddingDeps) {
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
-    if (dependencies.length) {
+    if (dependencies.length > 0) {
       spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
     }
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
-    if (devDependencies.length) {
+    if (devDependencies.length > 0) {
       spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
-    if (poetryDependencies.length) {
+    if (poetryDependencies.length > 0) {
       spawnSync('poetry', ['add', ...new Set(poetryDependencies)], config.dirPath);
     }
   }
@@ -309,11 +311,11 @@ function generateScripts(config: PackageConfig): Record<string, string> {
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {
   const filePath = path.resolve(dirPath, '.prettierignore');
-  const existingContent = await fs.promises.readFile(filePath, 'utf-8');
+  const existingContent = await fs.promises.readFile(filePath, 'utf8');
   const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);
   if (index < 0) return '';
 
-  const originalContent = existingContent.substring(0, index);
+  const originalContent = existingContent.slice(0, Math.max(0, index));
   const lines = originalContent
     .split('\n')
     .map((line) => {

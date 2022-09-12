@@ -5,7 +5,7 @@
   "repository": "github:WillBooster/wbfy",
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
-  "bin": "./bin/index.cjs",
+  "bin": "./bin/index.mjs",
   "files": [
     "bin/",
     "dist/"
@@ -57,18 +57,19 @@
     "@types/yargs": "17.0.12",
     "@typescript-eslint/eslint-plugin": "5.36.2",
     "@typescript-eslint/parser": "5.36.2",
-    "@willbooster/eslint-config-ts": "9.2.1",
-    "@willbooster/prettier-config": "9.1.0",
-    "@willbooster/renovate-config": "9.4.0",
+    "@willbooster/eslint-config-ts": "10.0.4",
+    "@willbooster/prettier-config": "9.1.1",
+    "@willbooster/renovate-config": "9.4.1",
     "conventional-changelog-conventionalcommits": "5.0.0",
     "esbuild": "0.15.7",
     "esbuild-register": "3.3.3",
-    "eslint": "8.23.0",
+    "eslint": "8.23.1",
     "eslint-config-prettier": "8.5.0",
     "eslint-import-resolver-typescript": "3.5.1",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-sort-class-members": "1.15.2",
     "eslint-plugin-sort-destructure-keys": "1.4.0",
+    "eslint-plugin-unicorn": "43.0.2",
     "husky": "8.0.1",
     "jest": "29.0.2",
     "lint-staged": "13.0.3",
@@ -82,5 +83,8 @@
   "packageManager": "yarn@4.0.0-rc.18",
   "engines": {
     "node": ">=16.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

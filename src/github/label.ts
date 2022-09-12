@@ -61,8 +61,8 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await deleteLabel(owner, repo, 'review requested');
       await deleteLabel(owner, repo, 'released');
       await deleteLabel(owner, repo, 'semantic-release');
-    } catch (e) {
-      console.warn('Skip setupLabels due to:', (e as Error)?.stack ?? e);
+    } catch (error) {
+      console.warn('Skip setupLabels due to:', (error as Error)?.stack ?? error);
     }
   });
 }
@@ -75,7 +75,7 @@ async function setupLabel(owner: string, repo: string, name: string, color: stri
       name,
       color,
     });
-  } catch (e) {
+  } catch {
     await octokit.request('PATCH /repos/{owner}/{repo}/labels/{name}', {
       owner,
       repo,
@@ -92,7 +92,7 @@ async function deleteLabel(owner: string, repo: string, name: string): Promise<v
       repo,
       name,
     });
-  } catch (e) {
+  } catch {
     // do nothing
   }
 }

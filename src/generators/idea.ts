@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
@@ -138,21 +138,17 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
     const dirPath = path.resolve(config.dirPath, '.idea');
     if (fs.existsSync(dirPath)) {
       const filePath = path.resolve(dirPath, 'watcherTasks.xml');
-      if (
-        config.containingJavaScript ||
-        config.containingJavaScriptInPackages ||
-        config.containingTypeScript ||
-        config.containingTypeScriptInPackages ||
-        (config.containingPackageJson &&
-          !config.containingPubspecYaml &&
-          !config.containingGemfile &&
-          !config.containingGoMod &&
-          !config.containingPomXml)
-      ) {
-        await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
-      } else {
-        await promisePool.run(() => fs.promises.rm(filePath, { force: true }));
-      }
+      await (config.containingJavaScript ||
+      config.containingJavaScriptInPackages ||
+      config.containingTypeScript ||
+      config.containingTypeScriptInPackages ||
+      (config.containingPackageJson &&
+        !config.containingPubspecYaml &&
+        !config.containingGemfile &&
+        !config.containingGoMod &&
+        !config.containingPomXml)
+        ? promisePool.run(() => FsUtil.generateFile(filePath, newContent))
+        : promisePool.run(() => fs.promises.rm(filePath, { force: true })));
     }
   });
 }

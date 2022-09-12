@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import merge from 'deepmerge';
 import cloneDeep from 'lodash.clonedeep';
@@ -19,10 +19,10 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     let newSettings: any = cloneDeep(jsonObj);
     const filePath = path.resolve(config.dirPath, '.renovaterc.json');
     try {
-      const oldContent = await fs.promises.readFile(filePath, 'utf-8');
+      const oldContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(oldContent) as any;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
-    } catch (e) {
+    } catch {
       // do nothing
     }
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }));

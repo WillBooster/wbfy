@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
@@ -34,7 +34,7 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
       }
       const newContent = JSON.stringify(settings);
       await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
-    } catch (_) {
+    } catch {
       // do nothing
     }
   });
