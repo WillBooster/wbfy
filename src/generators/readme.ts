@@ -13,9 +13,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
 
     newContent = insertBadge(config, newContent, semanticReleaseBadge, '.releaserc.json');
 
-    const repository = config.repository?.slice(
-      Math.max(0, Math.max(0, Math.max(0, Math.max(0, Math.max(0, config.repository?.indexOf(':') + 1)))))
-    );
+    const repository = config.repository?.slice(config.repository?.indexOf(':') + 1);
     const fileNames = fs.readdirSync(`${config.dirPath}/.github/workflows`);
     for (const fileName of fileNames) {
       if (!fileName.startsWith('test') && !fileName.startsWith('deploy')) continue;
@@ -42,18 +40,13 @@ function insertBadge(config: PackageConfig, newContent: string, badge: string, f
   // 既にbadgeがある場合は削除
   const badgePos = newContent.indexOf(badge);
   if (badgePos >= 0) {
-    newContent =
-      newContent.slice(0, Math.max(0, Math.max(0, Math.max(0, Math.max(0, Math.max(0, badgePos)))))) +
-      newContent.slice(Math.max(0, Math.max(0, Math.max(0, Math.max(0, Math.max(0, badgePos + badge.length))))));
+    newContent = newContent.slice(0, badgePos) + newContent.slice(badgePos + badge.length);
   }
   let inserted = false;
   for (let i = 0; i < newContent.length; i++) {
     if (newContent[i] === '\n') {
       inserted = true;
-      newContent = `${newContent.slice(
-        0,
-        Math.max(0, Math.max(0, Math.max(0, Math.max(0, i + 1))))
-      )}${badge}\n${newContent.slice(Math.max(0, Math.max(0, Math.max(0, Math.max(0, i + 1)))))}`;
+      newContent = `${newContent.slice(0, i + 1)}${badge}\n${newContent.slice(i + 1)}`;
       break;
     }
   }

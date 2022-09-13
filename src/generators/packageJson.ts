@@ -315,7 +315,7 @@ async function generatePrettierSuffix(dirPath: string): Promise<string> {
   const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);
   if (index < 0) return '';
 
-  const originalContent = existingContent.slice(0, Math.max(0, index));
+  const originalContent = existingContent.slice(0, index);
   const lines = originalContent
     .split('\n')
     .map((line) => {

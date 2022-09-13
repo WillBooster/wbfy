@@ -20,7 +20,7 @@ export const IgnoreFileUtil = {
       const content = await fs.promises.readFile(filePath, 'utf8');
       const index = content.indexOf(this.separatorPrefix);
       if (index >= 0) {
-        return content.slice(0, Math.max(0, content.indexOf('\n', index) + 1));
+        return content.slice(0, content.indexOf('\n', index) + 1);
       }
     } catch {
       // do nothing
