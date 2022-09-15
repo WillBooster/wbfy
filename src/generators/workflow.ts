@@ -13,103 +13,99 @@ import { combineMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
 import { promisePool } from '../utils/promisePool';
 
-const testWorkflow = {
-  name: 'Test',
-  on: {
-    pull_request: null,
-    push: {
-      branches: ['main', 'wbfy', 'renovate/**'],
+const workflows = {
+  test: {
+    name: 'Test',
+    on: {
+      pull_request: null,
+      push: {
+        branches: ['main', 'wbfy', 'renovate/**'],
+      },
     },
-  },
-  jobs: {
-    test: {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/test.yml@main',
-    },
-  },
-};
-
-const releaseWorkflow = {
-  name: 'Release',
-  on: {
-    push: {
-      branches: [],
-    },
-  },
-  jobs: {
-    release: {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/release.yml@main',
-    },
-  },
-};
-
-const wbfyWorkflow = {
-  name: 'Willboosterify',
-  on: {
-    workflow_dispatch: null,
-  },
-  jobs: {
-    wbfy: {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy.yml@main',
-    },
-  },
-};
-
-const wbfyMergeWorkflow = {
-  name: 'Merge wbfy',
-  on: {
-    workflow_dispatch: null,
-  },
-  jobs: {
-    'wbfy-merge': {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy-merge.yml@main',
-    },
-  },
-};
-
-const semanticPullRequestWorkflow = {
-  name: 'Lint PR title',
-  on: {
-    pull_request_target: {
-      types: ['opened', 'edited', 'synchronize'],
-    },
-  },
-  jobs: {
-    'semantic-pr': {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/semantic-pr.yml@main',
-    },
-  },
-};
-
-const notifyReadyWorkflow = {
-  name: 'Notify ready',
-  on: {
-    issues: {
-      types: ['labeled'],
-    },
-  },
-  jobs: {
-    'notify-ready': {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/notify-ready.yml@main',
-      secrets: {
-        DISCORD_WEBHOOK_URL: '${{ secrets.DISCORD_WEBHOOK_URL_FOR_READY }}',
+    jobs: {
+      test: {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/test.yml@main',
       },
     },
   },
-};
-
-const closeCommentWorkflow = {
-  name: 'Add close comment',
-  on: {
-    pull_request: {
-      types: ['opened'],
+  release: {
+    name: 'Release',
+    on: {
+      push: {
+        branches: [],
+      },
+    },
+    jobs: {
+      release: {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/release.yml@main',
+      },
     },
   },
-  jobs: {
-    'close-comment': {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/close-comment.yml@main',
+  wbfy: {
+    name: 'Willboosterify',
+    on: {
+      workflow_dispatch: null,
+    },
+    jobs: {
+      wbfy: {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy.yml@main',
+      },
     },
   },
-};
+  'wbfy-merge': {
+    name: 'Merge wbfy',
+    on: {
+      workflow_dispatch: null,
+    },
+    jobs: {
+      'wbfy-merge': {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy-merge.yml@main',
+      },
+    },
+  },
+  'semantic-pr': {
+    name: 'Lint PR title',
+    on: {
+      pull_request_target: {
+        types: ['opened', 'edited', 'synchronize'],
+      },
+    },
+    jobs: {
+      'semantic-pr': {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/semantic-pr.yml@main',
+      },
+    },
+  },
+  'notify-ready': {
+    name: 'Notify ready',
+    on: {
+      issues: {
+        types: ['labeled'],
+      },
+    },
+    jobs: {
+      'notify-ready': {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/notify-ready.yml@main',
+        secrets: {
+          DISCORD_WEBHOOK_URL: '${{ secrets.DISCORD_WEBHOOK_URL_FOR_READY }}',
+        },
+      },
+    },
+  },
+  'close-comment': {
+    name: 'Add close comment',
+    on: {
+      pull_request: {
+        types: ['opened'],
+      },
+    },
+    jobs: {
+      'close-comment': {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/close-comment.yml@main',
+      },
+    },
+  },
+} as Record<KnownKind, any>;
 
 type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready' | 'close-comment';
 
@@ -143,47 +139,7 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
-  let newSettings: any = {};
-  switch (kind) {
-    case 'test': {
-      newSettings = testWorkflow;
-
-      break;
-    }
-    case 'release': {
-      newSettings = releaseWorkflow;
-
-      break;
-    }
-    case 'wbfy': {
-      newSettings = wbfyWorkflow;
-
-      break;
-    }
-    case 'wbfy-merge': {
-      newSettings = wbfyMergeWorkflow;
-
-      break;
-    }
-    case 'semantic-pr': {
-      newSettings = semanticPullRequestWorkflow;
-
-      break;
-    }
-    case 'notify-ready': {
-      newSettings = notifyReadyWorkflow;
-
-      break;
-    }
-    case 'close-comment': {
-      newSettings = closeCommentWorkflow;
-
-      break;
-    }
-    // No default
-  }
-  newSettings = cloneDeep(newSettings);
-
+  let newSettings = cloneDeep(workflows[kind] || {});
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
@@ -203,20 +159,21 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     case 'release': {
       if (newSettings.on.schedule) {
         delete newSettings.on.push;
-      } else {
+      } else if (config.release.branches.length > 0) {
         newSettings.on.push.branches = config.release.branches;
+      } else {
+        // Don't use release.yml if release branch is not specified
+        await fs.promises.rm(path.join(workflowsPath, 'release.yml'), { force: true });
+        return;
       }
-
       break;
     }
     case 'wbfy': {
       setSchedule(newSettings, 20, 24);
-
       break;
     }
     case 'wbfy-merge': {
       setSchedule(newSettings, 0, 4);
-
       break;
     }
     // No default
