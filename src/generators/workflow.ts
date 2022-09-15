@@ -212,6 +212,12 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
     job.secrets['GCP_SA_KEY_JSON_FOR_FIREBASE'] = '${{ secrets.GCP_SA_KEY_JSON_FOR_FIREBASE }}';
     delete job.secrets['FIREBASE_TOKEN'];
   }
+  if (
+    (job.secrets['DISCORD_WEBHOOK_URL'] && (kind === 'release' || kind.startsWith('deploy'))) ||
+    (job.with.server_url && kind.startsWith('deploy'))
+  ) {
+    job.secrets['DISCORD_WEBHOOK_URL'] = '${{ secrets.DISCORD_WEBHOOK_URL_FOR_RELEASE }}';
+  }
 
   if (kind === 'sync') {
     const params = job.with?.sync_params_without_dest;
