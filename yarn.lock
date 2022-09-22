@@ -8488,7 +8488,7 @@ __metadata:
     typescript: "npm:4.8.3"
     yargs: "npm:17.5.1"
   bin:
-    wbfy: ./bin/index.mjs
+    wbfy: ./bin/index.cjs
   languageName: unknown
   linkType: soft
 

@@ -5,7 +5,7 @@
   "repository": "github:WillBooster/wbfy",
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
-  "bin": "./bin/index.mjs",
+  "bin": "./bin/index.cjs",
   "files": [
     "bin/",
     "dist/"
@@ -22,6 +22,7 @@
     "prettify": "prettier --color --write \"**/{.*/,}*.{cjs,css,htm,html,js,json,json5,jsx,md,mjs,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\"",
     "release": "yarn build && semantic-release",
     "start": "dotenv -- node -r esbuild-register src",
+    "start-prod": "yarn build && yarn wbfy",
     "test": "yarn jest --color __tests__",
     "test/ci-setup": "cd .. && pwd && rm -Rf test-fixtures-for-wbfy && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
     "typecheck": "tsc --noEmit --Pretty"
