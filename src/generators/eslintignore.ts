@@ -20,9 +20,9 @@ android/
 ios/
 no-format/
 test-fixtures/
-*.config.js
+*.config.*js
 *.d.ts
-*.min.js
+*.min.*js
 .yarn/
 .pnp.js
 `;
