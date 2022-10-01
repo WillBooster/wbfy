@@ -20,7 +20,12 @@ if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "e
 fi
 
 yarn typecheck`.trim(),
-  postMerge: 'yarn',
+  postMerge: `
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+run_if_changed() {
+  echo "$changed_files" | grep -E --quiet "$1" && eval "$2"
+}`.trim(),
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
@@ -67,23 +72,23 @@ async function core(config: PackageConfig): Promise<void> {
 
   const postMergeCommands: string[] = [];
   if (config.versionsText) {
-    postMergeCommands.push('asdf plugin update --all');
+    postMergeCommands.push('run_if_changed "\\..+-version" "asdf plugin update --all"');
   }
   // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
   if (config.versionsText?.includes('python ')) {
-    postMergeCommands.push('asdf install python');
+    postMergeCommands.push('run_if_changed "\\..+-version" "asdf install python"');
   }
   if (config.versionsText) {
-    postMergeCommands.push('asdf install');
+    postMergeCommands.push('run_if_changed "\\..+-version" "asdf install"');
   }
-  postMergeCommands.push(settings.postMerge);
+  postMergeCommands.push('run_if_changed "package\\.json" "yarn"');
   if (config.containingPoetryLock) {
-    postMergeCommands.push('poetry install');
+    postMergeCommands.push('run_if_changed "poetry\\.lock" "poetry install"');
   }
   if (config.depending.blitz || config.depending.prisma) {
     postMergeCommands.push('yarn gen-code');
   }
-  const postMergeCommand = content.replace(DEFAULT_COMMAND, postMergeCommands.join(' && '));
+  const postMergeCommand = content.replace(DEFAULT_COMMAND, `${settings.postMerge}\n\n${postMergeCommands.join('\n')}`);
   await promisePool.run(() =>
     fs.promises.writeFile(path.resolve(dirPath, 'post-merge'), postMergeCommand, {
       mode: 0o755,

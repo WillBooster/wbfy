@@ -1,4 +1,4 @@
-import child_process from 'node:child_process';
+import child_process, { SpawnSyncOptions } from 'node:child_process';
 
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {
@@ -20,7 +20,7 @@ export function spawnSyncWithStringResult(command: string, args: string[], cwd: 
   return proc.stdout.toString().trim();
 }
 
-export function getSpawnSyncArgs(command: string, args: string[], cwd: string): [string, string[], any] {
+export function getSpawnSyncArgs(command: string, args: string[], cwd: string): [string, string[], SpawnSyncOptions] {
   const env = { ...process.env };
   // Remove berry from PATH
   if (env.PATH && env.BERRY_BIN_FOLDER) {
