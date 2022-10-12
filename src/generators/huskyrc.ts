@@ -24,7 +24,9 @@ yarn typecheck`.trim(),
 changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
 
 run_if_changed() {
-  echo "$changed_files" | grep -E --quiet "$1" && eval "$2"
+  if echo "$changed_files" | grep --quiet -E "$1"; then
+    eval "$2"
+  fi
 }`.trim(),
 };
 
