@@ -180,20 +180,19 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       const entries = await fs.promises.readdir(config.dirPath, { withFileTypes: true });
       const dirNames = await Promise.all(
-        entries
-          .filter(async (entry) => {
-            if (!entry.isDirectory()) return false;
-            const dirPath = path.resolve(config.dirPath, entry.name);
-            const fileNames = await fs.promises.readdir(dirPath);
-            return fileNames.some((fileName) => fileName.endsWith('.py'));
-          })
-          .map((entry) => entry.name)
+        entries.map(async (entry) => {
+          if (!entry.isDirectory()) return '';
+          const dirPath = path.resolve(config.dirPath, entry.name);
+          const fileNames = await fs.promises.readdir(dirPath);
+          return fileNames.some((fileName) => fileName.endsWith('.py')) ? entry.name : '';
+        })
       );
-      if (dirNames.length > 0) {
-        jsonObj.scripts['format-code'] = `poetry run isort --profile black ${dirNames.join(
+      const filteredDirNames = dirNames.filter(Boolean);
+      if (filteredDirNames.length > 0) {
+        jsonObj.scripts['format-code'] = `poetry run isort --profile black ${filteredDirNames.join(
           ' '
-        )} && poetry run black ${dirNames.join(' ')}`;
-        jsonObj.scripts.lint = `poetry run flake8 ${dirNames.join(' ')}`;
+        )} && poetry run black ${filteredDirNames.join(' ')}`;
+        jsonObj.scripts.lint = `poetry run flake8 ${filteredDirNames.join(' ')}`;
         jsonObj.scripts['lint-fix'] = 'yarn lint';
         jsonObj.scripts.format += ` && yarn format-code`;
         poetryDependencies.push('black', 'isort', 'flake8');
