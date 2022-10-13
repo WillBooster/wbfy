@@ -180,12 +180,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       const entries = await fs.promises.readdir(config.dirPath, { withFileTypes: true });
       const dirNames = await Promise.all(
-        entries.filter(async (entry) => {
-          if (!entry.isDirectory()) return false;
-          const dirPath = path.resolve(config.dirPath, entry.name);
-          const fileNames = await fs.promises.readdir(dirPath);
-          return fileNames.some((fileName) => fileName.endsWith('.py'));
-        })
+        entries
+          .filter(async (entry) => {
+            if (!entry.isDirectory()) return false;
+            const dirPath = path.resolve(config.dirPath, entry.name);
+            const fileNames = await fs.promises.readdir(dirPath);
+            return fileNames.some((fileName) => fileName.endsWith('.py'));
+          })
+          .map((entry) => entry.name)
       );
       if (dirNames.length > 0) {
         jsonObj.scripts['format-code'] = `poetry run isort --profile black ${dirNames.join(
