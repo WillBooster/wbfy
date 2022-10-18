@@ -121,13 +121,14 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
       containingJavaScript:
-        glob.sync('@(app|src|__tests__|scripts)/**/*.{js,jsx,cjs,mjs}', { cwd: dirPath }).length > 0,
-      containingTypeScript: glob.sync('@(app|src|__tests__|scripts)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+        glob.sync('@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}', { cwd: dirPath }).length > 0,
+      containingTypeScript:
+        glob.sync('@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}', { cwd: dirPath }).length > 0,
       containingJsxOrTsx: glob.sync('@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       containingJavaScriptInPackages:
-        glob.sync('packages/**/@(app|src|__tests__|scripts)/**/*.{js,jsx,cjs,mjs}', { cwd: dirPath }).length > 0,
+        glob.sync('packages/**/@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}', { cwd: dirPath }).length > 0,
       containingTypeScriptInPackages:
-        glob.sync('packages/**/@(app|src|__tests__|scripts)/**/*.ts?(x)', { cwd: dirPath }).length > 0,
+        glob.sync('packages/**/@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}', { cwd: dirPath }).length > 0,
       containingJsxOrTsxInPackages:
         glob.sync('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
