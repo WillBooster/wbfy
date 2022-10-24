@@ -277,6 +277,9 @@ function setSchedule(newSettings: any, inclusiveMinHourJst: number, exclusiveMax
         ? inclusiveMinHourJst <= hourJst && hourJst < exclusiveMaxHourJst
         : inclusiveMinHourJst <= hourJst || hourJst < exclusiveMaxHourJst;
     if (inRange) return;
+    console.log('setSchedule:', minuteUtc, hourUtc, inRange, hourJst, inclusiveMinHourJst, exclusiveMaxHourJst);
+  } else {
+    console.log('setSchedule:', minuteUtc, hourUtc);
   }
 
   const minJst = 1 + Math.floor(Math.random() * 59);
