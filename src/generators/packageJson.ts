@@ -115,7 +115,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
   }
 
-  if ((config.containingTypeScript || config.containingTypeScriptInPackages) && !config.depending.blitz) {
+  if ((config.containingTypeScript || config.containingTypeScriptInPackages) && config.depending.blitz !== '1') {
     devDependencies.push('typescript');
   }
 
@@ -205,16 +205,18 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (config.depending.blitz) {
-    // These cause an error of eslint-plugin-import loading
-    devDependencies = devDependencies.filter((dep) => !dep.includes('@typescript-eslint/'));
-    // This causes eslint errors
-    devDependencies = devDependencies.filter(
-      (d) =>
-        d !== 'eslint-plugin-react' &&
-        d !== 'eslint-import-resolver-typescript' &&
-        d !== 'eslint-plugin-import' &&
-        d !== 'eslint-plugin-react-hooks'
-    );
+    if (config.depending.blitz === '1') {
+      // These cause an error of eslint-plugin-import loading
+      devDependencies = devDependencies.filter((dep) => !dep.includes('@typescript-eslint/'));
+      // This causes eslint errors
+      devDependencies = devDependencies.filter(
+        (d) =>
+          d !== 'eslint-plugin-react' &&
+          d !== 'eslint-import-resolver-typescript' &&
+          d !== 'eslint-plugin-import' &&
+          d !== 'eslint-plugin-react-hooks'
+      );
+    }
     if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
       jsonObj.scripts['gen-code'] = 'blitz codegen';
     }

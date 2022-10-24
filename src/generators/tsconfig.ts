@@ -85,9 +85,6 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
       if (oldSettings.jsx) {
         delete newSettings.jsx;
       }
-      if (config.depending.blitz) {
-        delete newSettings.include;
-      }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
     } catch {
       // do nothing

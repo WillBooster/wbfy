@@ -11,6 +11,9 @@ import { promisePool } from '../utils/promisePool';
 
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateEslintrc', async () => {
+    // TODO: support Blitz v2
+    if (rootConfig.depending.blitz === '2') return;
+
     const bases = [];
     if (config.eslintBase) {
       bases.push(config.eslintBase);
@@ -36,8 +39,10 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       newSettings.extends = oldSettings.extends;
       oldSettings.extends = newExtends;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-      if (config.depending.blitz) {
-        newSettings.extends = [...newSettings.extends.filter((e: string) => e !== 'blitz'), 'blitz'];
+      if (config.depending.blitz === '1') {
+        addExtensionToTail(newSettings, 'blitz');
+      } else if (config.depending.blitz === '2') {
+        addExtensionToTail(newSettings, '@blitzjs/next/eslint');
       }
     } catch {
       // do nothing
@@ -45,4 +50,8 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
     const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
   });
+}
+
+function addExtensionToTail(newSettings: any, extension: string): void {
+  newSettings.extends = [...newSettings.extends.filter((e: string) => e !== extension), extension];
 }

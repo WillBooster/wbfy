@@ -31,7 +31,7 @@ export interface PackageConfig {
   containingTypeScriptInPackages: boolean;
   containingJsxOrTsxInPackages: boolean;
   depending: {
-    blitz: boolean;
+    blitz?: string;
     firebase: boolean;
     prisma: boolean;
     reactNative: boolean;
@@ -132,7 +132,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingJsxOrTsxInPackages:
         glob.sync('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
       depending: {
-        blitz: !!(dependencies['blitz'] || devDependencies['blitz']),
+        blitz: (dependencies['blitz'] || devDependencies['blitz'] || '')[0],
         firebase: !!devDependencies['firebase-tools'],
         prisma: !!devDependencies['prisma'],
         reactNative: !!dependencies['react-native'],
