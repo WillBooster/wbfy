@@ -178,8 +178,9 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const oldSettings = yaml.load(oldContent);
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-  } catch {
+  } catch (error) {
     // do nothing
+    console.log(error);
   }
   for (const job of Object.values(newSettings.jobs) as any[]) {
     // Ignore non-reusable workflows
@@ -310,9 +311,18 @@ function setSchedule(newSettings: any, inclusiveMinHourJst: number, exclusiveMax
         ? inclusiveMinHourJst <= hourJst && hourJst < exclusiveMaxHourJst
         : inclusiveMinHourJst <= hourJst || hourJst < exclusiveMaxHourJst;
     if (inRange) return;
-    console.log('setSchedule:', minuteUtc, hourUtc, inRange, hourJst, inclusiveMinHourJst, exclusiveMaxHourJst);
+    console.log(
+      'setSchedule:',
+      newSettings,
+      minuteUtc,
+      hourUtc,
+      inRange,
+      hourJst,
+      inclusiveMinHourJst,
+      exclusiveMaxHourJst
+    );
   } else {
-    console.log('setSchedule:', minuteUtc, hourUtc);
+    console.log('setSchedule:', newSettings, minuteUtc, hourUtc);
   }
 
   const minJst = 1 + Math.floor(Math.random() * 59);
