@@ -105,9 +105,35 @@ const workflows = {
       },
     },
   },
+  'add-issue-to-project': {
+    name: 'Add issue to github project',
+    on: {
+      issues: {
+        types: ['labeled'],
+      },
+    },
+    jobs: {
+      'add-to-project': {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
+        secrets: {
+          GH_PROJECT_URL: '${{ secrets.GH_PROJECT_URL }}',
+          GH_BOT_PAT: '${{ secrets.GH_BOT_PAT }}',
+        },
+      },
+    },
+  },
 } as Record<KnownKind, any>;
 
-type KnownKind = 'test' | 'release' | 'sync' | 'wbfy' | 'wbfy-merge' | 'semantic-pr' | 'notify-ready' | 'close-comment';
+type KnownKind =
+  | 'test'
+  | 'release'
+  | 'sync'
+  | 'wbfy'
+  | 'wbfy-merge'
+  | 'semantic-pr'
+  | 'notify-ready'
+  | 'close-comment'
+  | 'add-issue-to-project';
 
 export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateWorkflow', async () => {
@@ -128,7 +154,14 @@ export async function generateWorkflow(rootConfig: PackageConfig): Promise<void>
     if (rootConfig.publicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
       fileNames.push('notify-ready.yml');
     }
-    fileNames.push('test.yml', 'wbfy.yml', 'wbfy-merge.yml', 'semantic-pr.yml', 'close-comment.yml');
+    fileNames.push(
+      'test.yml',
+      'wbfy.yml',
+      'wbfy-merge.yml',
+      'semantic-pr.yml',
+      'close-comment.yml',
+      'add-issue-to-project.yml'
+    );
 
     for (const fileName of fileNames) {
       // 実際はKnownKind以外の値も代入されることに注意
