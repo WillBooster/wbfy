@@ -40,9 +40,9 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       oldSettings.extends = newExtends;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
       if (config.depending.blitz === '0') {
-        addExtensionToTail(newSettings, 'blitz');
+        addExtensionToHead(newSettings, 'blitz');
       } else if (config.depending.blitz === '2') {
-        addExtensionToTail(newSettings, '@blitzjs/next/eslint');
+        addExtensionToHead(newSettings, '@blitzjs/next/eslint');
       }
     } catch {
       // do nothing
@@ -52,6 +52,6 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
   });
 }
 
-function addExtensionToTail(newSettings: any, extension: string): void {
-  newSettings.extends = [...newSettings.extends.filter((e: string) => e !== extension), extension];
+function addExtensionToHead(newSettings: any, extension: string): void {
+  newSettings.extends = [extension, ...newSettings.extends.filter((e: string) => e !== extension)];
 }
