@@ -1516,10 +1516,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:16.18.2":
-  version: 16.18.2
-  resolution: "@types/node@npm:16.18.2"
-  checksum: cfd894ece121b7b71dd281a8eb2338fff4cb05a0cee181928d8af503eb79611f596770c009040fa80b7940f256bcf10825ed02d9cf299b4a23c80075e234a29f
+"@types/node@npm:18.11.8":
+  version: 18.11.8
+  resolution: "@types/node@npm:18.11.8"
+  checksum: 46527a04b97610751efcefffe33e4b1b8428855c9b95a4efd225299730409990631296cfc4a5d67ae32741274ab686dbf76cdf5eb201c9476833250bb9d9b60e
   languageName: node
   linkType: hard
 
@@ -8442,7 +8442,7 @@ __metadata:
     "@types/libsodium-wrappers": "npm:0.7.10"
     "@types/lodash.clonedeep": "npm:4.5.7"
     "@types/micromatch": "npm:4.0.2"
-    "@types/node": "npm:16.18.2"
+    "@types/node": "npm:18.11.8"
     "@types/node-fetch": "npm:3.0.3"
     "@types/yargs": "npm:17.0.13"
     "@typescript-eslint/eslint-plugin": "npm:5.41.0"
