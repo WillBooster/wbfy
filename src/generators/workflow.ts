@@ -109,7 +109,7 @@ const workflows = {
     name: 'Add issue to github project',
     on: {
       issues: {
-        types: ['labeled'],
+        types: ['opened'],
       },
     },
     jobs: {
