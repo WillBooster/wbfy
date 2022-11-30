@@ -286,7 +286,7 @@ function generateScripts(config: PackageConfig): Record<string, string> {
     format: `sort-package-json && yarn prettify`,
     lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
     'lint-fix': 'yarn lint --fix',
-    prettify: `prettier --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
+    prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
     typecheck: 'tsc --noEmit --Pretty',
   };
   if (config.containingSubPackageJsons) {
@@ -296,7 +296,7 @@ function generateScripts(config: PackageConfig): Record<string, string> {
         format: `sort-package-json && yarn prettify && yarn workspaces foreach --parallel --verbose run format`,
         lint: `yarn workspaces foreach --parallel --verbose run lint`,
         'lint-fix': 'yarn workspaces foreach --parallel --verbose run lint-fix',
-        prettify: `prettier --color --write "**/{.*/,}*.{${extensions.prettier.join(
+        prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
           ','
         )}}" "!**/packages/**" "!**/test-fixtures/**"`,
         test: 'yarn workspaces foreach --verbose run test',

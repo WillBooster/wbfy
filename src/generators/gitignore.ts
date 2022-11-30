@@ -12,12 +12,6 @@ import { promisePool } from '../utils/promisePool';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 
-const defaultUserContent = `${IgnoreFileUtil.header}
-
-
-${IgnoreFileUtil.separator}
-`;
-
 const commonContent = `
 .devcontainer/
 dist/
@@ -30,7 +24,9 @@ Icon[\r]
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateGitignore', async () => {
     const filePath = path.resolve(config.dirPath, '.gitignore');
-    let userContent = ((await IgnoreFileUtil.getUserContent(filePath)) || defaultUserContent) + commonContent;
+    const content = (await FsUtil.readFileIgnoringError(filePath)) ?? '';
+    let headUserContent = IgnoreFileUtil.getHeadUserContent(content) + commonContent;
+    const tailUserContent = IgnoreFileUtil.getTailUserContent(content);
 
     const names = [...defaultNames];
     if (config.containingGemfile) {
@@ -38,7 +34,7 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
     }
     if (config.containingGoMod) {
       names.push('go');
-      userContent += `${path.basename(config.dirPath)}
+      headUserContent += `${path.basename(config.dirPath)}
 `;
     }
     if (config.containingPackageJson) {
@@ -46,19 +42,19 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
     }
     if (config.containingPomXml) {
       names.push('maven');
-      userContent += `.idea/google-java-format.xml
+      headUserContent += `.idea/google-java-format.xml
 `;
     }
     if (config.containingPubspecYaml) {
       names.push('flutter', 'AndroidStudio', 'ruby');
-      userContent += `.flutter-plugins-dependencies
+      headUserContent += `.flutter-plugins-dependencies
 android/key.properties
 ios/.bundle
 .idea/runConfigurations.xml
 `;
     }
     if (config.containingTemplateYaml) {
-      userContent += `.aws-sam/
+      headUserContent += `.aws-sam/
 packaged.yaml
 `;
     }
@@ -71,7 +67,7 @@ packaged.yaml
     }
     if (rootConfig.depending.reactNative || config.depending.reactNative) {
       names.push('reactnative');
-      userContent += `google-services.json
+      headUserContent += `google-services.json
 android/app/src/main/assets/
 `;
     }
@@ -80,7 +76,7 @@ android/app/src/main/assets/
     }
     if (rootConfig.depending.blitz) {
       names.push('nextjs');
-      userContent += `.blitz/
+      headUserContent += `.blitz/
 .blitz**
 `;
     }
@@ -126,7 +122,7 @@ android/app/src/main/assets/
     if (rootConfig.depending.reactNative || config.depending.reactNative || config.containingPubspecYaml) {
       generated = generated.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
     }
-    const newContent = userContent + generated;
+    const newContent = headUserContent + generated + tailUserContent;
     await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
   });
 }

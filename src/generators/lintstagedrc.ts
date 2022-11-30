@@ -21,7 +21,7 @@ async function core(config: PackageConfig): Promise<void> {
     const eslint = `
   '${getEslintKey(config)}': [${JSON.stringify(
       `eslint --fix${EslintUtil.getLintFixSuffix(config)}`
-    )}, 'prettier --write'],`;
+    )}, 'prettier --cache --write'],`;
     lines.push(eslint);
   }
   const packagesFilter = config.root ? " && !file.includes('/packages/')" : '';
@@ -30,7 +30,7 @@ async function core(config: PackageConfig): Promise<void> {
     ${config.containingJavaScript || config.containingTypeScript ? getEslintFilterForPrettier(config) : ''}
     const filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});
     if (filteredFiles.length === 0) return [];
-    const commands = [\`prettier --write \${filteredFiles.join(' ')}\`];
+    const commands = [\`prettier --cache --write \${filteredFiles.join(' ')}\`];
     if (filteredFiles.some(file => file.endsWith('package.json'))) {
       commands.push('yarn sort-package-json');
     }

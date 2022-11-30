@@ -178,9 +178,8 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const oldSettings = yaml.load(oldContent);
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-  } catch (error) {
+  } catch {
     // do nothing
-    console.log(error);
   }
   for (const job of Object.values(newSettings.jobs) as any[]) {
     // Ignore non-reusable workflows

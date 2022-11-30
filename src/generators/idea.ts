@@ -10,7 +10,7 @@ const newContent = `<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="prettier --write $FilePathRelativeToProjectRoot$" />
+      <option name="arguments" value="prettier --cache --write $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -30,7 +30,7 @@ const newContent = `<?xml version="1.0" encoding="UTF-8"?>
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="prettier --write $FilePathRelativeToProjectRoot$" />
+      <option name="arguments" value="prettier --cache --write $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -50,7 +50,7 @@ const newContent = `<?xml version="1.0" encoding="UTF-8"?>
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="prettier --write $FilePathRelativeToProjectRoot$" />
+      <option name="arguments" value="prettier --cache --write $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -70,7 +70,7 @@ const newContent = `<?xml version="1.0" encoding="UTF-8"?>
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="prettier --write $FilePathRelativeToProjectRoot$" />
+      <option name="arguments" value="prettier --cache --write $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -90,7 +90,7 @@ const newContent = `<?xml version="1.0" encoding="UTF-8"?>
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="prettier --write $FilePathRelativeToProjectRoot$" />
+      <option name="arguments" value="prettier --cache --write $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -110,7 +110,7 @@ const newContent = `<?xml version="1.0" encoding="UTF-8"?>
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="prettier --write $FilePathRelativeToProjectRoot$" />
+      <option name="arguments" value="prettier --cache --write $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />

@@ -6,12 +6,6 @@ import { FsUtil } from '../utils/fsUtil';
 import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
 import { promisePool } from '../utils/promisePool';
 
-const defaultUserContent = `${IgnoreFileUtil.header}
-
-
-${IgnoreFileUtil.separator}
-`;
-
 const commonContent = `
 3rd-party/
 @types/
@@ -30,12 +24,14 @@ test-fixtures/
 export async function generateEslintignore(config: PackageConfig): Promise<void> {
   return logger.function('generateEslintignore', async () => {
     const filePath = path.resolve(config.dirPath, '.eslintignore');
-    const userContent = (await IgnoreFileUtil.getUserContent(filePath)) || defaultUserContent;
+    const content = (await FsUtil.readFileIgnoringError(filePath)) ?? '';
+    const headUserContent = IgnoreFileUtil.getHeadUserContent(content) + commonContent;
+    const tailUserContent = IgnoreFileUtil.getTailUserContent(content);
 
     const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
-    const gitignoreContent = (await IgnoreFileUtil.getExistingContent(gitignoreFilePath)) || '';
+    const gitignoreContent = (await IgnoreFileUtil.readGitignoreWithoutSeparators(gitignoreFilePath)) || '';
 
-    const newContent = userContent + commonContent + gitignoreContent;
+    const newContent = headUserContent + commonContent + gitignoreContent + tailUserContent;
     await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
   });
 }

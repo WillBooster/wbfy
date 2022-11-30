@@ -9,7 +9,7 @@ export function combineMerge(target: any[], source: any[], options: any): any[] 
   const destination = [...target];
 
   for (const [index, item] of source.entries()) {
-    if (typeof destination[index] === 'undefined') {
+    if (destination[index] === undefined) {
       destination[index] = options.cloneUnlessOtherwiseSpecified(item, options);
     } else if (options.isMergeableObject(item)) {
       destination[index] = merge(target[index], item, options);
