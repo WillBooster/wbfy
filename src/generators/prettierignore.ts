@@ -3,7 +3,7 @@ import path from 'node:path';
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { FsUtil } from '../utils/fsUtil';
-import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
+import { ignoreFileUtil } from '../utils/ignoreFileUtil';
 import { promisePool } from '../utils/promisePool';
 
 const commonContent = `
@@ -22,11 +22,11 @@ export async function generatePrettierignore(config: PackageConfig): Promise<voi
   return logger.function('generatePrettierignore', async () => {
     const filePath = path.resolve(config.dirPath, '.prettierignore');
     const content = (await FsUtil.readFileIgnoringError(filePath)) ?? '';
-    const headUserContent = IgnoreFileUtil.getHeadUserContent(content) + commonContent;
-    const tailUserContent = IgnoreFileUtil.getTailUserContent(content);
+    const headUserContent = ignoreFileUtil.getHeadUserContent(content) + commonContent;
+    const tailUserContent = ignoreFileUtil.getTailUserContent(content);
 
     const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
-    const gitignoreContent = (await IgnoreFileUtil.readGitignoreWithoutSeparators(gitignoreFilePath)) || '';
+    const gitignoreContent = (await ignoreFileUtil.readGitignoreWithoutSeparators(gitignoreFilePath)) || '';
 
     let additionalContent = '';
     if (config.containingPubspecYaml) {

@@ -7,7 +7,7 @@ import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { EslintUtil } from '../utils/eslintUtil';
 import { extensions } from '../utils/extensions';
-import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
+import { ignoreFileUtil } from '../utils/ignoreFileUtil';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync } from '../utils/spawnUtil';
 import { getSrcDirs } from '../utils/srcDirectories';
@@ -315,7 +315,7 @@ function generateScripts(config: PackageConfig): Record<string, string> {
 async function generatePrettierSuffix(dirPath: string): Promise<string> {
   const filePath = path.resolve(dirPath, '.prettierignore');
   const existingContent = await fs.promises.readFile(filePath, 'utf8');
-  const index = existingContent.indexOf(IgnoreFileUtil.separatorPrefix);
+  const index = existingContent.indexOf(ignoreFileUtil.separatorPrefix);
   if (index < 0) return '';
 
   const originalContent = existingContent.slice(0, index);

@@ -7,7 +7,7 @@ import { options } from '../options';
 import { PackageConfig } from '../packageConfig';
 import { fetchOnNode } from '../utils/fetchOnNode';
 import { FsUtil } from '../utils/fsUtil';
-import { IgnoreFileUtil } from '../utils/ignoreFileUtil';
+import { ignoreFileUtil } from '../utils/ignoreFileUtil';
 import { promisePool } from '../utils/promisePool';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
@@ -25,8 +25,8 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
   return logger.function('generateGitignore', async () => {
     const filePath = path.resolve(config.dirPath, '.gitignore');
     const content = (await FsUtil.readFileIgnoringError(filePath)) ?? '';
-    let headUserContent = IgnoreFileUtil.getHeadUserContent(content) + commonContent;
-    const tailUserContent = IgnoreFileUtil.getTailUserContent(content);
+    let headUserContent = ignoreFileUtil.getHeadUserContent(content) + commonContent;
+    const tailUserContent = ignoreFileUtil.getTailUserContent(content);
 
     const names = [...defaultNames];
     if (config.containingGemfile) {
@@ -101,7 +101,7 @@ android/app/src/main/assets/
       if (generated) generated += '\n';
       generated += content + '\n';
     }
-    if (!(await IgnoreFileUtil.isBerryZeroInstallEnabled(filePath))) {
+    if (!(await ignoreFileUtil.isBerryZeroInstallEnabled(filePath))) {
       generated = generated.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
     }
     if (config.containingPomXml || config.containingPubspecYaml) {
