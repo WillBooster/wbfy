@@ -5,7 +5,6 @@ import path from 'node:path';
 import { logger } from '../logger';
 import { options } from '../options';
 import { PackageConfig } from '../packageConfig';
-import { fetchOnNode } from '../utils/fetchOnNode';
 import { FsUtil } from '../utils/fsUtil';
 import { ignoreFileUtil } from '../utils/ignoreFileUtil';
 import { promisePool } from '../utils/promisePool';
@@ -86,7 +85,7 @@ android/app/src/main/assets/
       let content = (await readCache(name)) ?? '';
       if (!content) {
         const url = `https://www.toptal.com/developers/gitignore/api/${name}`;
-        const response = await fetchOnNode(url);
+        const response = await fetch(url);
         const responseText = await response.text();
         if (responseText.includes('Attention Required!')) {
           console.error(`Failed to fetch ${url}`);

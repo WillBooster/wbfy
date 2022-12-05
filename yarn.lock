@@ -1505,15 +1505,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-fetch@npm:3.0.3":
-  version: 3.0.3
-  resolution: "@types/node-fetch@npm:3.0.3"
-  dependencies:
-    node-fetch: "npm:*"
-  checksum: 78431c76e55d431752a221e76fa801440d654a915e50cd4e274703ea050d6c026416fb72ada62fee34c239d6c79fd8b4c44e12f3320d82a4b7ae850064f60fdb
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:*, @types/node@npm:18.11.10":
   version: 18.11.10
   resolution: "@types/node@npm:18.11.10"
@@ -2687,13 +2678,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"data-uri-to-buffer@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "data-uri-to-buffer@npm:4.0.0"
-  checksum: d1559da256893c6d71dbff34aac56d294b0865ac675bb155b2702dfdbea00df9e580a55015104cf86f814b3c67f10b4027682302e1ef9d9dfd5d09b7719521e1
-  languageName: node
-  linkType: hard
-
 "dateformat@npm:^3.0.0":
   version: 3.0.3
   resolution: "dateformat@npm:3.0.3"
@@ -3747,16 +3731,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-blob@npm:^3.1.2, fetch-blob@npm:^3.1.4":
-  version: 3.2.0
-  resolution: "fetch-blob@npm:3.2.0"
-  dependencies:
-    node-domexception: "npm:^1.0.0"
-    web-streams-polyfill: "npm:^3.0.3"
-  checksum: 114f3d29d46bf029fdc4753b3688295e9a917f37c81c124b3fcad7388ecffe234c29cd48259bed2319ca25aaf105ffd96a3e369c3ad1bcca5f94f410876f5b0d
-  languageName: node
-  linkType: hard
-
 "figures@npm:^2.0.0":
   version: 2.0.0
   resolution: "figures@npm:2.0.0"
@@ -3845,15 +3819,6 @@ __metadata:
   version: 3.2.7
   resolution: "flatted@npm:3.2.7"
   checksum: d57a559a56f8743f48067b992e70f222921bec6656de4617ee60dab5e531c2aeba67ace287965b759cca80fa0d3f0c7ffc39341ccc9bc874594f4b73c0fea48c
-  languageName: node
-  linkType: hard
-
-"formdata-polyfill@npm:^4.0.10":
-  version: 4.0.10
-  resolution: "formdata-polyfill@npm:4.0.10"
-  dependencies:
-    fetch-blob: "npm:^3.1.2"
-  checksum: 8954f9e756728f96239da0b07b2651193ebad3be58c7c9b114c3982982861d8bbd820497926b1d5018e5a57281af86693471672ed7c6c26860910c5597d5fc9d
   languageName: node
   linkType: hard
 
@@ -6199,30 +6164,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-domexception@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "node-domexception@npm:1.0.0"
-  checksum: 7b65cf4b5e9545fbf17d8fd969952f71074048ff6f5c94d4ba9b98f1aee84ca9c5ec12e0eb7d5db0b6ad199c8c8c100056ef36c1145eabb542d910159c034bb7
-  languageName: node
-  linkType: hard
-
 "node-emoji@npm:^1.11.0":
   version: 1.11.0
   resolution: "node-emoji@npm:1.11.0"
   dependencies:
     lodash: "npm:^4.17.21"
   checksum: d94fcc48d9c3dc1f2512bf525f5c614d0b88c9c711c7d116f06ec8adc6d25082959c1c6a37fe9ae431ba4018018ca13bed256f94e61c347e4618b1276b841d3c
-  languageName: node
-  linkType: hard
-
-"node-fetch@npm:*, node-fetch@npm:3.3.0":
-  version: 3.3.0
-  resolution: "node-fetch@npm:3.3.0"
-  dependencies:
-    data-uri-to-buffer: "npm:^4.0.0"
-    fetch-blob: "npm:^3.1.4"
-    formdata-polyfill: "npm:^4.0.10"
-  checksum: 1a833a97b36f8646171409ca426a31b08a360a30f90f282c722cf7dce2f9c754ce687706cd6d76d110b7da7d1fe3d8530ba70640f0c23fa1a7e0b98fe59ecfbe
   languageName: node
   linkType: hard
 
@@ -8492,7 +8439,6 @@ __metadata:
     "@types/lodash.clonedeep": "npm:4.5.7"
     "@types/micromatch": "npm:4.0.2"
     "@types/node": "npm:18.11.10"
-    "@types/node-fetch": "npm:3.0.3"
     "@types/yargs": "npm:17.0.15"
     "@typescript-eslint/eslint-plugin": "npm:5.45.0"
     "@typescript-eslint/parser": "npm:5.45.0"
@@ -8521,7 +8467,6 @@ __metadata:
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.5"
     minimal-promise-pool: "npm:1.2.0"
-    node-fetch: "npm:3.3.0"
     pinst: "npm:3.0.0"
     prettier: "npm:2.8.0"
     semantic-release: "npm:19.0.5"
@@ -8540,13 +8485,6 @@ __metadata:
   dependencies:
     defaults: "npm:^1.0.3"
   checksum: fbed749fcbc2aaaa4379619872d817099173bd049c808373a7d19afc8e5c66913a7e6bc101ad97d0f6e5b3c85d76a36166e8e0281ba9128e707140582f223660
-  languageName: node
-  linkType: hard
-
-"web-streams-polyfill@npm:^3.0.3":
-  version: 3.2.1
-  resolution: "web-streams-polyfill@npm:3.2.1"
-  checksum: d0b6246240d181d6e2d8de6ded04938581bc5807da33ccd6f6b4a431c1f3fa3c04ffe0dfb739c7172d1208141717b4c80e8df7b300998fa9287ddb69bbaa0c68
   languageName: node
   linkType: hard
 
