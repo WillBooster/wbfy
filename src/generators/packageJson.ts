@@ -83,8 +83,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (config.root) {
     // To install the latest pinst
     devDependencies.push('husky', '@willbooster/renovate-config');
-    if (config.publicRepo) {
+    if (config.publicRepo || config.referred) {
+      // https://typicode.github.io/husky/#/?id=install-1
       devDependencies.push('pinst');
+      jsonObj.scripts['prepack'] = 'pinst --disable';
+      jsonObj.scripts['postpack'] = 'pinst --enable';
     }
     if (config.depending.semanticRelease) {
       devDependencies.push('conventional-changelog-conventionalcommits');
