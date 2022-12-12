@@ -98,6 +98,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       ) {
         devDependencies.push('semantic-release');
       }
+      jsonObj.version = '0.0.0-semantically-released';
     }
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
