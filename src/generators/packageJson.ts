@@ -7,6 +7,7 @@ import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { EslintUtil } from '../utils/eslintUtil';
 import { extensions } from '../utils/extensions';
+import { gitHubUtil } from '../utils/githubUtil';
 import { ignoreFileUtil } from '../utils/ignoreFileUtil';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync } from '../utils/spawnUtil';
@@ -142,6 +143,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj.publishConfig ??= {};
     jsonObj.publishConfig.access ??= 'public';
   }
+  const [owner] = gitHubUtil.getOrgAndName(config.repository ?? '');
+  if (owner === 'WillBooster' || owner === 'WillBoosterLab') {
+    jsonObj.author = 'WillBooster Inc.';
+  }
 
   if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
     delete jsonObj.scripts.typecheck;
@@ -250,8 +255,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 }
 
+// TODO: remove the following migration code in future
 async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
-  // TODO: remove the following migration code in future
   if (jsonObj.author === 'WillBooster LLC') {
     jsonObj.author = 'WillBooster Inc.';
   }
