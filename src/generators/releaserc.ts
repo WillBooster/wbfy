@@ -1,9 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import merge from 'deepmerge';
+
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { FsUtil } from '../utils/fsUtil';
+import { overwriteMerge } from '../utils/mergeUtil';
 import { promisePool } from '../utils/promisePool';
 
 export async function generateReleaserc(rootConfig: PackageConfig): Promise<void> {
@@ -14,21 +17,34 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
       const plugins = settings?.plugins || [];
       for (let i = 0; i < plugins.length; i++) {
         const plugin = Array.isArray(plugins[i]) ? plugins[i][0] : plugins[i];
+        const oldConfig = (Array.isArray(plugins[i]) && plugins[i][1]) || {};
         if (plugin === '@semantic-release/commit-analyzer') {
           plugins[i] = [
             '@semantic-release/commit-analyzer',
-            {
-              preset: 'conventionalcommits',
-            },
+            merge.all(
+              [
+                oldConfig,
+                {
+                  preset: 'conventionalcommits',
+                },
+              ],
+              { arrayMerge: overwriteMerge }
+            ),
           ];
         } else if (plugin === '@semantic-release/github') {
           plugins[i] = [
             '@semantic-release/github',
-            {
-              successComment: false,
-              labels: ['r: semantic-release'],
-              releasedLabels: ['released :bookmark:'],
-            },
+            merge.all(
+              [
+                oldConfig,
+                {
+                  successComment: false,
+                  labels: ['r: semantic-release'],
+                  releasedLabels: ['released :bookmark:'],
+                },
+              ],
+              { arrayMerge: overwriteMerge }
+            ),
           ];
         }
       }
