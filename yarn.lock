@@ -5971,10 +5971,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimal-promise-pool@npm:1.2.0":
-  version: 1.2.0
-  resolution: "minimal-promise-pool@npm:1.2.0"
-  checksum: c48f0003cc4cc7734daeb5607f7d46a29bb3380c7c4091f07d577978c498be0afac00259a2e6f16288e9fbc7d610aba194d694c0e4606ef8a32f5ed350b8c05f
+"minimal-promise-pool@npm:2.1.1":
+  version: 2.1.1
+  resolution: "minimal-promise-pool@npm:2.1.1"
+  checksum: 4462d86248b5c21f041865c1534caca7a889a5249fa6f2df11a8c7f759d03b32b1ed0c576753e6921cf8f2c55ec9d1a00e96fb3391c14b62d7ffee16c7641088
   languageName: node
   linkType: hard
 
@@ -8495,7 +8495,7 @@ __metadata:
     lint-staged: "npm:13.1.0"
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.5"
-    minimal-promise-pool: "npm:1.2.0"
+    minimal-promise-pool: "npm:2.1.1"
     pinst: "npm:3.0.0"
     prettier: "npm:2.8.1"
     semantic-release: "npm:19.0.5"
