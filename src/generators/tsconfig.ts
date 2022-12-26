@@ -27,6 +27,7 @@ const rootJsonObj = {
     sourceMap: true,
     importHelpers: false,
     outDir: 'dist',
+    typeRoots: ['./node_modules/@types', './@types'],
   },
   include: [
     'src/**/*',
@@ -35,8 +36,6 @@ const rootJsonObj = {
     'packages/*/src/**/*',
     'packages/*/__tests__/**/*',
     'packages/*/scripts/**/*',
-    './node_modules/@types',
-    './@types',
   ],
 };
 
@@ -56,8 +55,9 @@ const subJsonObj = {
     sourceMap: true,
     importHelpers: false,
     outDir: 'dist',
+    typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
   },
-  include: ['src/**/*', '__tests__/**/*', 'scripts/**/*', '../../node_modules/@types', '../../@types', './@types'],
+  include: ['src/**/*', '__tests__/**/*', 'scripts/**/*'],
 };
 
 export async function generateTsconfig(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
@@ -79,13 +79,13 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
       if (oldSettings.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
         delete oldSettings.extends;
       }
-      delete oldSettings.compilerOptions?.typeRoots;
       delete newSettings?.compilerOptions?.target;
       delete newSettings?.compilerOptions?.module;
       if (oldSettings.jsx) {
         delete newSettings.jsx;
       }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
+      newSettings.include = newSettings.include.filter((dirPath: string) => !dirPath.includes('@types'));
     } catch {
       // do nothing
     }
