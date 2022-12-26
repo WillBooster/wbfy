@@ -9,7 +9,7 @@ import { spawnSync } from '../utils/spawnUtil';
 const DEFAULT_COMMAND = 'npm test';
 
 const settings = {
-  preCommit: 'yarn lint-staged',
+  preCommit: 'node node_modules/.bin/lint-staged',
   prePush: `yarn typecheck`,
   prePushForLab: `
 if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
@@ -64,7 +64,10 @@ async function core(config: PackageConfig): Promise<void> {
   );
 
   if (config.containingTypeScript || config.containingTypeScriptInPackages) {
-    const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? settings.prePushForLab : settings.prePush;
+    let prePush = config.repository?.startsWith('github:WillBoosterLab/') ? settings.prePushForLab : settings.prePush;
+    if (!config.containingSubPackageJsons) {
+      prePush = prePush.replace('yarn typecheck', 'node node_modules/.bin/tsc --noEmit --Pretty');
+    }
     await promisePool.run(() =>
       fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, prePush), {
         mode: 0o755,
