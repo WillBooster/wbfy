@@ -16,12 +16,13 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
 }
 
 async function core(config: PackageConfig): Promise<void> {
+  const packagePrefix = config.root ? 'node node_modules/.bin/' : 'node ../../node_modules/.bin/';
   const lines: string[] = [];
   if (config.containingJavaScript || config.containingTypeScript) {
     const eslint = `
   '${getEslintKey(config)}': [${JSON.stringify(
-      `node node_modules/.bin/eslint --fix${EslintUtil.getLintFixSuffix(config)}`
-    )}, 'node node_modules/.bin/prettier --cache --write'],`;
+      `${packagePrefix}eslint --fix${EslintUtil.getLintFixSuffix(config)}`
+    )}, '${packagePrefix}prettier --cache --write'],`;
     lines.push(eslint);
   }
   const packagesFilter = config.root ? " && !file.includes('/packages/')" : '';
@@ -30,9 +31,9 @@ async function core(config: PackageConfig): Promise<void> {
     ${config.containingJavaScript || config.containingTypeScript ? getEslintFilterForPrettier(config) : ''}
     const filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});
     if (filteredFiles.length === 0) return [];
-    const commands = [\`node node_modules/.bin/prettier --cache --write \${filteredFiles.join(' ')}\`];
+    const commands = [\`${packagePrefix}prettier --cache --write \${filteredFiles.join(' ')}\`];
     if (filteredFiles.some(file => file.endsWith('package.json'))) {
-      commands.push('node node_modules/.bin/sort-package-json');
+      commands.push('${packagePrefix}sort-package-json');
     }
     return commands;
   },`);

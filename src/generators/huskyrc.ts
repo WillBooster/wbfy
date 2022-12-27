@@ -6,6 +6,8 @@ import { PackageConfig } from '../packageConfig';
 import { promisePool } from '../utils/promisePool';
 import { spawnSync } from '../utils/spawnUtil';
 
+import { generateScripts } from './packageJson';
+
 const DEFAULT_COMMAND = 'npm test';
 
 const settings = {
@@ -19,7 +21,8 @@ if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "e
   exit 1
 fi
 
-yarn typecheck`.trim(),
+yarn typecheck
+`.trim(),
   postMerge: `
 changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
 
@@ -27,7 +30,8 @@ run_if_changed() {
   if echo "$changed_files" | grep --quiet -E "$1"; then
     eval "$2"
   fi
-}`.trim(),
+}
+`.trim(),
 };
 
 export async function generateHuskyrc(config: PackageConfig): Promise<void> {
@@ -65,9 +69,8 @@ async function core(config: PackageConfig): Promise<void> {
 
   if (config.containingTypeScript || config.containingTypeScriptInPackages) {
     let prePush = config.repository?.startsWith('github:WillBoosterLab/') ? settings.prePushForLab : settings.prePush;
-    if (!config.containingSubPackageJsons) {
-      prePush = prePush.replace('yarn typecheck', 'node node_modules/.bin/tsc --noEmit --Pretty');
-    }
+    const { typecheck } = generateScripts(config);
+    prePush = prePush.replace('yarn typecheck', typecheck.replace('tsc', 'node node_modules/.bin/tsc'));
     await promisePool.run(() =>
       fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, prePush), {
         mode: 0o755,

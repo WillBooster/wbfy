@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import type { PluginMeta } from '@yarnpkg/core/lib/Plugin';
 import yaml from 'js-yaml';
 
 import { logger } from '../logger';
@@ -37,9 +38,18 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       // c.f. https://github.com/yarnpkg/berry/pull/4698
       settings.enableGlobalCache = true;
     }
+    const originalLength = settings.plugins?.length ?? 0;
+    settings.plugins = settings.plugins?.filter((p: PluginMeta) => p.path !== '.yarn/plugins/undefined.cjs') ?? [];
+    if (settings.plugins.length !== originalLength) {
+      const pluginPath = path.resolve(config.dirPath, '.yarnrc', 'undefined.cjs');
+      await promisePool.run(() => fs.promises.rm(pluginPath, { force: true }));
+    }
+    if (settings.plugins.length === 0) {
+      delete settings.plugins;
+    }
     await fs.promises.writeFile(yarnrcYmlPath, yaml.dump(settings, { lineWidth: -1 }));
 
-    const plugins = (settings.plugins || []).map((p: any) => p.spec as string);
+    const plugins = (settings.plugins ?? []).map((p: PluginMeta) => p.spec);
     const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;
     importOrRemovePlugin(config, plugins, requireTypeScript, '@yarnpkg/plugin-typescript');
     if (requireTypeScript && !config.requiringNodeModules) {
