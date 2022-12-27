@@ -289,7 +289,7 @@ async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
   await promisePool.run(() => fs.promises.rm('lerna.json', { force: true }));
 }
 
-function generateScripts(config: PackageConfig): Record<string, string> {
+export function generateScripts(config: PackageConfig): Record<string, string> {
   let scripts = {
     cleanup: 'yarn format && yarn lint-fix',
     format: `sort-package-json && yarn prettify`,
@@ -315,8 +315,10 @@ function generateScripts(config: PackageConfig): Record<string, string> {
   }
   if (config.depending.blitz) {
     scripts.typecheck = `${scripts.typecheck} || yarn run typecheck/warn`;
-    (scripts as any)['typecheck/warn'] = `echo 'Please try "yarn gen-code" if you face unknown type errors.' && exit 1`;
-    (scripts as any)['typecheck:gen-code'] = 'yarn gen-code && tsc --noEmit --Pretty';
+    (scripts as Record<string, string>)[
+      'typecheck/warn'
+    ] = `echo 'Please try "yarn gen-code" if you face unknown type errors.' && exit 1`;
+    (scripts as Record<string, string>)['typecheck:gen-code'] = 'yarn gen-code && tsc --noEmit --Pretty';
   }
   return scripts;
 }
