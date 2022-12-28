@@ -12,7 +12,7 @@ export interface PackageConfig {
   dirPath: string;
   root: boolean;
   publicRepo: boolean;
-  referred: boolean;
+  referredByOtherRepo: boolean;
   repository?: string;
   willBoosterConfigs: boolean;
   containingSubPackageJsons: boolean;
@@ -108,7 +108,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       dirPath,
       root: isRoot,
       publicRepo: repoInfo?.private === false,
-      referred: !!packageJson.files,
+      referredByOtherRepo: !!packageJson.files,
       repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,

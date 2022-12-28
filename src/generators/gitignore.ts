@@ -13,6 +13,7 @@ const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocod
 
 const commonContent = `
 .devcontainer/
+.venv/
 dist/
 temp/
 Icon[\r]
