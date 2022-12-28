@@ -22,14 +22,14 @@ async function core(config: PackageConfig): Promise<void> {
       lines.push(line);
       continue;
     }
-
     const [, version] = line.split(/\s+/);
     await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
   }
   if (config.containingPoetryLock) {
-    updateLine('poetry 1.2.2', 0, lines);
+    updateLine('poetry 1.3.1', 0, lines);
+    // Don't update python in .python-version automatically
     if (!fs.existsSync(path.resolve(config.dirPath, '.python-version'))) {
-      updateLine('python 3.9.15', 0, lines);
+      updateLine('python 3.9.16', 0, lines);
     }
   }
   if (config.depending.firebase) {
@@ -50,8 +50,8 @@ async function core(config: PackageConfig): Promise<void> {
 }
 
 function updateLine(line: string, insertionIndex: number, lines: string[]): void {
-  const [prefix] = line.split(' ');
-  const index = lines.findIndex((l) => l.split(/\s+/)[0] === prefix);
+  const [toolName] = line.split(' ');
+  const index = lines.findIndex((l) => l.split(/\s+/)[0] === toolName);
   if (index >= 0) {
     lines[index] = line;
   } else {
