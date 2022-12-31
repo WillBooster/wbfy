@@ -7,7 +7,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { FsUtil } from '../utils/fsUtil';
-import { overwriteMerge } from '../utils/mergeUtil';
+import { combineMerge, overwriteMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
 import { promisePool } from '../utils/promisePool';
 
@@ -84,12 +84,13 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
       if (oldSettings.jsx) {
         delete newSettings.jsx;
       }
-      newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
+      newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
       newSettings.include = newSettings.include.filter((dirPath: string) => !dirPath.includes('@types'));
     } catch {
       // do nothing
     }
     sortKeys(newSettings.compilerOptions);
+    newSettings.include = newSettings.include.sort();
     const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
   });
