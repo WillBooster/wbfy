@@ -113,11 +113,10 @@ const workflows = {
       },
     },
     jobs: {
-      'add-to-project': {
+      'add-issue-to-project': {
         uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
         secrets: {
           GH_PROJECT_URL: '${{ secrets.GH_PROJECT_URL }}',
-          GH_BOT_PAT: '${{ secrets.GH_BOT_PAT }}',
         },
       },
     },
@@ -211,6 +210,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     }
     // No default
   }
+  migrateWorkflow(newSettings);
   await writeYaml(newSettings, filePath);
 
   if (kind === 'release') {
@@ -235,7 +235,13 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   job.with ||= {};
   job.secrets ||= {};
 
-  if ((config.release.github && kind === 'test') || kind === 'release' || kind === 'wbfy' || kind === 'wbfy-merge') {
+  if (
+    (config.release.github && kind === 'test') ||
+    kind === 'release' ||
+    kind === 'wbfy' ||
+    kind === 'wbfy-merge' ||
+    kind === 'add-issue-to-project'
+  ) {
     job.secrets['GH_TOKEN'] = config.publicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
@@ -266,10 +272,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   }
 
   // Remove deprecated parameters
-  delete job.with['non_self_hosted'];
-  delete job.with['notify_discord'];
-  delete job.with['require_fly'];
-  delete job.with['require_gcloud'];
+  migrateJob(job);
   if (job.with['dot_env_path'] === '.env') {
     delete job.with['dot_env_path'];
   }
@@ -339,4 +342,15 @@ async function writeYaml(newSettings: any, filePath: string): Promise<void> {
     },
   });
   await fs.promises.writeFile(filePath, yamlText);
+}
+
+function migrateWorkflow(newSettings: any): void {
+  delete newSettings.jobs['add-to-project'];
+}
+
+function migrateJob(job: any): void {
+  delete job.with['non_self_hosted'];
+  delete job.with['notify_discord'];
+  delete job.with['require_fly'];
+  delete job.with['require_gcloud'];
 }

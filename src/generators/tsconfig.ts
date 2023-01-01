@@ -95,7 +95,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     } catch {
       // do nothing
     }
-    sortKeys(newSettings.compilerOptions);
+    sortKeys(newSettings.compilerOptions ?? {});
     newSettings.include?.sort();
     const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
