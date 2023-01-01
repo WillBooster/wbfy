@@ -4235,9 +4235,9 @@ __metadata:
   linkType: hard
 
 "get-tsconfig@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "get-tsconfig@npm:4.2.0"
-  checksum: 9bdb940c9a30bbc87818e2c1c46fdf39708b913388e71fe0d30a3e8f6b4146d871d6fc9d6834220de84ece85f45872f41a1a8207f709bbfa7f9dcb38909a1a99
+  version: 4.3.0
+  resolution: "get-tsconfig@npm:4.3.0"
+  checksum: 7f2c1f873c2d483485a2e21ab7a4b99f2222ff305e85a4a9320db5b71dfac16d4941b489243d9f63780c3c9162fb289a7d7fce3fed116a869436fbb020b9cbaa
   languageName: node
   linkType: hard
 
