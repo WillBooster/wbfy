@@ -32,12 +32,10 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
     const settings = yaml.load(await fs.promises.readFile(yarnrcYmlPath, 'utf8')) as any;
     settings.defaultSemverRangePrefix = '';
-    if (config.requiringNodeModules) {
-      settings.nodeLinker = 'node-modules';
-      settings.nmMode = 'hardlinks-global';
-      // c.f. https://github.com/yarnpkg/berry/pull/4698
-      settings.enableGlobalCache = true;
-    }
+    settings.nodeLinker = 'node-modules';
+    settings.nmMode = 'hardlinks-global';
+    // c.f. https://github.com/yarnpkg/berry/pull/4698
+    settings.enableGlobalCache = true;
     const originalLength = settings.plugins?.length ?? 0;
     settings.plugins = settings.plugins?.filter((p: PluginMeta) => p.path !== '.yarn/plugins/undefined.cjs') ?? [];
     if (settings.plugins.length !== originalLength) {
@@ -52,9 +50,6 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     const plugins = (settings.plugins ?? []).map((p: PluginMeta) => p.spec);
     const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;
     importOrRemovePlugin(config, plugins, requireTypeScript, '@yarnpkg/plugin-typescript');
-    if (requireTypeScript && !config.requiringNodeModules) {
-      spawnSync('yarn', ['dlx', '@yarnpkg/sdks', 'vscode'], config.dirPath);
-    }
     importOrRemovePlugin(config, plugins, config.containingSubPackageJsons, '@yarnpkg/plugin-workspace-tools');
     spawnSync('yarn', ['dlx', 'yarn-plugin-auto-install'], config.dirPath);
   });

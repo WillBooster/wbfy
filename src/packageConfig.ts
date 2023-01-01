@@ -3,8 +3,8 @@ import fsp from 'node:fs/promises';
 import path from 'node:path';
 
 import glob from 'glob';
-import yaml from 'js-yaml';
 import { simpleGit } from 'simple-git';
+import { PackageJson } from 'type-fest';
 
 import { gitHubUtil, octokit } from './utils/githubUtil';
 
@@ -14,6 +14,7 @@ export interface PackageConfig {
   publicRepo: boolean;
   referredByOtherRepo: boolean;
   repository?: string;
+  isEsmPackage: boolean;
   willBoosterConfigs: boolean;
   containingSubPackageJsons: boolean;
   containingDockerfile: boolean;
@@ -45,7 +46,6 @@ export interface PackageConfig {
     npm: boolean;
   };
   eslintBase?: string;
-  requiringNodeModules: boolean;
   versionsText?: string;
 }
 
@@ -53,23 +53,16 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
   const packageJsonPath = path.resolve(dirPath, 'package.json');
   try {
     const containingPackageJson = fs.existsSync(packageJsonPath);
-    let dependencies: { [key: string]: string } = {};
-    let devDependencies: { [key: string]: string } = {};
-    let packageJson: any = {};
+    let dependencies: PackageJson['dependencies'] = {};
+    let devDependencies: PackageJson['devDependencies'] = {};
+    let packageJson: PackageJson = {};
+    let isEsmPackage = false;
     if (containingPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath, 'utf8');
       packageJson = JSON.parse(packageJsonText);
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
-    }
-
-    let requiringNodeModules = true;
-    try {
-      const yarnrcYmlPath = path.resolve(dirPath, '.yarnrc.yml');
-      const doc = yaml.load(await fsp.readFile(yarnrcYmlPath, 'utf8')) as any;
-      requiringNodeModules = !doc.nodeLinker || doc.nodeLinker === 'node-modules';
-    } catch {
-      // do nothing
+      isEsmPackage = packageJson.type === 'module';
     }
 
     let releaseBranches: string[] = [];
@@ -89,7 +82,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
 
     let repoInfo: Record<string, any> | undefined;
     if (isRoot) {
-      repoInfo = await getRepoInfo(dirPath, packageJson);
+      repoInfo = await fetchRepoInfo(dirPath, packageJson);
     }
 
     let versionsText: string | undefined;
@@ -110,6 +103,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       publicRepo: repoInfo?.private === false,
       referredByOtherRepo: !!packageJson.files,
       repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
+      isEsmPackage,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
       containingDockerfile:
@@ -150,7 +144,6 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         github: releasePlugins.includes('@semantic-release/github'),
         npm: releasePlugins.includes('@semantic-release/npm'),
       },
-      requiringNodeModules,
       versionsText,
     };
     config.eslintBase = getEslintExtensionBase(config);
@@ -182,24 +175,24 @@ function getEslintExtensionBase(config: PackageConfig): string | undefined {
   }
 }
 
-async function getRepoInfo(dirPath: string, packageJson: any): Promise<Record<string, any> | undefined> {
+async function fetchRepoInfo(dirPath: string, packageJson: PackageJson): Promise<Record<string, any> | undefined> {
   const git = simpleGit(dirPath);
   const remotes = await git.getRemotes(true);
   const origin = remotes.find((r) => r.name === 'origin');
   const remoteUrl = origin?.refs?.fetch ?? origin?.refs?.push;
   if (typeof remoteUrl === 'string') {
-    const json = await fetchRepoInfo(remoteUrl);
+    const json = await requestRepoInfo(remoteUrl);
     if (json) return json;
   }
 
-  const url = packageJson.repository?.url ?? packageJson.repository;
-  if (typeof url === 'string') {
-    const json = await fetchRepoInfo(url);
+  const url = typeof packageJson.repository === 'string' ? packageJson.repository : packageJson.repository?.url;
+  if (url) {
+    const json = await requestRepoInfo(url);
     if (json && json.message !== 'Not Found') return json;
   }
 }
 
-async function fetchRepoInfo(urlOrFullName: string): Promise<Record<string, any> | undefined> {
+async function requestRepoInfo(urlOrFullName: string): Promise<Record<string, any> | undefined> {
   const [org, name] = gitHubUtil.getOrgAndName(urlOrFullName);
   if (!org || !name) return;
 
