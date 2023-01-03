@@ -86,13 +86,23 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       repoInfo = await fetchRepoInfo(dirPath, packageJson);
     }
 
-    let versionsText: string | undefined;
+    let versionsText = '';
     try {
-      versionsText = await fsp.readFile(path.resolve(dirPath, '.tool-versions'), 'utf8');
+      const content = await fsp.readFile(path.resolve(dirPath, '.tool-versions'), 'utf8');
+      versionsText += content.trim();
     } catch {
+      // do nothing
+    }
+    for (const [prefix, name] of [
+      ['node', 'nodejs'],
+      ['python', 'python'],
+    ]) {
       try {
-        const nodeVersionContent = await fsp.readFile(path.resolve(dirPath, '.node-version'), 'utf8');
-        versionsText = 'nodejs ' + nodeVersionContent.trim();
+        const nodeVersionContent = await fsp.readFile(path.resolve(dirPath, `.${prefix}-version`), 'utf8');
+        if (versionsText) {
+          versionsText += '\n';
+        }
+        versionsText += name + ' ' + nodeVersionContent.trim();
       } catch {
         // do nothing
       }

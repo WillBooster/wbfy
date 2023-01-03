@@ -12,28 +12,35 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
   });
 }
 
+const POETRY_VERSION = '1.3.1';
+const PYTHON_VERSION = '3.9.16';
+const JAVA_VERSION = 'adoptopenjdk-17.0.5+8';
+
 async function core(config: PackageConfig): Promise<void> {
   if (!config.versionsText) return;
 
   const lines: string[] = [];
   for (const versionText of config.versionsText.trim().split('\n')) {
     const line = versionText.trim();
-    if (line && line.split(/\s+/)[0] !== 'nodejs') {
+    const [name, version] = line.split(/\s+/);
+    if (!name || !version) continue;
+    if (name === 'nodejs') {
+      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
+    } else if (name === 'python') {
+      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.python-version'), version));
+    } else {
       lines.push(line);
-      continue;
     }
-    const [, version] = line.split(/\s+/);
-    await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
   }
   if (config.containingPoetryLock) {
-    updateLine('poetry 1.3.1', 0, lines);
+    updateLine(`poetry ${POETRY_VERSION}`, 0, lines);
     // Don't update python in .python-version automatically
     if (!fs.existsSync(path.resolve(config.dirPath, '.python-version'))) {
-      updateLine('python 3.9.16', 0, lines);
+      updateLine(`python ${PYTHON_VERSION}`, 0, lines);
     }
   }
   if (config.depending.firebase) {
-    updateLine('java adoptopenjdk-17.0.5+8', 0, lines);
+    updateLine(`java ${JAVA_VERSION}`, 0, lines);
   }
   if (config.containingPackageJson) {
     const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);

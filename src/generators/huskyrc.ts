@@ -93,8 +93,17 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.containingPoetryLock) {
     postMergeCommands.push('run_if_changed "poetry\\.lock" "poetry install"');
   }
-  if (config.depending.blitz || config.depending.prisma) {
-    postMergeCommands.push('yarn gen-code');
+  if (config.depending.blitz) {
+    postMergeCommands.push(
+      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz prisma migrate deploy"',
+      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz blitz codegen"'
+    );
+  }
+  if (config.depending.prisma) {
+    postMergeCommands.push(
+      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/prisma migrate deploy"',
+      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/prisma generate"'
+    );
   }
   const postMergeCommand = content.replace(DEFAULT_COMMAND, `${settings.postMerge}\n\n${postMergeCommands.join('\n')}`);
   await promisePool.run(() =>
