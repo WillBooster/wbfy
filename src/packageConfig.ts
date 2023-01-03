@@ -35,6 +35,7 @@ export interface PackageConfig {
   depending: {
     blitz?: string;
     firebase: boolean;
+    playwright: boolean;
     prisma: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
@@ -130,7 +131,8 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       depending: {
         blitz: (dependencies['blitz'] || devDependencies['blitz'] || '').replace('^', '')[0],
         firebase: !!devDependencies['firebase-tools'],
-        prisma: !!devDependencies['prisma'],
+        playwright: !!devDependencies['playwright'],
+        prisma: !!dependencies['prisma'],
         reactNative: !!dependencies['react-native'],
         semanticRelease: !!(
           devDependencies['semantic-release'] ||
