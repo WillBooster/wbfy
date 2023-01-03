@@ -17,8 +17,6 @@ const commonContent = `
 dist/
 temp/
 Icon[\r]
-*.sqlite3
-*.sqlite3-journal
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
@@ -61,9 +59,27 @@ packaged.yaml
     // Because .venv should be ignored on root directory
     if (config.containingPoetryLock) {
       names.push('python');
+      headUserContent += `.venv/
+`;
+    }
+
+    if (rootConfig.depending.blitz) {
+      names.push('nextjs');
+      headUserContent += `.blitz/
+.blitz**
+`;
     }
     if (rootConfig.depending.firebase || config.depending.firebase) {
       names.push('firebase');
+    }
+    if (rootConfig.depending.prisma) {
+      headUserContent += `*.sqlite3
+*.sqlite3-journal
+`;
+    }
+    if (rootConfig.depending.playwright) {
+      headUserContent += `test-results/
+`;
     }
     if (rootConfig.depending.reactNative || config.depending.reactNative) {
       names.push('reactnative');
@@ -73,12 +89,6 @@ android/app/src/main/assets/
     }
     if (rootConfig.depending.storybook) {
       names.push('storybookjs');
-    }
-    if (rootConfig.depending.blitz) {
-      names.push('nextjs');
-      headUserContent += `.blitz/
-.blitz**
-`;
     }
 
     let generated = '';
