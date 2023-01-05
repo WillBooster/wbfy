@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { test, expect } from 'vitest';
+
 import { getLatestVersion } from '../src/generators/yarnrc';
 import { spawnSyncWithStringResult } from '../src/utils/spawnUtil';
 
