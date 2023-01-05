@@ -134,7 +134,7 @@ type KnownKind =
   | 'close-comment'
   | 'add-issue-to-project';
 
-export async function generateWorkflow(rootConfig: PackageConfig): Promise<void> {
+export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateWorkflow', async () => {
     const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
     await fs.promises.mkdir(workflowsPath, { recursive: true });

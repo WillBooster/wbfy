@@ -25,9 +25,11 @@ async function core(config: PackageConfig): Promise<void> {
     const [name, version] = line.split(/\s+/);
     if (!name || !version) continue;
     if (name === 'nodejs') {
-      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
+      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version + '\n'));
     } else if (name === 'python') {
-      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.python-version'), version));
+      await promisePool.run(() =>
+        fs.promises.writeFile(path.resolve(config.dirPath, '.python-version'), version + '\n')
+      );
     } else {
       lines.push(line);
     }

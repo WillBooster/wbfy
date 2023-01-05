@@ -3,7 +3,7 @@ import path from 'node:path';
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { extensions } from '../utils/extensions';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { promisePool } from '../utils/promisePool';
 
 const newContent = `root = true
@@ -37,7 +37,7 @@ indent_style = tab
 export async function generateEditorconfig(config: PackageConfig): Promise<void> {
   return logger.function('generateEditorconfig', async () => {
     const filePath = path.resolve(config.dirPath, '.editorconfig');
-    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+    await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }
 

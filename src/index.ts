@@ -18,7 +18,8 @@ import { generateReadme } from './generators/readme';
 import { generateReleaserc } from './generators/releaserc';
 import { generateRenovateJson } from './generators/renovaterc';
 import { generateTsconfig } from './generators/tsconfig';
-import { generateWorkflow } from './generators/workflow';
+import { fixTypeDefinitions } from './generators/typeDefinition';
+import { generateWorkflows } from './generators/workflow';
 import { generateYarnrcYml } from './generators/yarnrc';
 import { setupLabels } from './github/label';
 import { setupSecrets } from './github/secret';
@@ -76,7 +77,7 @@ async function main(): Promise<void> {
       generateReadme(rootConfig),
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
-      generateWorkflow(rootConfig),
+      generateWorkflows(rootConfig),
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
       setupSettings(rootConfig),
@@ -85,6 +86,9 @@ async function main(): Promise<void> {
 
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
+      if (config.containingTypeScript) {
+        promises.push(fixTypeDefinitions(config));
+      }
       await generateGitignore(config, rootConfig);
       await promisePool.promiseAll();
       if (!config.root && !config.containingPackageJson) {

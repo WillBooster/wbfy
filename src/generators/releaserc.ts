@@ -5,7 +5,7 @@ import merge from 'deepmerge';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { promisePool } from '../utils/promisePool';
 
@@ -49,7 +49,7 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
         }
       }
       const newContent = JSON.stringify(settings);
-      await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+      await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
     } catch {
       // do nothing
     }

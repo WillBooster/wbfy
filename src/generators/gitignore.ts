@@ -5,7 +5,7 @@ import path from 'node:path';
 import { logger } from '../logger';
 import { options } from '../options';
 import { PackageConfig } from '../packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { ignoreFileUtil } from '../utils/ignoreFileUtil';
 import { promisePool } from '../utils/promisePool';
 
@@ -22,7 +22,7 @@ Icon[\r]
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateGitignore', async () => {
     const filePath = path.resolve(config.dirPath, '.gitignore');
-    const content = (await FsUtil.readFileIgnoringError(filePath)) ?? '';
+    const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';
     let headUserContent = ignoreFileUtil.getHeadUserContent(content) + commonContent;
     const tailUserContent = ignoreFileUtil.getTailUserContent(content);
 
@@ -133,7 +133,7 @@ android/app/src/main/assets/
       generated = generated.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
     }
     const newContent = headUserContent + generated + tailUserContent;
-    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+    await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }
 

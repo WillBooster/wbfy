@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { promisePool } from '../utils/promisePool';
 
 export async function generateReadme(config: PackageConfig): Promise<void> {
@@ -25,7 +25,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
       newContent = insertBadge(config, newContent, badge, `.github/workflows/${fileName}`);
     }
 
-    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+    await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }
 
