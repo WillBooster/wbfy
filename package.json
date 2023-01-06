@@ -5,7 +5,8 @@
   "repository": "github:WillBooster/wbfy",
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
-  "bin": "./bin/wbfy",
+  "type": "module",
+  "bin": "./bin/wbfy.mjs",
   "files": [
     "bin/",
     "dist/"
@@ -21,7 +22,7 @@
     "postpack": "pinst --enable",
     "prettify": "prettier --cache --color --write \"**/{.*/,}*.{cjs,css,cts,htm,html,js,json,json5,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}\" \"!**/test-fixtures/**\"",
     "release": "yarn build && semantic-release",
-    "start": "dotenv -- build-ts run src --",
+    "start": "dotenv -- build-ts run src/index.ts --",
     "start-prod": "yarn build && yarn wbfy",
     "test": "vitest __tests__",
     "test/ci-setup": "cd .. && pwd && rm -Rf test-fixtures-for-wbfy && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
@@ -37,7 +38,7 @@
     "deepmerge": "4.2.2",
     "dotenv": "16.0.3",
     "dotenv-cli": "6.0.0",
-    "glob": "8.0.3",
+    "globby": "13.1.3",
     "js-yaml": "4.1.0",
     "libsodium-wrappers": "0.7.10",
     "lodash.clonedeep": "4.5.0",
@@ -47,7 +48,6 @@
   },
   "devDependencies": {
     "@types/eslint": "8.4.10",
-    "@types/glob": "8.0.0",
     "@types/jest": "29.2.5",
     "@types/js-yaml": "4.0.5",
     "@types/libsodium-wrappers": "0.7.10",
@@ -78,6 +78,7 @@
     "prettier": "2.8.1",
     "semantic-release": "19.0.5",
     "sort-package-json": "2.1.0",
+    "ts-node": "10.9.1",
     "type-fest": "3.5.1",
     "typescript": "4.9.4",
     "vitest": "0.26.3"

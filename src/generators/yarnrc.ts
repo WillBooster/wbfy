@@ -1,13 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { PluginMeta } from '@yarnpkg/core/lib/Plugin';
 import yaml from 'js-yaml';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { promisePool } from '../utils/promisePool';
-import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { promisePool } from '../utils/promisePool.js';
+import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   return logger.function('generateYarnrcYml', async () => {
@@ -37,7 +36,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     // c.f. https://github.com/yarnpkg/berry/pull/4698
     settings.enableGlobalCache = true;
     const originalLength = settings.plugins?.length ?? 0;
-    settings.plugins = settings.plugins?.filter((p: PluginMeta) => p.path !== '.yarn/plugins/undefined.cjs') ?? [];
+    settings.plugins = settings.plugins?.filter((p: any) => p.path !== '.yarn/plugins/undefined.cjs') ?? [];
     if (settings.plugins.length !== originalLength) {
       const pluginPath = path.resolve(config.dirPath, '.yarnrc', 'undefined.cjs');
       await promisePool.run(() => fs.promises.rm(pluginPath, { force: true }));
@@ -47,7 +46,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     }
     await fs.promises.writeFile(yarnrcYmlPath, yaml.dump(settings, { lineWidth: -1 }));
 
-    const plugins = (settings.plugins ?? []).map((p: PluginMeta) => p.spec);
+    const plugins = (settings.plugins ?? []).map((p: any) => p.spec);
     const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;
     importOrRemovePlugin(config, plugins, requireTypeScript, '@yarnpkg/plugin-typescript');
     importOrRemovePlugin(config, plugins, config.containingSubPackageJsons, '@yarnpkg/plugin-workspace-tools');

@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { fsUtil } from '../utils/fsUtil';
-import { promisePool } from '../utils/promisePool';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { fsUtil } from '../utils/fsUtil.js';
+import { promisePool } from '../utils/promisePool.js';
 
 const newContent = `<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">

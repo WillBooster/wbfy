@@ -3,9 +3,9 @@ import path from 'node:path';
 
 import { ignoreEnoentAsync } from '@willbooster/shared-lib';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { promisePool } from '../utils/promisePool';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { promisePool } from '../utils/promisePool.js';
 
 export async function fixTypeDefinitions(config: PackageConfig): Promise<void> {
   return logger.function('fixTypeDefinitions', async () => {

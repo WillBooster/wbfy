@@ -1,4 +1,4 @@
-import { options } from './options';
+import { options } from './options.js';
 
 class Logger {
   async function(name: string, func: () => Promise<void>): Promise<void> {

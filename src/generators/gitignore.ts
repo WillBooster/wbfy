@@ -2,12 +2,12 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { logger } from '../logger';
-import { options } from '../options';
-import { PackageConfig } from '../packageConfig';
-import { fsUtil } from '../utils/fsUtil';
-import { ignoreFileUtil } from '../utils/ignoreFileUtil';
-import { promisePool } from '../utils/promisePool';
+import { logger } from '../logger.js';
+import { options } from '../options.js';
+import { PackageConfig } from '../packageConfig.js';
+import { fsUtil } from '../utils/fsUtil.js';
+import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
+import { promisePool } from '../utils/promisePool.js';
 
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 

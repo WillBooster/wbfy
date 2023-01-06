@@ -2,16 +2,17 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import merge from 'deepmerge';
+import { globby } from 'globby';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { EslintUtil } from '../utils/eslintUtil';
-import { extensions } from '../utils/extensions';
-import { gitHubUtil } from '../utils/githubUtil';
-import { ignoreFileUtil } from '../utils/ignoreFileUtil';
-import { promisePool } from '../utils/promisePool';
-import { spawnSync } from '../utils/spawnUtil';
-import { getSrcDirs } from '../utils/srcDirectories';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { EslintUtil } from '../utils/eslintUtil.js';
+import { extensions } from '../utils/extensions.js';
+import { gitHubUtil } from '../utils/githubUtil.js';
+import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
+import { promisePool } from '../utils/promisePool.js';
+import { spawnSync } from '../utils/spawnUtil.js';
+import { getSrcDirs } from '../utils/srcDirectories.js';
 
 const jsCommonDeps = [
   'eslint',
@@ -152,10 +153,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj.author = 'WillBooster Inc.';
   }
 
-  if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
-    delete jsonObj.scripts.typecheck;
-  }
-
   // https://github.com/semantic-release/semantic-release/issues/2323#issuecomment-1032341621
   if (config.depending.semanticRelease && config.release.npm) {
     jsonObj.resolutions ||= {};
@@ -187,21 +184,25 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       if (jsonObj.scripts.postinstall === 'poetry install') {
         delete jsonObj.scripts.postinstall;
       }
-      const entries = await fs.promises.readdir(config.dirPath, { withFileTypes: true });
-      const dirNames = await Promise.all(
-        entries.map(async (entry) => {
-          if (!entry.isDirectory()) return '';
-          const dirPath = path.resolve(config.dirPath, entry.name);
-          const fileNames = await fs.promises.readdir(dirPath);
-          return fileNames.some((fileName) => fileName.endsWith('.py')) ? entry.name : '';
-        })
-      );
-      const filteredDirNames = dirNames.filter(Boolean);
-      if (filteredDirNames.length > 0) {
-        jsonObj.scripts['format-code'] = `poetry run isort --profile black ${filteredDirNames.join(
-          ' '
-        )} && poetry run black ${filteredDirNames.join(' ')}`;
-        jsonObj.scripts.lint = `poetry run flake8 ${filteredDirNames.join(' ')}`;
+      const pythonFiles = await globby('**/*.py', {
+        cwd: config.dirPath,
+        dot: true,
+        gitignore: true,
+        ignore: ['test-fixtures'],
+      });
+      const dirNameSet = new Set<string>();
+      for (const pythonFile of pythonFiles) {
+        const [first, second] = pythonFile.split(/[/\\]/);
+        if (second) {
+          dirNameSet.add(first);
+        }
+      }
+      if (dirNameSet.size > 0) {
+        const dirNamesStr = [...dirNameSet].join(' ');
+        jsonObj.scripts[
+          'format-code'
+        ] = `poetry run isort --profile black ${dirNamesStr} && poetry run black ${dirNamesStr}`;
+        jsonObj.scripts.lint = `poetry run flake8 ${dirNamesStr}`;
         jsonObj.scripts['lint-fix'] = 'yarn lint';
         jsonObj.scripts.format += ` && yarn format-code`;
         poetryDependencies.push('black', 'isort', 'flake8');
@@ -290,7 +291,7 @@ async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
 }
 
 export function generateScripts(config: PackageConfig): Record<string, string> {
-  let scripts = {
+  let scripts: Record<string, string> = {
     cleanup: 'yarn format && yarn lint-fix',
     format: `sort-package-json && yarn prettify`,
     lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
@@ -312,13 +313,22 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
         typecheck: 'yarn workspaces foreach --parallel --verbose run typecheck',
       }
     );
-  }
-  if (config.depending.blitz) {
-    scripts.typecheck = `${scripts.typecheck} || yarn run typecheck/warn`;
-    (scripts as Record<string, string>)[
-      'typecheck/warn'
-    ] = `echo 'Please try "yarn gen-code" if you face unknown type errors.' && exit 1`;
-    (scripts as Record<string, string>)['typecheck:gen-code'] = 'yarn gen-code && tsc --noEmit --Pretty';
+    if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
+      delete scripts.typecheck;
+    }
+  } else {
+    if (config.depending.blitz) {
+      scripts.typecheck += ' || yarn run typecheck/warn';
+      scripts['typecheck/warn'] = `echo 'Please try "yarn gen-code" if you face unknown type errors.' && exit 1`;
+      scripts['typecheck:gen-code'] = 'yarn gen-code && tsc --noEmit --Pretty';
+    }
+    if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
+      delete scripts.typecheck;
+    }
+    if (config.depending.pyright) {
+      scripts.typecheck = scripts.typecheck ? `${scripts.typecheck} && ` : '';
+      scripts.typecheck += 'pyright';
+    }
   }
   return scripts;
 }

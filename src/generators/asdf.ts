@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { promisePool } from '../utils/promisePool';
-import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { promisePool } from '../utils/promisePool.js';
+import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
   return logger.function('generateVersionConfigs', async () => {

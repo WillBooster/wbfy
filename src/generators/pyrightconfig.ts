@@ -11,22 +11,21 @@ import { overwriteMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 const jsonObj = {
-  extends: ['@willbooster'],
+  venvPath: '.',
+  venv: '.venv',
 };
 
-export async function generateRenovateJson(config: PackageConfig): Promise<void> {
-  return logger.function('generateRenovateJson', async () => {
-    let newSettings: any = cloneDeep(jsonObj);
-    const filePath = path.resolve(config.dirPath, '.renovaterc.json');
+export async function generatePyrightConfigJson(config: PackageConfig): Promise<void> {
+  return logger.function('generatePyrightConfigJson', async () => {
+    let newSettings: unknown = cloneDeep(jsonObj);
+    const filePath = path.resolve(config.dirPath, 'pyrightconfig.json');
     try {
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
-      const oldSettings = JSON.parse(oldContent) as any;
+      const oldSettings = JSON.parse(oldContent);
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
     } catch {
       // do nothing
     }
-    await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }));
-    await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, 'renovate.json'), { force: true }));
     const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });

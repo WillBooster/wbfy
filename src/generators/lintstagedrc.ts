@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { EslintUtil } from '../utils/eslintUtil';
-import { extensions } from '../utils/extensions';
-import { fsUtil } from '../utils/fsUtil';
-import { promisePool } from '../utils/promisePool';
-import { getSrcDirs } from '../utils/srcDirectories';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { EslintUtil } from '../utils/eslintUtil.js';
+import { extensions } from '../utils/extensions.js';
+import { fsUtil } from '../utils/fsUtil.js';
+import { promisePool } from '../utils/promisePool.js';
+import { getSrcDirs } from '../utils/srcDirectories.js';
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
   return logger.function('generateLintstagedrc', async () => {

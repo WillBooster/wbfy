@@ -3,11 +3,11 @@ import path from 'node:path';
 
 import merge from 'deepmerge';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { fsUtil } from '../utils/fsUtil';
-import { combineMerge } from '../utils/mergeUtil';
-import { promisePool } from '../utils/promisePool';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { fsUtil } from '../utils/fsUtil.js';
+import { combineMerge } from '../utils/mergeUtil.js';
+import { promisePool } from '../utils/promisePool.js';
 
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateEslintrc', async () => {

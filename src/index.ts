@@ -1,33 +1,34 @@
 import path from 'node:path';
 
-import glob from 'glob';
+import { globbySync } from 'globby';
 import yargs from 'yargs';
 
-import { generateVersionConfigs } from './generators/asdf';
-import { generateEditorconfig } from './generators/editorconfig';
-import { generateEslintignore } from './generators/eslintignore';
-import { generateEslintrc } from './generators/eslintrc';
-import { generateGitattributes } from './generators/gitattributes';
-import { generateGitignore } from './generators/gitignore';
-import { generateHuskyrc } from './generators/huskyrc';
-import { generateIdeaSettings } from './generators/idea';
-import { generateLintstagedrc } from './generators/lintstagedrc';
-import { generatePackageJson } from './generators/packageJson';
-import { generatePrettierignore } from './generators/prettierignore';
-import { generateReadme } from './generators/readme';
-import { generateReleaserc } from './generators/releaserc';
-import { generateRenovateJson } from './generators/renovaterc';
-import { generateTsconfig } from './generators/tsconfig';
-import { fixTypeDefinitions } from './generators/typeDefinition';
-import { generateWorkflows } from './generators/workflow';
-import { generateYarnrcYml } from './generators/yarnrc';
-import { setupLabels } from './github/label';
-import { setupSecrets } from './github/secret';
-import { setupSettings } from './github/settings';
-import { options } from './options';
-import { getPackageConfig, PackageConfig } from './packageConfig';
-import { promisePool } from './utils/promisePool';
-import { spawnSync } from './utils/spawnUtil';
+import { generateVersionConfigs } from './generators/asdf.js';
+import { generateEditorconfig } from './generators/editorconfig.js';
+import { generateEslintignore } from './generators/eslintignore.js';
+import { generateEslintrc } from './generators/eslintrc.js';
+import { generateGitattributes } from './generators/gitattributes.js';
+import { generateGitignore } from './generators/gitignore.js';
+import { generateHuskyrc } from './generators/huskyrc.js';
+import { generateIdeaSettings } from './generators/idea.js';
+import { generateLintstagedrc } from './generators/lintstagedrc.js';
+import { generatePackageJson } from './generators/packageJson.js';
+import { generatePrettierignore } from './generators/prettierignore.js';
+import { generatePyrightConfigJson } from './generators/pyrightconfig.js';
+import { generateReadme } from './generators/readme.js';
+import { generateReleaserc } from './generators/releaserc.js';
+import { generateRenovateJson } from './generators/renovaterc.js';
+import { generateTsconfig } from './generators/tsconfig.js';
+import { fixTypeDefinitions } from './generators/typeDefinition.js';
+import { generateWorkflows } from './generators/workflow.js';
+import { generateYarnrcYml } from './generators/yarnrc.js';
+import { setupLabels } from './github/label.js';
+import { setupSecrets } from './github/secret.js';
+import { setupSettings } from './github/settings.js';
+import { options } from './options.js';
+import { getPackageConfig, PackageConfig } from './packageConfig.js';
+import { promisePool } from './utils/promisePool.js';
+import { spawnSync } from './utils/spawnUtil.js';
 
 async function main(): Promise<void> {
   const argv = await yargs(process.argv.slice(2))
@@ -52,7 +53,9 @@ async function main(): Promise<void> {
     }
 
     const subDirPaths = rootConfig.containingSubPackageJsons
-      ? glob.sync('packages/*', { cwd: rootDirPath }).map((subDirPath) => path.resolve(rootDirPath, subDirPath))
+      ? globbySync('packages/*', { cwd: rootDirPath, dot: true }).map((subDirPath) =>
+          path.resolve(rootDirPath, subDirPath)
+        )
       : [];
     const nullableSubPackageConfigs = await Promise.all(subDirPaths.map((subDirPath) => getPackageConfig(subDirPath)));
     const subPackageConfigs = nullableSubPackageConfigs.filter((config) => !!config) as PackageConfig[];
@@ -111,6 +114,9 @@ async function main(): Promise<void> {
           promises.push(generateEslintrc(config, rootConfig));
         }
         promises.push(generateEslintignore(config));
+      }
+      if (config.depending.pyright) {
+        promises.push(generatePyrightConfigJson(config));
       }
     }
     await Promise.all(promises);

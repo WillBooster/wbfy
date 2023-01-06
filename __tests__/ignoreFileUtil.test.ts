@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 
-import { ignoreFileUtil } from '../src/utils/ignoreFileUtil';
+import { ignoreFileUtil } from '../src/utils/ignoreFileUtil.js';
 
 test.each([
   {

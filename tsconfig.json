@@ -5,15 +5,20 @@
     "declaration": true,
     "esModuleInterop": true,
     "importHelpers": false,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "esnext",
+    "target": "ESNext",
     "typeRoots": ["./node_modules/@types", "./@types"]
   },
-  "include": ["__tests__/**/*", "scripts/**/*", "src/**/*"]
+  "include": ["__tests__/**/*", "scripts/**/*", "src/**/*"],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "experimentalResolver": true
+  }
 }

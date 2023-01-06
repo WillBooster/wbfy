@@ -1,4 +1,4 @@
-import { PackageConfig } from '../packageConfig';
+import { PackageConfig } from '../packageConfig.js';
 
 const srcDirectories = {
   node: ['src', '__tests__', 'scripts'].sort(),

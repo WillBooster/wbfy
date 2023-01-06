@@ -1,10 +1,10 @@
 import path from 'node:path';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { fsUtil } from '../utils/fsUtil';
-import { ignoreFileUtil } from '../utils/ignoreFileUtil';
-import { promisePool } from '../utils/promisePool';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { fsUtil } from '../utils/fsUtil.js';
+import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
+import { promisePool } from '../utils/promisePool.js';
 
 const commonContent = `
 3rd-party/

@@ -3,8 +3,8 @@ import path from 'node:path';
 
 import { test, expect } from 'vitest';
 
-import { getLatestVersion } from '../src/generators/yarnrc';
-import { spawnSyncWithStringResult } from '../src/utils/spawnUtil';
+import { getLatestVersion } from '../src/generators/yarnrc.js';
+import { spawnSyncWithStringResult } from '../src/utils/spawnUtil.js';
 
 const testFixturePackageRoot = path.resolve('..', 'test-fixtures-for-wbfy', 'packages');
 

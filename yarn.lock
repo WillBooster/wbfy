@@ -2757,16 +2757,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/glob@npm:8.0.0":
-  version: 8.0.0
-  resolution: "@types/glob@npm:8.0.0"
-  dependencies:
-    "@types/minimatch": "npm:*"
-    "@types/node": "npm:*"
-  checksum: 545d231c07e174f3d37d9133f666e6e8695bb4d4f215cd09975e5fd9eb993356cb34f3669b4cda666cd6ba1e13452aa783e95c62cdcc0e30d628428b0eb94fc4
-  languageName: node
-  linkType: hard
-
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.5
   resolution: "@types/graceful-fs@npm:4.1.5"
@@ -2877,13 +2867,6 @@ __metadata:
   dependencies:
     "@types/braces": "npm:*"
   checksum: ac7ec28d57ac61a85bd2859c69d096192e8ef66cc9d3c5fcb4531eeec3b090b1ff1be132e65eff6a16be14b9a30083cf488a402c094890c654db861aafee4669
-  languageName: node
-  linkType: hard
-
-"@types/minimatch@npm:*":
-  version: 5.1.2
-  resolution: "@types/minimatch@npm:5.1.2"
-  checksum: 698855336a92f768d02526d019efcf80e32d65ea5d044a5a0a909a923a9cfccc55e61284fd2c5dc71a51e9b5f0b4dc651cb187683f811582815a5206f534d04b
   languageName: node
   linkType: hard
 
@@ -5770,19 +5753,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:8.0.3, glob@npm:^8.0.1, glob@npm:^8.0.3":
-  version: 8.0.3
-  resolution: "glob@npm:8.0.3"
-  dependencies:
-    fs.realpath: "npm:^1.0.0"
-    inflight: "npm:^1.0.4"
-    inherits: "npm:2"
-    minimatch: "npm:^5.0.1"
-    once: "npm:^1.3.0"
-  checksum: e629823aabf11611bfe7b3a2f4582a5e0898daaecba3263081d5d4a8fcc595d07aefb85c178e816f7bf1c07a09fd164dc80558b83e9e825555796929164404b1
-  languageName: node
-  linkType: hard
-
 "glob@npm:^7.1.3, glob@npm:^7.1.4":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
@@ -5794,6 +5764,19 @@ __metadata:
     once: "npm:^1.3.0"
     path-is-absolute: "npm:^1.0.0"
   checksum: c55966a5db7ed2f30976a1490f3165f9d4e20ac7cabf01b55da4cc4f8f53a4c506e6f427e469c2fbf68636200871f3acf07e159ba6d9b65e7386216b98474a34
+  languageName: node
+  linkType: hard
+
+"glob@npm:^8.0.1, glob@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "glob@npm:8.0.3"
+  dependencies:
+    fs.realpath: "npm:^1.0.0"
+    inflight: "npm:^1.0.4"
+    inherits: "npm:2"
+    minimatch: "npm:^5.0.1"
+    once: "npm:^1.3.0"
+  checksum: e629823aabf11611bfe7b3a2f4582a5e0898daaecba3263081d5d4a8fcc595d07aefb85c178e816f7bf1c07a09fd164dc80558b83e9e825555796929164404b1
   languageName: node
   linkType: hard
 
@@ -5820,6 +5803,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"globby@npm:13.1.3, globby@npm:^13.1.2":
+  version: 13.1.3
+  resolution: "globby@npm:13.1.3"
+  dependencies:
+    dir-glob: "npm:^3.0.1"
+    fast-glob: "npm:^3.2.11"
+    ignore: "npm:^5.2.0"
+    merge2: "npm:^1.4.1"
+    slash: "npm:^4.0.0"
+  checksum: a4b8f38a118310286f684c0146301f375f40b9550fa172f37a668f7de0b52d955f7f5c05e83885b517cedb39ebfc523a7155efa8e3366c375d3fff14e5924af4
+  languageName: node
+  linkType: hard
+
 "globby@npm:^11.0.0, globby@npm:^11.0.1, globby@npm:^11.1.0":
   version: 11.1.0
   resolution: "globby@npm:11.1.0"
@@ -5831,19 +5827,6 @@ __metadata:
     merge2: "npm:^1.4.1"
     slash: "npm:^3.0.0"
   checksum: 3047df770874d103dafe26084f998f562e8a8e2930896940e0bdbdc27c1f7574570f231dc2aa981d941dc84c93db05ce7cd81667488b040412e88740186fc22e
-  languageName: node
-  linkType: hard
-
-"globby@npm:^13.1.2":
-  version: 13.1.3
-  resolution: "globby@npm:13.1.3"
-  dependencies:
-    dir-glob: "npm:^3.0.1"
-    fast-glob: "npm:^3.2.11"
-    ignore: "npm:^5.2.0"
-    merge2: "npm:^1.4.1"
-    slash: "npm:^4.0.0"
-  checksum: a4b8f38a118310286f684c0146301f375f40b9550fa172f37a668f7de0b52d955f7f5c05e83885b517cedb39ebfc523a7155efa8e3366c375d3fff14e5924af4
   languageName: node
   linkType: hard
 
@@ -10929,7 +10912,6 @@ __metadata:
   dependencies:
     "@octokit/core": "npm:4.1.0"
     "@types/eslint": "npm:8.4.10"
-    "@types/glob": "npm:8.0.0"
     "@types/jest": "npm:29.2.5"
     "@types/js-yaml": "npm:4.0.5"
     "@types/libsodium-wrappers": "npm:0.7.10"
@@ -10956,7 +10938,7 @@ __metadata:
     eslint-plugin-sort-class-members: "npm:1.16.0"
     eslint-plugin-sort-destructure-keys: "npm:1.4.0"
     eslint-plugin-unicorn: "npm:45.0.2"
-    glob: "npm:8.0.3"
+    globby: "npm:13.1.3"
     husky: "npm:8.0.3"
     jest: "npm:29.3.1"
     js-yaml: "npm:4.1.0"
@@ -10970,12 +10952,13 @@ __metadata:
     semantic-release: "npm:19.0.5"
     simple-git: "npm:3.15.1"
     sort-package-json: "npm:2.1.0"
+    ts-node: "npm:10.9.1"
     type-fest: "npm:3.5.1"
     typescript: "npm:4.9.4"
     vitest: "npm:0.26.3"
     yargs: "npm:17.6.2"
   bin:
-    wbfy: ./bin/wbfy
+    wbfy: ./bin/wbfy.mjs
   languageName: unknown
   linkType: soft
 

@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { promisePool } from '../utils/promisePool';
-import { spawnSync } from '../utils/spawnUtil';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { promisePool } from '../utils/promisePool.js';
+import { spawnSync } from '../utils/spawnUtil.js';
 
-import { generateScripts } from './packageJson';
+import { generateScripts } from './packageJson.js';
 
 const DEFAULT_COMMAND = 'npm test';
 
@@ -67,10 +67,13 @@ async function core(config: PackageConfig): Promise<void> {
     fs.promises.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, settings.preCommit))
   );
 
-  if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+  const { typecheck } = generateScripts(config);
+  if (typecheck) {
     let prePush = config.repository?.startsWith('github:WillBoosterLab/') ? settings.prePushForLab : settings.prePush;
-    const { typecheck } = generateScripts(config);
-    prePush = prePush.replace('yarn typecheck', typecheck.replace('tsc', 'node node_modules/.bin/tsc'));
+    prePush = prePush.replace(
+      'yarn typecheck',
+      typecheck.replace('tsc', 'node node_modules/.bin/tsc').replace('pyright', 'node node_modules/.bin/pyright')
+    );
     await promisePool.run(() =>
       fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, prePush), {
         mode: 0o755,

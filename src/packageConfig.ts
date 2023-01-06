@@ -2,11 +2,11 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 
-import glob from 'glob';
+import { globbySync } from 'globby';
 import { simpleGit } from 'simple-git';
 import { PackageJson } from 'type-fest';
 
-import { gitHubUtil, octokit } from './utils/githubUtil';
+import { gitHubUtil, octokit } from './utils/githubUtil.js';
 
 export interface PackageConfig {
   dirPath: string;
@@ -37,6 +37,7 @@ export interface PackageConfig {
     firebase: boolean;
     playwright: boolean;
     prisma: boolean;
+    pyright: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
     storybook: boolean;
@@ -117,7 +118,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
       isEsmPackage,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
-      containingSubPackageJsons: glob.sync('packages/**/package.json', { cwd: dirPath }).length > 0,
+      containingSubPackageJsons: containsAny('packages/**/package.json', dirPath),
       containingDockerfile:
         fs.existsSync(path.resolve(dirPath, 'Dockerfile')) ||
         fs.existsSync(path.resolve(dirPath, 'docker-compose.yml')),
@@ -128,22 +129,24 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
-      containingJavaScript:
-        glob.sync('@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}', { cwd: dirPath }).length > 0,
-      containingTypeScript:
-        glob.sync('@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}', { cwd: dirPath }).length > 0,
-      containingJsxOrTsx: glob.sync('@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
-      containingJavaScriptInPackages:
-        glob.sync('packages/**/@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}', { cwd: dirPath }).length > 0,
-      containingTypeScriptInPackages:
-        glob.sync('packages/**/@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}', { cwd: dirPath }).length > 0,
-      containingJsxOrTsxInPackages:
-        glob.sync('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', { cwd: dirPath }).length > 0,
+      containingJavaScript: containsAny('@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}', dirPath),
+      containingTypeScript: containsAny('@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}', dirPath),
+      containingJsxOrTsx: containsAny('@(app|src|__tests__)/**/*.{t,j}sx', dirPath),
+      containingJavaScriptInPackages: containsAny(
+        'packages/**/@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}',
+        dirPath
+      ),
+      containingTypeScriptInPackages: containsAny(
+        'packages/**/@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}',
+        dirPath
+      ),
+      containingJsxOrTsxInPackages: containsAny('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', dirPath),
       depending: {
         blitz: (dependencies['blitz'] || devDependencies['blitz'] || '').replace('^', '')[0],
         firebase: !!devDependencies['firebase-tools'],
         playwright: !!devDependencies['playwright'],
         prisma: !!dependencies['prisma'],
+        pyright: !!devDependencies['pyright'],
         reactNative: !!dependencies['react-native'],
         semanticRelease: !!(
           devDependencies['semantic-release'] ||
@@ -175,6 +178,10 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
   } catch {
     // do nothing
   }
+}
+
+function containsAny(pattern: string, dirPath: string): boolean {
+  return globbySync(pattern, { dot: true, cwd: dirPath }).length > 0;
 }
 
 function getEslintExtensionBase(config: PackageConfig): string | undefined {

@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 import sodium from 'libsodium-wrappers';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil.js';
 
 const deprecatedSecretNames = ['READY_DISCORD_WEBHOOK_URL'];
 

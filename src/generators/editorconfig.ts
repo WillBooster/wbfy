@@ -1,10 +1,10 @@
 import path from 'node:path';
 
-import { logger } from '../logger';
-import { PackageConfig } from '../packageConfig';
-import { extensions } from '../utils/extensions';
-import { fsUtil } from '../utils/fsUtil';
-import { promisePool } from '../utils/promisePool';
+import { logger } from '../logger.js';
+import { PackageConfig } from '../packageConfig.js';
+import { extensions } from '../utils/extensions.js';
+import { fsUtil } from '../utils/fsUtil.js';
+import { promisePool } from '../utils/promisePool.js';
 
 const newContent = `root = true
 
