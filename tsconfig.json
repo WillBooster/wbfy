@@ -15,10 +15,5 @@
     "target": "ESNext",
     "typeRoots": ["./node_modules/@types", "./@types"]
   },
-  "include": ["__tests__/**/*", "scripts/**/*", "src/**/*"],
-  "ts-node": {
-    "transpileOnly": true,
-    "files": true,
-    "experimentalResolver": true
-  }
+  "include": ["__tests__/**/*", "scripts/**/*", "src/**/*"]
 }
