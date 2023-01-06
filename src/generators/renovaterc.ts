@@ -6,7 +6,7 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { overwriteMerge } from '../utils/mergeUtil';
 import { promisePool } from '../utils/promisePool';
 
@@ -28,6 +28,6 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }));
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, 'renovate.json'), { force: true }));
     const newContent = JSON.stringify(newSettings);
-    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+    await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }

@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { promisePool } from '../utils/promisePool';
 
 const newContent = `<?xml version="1.0" encoding="UTF-8"?>
@@ -147,7 +147,7 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
         !config.containingGemfile &&
         !config.containingGoMod &&
         !config.containingPomXml)
-        ? promisePool.run(() => FsUtil.generateFile(filePath, newContent))
+        ? promisePool.run(() => fsUtil.generateFile(filePath, newContent))
         : promisePool.run(() => fs.promises.rm(filePath, { force: true })));
     }
   });

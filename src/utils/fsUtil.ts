@@ -1,6 +1,6 @@
 import fsp from 'node:fs/promises';
 
-export const FsUtil = {
+export const fsUtil = {
   async readFileIgnoringError(filePath: string): Promise<string | undefined> {
     try {
       return await fsp.readFile(filePath, 'utf8');

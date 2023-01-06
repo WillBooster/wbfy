@@ -5,7 +5,7 @@ import merge from 'deepmerge';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { combineMerge } from '../utils/mergeUtil';
 import { promisePool } from '../utils/promisePool';
 
@@ -48,7 +48,7 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       // do nothing
     }
     const newContent = JSON.stringify(newSettings);
-    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+    await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }
 

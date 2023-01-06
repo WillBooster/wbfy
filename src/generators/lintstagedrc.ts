@@ -5,7 +5,7 @@ import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
 import { EslintUtil } from '../utils/eslintUtil';
 import { extensions } from '../utils/extensions';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { promisePool } from '../utils/promisePool';
 import { getSrcDirs } from '../utils/srcDirectories';
 
@@ -66,7 +66,7 @@ module.exports = {${lines.join('')}
   const filePath = path.resolve(config.dirPath, '.lintstagedrc.cjs');
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.js'), { force: true }));
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.json'), { force: true }));
-  await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+  await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
 }
 
 function getEslintKey(config: PackageConfig): string {

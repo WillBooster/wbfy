@@ -7,7 +7,7 @@ import { TsConfigJson } from 'type-fest';
 
 import { logger } from '../logger';
 import { PackageConfig } from '../packageConfig';
-import { FsUtil } from '../utils/fsUtil';
+import { fsUtil } from '../utils/fsUtil';
 import { combineMerge } from '../utils/mergeUtil';
 import { sortKeys } from '../utils/objectUtil';
 import { promisePool } from '../utils/promisePool';
@@ -98,6 +98,6 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     sortKeys(newSettings.compilerOptions ?? {});
     newSettings.include?.sort();
     const newContent = JSON.stringify(newSettings);
-    await promisePool.run(() => FsUtil.generateFile(filePath, newContent));
+    await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }

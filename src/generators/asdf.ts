@@ -14,7 +14,7 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
 
 const POETRY_VERSION = '1.3.1';
 const PYTHON_VERSION = '3.9.16';
-const JAVA_VERSION = 'adoptopenjdk-17.0.5+8';
+const JAVA_VERSION = 'adoptopenjdk-11.0.17+8';
 
 async function core(config: PackageConfig): Promise<void> {
   if (!config.versionsText) return;
@@ -25,26 +25,29 @@ async function core(config: PackageConfig): Promise<void> {
     const [name, version] = line.split(/\s+/);
     if (!name || !version) continue;
     if (name === 'nodejs') {
-      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version));
+      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version + '\n'));
     } else if (name === 'python') {
-      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.python-version'), version));
+      await promisePool.run(() =>
+        fs.promises.writeFile(path.resolve(config.dirPath, '.python-version'), version + '\n')
+      );
     } else {
       lines.push(line);
     }
   }
+
   if (config.containingPoetryLock) {
-    updateLine(`poetry ${POETRY_VERSION}`, 0, lines);
+    updateVersion(lines, 'poetry', POETRY_VERSION);
     // Don't update python in .python-version automatically
     if (!fs.existsSync(path.resolve(config.dirPath, '.python-version'))) {
-      updateLine(`python ${PYTHON_VERSION}`, 0, lines);
+      updateVersion(lines, 'python', PYTHON_VERSION, true);
     }
   }
   if (config.depending.firebase) {
-    updateLine(`java ${JAVA_VERSION}`, 0, lines);
+    updateVersion(lines, 'java', JAVA_VERSION, true, true);
   }
   if (config.containingPackageJson) {
     const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
-    updateLine(`yarn ${version}`, lines.length, lines);
+    updateVersion(lines, 'yarn', version);
   }
 
   const toolVersionsPath = path.resolve(config.dirPath, '.tool-versions');
@@ -56,12 +59,27 @@ async function core(config: PackageConfig): Promise<void> {
   spawnSync('asdf', ['install'], config.dirPath);
 }
 
-function updateLine(line: string, insertionIndex: number, lines: string[]): void {
-  const [toolName] = line.split(' ');
+function updateVersion(lines: string[], toolName: string, newVersion: string, head = false, force = false): void {
   const index = lines.findIndex((l) => l.split(/\s+/)[0] === toolName);
+  const newLine = `${toolName} ${newVersion}`;
   if (index >= 0) {
-    lines[index] = line;
+    const [, version] = lines[index].split(/\s+/);
+    if (force || convertVersionIntoNumber(newVersion) > convertVersionIntoNumber(version)) {
+      lines[index] = newLine;
+    }
   } else {
-    lines.splice(insertionIndex, 0, line);
+    lines.splice(head ? 0 : lines.length, 0, newLine);
   }
+}
+
+function convertVersionIntoNumber(version: string): number {
+  // e.g. java adoptopenjdk-11.0.17+8
+  const numbers = version.split(/[+.-]/).map(Number).filter(Number.isNaN);
+  let versionNumber = 0;
+  let divisor = 1;
+  for (const num of numbers) {
+    versionNumber += num * divisor;
+    divisor /= 1000;
+  }
+  return versionNumber;
 }
