@@ -48,6 +48,7 @@ export interface PackageConfig {
   };
   eslintBase?: string;
   versionsText?: string;
+  packageJson?: PackageJson;
 }
 
 export async function getPackageConfig(dirPath: string): Promise<PackageConfig | undefined> {
@@ -157,6 +158,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         npm: releasePlugins.includes('@semantic-release/npm'),
       },
       versionsText,
+      packageJson,
     };
     config.eslintBase = getEslintExtensionBase(config);
     if (

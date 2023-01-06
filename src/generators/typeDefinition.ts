@@ -9,17 +9,35 @@ import { promisePool } from '../utils/promisePool';
 
 export async function fixTypeDefinitions(config: PackageConfig): Promise<void> {
   return logger.function('fixTypeDefinitions', async () => {
-    const typeDirPath = path.resolve(config.dirPath, '@types');
+    const libTypeDirPath = path.resolve(config.dirPath, '@types');
+    const srcTypeDirPath =
+      config.root && config.containingSubPackageJsons ? undefined : path.resolve(config.dirPath, 'src', 'types');
 
-    const dirents = await ignoreEnoentAsync(() => fs.readdir(typeDirPath, { withFileTypes: true }));
+    const dirents = await ignoreEnoentAsync(() => fs.readdir(libTypeDirPath, { withFileTypes: true }));
     if (!dirents) return;
 
     for (const dirent of dirents) {
+      const dirName = dirent.name.slice(0, -5);
+      const hasLibrary = config.packageJson?.dependencies?.[dirName] || config.packageJson?.devDependencies?.[dirName];
+
       if (dirent.isFile() && dirent.name.endsWith('.d.ts')) {
-        const dirName = dirent.name.slice(0, -5);
-        await fs.mkdir(path.join(typeDirPath, dirName));
+        if (hasLibrary) {
+          await fs.mkdir(path.join(libTypeDirPath, dirName));
+          await promisePool.run(() =>
+            fs.rename(path.join(libTypeDirPath, dirent.name), path.join(libTypeDirPath, dirName, 'index.d.ts'))
+          );
+        } else if (srcTypeDirPath) {
+          await fs.mkdir(srcTypeDirPath, { recursive: true });
+          await promisePool.run(() =>
+            fs.rename(path.join(libTypeDirPath, dirent.name), path.join(srcTypeDirPath, dirent.name))
+          );
+        }
+      } else if (dirent.isDirectory() && srcTypeDirPath && !hasLibrary) {
+        await fs.mkdir(srcTypeDirPath, { recursive: true });
         await promisePool.run(() =>
-          fs.rename(path.join(typeDirPath, dirent.name), path.join(typeDirPath, dirName, 'index.d.ts'))
+          ignoreEnoentAsync(() =>
+            fs.rename(path.join(libTypeDirPath, dirent.name), path.join(srcTypeDirPath, `${dirName}.d.ts`))
+          )
         );
       }
     }
