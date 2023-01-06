@@ -29,7 +29,6 @@ test-fixtures/
 .yarn/
 .pnp.js
 .devcontainer/
-.venv/
 dist/
 temp/
 Icon[]
