@@ -14,7 +14,7 @@ export interface PackageConfig {
   publicRepo: boolean;
   referredByOtherRepo: boolean;
   repository?: string;
-  isEsmPackage: boolean;
+  esmPackage: boolean;
   willBoosterConfigs: boolean;
   containingSubPackageJsons: boolean;
   containingDockerfile: boolean;
@@ -59,13 +59,13 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
     let dependencies: PackageJson['dependencies'] = {};
     let devDependencies: PackageJson['devDependencies'] = {};
     let packageJson: PackageJson = {};
-    let isEsmPackage = false;
+    let esmPackage = false;
     if (containingPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath, 'utf8');
       packageJson = JSON.parse(packageJsonText);
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
-      isEsmPackage = packageJson.type === 'module';
+      esmPackage = packageJson.type === 'module';
     }
 
     let releaseBranches: string[] = [];
@@ -116,7 +116,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       publicRepo: repoInfo?.private === false,
       referredByOtherRepo: !!packageJson.files,
       repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
-      isEsmPackage,
+      esmPackage,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: containsAny('packages/**/package.json', dirPath),
       containingDockerfile:

@@ -72,7 +72,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     if (config.root && !config.containingSubPackageJsons) {
       newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
     }
-    if (config.isEsmPackage) {
+    if (config.esmPackage) {
       newSettings.compilerOptions = { ...newSettings.compilerOptions, moduleResolution: 'NodeNext' };
     }
 

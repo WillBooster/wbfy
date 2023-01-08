@@ -155,8 +155,12 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   // https://github.com/semantic-release/semantic-release/issues/2323#issuecomment-1032341621
   if (config.depending.semanticRelease && config.release.npm) {
-    jsonObj.resolutions ||= {};
-    jsonObj.resolutions['npm/chalk'] = '^4.1.2';
+    if (config.esmPackage) {
+      delete jsonObj.resolutions?.['npm/chalk'];
+    } else {
+      jsonObj.resolutions ||= {};
+      jsonObj.resolutions['npm/chalk'] = '^4.1.2';
+    }
   }
 
   if (!config.containingSubPackageJsons) {

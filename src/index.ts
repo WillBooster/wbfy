@@ -33,21 +33,32 @@ import { spawnSync } from './utils/spawnUtil.js';
 
 async function main(): Promise<void> {
   const argv = await yargs(process.argv.slice(2))
-    .command('wbfy <paths...>', 'Generate/update project files for WillBooster')
-    .demandCommand(1)
-    .alias('d', 'skipDeps')
-    .boolean('skipDeps')
-    .default('skipDeps', false)
-    .describe('skipDeps', 'Skip dependency installation')
-    .alias('v', 'verbose')
-    .boolean('verbose')
-    .default('verbose', false)
+    .command('$0 [paths..]', 'Make a given project follow the WillBooster standard', (yargs) => {
+      yargs.positional('paths', {
+        describe: 'project paths to be wbfied',
+        array: true,
+        type: 'string',
+        default: ['.'],
+      });
+    })
+    .options({
+      skipDeps: {
+        description: 'Skip dependency installation',
+        type: 'boolean',
+        default: false,
+        alias: 'd',
+      },
+      verbose: {
+        description: 'Whether or not to enable verbose mode',
+        type: 'boolean',
+        default: false,
+        alias: 'd',
+      },
+    })
     .strict().argv;
   options.isVerbose = argv.verbose;
 
-  for (const rootDirPath of argv._) {
-    if (typeof rootDirPath === 'number') continue;
-
+  for (const rootDirPath of argv.paths as string[]) {
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
