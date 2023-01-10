@@ -43,7 +43,7 @@ async function core(config: PackageConfig): Promise<void> {
     }
   }
   if (config.depending.firebase) {
-    updateVersion(lines, 'java', JAVA_VERSION, true, true);
+    updateVersion(lines, 'java', JAVA_VERSION, true);
   }
   if (config.containingPackageJson) {
     const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
@@ -59,12 +59,12 @@ async function core(config: PackageConfig): Promise<void> {
   spawnSync('asdf', ['install'], config.dirPath);
 }
 
-function updateVersion(lines: string[], toolName: string, newVersion: string, head = false, force = false): void {
+function updateVersion(lines: string[], toolName: string, newVersion: string, head = false): void {
   const index = lines.findIndex((l) => l.split(/\s+/)[0] === toolName);
   const newLine = `${toolName} ${newVersion}`;
   if (index >= 0) {
     const [, version] = lines[index].split(/\s+/);
-    if (force || convertVersionIntoNumber(newVersion) > convertVersionIntoNumber(version)) {
+    if (convertVersionIntoNumber(newVersion) > convertVersionIntoNumber(version)) {
       lines[index] = newLine;
     }
   } else {
