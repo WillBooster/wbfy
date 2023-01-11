@@ -18,25 +18,35 @@ export async function fixTypeDefinitions(config: PackageConfig): Promise<void> {
 
     for (const dirent of dirents) {
       const dirName = dirent.name.slice(0, -5);
-      const hasLibrary = config.packageJson?.dependencies?.[dirName] || config.packageJson?.devDependencies?.[dirName];
+      const hasTypeDeclarationExtension = dirent.name.endsWith('.d.ts');
+      let packageName = hasTypeDeclarationExtension ? dirName : dirent.name;
+      packageName = dirent.name.includes('__') ? `@${dirent.name.replace('__', '/')}` : dirent.name;
+      const hasLibrary =
+        config.packageJson?.dependencies?.[packageName] || config.packageJson?.devDependencies?.[packageName];
 
-      if (dirent.isFile() && dirent.name.endsWith('.d.ts')) {
+      if (dirent.isFile() && hasTypeDeclarationExtension) {
         if (hasLibrary) {
+          // Move @types/<name>/index.d.ts if installed
           await fs.mkdir(path.join(libTypeDirPath, dirName));
           await promisePool.run(() =>
             fs.rename(path.join(libTypeDirPath, dirent.name), path.join(libTypeDirPath, dirName, 'index.d.ts'))
           );
         } else if (srcTypeDirPath) {
+          // Move src/types/<name> if not installed
           await fs.mkdir(srcTypeDirPath, { recursive: true });
           await promisePool.run(() =>
             fs.rename(path.join(libTypeDirPath, dirent.name), path.join(srcTypeDirPath, dirent.name))
           );
         }
       } else if (dirent.isDirectory() && srcTypeDirPath && !hasLibrary) {
+        // Move src/types/<name>.d.ts if not installed
         await fs.mkdir(srcTypeDirPath, { recursive: true });
         await promisePool.run(() =>
           ignoreEnoentAsync(() =>
-            fs.rename(path.join(libTypeDirPath, dirent.name), path.join(srcTypeDirPath, `${dirName}.d.ts`))
+            fs.rename(
+              path.join(libTypeDirPath, dirent.name, 'index.d.ts'),
+              path.join(srcTypeDirPath, `${dirent.name}.d.ts`)
+            )
           )
         );
       }
