@@ -212,7 +212,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
       break;
     }
     case 'wbfy-merge': {
-      setSchedule(newSettings, 0, 4);
+      setSchedule(newSettings, 1, 4);
       break;
     }
     // No default
