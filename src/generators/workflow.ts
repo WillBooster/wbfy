@@ -243,7 +243,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   job.secrets ||= {};
 
   if (
-    (config.release.github && kind === 'test') ||
+    kind === 'test' ||
     kind === 'release' ||
     kind === 'wbfy' ||
     kind === 'wbfy-merge' ||
