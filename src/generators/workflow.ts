@@ -176,7 +176,14 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const oldSettings = yaml.load(oldContent);
+    if (kind === 'wbfy' || kind === 'wbfy-merge') {
+      console.log('writeWorkflowYaml:', kind);
+      console.dir(oldSettings, { depth: null });
+    }
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
+    if (kind === 'wbfy' || kind === 'wbfy-merge') {
+      console.dir(newSettings, { depth: null });
+    }
   } catch {
     // do nothing
   }
