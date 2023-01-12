@@ -7,7 +7,10 @@ import { logger } from '../logger.js';
 import { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 
-export async function fixTypeDefinitions(config: PackageConfig): Promise<void> {
+export async function fixTypeDefinitions(
+  config: PackageConfig,
+  configsIncludingChildren: PackageConfig[]
+): Promise<void> {
   return logger.function('fixTypeDefinitions', async () => {
     const libTypeDirPath = path.resolve(config.dirPath, '@types');
     const srcTypeDirPath =
@@ -20,9 +23,13 @@ export async function fixTypeDefinitions(config: PackageConfig): Promise<void> {
       const dirName = dirent.name.slice(0, -5);
       const hasTypeDeclarationExtension = dirent.name.endsWith('.d.ts');
       let packageName = hasTypeDeclarationExtension ? dirName : dirent.name;
-      packageName = dirent.name.includes('__') ? `@${dirent.name.replace('__', '/')}` : dirent.name;
-      const hasLibrary =
-        config.packageJson?.dependencies?.[packageName] || config.packageJson?.devDependencies?.[packageName];
+      if (packageName.includes('__')) {
+        packageName = `@${packageName.replace('__', '/')}`;
+      }
+      const hasLibrary = configsIncludingChildren.some(
+        (config) =>
+          config.packageJson?.dependencies?.[packageName] || config.packageJson?.devDependencies?.[packageName]
+      );
 
       if (dirent.isFile() && hasTypeDeclarationExtension) {
         if (hasLibrary) {

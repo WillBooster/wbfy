@@ -52,7 +52,7 @@ async function main(): Promise<void> {
         description: 'Whether or not to enable verbose mode',
         type: 'boolean',
         default: false,
-        alias: 'd',
+        alias: 'v',
       },
     })
     .strict().argv;
@@ -101,8 +101,8 @@ async function main(): Promise<void> {
 
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
-      if (config.containingTypeScript) {
-        promises.push(fixTypeDefinitions(config));
+      if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+        promises.push(fixTypeDefinitions(config, config.root ? allPackageConfigs : [config]));
       }
       await generateGitignore(config, rootConfig);
       await promisePool.promiseAll();
