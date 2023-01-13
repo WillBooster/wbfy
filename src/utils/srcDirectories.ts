@@ -1,10 +1,10 @@
 import { PackageConfig } from '../packageConfig.js';
 
 const srcDirectories = {
-  node: ['src', '__tests__', 'scripts'].sort(),
-  blitz0: ['__tests__', 'scripts', 'app', 'db', 'integrations', 'mailers', 'test'].sort(),
-  // We rename 'test' directory to '__tests__'
-  blitz2: ['src', '__tests__', 'scripts', 'db', 'integrations', 'mailers'].sort(),
+  node: ['src', 'tests', 'scripts'].sort(),
+  blitz0: ['tests', 'scripts', 'app', 'db', 'integrations', 'mailers', 'test'].sort(),
+  // We rename 'test' directory to 'tests'
+  blitz2: ['src', 'tests', 'scripts', 'db', 'integrations', 'mailers'].sort(),
 };
 
 export function getSrcDirs(config: PackageConfig): string[] {

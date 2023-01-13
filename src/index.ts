@@ -4,6 +4,8 @@ import path from 'node:path';
 import { ignoreErrorAsync } from '@willbooster/shared-lib';
 import yargs from 'yargs';
 
+import { fixTestDirectories } from './fixers/testDirectory.js';
+import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { generateVersionConfigs } from './generators/asdf.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
 import { generateEslintignore } from './generators/eslintignore.js';
@@ -20,7 +22,6 @@ import { generateReadme } from './generators/readme.js';
 import { generateReleaserc } from './generators/releaserc.js';
 import { generateRenovateJson } from './generators/renovaterc.js';
 import { generateTsconfig } from './generators/tsconfig.js';
-import { fixTypeDefinitions } from './generators/typeDefinition.js';
 import { generateWorkflows } from './generators/workflow.js';
 import { generateYarnrcYml } from './generators/yarnrc.js';
 import { setupLabels } from './github/label.js';
@@ -59,15 +60,17 @@ async function main(): Promise<void> {
   options.isVerbose = argv.verbose;
 
   for (const rootDirPath of argv.paths as string[]) {
+    const packagesDirPath = path.join(rootDirPath, 'packages');
+    const dirents = (await ignoreErrorAsync(() => fs.readdir(packagesDirPath, { withFileTypes: true }))) ?? [];
+    const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
+
+    await fixTestDirectories([rootDirPath, ...subDirPaths]);
+
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
       continue;
     }
-
-    const packagesDirPath = path.join(rootDirPath, 'packages');
-    const dirents = (await ignoreErrorAsync(() => fs.readdir(packagesDirPath, { withFileTypes: true }))) ?? [];
-    const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
     const nullableSubPackageConfigs = await Promise.all(subDirPaths.map((subDirPath) => getPackageConfig(subDirPath)));
     const subPackageConfigs = nullableSubPackageConfigs.filter((config) => !!config) as PackageConfig[];
