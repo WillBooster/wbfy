@@ -129,18 +129,18 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
-      containingJavaScript: containsAny('@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}', dirPath),
-      containingTypeScript: containsAny('@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}', dirPath),
-      containingJsxOrTsx: containsAny('@(app|src|__tests__)/**/*.{t,j}sx', dirPath),
+      containingJavaScript: containsAny('@(app|src|tests|scripts)/**/*.{cjs,mjs,js,jsx}', dirPath),
+      containingTypeScript: containsAny('@(app|src|tests|scripts)/**/*.{cts,mts,ts,tsx}', dirPath),
+      containingJsxOrTsx: containsAny('@(app|src|tests)/**/*.{t,j}sx', dirPath),
       containingJavaScriptInPackages: containsAny(
-        'packages/**/@(app|src|__tests__|scripts)/**/*.{cjs,mjs,js,jsx}',
+        'packages/**/@(app|src|tests|scripts)/**/*.{cjs,mjs,js,jsx}',
         dirPath
       ),
       containingTypeScriptInPackages: containsAny(
-        'packages/**/@(app|src|__tests__|scripts)/**/*.{cts,mts,ts,tsx}',
+        'packages/**/@(app|src|tests|scripts)/**/*.{cts,mts,ts,tsx}',
         dirPath
       ),
-      containingJsxOrTsxInPackages: containsAny('packages/**/@(app|src|__tests__)/**/*.{t,j}sx', dirPath),
+      containingJsxOrTsxInPackages: containsAny('packages/**/@(app|src|tests)/**/*.{t,j}sx', dirPath),
       depending: {
         blitz: (dependencies['blitz'] || devDependencies['blitz'] || '').replace('^', '')[0],
         firebase: !!devDependencies['firebase-tools'],

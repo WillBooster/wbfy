@@ -32,10 +32,10 @@ const rootJsonObj = {
   },
   include: [
     'src/**/*',
-    '__tests__/**/*',
+    'tests/**/*',
     'scripts/**/*',
     'packages/*/src/**/*',
-    'packages/*/__tests__/**/*',
+    'packages/*/tests/**/*',
     'packages/*/scripts/**/*',
   ],
 };
@@ -58,7 +58,7 @@ const subJsonObj = {
     outDir: 'dist',
     typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
   },
-  include: ['src/**/*', '__tests__/**/*', 'scripts/**/*'],
+  include: ['src/**/*', 'tests/**/*', 'scripts/**/*'],
 };
 
 export async function generateTsconfig(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
