@@ -91,7 +91,9 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
         delete newSettings.compilerOptions?.jsx;
       }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-      newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.includes('@types'));
+      newSettings.include = newSettings.include?.filter(
+        (dirPath: string) => !dirPath.includes('@types') && !dirPath.includes('__tests__')
+      );
     } catch {
       // do nothing
     }

@@ -64,7 +64,7 @@ async function main(): Promise<void> {
     const dirents = (await ignoreErrorAsync(() => fs.readdir(packagesDirPath, { withFileTypes: true }))) ?? [];
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
-    await fixTestDirectories([packagesDirPath, ...subDirPaths]);
+    await fixTestDirectories([rootDirPath, ...subDirPaths]);
 
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
