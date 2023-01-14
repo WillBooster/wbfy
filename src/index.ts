@@ -5,6 +5,7 @@ import { ignoreErrorAsync } from '@willbooster/shared-lib';
 import yargs from 'yargs';
 
 import { fixAbbreviations } from './fixers/abbreviations.js';
+import { fixDockerfiles } from './fixers/dockerfile.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { generateVersionConfigs } from './generators/asdf.js';
@@ -66,7 +67,7 @@ async function main(): Promise<void> {
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
     await fixTestDirectories([rootDirPath, ...subDirPaths]);
-    await fixAbbreviations(rootDirPath);
+    await Promise.all([fixAbbreviations(rootDirPath), fixDockerfiles([rootDirPath, ...subDirPaths])]);
 
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {

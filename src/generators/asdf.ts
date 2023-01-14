@@ -5,6 +5,7 @@ import { logger } from '../logger.js';
 import { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
+import { convertVersionIntoNumber } from '../utils/version.js';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
   return logger.function('generateVersionConfigs', async () => {
@@ -70,16 +71,4 @@ function updateVersion(lines: string[], toolName: string, newVersion: string, he
   } else {
     lines.splice(head ? 0 : lines.length, 0, newLine);
   }
-}
-
-function convertVersionIntoNumber(version: string): number {
-  // e.g. java adoptopenjdk-11.0.17+8
-  const numbers = version.split(/[+.-]/).map(Number).filter(Number.isNaN);
-  let versionNumber = 0;
-  let divisor = 1;
-  for (const num of numbers) {
-    versionNumber += num * divisor;
-    divisor /= 1000;
-  }
-  return versionNumber;
 }
