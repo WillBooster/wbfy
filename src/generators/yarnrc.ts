@@ -33,7 +33,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.defaultSemverRangePrefix = '';
     settings.nodeLinker = 'node-modules';
     settings.nmMode = 'hardlinks-global';
-    // c.f. https://github.com/yarnpkg/berry/pull/4698
+    // cf. https://github.com/yarnpkg/berry/pull/4698
     settings.enableGlobalCache = true;
     const originalLength = settings.plugins?.length ?? 0;
     settings.plugins = settings.plugins?.filter((p: any) => p.path !== '.yarn/plugins/undefined.cjs') ?? [];
