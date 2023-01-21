@@ -13,35 +13,29 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
   });
 }
 
-const POETRY_VERSION = '1.3.1';
+const POETRY_VERSION = '1.3.2';
 const PYTHON_VERSION = '3.9.16';
 const JAVA_VERSION = 'adoptopenjdk-11.0.17+8';
+const CORE_TOOLS = new Set(['java', 'nodejs', 'python']);
+const DEPRECATED_VERSION_PREFIXES = ['java', 'node', 'python'];
 
 async function core(config: PackageConfig): Promise<void> {
   if (!config.versionsText) return;
 
-  const lines: string[] = [];
-  for (const versionText of config.versionsText.trim().split('\n')) {
-    const line = versionText.trim();
-    const [name, version] = line.split(/\s+/);
-    if (!name || !version) continue;
-    if (name === 'nodejs') {
-      await promisePool.run(() => fs.promises.writeFile(path.resolve(config.dirPath, '.node-version'), version + '\n'));
-    } else if (name === 'python') {
-      await promisePool.run(() =>
-        fs.promises.writeFile(path.resolve(config.dirPath, '.python-version'), version + '\n')
-      );
-    } else {
-      lines.push(line);
-    }
-  }
+  const duplicatableLines = config.versionsText
+    .trim()
+    .split('\n')
+    .map((line) => {
+      const [name, version] = line.trim().split(/\s+/);
+      return `${CORE_TOOLS.has(name) ? ' ' : ''}${name} ${version}`;
+    })
+    .sort()
+    .map((line) => line.trim());
+  const lines = [...new Set(duplicatableLines)];
 
   if (config.containingPoetryLock) {
     updateVersion(lines, 'poetry', POETRY_VERSION);
-    // Don't update python in .python-version automatically
-    if (!fs.existsSync(path.resolve(config.dirPath, '.python-version'))) {
-      updateVersion(lines, 'python', PYTHON_VERSION, true);
-    }
+    updateVersion(lines, 'python', PYTHON_VERSION, true);
   }
   if (config.depending.firebase) {
     updateVersion(lines, 'java', JAVA_VERSION, true);
@@ -49,6 +43,11 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.containingPackageJson) {
     const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
     updateVersion(lines, 'yarn', version);
+  }
+
+  for (const prefix of DEPRECATED_VERSION_PREFIXES) {
+    const versionPath = path.resolve(config.dirPath, `.${prefix}-version`);
+    void fs.promises.rm(versionPath, { force: true });
   }
 
   const toolVersionsPath = path.resolve(config.dirPath, '.tool-versions');

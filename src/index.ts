@@ -67,7 +67,8 @@ async function main(): Promise<void> {
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
     await fixTestDirectories([rootDirPath, ...subDirPaths]);
-    await Promise.all([fixAbbreviations(rootDirPath), fixDockerfiles([rootDirPath, ...subDirPaths])]);
+    const abbreviationPromise = fixAbbreviations(rootDirPath);
+    const dockerfilePromise = fixDockerfiles([rootDirPath, ...subDirPaths]);
 
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
@@ -90,12 +91,13 @@ async function main(): Promise<void> {
     // Install yarn berry
     await generateYarnrcYml(rootConfig);
     await Promise.all([
+      abbreviationPromise.then(() => generateReadme(rootConfig)),
+      dockerfilePromise,
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),
       generateHuskyrc(rootConfig),
       generateIdeaSettings(rootConfig),
       generateLintstagedrc(rootConfig),
-      generateReadme(rootConfig),
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
       generateWorkflows(rootConfig),
