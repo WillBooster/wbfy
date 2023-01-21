@@ -2183,7 +2183,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/core@npm:4.1.0, @octokit/core@npm:^4.1.0":
+"@octokit/core@npm:4.2.0":
+  version: 4.2.0
+  resolution: "@octokit/core@npm:4.2.0"
+  dependencies:
+    "@octokit/auth-token": "npm:^3.0.0"
+    "@octokit/graphql": "npm:^5.0.0"
+    "@octokit/request": "npm:^6.0.0"
+    "@octokit/request-error": "npm:^3.0.0"
+    "@octokit/types": "npm:^9.0.0"
+    before-after-hook: "npm:^2.2.0"
+    universal-user-agent: "npm:^6.0.0"
+  checksum: 19e6914cf84fd4f4b835162bd9104401f7c7bd5b563f286493fba73d48ab097bb89ed4d0b742989612a21c8c779158ae1965f90855153c6b0d119bb82e87db74
+  languageName: node
+  linkType: hard
+
+"@octokit/core@npm:^4.1.0":
   version: 4.1.0
   resolution: "@octokit/core@npm:4.1.0"
   dependencies:
@@ -2224,6 +2239,13 @@ __metadata:
   version: 14.0.0
   resolution: "@octokit/openapi-types@npm:14.0.0"
   checksum: 8cf19776ad6324f7021316feccc497fe768372f17b78a16dbed9d8a4977b7fac4ab8423f865d81d781df48145bec7a7ea0a21e07d5045c14d5cbe4327b91bae6
+  languageName: node
+  linkType: hard
+
+"@octokit/openapi-types@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "@octokit/openapi-types@npm:16.0.0"
+  checksum: 7bae7649e87e09fc4a064ccaa98568951fd2929f4128d108da86f82d35ccdde19930d57bbd0240ac92db2a196f11cdce5471c05f6d3d3492d4dba486c5af65e7
   languageName: node
   linkType: hard
 
@@ -2305,6 +2327,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/types@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@octokit/types@npm:9.0.0"
+  dependencies:
+    "@octokit/openapi-types": "npm:^16.0.0"
+  checksum: 377a08749434012c78fdc849765c3e11d0358d3bc49e83779da95488257aaffec7351ecb8dd9565a81c68be51976b9b20f544098c66d162f88dafdcc095d159f
+  languageName: node
+  linkType: hard
+
 "@pkgr/utils@npm:^2.3.1":
   version: 2.3.1
   resolution: "@pkgr/utils@npm:2.3.1"
@@ -2357,9 +2388,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:24.0.0":
-  version: 24.0.0
-  resolution: "@rollup/plugin-commonjs@npm:24.0.0"
+"@rollup/plugin-commonjs@npm:24.0.1":
+  version: 24.0.1
+  resolution: "@rollup/plugin-commonjs@npm:24.0.1"
   dependencies:
     "@rollup/pluginutils": "npm:^5.0.1"
     commondir: "npm:^1.0.1"
@@ -2372,7 +2403,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: d63fc075d084ac2207f5d79c177b3e6b430a90f091527ba2ab1c36976d5cf56ad38a9ea47cfb95b433e93bc5c0eb95dc6cb39d5623d82701648fb5298c2e65ff
+  checksum: a85a093d9c0e3ce2733f11fbe5d7109003840b3460b473c61a0c82d1c7a1fcd6ae6fd90db2fc687b36815f49ab45d9b27fc7bcf04a54ce5ce052d7b6c1f62de2
   languageName: node
   linkType: hard
 
@@ -3783,9 +3814,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:3.2.5":
-  version: 3.2.5
-  resolution: "build-ts@npm:3.2.5"
+"build-ts@npm:3.2.6":
+  version: 3.2.6
+  resolution: "build-ts@npm:3.2.6"
   dependencies:
     "@babel/core": "npm:7.20.12"
     "@babel/plugin-proposal-class-properties": "npm:7.18.6"
@@ -3794,7 +3825,7 @@ __metadata:
     "@babel/preset-env": "npm:7.20.2"
     "@babel/preset-typescript": "npm:7.18.6"
     "@rollup/plugin-babel": "npm:6.0.3"
-    "@rollup/plugin-commonjs": "npm:24.0.0"
+    "@rollup/plugin-commonjs": "npm:24.0.1"
     "@rollup/plugin-json": "npm:6.0.0"
     "@rollup/plugin-node-resolve": "npm:15.0.1"
     "@rollup/plugin-replace": "npm:5.0.2"
@@ -3802,10 +3833,10 @@ __metadata:
     "@rollup/pluginutils": "npm:5.0.2"
     babel-plugin-polyfill-corejs3: "npm:0.6.0"
     babel-plugin-transform-remove-console: "npm:6.9.4"
-    core-js: "npm:3.27.1"
-    core-js-pure: "npm:3.27.1"
+    core-js: "npm:3.27.2"
+    core-js-pure: "npm:3.27.2"
     dotenv: "npm:16.0.3"
-    rollup: "npm:3.10.0"
+    rollup: "npm:3.10.1"
     rollup-plugin-analyzer: "npm:4.0.0"
     rollup-plugin-node-externals: "npm:5.1.0"
     rollup-plugin-string: "npm:3.0.0"
@@ -3814,7 +3845,7 @@ __metadata:
     yargs: "npm:17.6.2"
   bin:
     build-ts: bin/index.mjs
-  checksum: d59a6bda78bc5bff373db79e586cc6f4728d3946ed8760cf510948ee27e6551b27b5a1fe2a41568d8372609e91641a3bb134fe740361b638036c188ab3972f61
+  checksum: 8ede8de79d8555d20dfb31cb1b8c98bfdd32f3509dc8a9333b26b76f9373c195753f2f2a4523c7569fd1b42daff3f27371d469271049e7b2f1c9202f0d9d6cd0
   languageName: node
   linkType: hard
 
@@ -4405,17 +4436,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:3.27.1":
-  version: 3.27.1
-  resolution: "core-js-pure@npm:3.27.1"
-  checksum: 7edb734c3b77c6ee118b699f195aae59abd72e6ce1a0e4454ac32b2390c92c6b7f3fcee0b3be002e64d84a73d2020444e378b145b0bac8eb00d3bf97ab4261c1
+"core-js-pure@npm:3.27.2":
+  version: 3.27.2
+  resolution: "core-js-pure@npm:3.27.2"
+  checksum: 2382f1b3d02a903758a332f952ef9648b6224ec08918d041134cd1f407717cbea2d37d60f62dfec46732fd4c95f4dd73c9e9b509b38c824775f6b0fc1c32c65f
   languageName: node
   linkType: hard
 
-"core-js@npm:3.27.1":
-  version: 3.27.1
-  resolution: "core-js@npm:3.27.1"
-  checksum: eacca0971dcb9402e91f4933772acd56bdb4aaf32cc77c60445e17909b1275190ea4b9ef1cc8eb09569f5bd64ef447ec5be1fdbdf5be6222ba0a1307a2ad6e35
+"core-js@npm:3.27.2":
+  version: 3.27.2
+  resolution: "core-js@npm:3.27.2"
+  checksum: a65178818013cb4f90d96b8ff899fea5cd5bb884f993888ad5da34b89ff199bd6732bca6acc1a0ef21d36f2955e0389bd58a2141ce5234900d42d5c636b1cd92
   languageName: node
   linkType: hard
 
@@ -9661,7 +9692,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:3.10.0, rollup@npm:^3.7.0":
+"rollup@npm:3.10.1":
+  version: 3.10.1
+  resolution: "rollup@npm:3.10.1"
+  dependencies:
+    fsevents: "npm:~2.3.2"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: 48b2831955524383173d3d889e8c2fe253735b16e1876001ce033ac59dcd60eb14d190d9255db9a13e8c0b091b0b4fd9d94d8506d0fa3083452a0eaba39502ab
+  languageName: node
+  linkType: hard
+
+"rollup@npm:^3.7.0":
   version: 3.10.0
   resolution: "rollup@npm:3.10.0"
   dependencies:
@@ -11083,7 +11128,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "wbfy@workspace:."
   dependencies:
-    "@octokit/core": "npm:4.1.0"
+    "@octokit/core": "npm:4.2.0"
     "@types/eslint": "npm:8.4.10"
     "@types/jest": "npm:29.2.6"
     "@types/js-yaml": "npm:4.0.5"
@@ -11099,7 +11144,7 @@ __metadata:
     "@willbooster/renovate-config": "npm:9.5.0"
     "@willbooster/shared-lib": "npm:1.7.1"
     "@yarnpkg/core": "npm:4.0.0-rc.36"
-    build-ts: "npm:3.2.5"
+    build-ts: "npm:3.2.6"
     conventional-changelog-conventionalcommits: "npm:5.0.0"
     deepmerge: "npm:4.2.2"
     dotenv: "npm:16.0.3"
