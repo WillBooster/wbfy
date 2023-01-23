@@ -79,7 +79,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   let dependencies: string[] = [];
   let devDependencies = ['lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config'];
-  const poetryDependencies: string[] = [];
+  const poetryDevDependencies: string[] = [];
 
   if (config.root) {
     // To install the latest pinst
@@ -209,7 +209,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         jsonObj.scripts.lint = `poetry run flake8 ${dirNamesStr}`;
         jsonObj.scripts['lint-fix'] = 'yarn lint';
         jsonObj.scripts.format += ` && yarn format-code`;
-        poetryDependencies.push('black', 'isort', 'flake8');
+        poetryDevDependencies.push('black', 'isort', 'flake8');
       }
     }
 
@@ -258,8 +258,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     if (devDependencies.length > 0) {
       spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
-    if (poetryDependencies.length > 0) {
-      spawnSync('poetry', ['add', ...new Set(poetryDependencies)], config.dirPath);
+    if (poetryDevDependencies.length > 0) {
+      spawnSync('poetry', ['add', '--group', 'dev', ...new Set(poetryDevDependencies)], config.dirPath);
     }
   }
 }
