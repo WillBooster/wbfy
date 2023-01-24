@@ -206,8 +206,12 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         jsonObj.scripts[
           'format-code'
         ] = `poetry run isort --profile black ${dirNamesStr} && poetry run black ${dirNamesStr}`;
-        jsonObj.scripts.lint = `poetry run flake8 ${dirNamesStr}`;
-        jsonObj.scripts['lint-fix'] = 'yarn lint';
+        if (jsonObj.scripts.lint) {
+          jsonObj.scripts.lint = `poetry run flake8 ${dirNamesStr} && ${jsonObj.scripts.lint}`;
+        } else {
+          jsonObj.scripts.lint = `poetry run flake8 ${dirNamesStr}`;
+          jsonObj.scripts['lint-fix'] = 'yarn lint';
+        }
         jsonObj.scripts.format += ` && yarn format-code`;
         poetryDevDependencies.push('black', 'isort', 'flake8');
       }
