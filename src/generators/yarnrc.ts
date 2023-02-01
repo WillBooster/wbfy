@@ -48,8 +48,10 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
 
     const plugins = (settings.plugins ?? []).map((p: any) => p.spec);
     const requireTypeScript = config.containingTypeScript || config.containingTypeScriptInPackages;
-    importOrRemovePlugin(config, plugins, requireTypeScript, '@yarnpkg/plugin-typescript');
-    importOrRemovePlugin(config, plugins, config.containingSubPackageJsons, '@yarnpkg/plugin-workspace-tools');
+    importOrRemovePlugin(config, plugins, false, '@yarnpkg/plugin-typescript');
+    importOrRemovePlugin(config, plugins, false, '@yarnpkg/plugin-workspace-tools');
+    importOrRemovePlugin(config, plugins, requireTypeScript, 'typescript');
+    importOrRemovePlugin(config, plugins, config.containingSubPackageJsons, 'workspace-tools');
     spawnSync('yarn', ['dlx', 'yarn-plugin-auto-install'], config.dirPath);
   });
 }
