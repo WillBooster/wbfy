@@ -237,6 +237,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
     if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
       jsonObj.scripts['gen-code'] = 'blitz codegen';
+    } else if (!jsonObj.scripts['gen-code'].includes('blitz prisma generate')) {
+      jsonObj.scripts['gen-code'] = jsonObj.scripts['gen-code'].replace(
+        'blitz codegen',
+        'blitz codegen && blitz prisma generate'
+      );
     }
   } else if (config.depending.prisma && !jsonObj.scripts['gen-code']?.startsWith('prisma generate')) {
     jsonObj.scripts['gen-code'] = 'prisma generate';
