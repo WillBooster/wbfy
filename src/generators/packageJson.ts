@@ -152,6 +152,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (owner === 'WillBooster' || owner === 'WillBoosterLab') {
     jsonObj.author = 'WillBooster Inc.';
   }
+  if (!config.root && jsonObj.private) {
+    // Make VSCode possible to refactor code across subpackages.
+    jsonObj.main = './src';
+  }
 
   // https://github.com/semantic-release/semantic-release/issues/2323#issuecomment-1032341621
   if (config.depending.semanticRelease && config.release.npm) {
