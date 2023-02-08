@@ -22,7 +22,7 @@ export async function generatePrettierignore(config: PackageConfig): Promise<voi
   return logger.function('generatePrettierignore', async () => {
     const filePath = path.resolve(config.dirPath, '.prettierignore');
     const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';
-    const headUserContent = ignoreFileUtil.getHeadUserContent(content) + commonContent;
+    const headUserContent = ignoreFileUtil.getHeadUserContent(content);
     const tailUserContent = ignoreFileUtil.getTailUserContent(content);
 
     const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');

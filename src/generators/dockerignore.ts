@@ -7,31 +7,17 @@ import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 const commonContent = `
-3rd-party/
-@types/
-__generated__/
-android/
-ios/
-no-format/
-test-fixtures/
-*.config.*js
-*.d.ts
-*.min.*js
-.yarn/
-.pnp.js
+**/*.sqlite3*
 `;
 
-export async function generateEslintignore(config: PackageConfig): Promise<void> {
-  return logger.function('generateEslintignore', async () => {
-    const filePath = path.resolve(config.dirPath, '.eslintignore');
+export async function generateDockerignore(config: PackageConfig): Promise<void> {
+  return logger.function('generateDockerignore', async () => {
+    const filePath = path.resolve(config.dirPath, '.dockerignore');
     const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';
     const headUserContent = ignoreFileUtil.getHeadUserContent(content);
     const tailUserContent = ignoreFileUtil.getTailUserContent(content);
 
-    const gitignoreFilePath = path.resolve(config.dirPath, '.gitignore');
-    const gitignoreContent = (await ignoreFileUtil.readGitignoreWithoutSeparators(gitignoreFilePath)) || '';
-
-    const newContent = headUserContent + commonContent + gitignoreContent + tailUserContent;
+    const newContent = headUserContent + commonContent + tailUserContent;
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }

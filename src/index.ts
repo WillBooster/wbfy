@@ -9,6 +9,7 @@ import { fixDockerfiles } from './fixers/dockerfile.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { generateVersionConfigs } from './generators/asdf.js';
+import { generateDockerignore } from './generators/dockerignore.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
 import { generateEslintignore } from './generators/eslintignore.js';
 import { generateEslintrc } from './generators/eslintrc.js';
@@ -93,6 +94,7 @@ async function main(): Promise<void> {
     await Promise.all([
       abbreviationPromise.then(() => generateReadme(rootConfig)),
       dockerfilePromise,
+      generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),
       generateHuskyrc(rootConfig),
