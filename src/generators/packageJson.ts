@@ -152,7 +152,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (owner === 'WillBooster' || owner === 'WillBoosterLab') {
     jsonObj.author = 'WillBooster Inc.';
   }
-  if (!config.root && jsonObj.private) {
+  if (!config.root && jsonObj.private && !jsonObj.main) {
     // Make VSCode possible to refactor code across subpackages.
     jsonObj.main = './src';
   }
