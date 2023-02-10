@@ -284,8 +284,11 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
     delete job.with['dot_env_path'];
   }
 
-  if (config.containingDockerfile && kind.startsWith('deploy')) {
-    job.with['cpu_arch'] = 'X64';
+  if (config.containingDockerfile) {
+    job.with['ci_size'] = 'large';
+    if (kind.startsWith('deploy')) {
+      job.with['cpu_arch'] = 'X64';
+    }
   }
   // Because github.event.repository.private is always true if job is scheduled
   if (kind === 'release' || kind === 'test' || kind === 'wbfy' || kind === 'wbfy-merge' || kind.startsWith('deploy')) {
