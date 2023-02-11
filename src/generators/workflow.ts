@@ -285,7 +285,9 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   }
 
   if (config.containingDockerfile) {
-    job.with['ci_size'] = 'large';
+    if (kind.startsWith('deploy') || kind.startsWith('test')) {
+      job.with['ci_size'] = 'large';
+    }
     if (kind.startsWith('deploy')) {
       job.with['cpu_arch'] = 'X64';
     }
