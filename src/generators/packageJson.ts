@@ -101,6 +101,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       jsonObj.version = '0.0.0-semantically-released';
     }
+    if (config.depending.sharedScript) {
+      devDependencies.push('@willbooster/shared-script');
+    }
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
     } else {

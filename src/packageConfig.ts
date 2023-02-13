@@ -40,6 +40,7 @@ export interface PackageConfig {
     pyright: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
+    sharedScript: boolean;
     storybook: boolean;
   };
   release: {
@@ -148,6 +149,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
           releaseBranches.length > 0 ||
           releasePlugins.length > 0
         ),
+        sharedScript: !!devDependencies['@willbooster/shared-script'],
         storybook: !!devDependencies['@storybook/react'],
       },
       release: {
