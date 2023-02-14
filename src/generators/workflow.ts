@@ -280,9 +280,6 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
 
   // Remove deprecated parameters
   migrateJob(job);
-  if (job.with['dot_env_path'] === '.env') {
-    delete job.with['dot_env_path'];
-  }
 
   if (config.containingDockerfile) {
     if (kind.startsWith('deploy') || kind.startsWith('test')) {
@@ -357,12 +354,18 @@ async function writeYaml(newSettings: any, filePath: string): Promise<void> {
 }
 
 function migrateWorkflow(newSettings: any): void {
+  // TODO: Remove them after 2023-03-31
   delete newSettings.jobs['add-to-project'];
 }
 
 function migrateJob(job: any): void {
+  // TODO: Remove them after 2023-03-31
   delete job.with['non_self_hosted'];
   delete job.with['notify_discord'];
   delete job.with['require_fly'];
   delete job.with['require_gcloud'];
+  if (job.with['dot_env_path'] === '.env') {
+    delete job.with['dot_env_path'];
+  }
+  delete job.with['ci_size'];
 }
