@@ -99,7 +99,8 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.depending.blitz) {
     postMergeCommands.push(
       'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz prisma migrate deploy"',
-      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz blitz codegen"'
+      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz prisma generate"',
+      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz codegen"'
     );
   } else if (config.depending.prisma) {
     postMergeCommands.push(
