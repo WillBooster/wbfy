@@ -101,14 +101,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       jsonObj.version = '0.0.0-semantically-released';
     }
-    if (config.depending.sharedScript) {
-      devDependencies.push('@willbooster/shared-script');
-    }
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
     } else {
       delete jsonObj.workspaces;
     }
+  }
+  if (config.depending.sharedScript) {
+    devDependencies.push('@willbooster/shared-script');
   }
 
   if (
@@ -266,11 +266,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   await fs.promises.writeFile(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
-    dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
+    // To avoid updating existing dependencies, comment in the following line
+    // dependencies = dependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (dependencies.length > 0) {
       spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
     }
-    devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
+    // To avoid updating existing devDependencies, comment in the following line
+    // devDependencies = devDependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
     if (devDependencies.length > 0) {
       spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
