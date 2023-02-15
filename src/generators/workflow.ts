@@ -368,4 +368,5 @@ function migrateJob(job: any): void {
     delete job.with['dot_env_path'];
   }
   delete job.with['ci_size'];
+  delete job.with['cpu_arch'];
 }
