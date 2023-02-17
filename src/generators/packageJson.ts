@@ -266,13 +266,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   await fs.promises.writeFile(filePath, JSON.stringify(jsonObj));
 
   if (!skipAddingDeps) {
-    // To avoid updating existing dependencies, comment in the following line
-    // dependencies = dependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
+    // We cannot add dependencies which are already included in devDependencies.
+    dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
     if (dependencies.length > 0) {
       spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
     }
-    // To avoid updating existing devDependencies, comment in the following line
-    // devDependencies = devDependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
+    // We cannot add devDependencies which are already included in dependencies.
+    devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
       spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
