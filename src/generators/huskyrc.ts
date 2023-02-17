@@ -72,7 +72,10 @@ async function core(config: PackageConfig): Promise<void> {
     let prePush = config.repository?.startsWith('github:WillBoosterLab/') ? settings.prePushForLab : settings.prePush;
     prePush = prePush.replace(
       'yarn typecheck',
-      typecheck.replace('tsc', 'node node_modules/.bin/tsc').replace('pyright', 'node node_modules/.bin/pyright')
+      typecheck
+        .replace('tsc ', 'node node_modules/.bin/tsc ')
+        .replace('pyright ', 'node node_modules/.bin/pyright ')
+        .replace('wb ', 'node node_modules/.bin/wb ')
     );
     await promisePool.run(() =>
       fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, prePush), {

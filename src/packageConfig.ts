@@ -149,7 +149,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
           releaseBranches.length > 0 ||
           releasePlugins.length > 0
         ),
-        sharedScript: !!devDependencies['@willbooster/shared-script'],
+        sharedScript: !!devDependencies['@willbooster/shared-scripts'],
         storybook: !!devDependencies['@storybook/react'],
       },
       release: {

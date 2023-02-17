@@ -108,7 +108,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
   }
   if (config.depending.sharedScript) {
-    devDependencies.push('@willbooster/shared-script');
+    devDependencies.push('@willbooster/shared-scripts');
   }
 
   if (
@@ -289,6 +289,8 @@ async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
   }
   delete jsonObj.scripts['sort-package-json'];
   delete jsonObj.scripts['sort-all-package-json'];
+  delete jsonObj.scripts['typecheck/warn'];
+  delete jsonObj.scripts['typecheck:gen-code'];
   delete jsonObj.scripts['typecheck:codegen'];
   delete jsonObj.dependencies['tslib'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
@@ -339,10 +341,8 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
       delete scripts.typecheck;
     }
   } else {
-    if (config.depending.blitz) {
-      scripts.typecheck += ' || yarn run typecheck/warn';
-      scripts['typecheck/warn'] = `echo 'Please try "yarn gen-code" if you face unknown type errors.' && exit 1`;
-      scripts['typecheck:gen-code'] = 'yarn gen-code && tsc --noEmit --Pretty';
+    if (config.depending.sharedScript) {
+      scripts.typecheck = 'wb typecheck';
     }
     if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
       delete scripts.typecheck;
