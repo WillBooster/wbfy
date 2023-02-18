@@ -37,6 +37,11 @@ const devDeps: { [prop: string]: string[] } = {
   '@willbooster/eslint-config-js-react': ['@willbooster/eslint-config-js-react', ...jsCommonDeps, ...reactCommonDeps],
   '@willbooster/eslint-config-ts': ['@willbooster/eslint-config-ts', ...tsCommonDeps],
   '@willbooster/eslint-config-ts-react': ['@willbooster/eslint-config-ts-react', ...tsCommonDeps, ...reactCommonDeps],
+  '@willbooster/eslint-config-blitz-next': [
+    '@willbooster/eslint-config-blitz-next',
+    ...tsCommonDeps,
+    ...reactCommonDeps,
+  ],
   '../../.eslintrc.json': [],
 };
 

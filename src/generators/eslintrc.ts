@@ -11,9 +11,6 @@ import { promisePool } from '../utils/promisePool.js';
 
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   return logger.function('generateEslintrc', async () => {
-    // TODO: support Blitz v2
-    if (rootConfig.depending.blitz === '2') return;
-
     const bases = [];
     if (config.eslintBase) {
       bases.push(config.eslintBase);
@@ -42,7 +39,7 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       if (config.depending.blitz === '0') {
         addExtensionToHead(newSettings, 'blitz');
       } else if (config.depending.blitz === '2') {
-        addExtensionToHead(newSettings, '@blitzjs/next/eslint');
+        addExtensionToHead(newSettings, './node_modules/@blitzjs/next/eslint');
       }
     } catch {
       // do nothing

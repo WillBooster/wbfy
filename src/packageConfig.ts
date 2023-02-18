@@ -182,7 +182,9 @@ function containsAny(pattern: string, dirPath: string): boolean {
 }
 
 function getEslintExtensionBase(config: PackageConfig): string | undefined {
-  if (config.containingTypeScript) {
+  if (config.depending.blitz === '2') {
+    return '@willbooster/eslint-config-blitz-next';
+  } else if (config.containingTypeScript) {
     return config.containingJsxOrTsx ? '@willbooster/eslint-config-ts-react' : '@willbooster/eslint-config-ts';
   } else {
     if (config.containingJsxOrTsx) {
