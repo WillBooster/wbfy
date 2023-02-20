@@ -22,6 +22,11 @@ const workflows = {
         branches: ['main', 'wbfy', 'renovate/**'],
       },
     },
+    // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-using-a-fallback-value
+    concurrency: {
+      group: '${{ github.workflow }}-${{ github.head_ref || github.run_id }}',
+      'cancel-in-progress': true,
+    },
     jobs: {
       test: {
         uses: 'WillBooster/reusable-workflows/.github/workflows/test.yml@main',
@@ -34,6 +39,10 @@ const workflows = {
       push: {
         branches: [],
       },
+    },
+    concurrency: {
+      group: '${{ github.workflow }}',
+      'cancel-in-progress': true,
     },
     jobs: {
       release: {
@@ -187,6 +196,17 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   } catch {
     // do nothing
   }
+
+  if (kind.startsWith('deploy')) {
+    newSettings = {
+      ...newSettings,
+      concurrency: {
+        group: '${{ github.workflow }}',
+        'cancel-in-progress': true,
+      },
+    };
+  }
+
   for (const job of Object.values(newSettings.jobs) as any[]) {
     // Ignore non-reusable workflows
     if (!job.uses?.includes?.('/reusable-workflows/')) return;
