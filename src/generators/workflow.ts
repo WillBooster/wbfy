@@ -17,9 +17,12 @@ const workflows = {
   test: {
     name: 'Test',
     on: {
-      pull_request: null,
+      pull_request: {
+        'paths-ignore': ['**.md', '**/docs/**'],
+      },
       push: {
         branches: ['main', 'wbfy', 'renovate/**'],
+        'paths-ignore': ['**.md', '**/docs/**'],
       },
     },
     // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-using-a-fallback-value
@@ -205,6 +208,17 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
         'cancel-in-progress': true,
       },
     };
+    // Move jobs to the bottom
+    if (newSettings.jobs) {
+      const jobs = newSettings.jobs;
+      delete newSettings.jobs;
+      newSettings.jobs = jobs;
+    }
+    if (newSettings.on?.push) {
+      newSettings.on.push['paths-ignore'] = [
+        ...new Set<string>([...(newSettings.on.push['paths-ignore'] ?? []), '**.md', '**/docs/**']),
+      ];
+    }
   }
 
   for (const job of Object.values(newSettings.jobs) as any[]) {
