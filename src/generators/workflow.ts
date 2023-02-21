@@ -45,7 +45,7 @@ const workflows = {
     },
     concurrency: {
       group: '${{ github.workflow }}',
-      'cancel-in-progress': true,
+      'cancel-in-progress': false,
     },
     jobs: {
       release: {
@@ -205,7 +205,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
       ...newSettings,
       concurrency: {
         group: '${{ github.workflow }}',
-        'cancel-in-progress': true,
+        'cancel-in-progress': false,
       },
     };
     // Move jobs to the bottom
