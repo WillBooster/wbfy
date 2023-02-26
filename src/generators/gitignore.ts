@@ -63,7 +63,7 @@ packaged.yaml
 `;
     }
 
-    if (rootConfig.depending.blitz) {
+    if (config.depending.blitz) {
       names.push('nextjs');
       headUserContent += `.blitz/
 .blitz**
@@ -77,7 +77,7 @@ packaged.yaml
 *.sqlite3-journal
 `;
     }
-    if (rootConfig.depending.playwright) {
+    if (config.depending.playwright) {
       headUserContent += `test-results/
 `;
     }
@@ -87,7 +87,7 @@ packaged.yaml
 android/app/src/main/assets/
 `;
     }
-    if (rootConfig.depending.storybook) {
+    if (config.depending.storybook) {
       names.push('storybookjs');
     }
 

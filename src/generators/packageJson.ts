@@ -338,7 +338,9 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
         prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
           ','
         )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-        test: 'yarn workspaces foreach --verbose run test',
+        // CI=1 prevents vitest from enabling watch.
+        // FORCE_COLOR=3 make wb enable color output.
+        test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --verbose run test',
         typecheck: 'yarn workspaces foreach --parallel --verbose run typecheck',
       }
     );
