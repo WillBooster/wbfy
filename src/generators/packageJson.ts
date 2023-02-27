@@ -45,6 +45,8 @@ const devDeps: { [prop: string]: string[] } = {
   '../../.eslintrc.json': [],
 };
 
+const NEXT_VERSION = '13.1.6';
+
 export async function generatePackageJson(
   config: PackageConfig,
   rootConfig: PackageConfig,
@@ -246,6 +248,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
           d !== 'eslint-plugin-import' &&
           d !== 'eslint-plugin-react-hooks'
       );
+    } else {
+      dependencies.push(`next@${NEXT_VERSION}`);
     }
     if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
       jsonObj.scripts['gen-code'] = 'blitz codegen';
