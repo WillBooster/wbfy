@@ -401,6 +401,5 @@ function migrateJob(job: any): void {
   if (job.with['dot_env_path'] === '.env') {
     delete job.with['dot_env_path'];
   }
-  delete job.with['ci_size'];
   delete job.with['cpu_arch'];
 }
