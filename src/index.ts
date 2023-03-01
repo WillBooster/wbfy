@@ -5,7 +5,6 @@ import { ignoreErrorAsync } from '@willbooster/shared-lib';
 import yargs from 'yargs';
 
 import { fixAbbreviations } from './fixers/abbreviations.js';
-import { fixDockerfiles } from './fixers/dockerfile.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { generateVersionConfigs } from './generators/asdf.js';
@@ -69,7 +68,6 @@ async function main(): Promise<void> {
 
     await fixTestDirectories([rootDirPath, ...subDirPaths]);
     const abbreviationPromise = fixAbbreviations(rootDirPath);
-    const dockerfilePromise = fixDockerfiles([rootDirPath, ...subDirPaths]);
 
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
@@ -93,7 +91,6 @@ async function main(): Promise<void> {
     await generateYarnrcYml(rootConfig);
     await Promise.all([
       abbreviationPromise.then(() => generateReadme(rootConfig)),
-      dockerfilePromise,
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),

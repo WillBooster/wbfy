@@ -6,6 +6,7 @@ import { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 import { convertVersionIntoNumber } from '../utils/version.js';
+import { JAVA_VERSION, POETRY_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
   return logger.function('generateVersionConfigs', async () => {
@@ -13,9 +14,6 @@ export async function generateVersionConfigs(config: PackageConfig): Promise<voi
   });
 }
 
-const POETRY_VERSION = '1.3.2';
-const PYTHON_VERSION = '3.9.16';
-const JAVA_VERSION = 'adoptopenjdk-11.0.17+8';
 const CORE_TOOLS = new Set(['java', 'nodejs', 'python']);
 const DEPRECATED_VERSION_PREFIXES = ['java', 'node', 'python'];
 

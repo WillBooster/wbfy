@@ -13,6 +13,7 @@ import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 import { getSrcDirs } from '../utils/srcDirectories.js';
+import { NEXT_VERSION } from '../utils/versionConstants.js';
 
 const jsCommonDeps = [
   'eslint',
@@ -44,8 +45,6 @@ const devDeps: { [prop: string]: string[] } = {
   ],
   '../../.eslintrc.json': [],
 };
-
-const NEXT_VERSION = '13.1.6';
 
 export async function generatePackageJson(
   config: PackageConfig,
