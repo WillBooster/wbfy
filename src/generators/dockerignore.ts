@@ -9,6 +9,7 @@ import { promisePool } from '../utils/promisePool.js';
 
 const commonContent = `
 **/*.sqlite3*
+.yarn/install-state.gz
 `;
 
 export async function generateDockerignore(config: PackageConfig): Promise<void> {
