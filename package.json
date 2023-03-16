@@ -54,7 +54,7 @@
     "@types/yargs": "17.0.22",
     "@typescript-eslint/eslint-plugin": "5.55.0",
     "@typescript-eslint/parser": "5.55.0",
-    "@willbooster/eslint-config-ts": "10.0.8",
+    "@willbooster/eslint-config-ts": "10.1.0",
     "@willbooster/prettier-config": "9.1.1",
     "@willbooster/renovate-config": "9.5.0",
     "@yarnpkg/core": "4.0.0-rc.40",
