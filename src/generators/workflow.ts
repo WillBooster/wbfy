@@ -156,25 +156,23 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     await promisePool.run(() => fs.promises.rm(semanticYmlPath, { force: true, recursive: true }));
 
     const entries = await fs.promises.readdir(workflowsPath, { withFileTypes: true });
-    const fileNames = entries
-      .filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml'))
-      .map((dirent) => dirent.name);
-    if (rootConfig.depending.semanticRelease) {
-      fileNames.push('release.yml');
-    }
-    if (rootConfig.publicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
-      fileNames.push('notify-ready.yml');
-    }
-    fileNames.push(
+    const fileNameSet = new Set([
       'test.yml',
       'wbfy.yml',
       'wbfy-merge.yml',
       'semantic-pr.yml',
       'close-comment.yml',
-      'add-issue-to-project.yml'
-    );
+      'add-issue-to-project.yml',
+      ...entries.filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml')).map((dirent) => dirent.name),
+    ]);
+    if (rootConfig.depending.semanticRelease) {
+      fileNameSet.add('release.yml');
+    }
+    if (rootConfig.publicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
+      fileNameSet.add('notify-ready.yml');
+    }
 
-    for (const fileName of fileNames) {
+    for (const fileName of fileNameSet) {
       // 実際はKnownKind以外の値も代入されることに注意
       const kind = path.basename(fileName, '.yml') as KnownKind;
       await promisePool.run(() => writeWorkflowYaml(rootConfig, workflowsPath, kind));
@@ -188,14 +186,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const oldSettings = yaml.load(oldContent);
-    if (kind === 'wbfy' || kind === 'wbfy-merge') {
-      console.log('writeWorkflowYaml:', kind);
-      console.dir(oldSettings, { depth: null });
-    }
     newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-    if (kind === 'wbfy' || kind === 'wbfy-merge') {
-      console.dir(newSettings, { depth: null });
-    }
   } catch {
     // do nothing
   }
@@ -356,18 +347,6 @@ function setSchedule(newSettings: any, inclusiveMinHourJst: number, exclusiveMax
         ? inclusiveMinHourJst <= hourJst && hourJst < exclusiveMaxHourJst
         : inclusiveMinHourJst <= hourJst || hourJst < exclusiveMaxHourJst;
     if (inRange) return;
-    console.log(
-      'setSchedule:',
-      newSettings,
-      minuteUtc,
-      hourUtc,
-      inRange,
-      hourJst,
-      inclusiveMinHourJst,
-      exclusiveMaxHourJst
-    );
-  } else {
-    console.log('setSchedule:', newSettings, minuteUtc, hourUtc);
   }
 
   const minJst = 1 + Math.floor(Math.random() * 59);
