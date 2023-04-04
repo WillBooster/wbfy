@@ -13,7 +13,6 @@ import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 import { getSrcDirs } from '../utils/srcDirectories.js';
-import { NEXT_VERSION } from '../utils/versionConstants.js';
 
 const jsCommonDeps = [
   'eslint',
@@ -247,8 +246,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
           d !== 'eslint-plugin-import' &&
           d !== 'eslint-plugin-react-hooks'
       );
-    } else {
-      dependencies.push(`next@${NEXT_VERSION}`);
     }
     if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
       jsonObj.scripts['gen-code'] = 'blitz codegen';
