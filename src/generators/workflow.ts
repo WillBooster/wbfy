@@ -306,6 +306,10 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   // Remove deprecated parameters
   migrateJob(job);
 
+  // Don't use `fly deploy --json` since it causes an error
+  if (kind.startsWith('deploy') && job.secrets['FLY_API_TOKEN'] && job.with['deploy_command']) {
+    job.with['deploy_command'] = job.with['deploy_command'].replace(/\s+--json/, '');
+  }
   if (config.containingDockerfile) {
     if (kind.startsWith('deploy') || kind.startsWith('test')) {
       job.with['ci_size'] = 'large';
