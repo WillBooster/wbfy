@@ -25,6 +25,15 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     } catch {
       // do nothing
     }
+
+    // Don't upgrade Next.js automatically
+    if (config.depending.blitz && config.depending.blitz !== '0') {
+      newSettings.packageRules ??= [];
+      if (!newSettings.packageRules.some((rule: any) => rule.packageNames.includes('next'))) {
+        newSettings.packageRules.push({ packageNames: ['next'], enabled: false });
+      }
+    }
+
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }));
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, 'renovate.json'), { force: true }));
     const newContent = JSON.stringify(newSettings);
