@@ -1392,16 +1392,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:7.21.0":
-  version: 7.21.0
-  resolution: "@babel/runtime@npm:7.21.0"
-  dependencies:
-    regenerator-runtime: "npm:^0.13.11"
-  checksum: adff473f615f797cffbd64d6839a5e3816e6e7942a6c9bfc23369e6d89a18c92eda974e2f538540a0ce543c28e3d637c59a0a8c391cee978e0b7dc31b606ef08
-  languageName: node
-  linkType: hard
-
-"@babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:7.21.5, @babel/runtime@npm:^7.8.4":
   version: 7.21.5
   resolution: "@babel/runtime@npm:7.21.5"
   dependencies:
@@ -2656,9 +2647,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semantic-release/release-notes-generator@npm:^10.0.0":
-  version: 10.0.3
-  resolution: "@semantic-release/release-notes-generator@npm:10.0.3"
+"@semantic-release/release-notes-generator@npm:^11.0.0":
+  version: 11.0.1
+  resolution: "@semantic-release/release-notes-generator@npm:11.0.1"
   dependencies:
     conventional-changelog-angular: "npm:^5.0.0"
     conventional-changelog-writer: "npm:^5.0.0"
@@ -2667,12 +2658,12 @@ __metadata:
     debug: "npm:^4.0.0"
     get-stream: "npm:^6.0.0"
     import-from: "npm:^4.0.0"
-    into-stream: "npm:^6.0.0"
-    lodash: "npm:^4.17.4"
-    read-pkg-up: "npm:^7.0.0"
+    into-stream: "npm:^7.0.0"
+    lodash-es: "npm:^4.17.21"
+    read-pkg-up: "npm:^9.0.0"
   peerDependencies:
-    semantic-release: ">=18.0.0-beta.1"
-  checksum: 10db1225075da038ff1c67d1b6ce1917b996e59001098303024fc8775e9d173f18cfa32b1a94028e7921a5210d796751c62c250eead5a6a08ded08d502867405
+    semantic-release: ">=20.1.0"
+  checksum: 1c3c1d347a26594649f30c00a9c9c840d646d47086ab21c24e7164790422c1d72d4e69818aa7bc29aeffa1fb5e54b8de5f260dde3504f011e01041df67e17977
   languageName: node
   linkType: hard
 
@@ -6629,13 +6620,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"into-stream@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "into-stream@npm:6.0.0"
+"into-stream@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "into-stream@npm:7.0.0"
   dependencies:
     from2: "npm:^2.3.0"
     p-is-promise: "npm:^3.0.0"
-  checksum: 5f48889e5b9818d38303704999cfd8b74976755647d90d9376c9cf2e9ed0a32ecd42c947841da79fa2d7c19ad3b242e82906506f818ea9f020181d3a0355c962
+  checksum: 7ed6f541686355b5a745b02e5b8b448c8c5391ab66caa378e1b891da867176f18f743b51547a0a36520bb074793b3961e7fe1632f13d31a3b29cb47b65433b75
   languageName: node
   linkType: hard
 
@@ -8369,12 +8360,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimal-promise-pool@npm:2.1.7":
-  version: 2.1.7
-  resolution: "minimal-promise-pool@npm:2.1.7"
+"minimal-promise-pool@npm:2.1.8":
+  version: 2.1.8
+  resolution: "minimal-promise-pool@npm:2.1.8"
   dependencies:
-    "@babel/runtime": "npm:7.21.0"
-  checksum: f6a51a7cbc2a338dc59bf68b52a7bd78352c9abebed23cf39e0c85990232be2b5b4f7a10ac7fde8acda4ac9f1af060a765aa628fde3f25dd6c8dc02d50b7eb40
+    "@babel/runtime": "npm:7.21.5"
+  checksum: 7d1af7cbce9330631f75a9657c95ce19793e7ec0f48573c48d238f73da79a09748043b6cc50a7a79328cbc5f29fb874c5aedab13da8152f76169f793bb927369
   languageName: node
   linkType: hard
 
@@ -9768,7 +9759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"read-pkg-up@npm:^7.0.0, read-pkg-up@npm:^7.0.1":
+"read-pkg-up@npm:^7.0.1":
   version: 7.0.1
   resolution: "read-pkg-up@npm:7.0.1"
   dependencies:
@@ -9779,7 +9770,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"read-pkg-up@npm:^9.1.0":
+"read-pkg-up@npm:^9.0.0, read-pkg-up@npm:^9.1.0":
   version: 9.1.0
   resolution: "read-pkg-up@npm:9.1.0"
   dependencies:
@@ -10270,15 +10261,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semantic-release@npm:21.0.1":
-  version: 21.0.1
-  resolution: "semantic-release@npm:21.0.1"
+"semantic-release@npm:21.0.2":
+  version: 21.0.2
+  resolution: "semantic-release@npm:21.0.2"
   dependencies:
     "@semantic-release/commit-analyzer": "npm:^9.0.2"
     "@semantic-release/error": "npm:^3.0.0"
     "@semantic-release/github": "npm:^8.0.0"
     "@semantic-release/npm": "npm:^10.0.2"
-    "@semantic-release/release-notes-generator": "npm:^10.0.0"
+    "@semantic-release/release-notes-generator": "npm:^11.0.0"
     aggregate-error: "npm:^4.0.1"
     cosmiconfig: "npm:^8.0.0"
     debug: "npm:^4.0.0"
@@ -10304,7 +10295,7 @@ __metadata:
     yargs: "npm:^17.5.1"
   bin:
     semantic-release: bin/semantic-release.js
-  checksum: 67a57a63b07ad8da1f56ee9c3882c5b28b50e0f497477b56fcefa1b24288bf423f82b5008d87cf88985f46ab4519f6b29245246129dfe99ba27c8394dee86d86
+  checksum: cb3d9e8d74e1a510f4a3090b8a758112681aba70779d62e277bf3472a574bbde130e7161e0cc655ae84973d799c7f2431225211b05d7c1d28abf86f0a61a2111
   languageName: node
   linkType: hard
 
@@ -11750,10 +11741,10 @@ __metadata:
     lint-staged: "npm:13.2.2"
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.5"
-    minimal-promise-pool: "npm:2.1.7"
+    minimal-promise-pool: "npm:2.1.8"
     pinst: "npm:3.0.0"
     prettier: "npm:2.8.8"
-    semantic-release: "npm:21.0.1"
+    semantic-release: "npm:21.0.2"
     simple-git: "npm:3.18.0"
     sort-package-json: "npm:2.4.1"
     ts-node: "npm:10.9.1"
