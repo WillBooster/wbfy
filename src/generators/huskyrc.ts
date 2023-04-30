@@ -74,8 +74,9 @@ async function core(config: PackageConfig): Promise<void> {
       'yarn typecheck',
       typecheck
         .replace('tsc ', 'node node_modules/.bin/tsc ')
-        .replace('pyright ', 'node node_modules/.bin/pyright ')
         .replace('wb ', 'node node_modules/.bin/wb ')
+        // pyright has no arguments
+        .replace('pyright', 'node node_modules/.bin/pyright')
     );
     await promisePool.run(() =>
       fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, prePush), {
