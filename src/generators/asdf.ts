@@ -6,7 +6,7 @@ import { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 import { convertVersionIntoNumber } from '../utils/version.js';
-import { JAVA_VERSION, POETRY_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
+import { JAVA_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
   return logger.function('generateVersionConfigs', async () => {
@@ -34,7 +34,10 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.containingPoetryLock) {
     const response = await fetch('https://pypi.org/pypi/poetry/json');
     const json = await response.json();
-    updateVersion(lines, 'poetry', json?.info?.version ?? POETRY_VERSION);
+    const poetryVersion = json?.info?.version;
+    if (poetryVersion) {
+      updateVersion(lines, 'poetry', json?.info?.version);
+    }
     updateVersion(lines, 'python', PYTHON_VERSION, true);
   }
   if (config.depending.firebase) {
