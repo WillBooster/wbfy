@@ -32,7 +32,9 @@ async function core(config: PackageConfig): Promise<void> {
   const lines = [...new Set(duplicatableLines)];
 
   if (config.containingPoetryLock) {
-    updateVersion(lines, 'poetry', POETRY_VERSION);
+    const response = await fetch('https://pypi.org/pypi/poetry/json');
+    const json = await response.json();
+    updateVersion(lines, 'poetry', json?.info?.version ?? POETRY_VERSION);
     updateVersion(lines, 'python', PYTHON_VERSION, true);
   }
   if (config.depending.firebase) {

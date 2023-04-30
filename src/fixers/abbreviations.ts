@@ -37,14 +37,14 @@ export async function fixAbbreviations(dirPath: string): Promise<void> {
     }
     for (const tsFile of tsFiles) {
       const filePath = path.join(dirPath, tsFile);
-      const content = await fs.promises.readFile(filePath, 'utf8');
-      const newContent = content
+      const oldContent = await fs.promises.readFile(filePath, 'utf8');
+      const newContent = oldContent
         .replaceAll(/\/\/(.*)c\.f\./g, '//$1cf.')
         .replaceAll(/\/\/(.*)eg\./g, '//$1e.g.')
         .replaceAll(/\/\/(.*)ie\./g, '//$1i.e.');
-      if (content !== newContent) {
-        await fsUtil.generateFile(filePath, newContent);
-      }
+
+      if (oldContent === newContent) continue;
+      await fsUtil.generateFile(filePath, newContent);
     }
 
     await promisePool.promiseAll();

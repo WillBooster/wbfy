@@ -5,6 +5,7 @@ import { ignoreErrorAsync } from '@willbooster/shared-lib';
 import yargs from 'yargs';
 
 import { fixAbbreviations } from './fixers/abbreviations.js';
+import { fixDockerfile } from './fixers/dockerfile.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { generateVersionConfigs } from './generators/asdf.js';
@@ -90,6 +91,7 @@ async function main(): Promise<void> {
     // Install yarn berry
     await generateYarnrcYml(rootConfig);
     await Promise.all([
+      fixDockerfile(rootConfig),
       abbreviationPromise.then(() => generateReadme(rootConfig)),
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
