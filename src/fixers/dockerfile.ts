@@ -20,6 +20,6 @@ export async function fixDockerfile(config: PackageConfig): Promise<void> {
     }
 
     if (oldContent === newContent) return;
-    await fs.writeFile(filePath, oldContent);
+    await fs.writeFile(filePath, newContent);
   });
 }
