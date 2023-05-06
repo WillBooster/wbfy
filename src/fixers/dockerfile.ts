@@ -13,7 +13,7 @@ export async function fixDockerfile(config: PackageConfig): Promise<void> {
 
     let newContent = oldContent.replaceAll('then(process.stdout.write)', 'then(t => process.stdout.write(t))');
     if (oldContent.includes('FROM node')) {
-      newContent = newContent.replace(
+      newContent = newContent.replaceAll(
         /curl https:\/\/raw.githubusercontent.com\/WillBooster(\S+)/g,
         'node -e \'fetch("https://raw.githubusercontent.com/WillBooster$1").then(r => r.text()).then(t => process.stdout.write(t))\''
       );

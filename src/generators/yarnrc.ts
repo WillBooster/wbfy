@@ -53,7 +53,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
 export function getLatestVersion(packageName: string, dirPath: string): string {
   const versionsJson = spawnSyncWithStringResult('npm', ['show', packageName, 'versions', '--json'], dirPath);
   const versions = JSON.parse(versionsJson) as string[];
-  return versions[versions.length - 1];
+  return versions.at(-1);
 }
 
 function importOrRemovePlugin(config: PackageConfig, plugins: string[], requirePlugin: boolean, plugin: string): void {

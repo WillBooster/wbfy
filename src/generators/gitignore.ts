@@ -116,21 +116,21 @@ android/app/src/main/assets/
     }
     if (config.containingPomXml || config.containingPubspecYaml) {
       generated = generated
-        .replace(/^# .idea\/artifacts$/gm, '.idea/artifacts')
-        .replace(/^# .idea\/compiler.xml$/gm, '.idea/compiler.xml')
-        .replace(/^# .idea\/jarRepositories.xml$/gm, '.idea/jarRepositories.xml')
-        .replace(/^# .idea\/modules.xml$/gm, '.idea/modules.xml')
-        .replace(/^# .idea\/*.iml$/gm, '.idea/*.iml')
-        .replace(/^# .idea\/modules$/gm, '.idea/modules')
-        .replace(/^# *.iml$/gm, '*.iml')
-        .replace(/^# *.ipr$/gm, '*.ipr');
+        .replaceAll(/^# .idea\/artifacts$/gm, '.idea/artifacts')
+        .replaceAll(/^# .idea\/compiler.xml$/gm, '.idea/compiler.xml')
+        .replaceAll(/^# .idea\/jarRepositories.xml$/gm, '.idea/jarRepositories.xml')
+        .replaceAll(/^# .idea\/modules.xml$/gm, '.idea/modules.xml')
+        .replaceAll(/^# .idea\/*.iml$/gm, '.idea/*.iml')
+        .replaceAll(/^# .idea\/modules$/gm, '.idea/modules')
+        .replaceAll(/^# *.iml$/gm, '*.iml')
+        .replaceAll(/^# *.ipr$/gm, '*.ipr');
       if (config.containingPubspecYaml) {
-        generated = generated.replace(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
+        generated = generated.replaceAll(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
       }
     }
-    generated = generated.replace(/^.idea\/?$/gm, '# .idea');
+    generated = generated.replaceAll(/^.idea\/?$/gm, '# .idea');
     if (rootConfig.depending.reactNative || config.depending.reactNative || config.containingPubspecYaml) {
-      generated = generated.replace(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
+      generated = generated.replaceAll(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
     }
     const newContent = headUserContent + generated + tailUserContent;
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
