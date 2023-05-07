@@ -12,7 +12,7 @@ export async function fixTestDirectories(packageDirPaths: string[]): Promise<voi
         try {
           await fs.promises.rename(oldTestDirPath, newTestDirPath);
           const oldContent = await fs.promises.readFile(path.join(packageDirPath, 'package.json'), 'utf8');
-          const newContent = oldContent.replace(/__tests__/g, 'tests');
+          const newContent = oldContent.replaceAll('__tests__', 'tests');
           if (oldContent === newContent) return;
 
           await fs.promises.writeFile(path.join(packageDirPath, 'package.json'), newContent);
