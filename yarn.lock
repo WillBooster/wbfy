@@ -2869,13 +2869,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:8.37.0":
-  version: 8.37.0
-  resolution: "@types/eslint@npm:8.37.0"
+"@types/eslint@npm:8.40.0":
+  version: 8.40.0
+  resolution: "@types/eslint@npm:8.40.0"
   dependencies:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
-  checksum: 5a1b547b4fbebeb173fd3e4a717de868021a14322cb7bd1bc2b432f3ac3cfec2e268623d24543a4ca7787fe64c59dd310a6ee329199e9f16b0d168d26a2da026
+  checksum: 64e7807d116fb55c95152443c32ebfcb66dcb8b71daf3be46b15ef1c07d0d6a3a63391ef8cd93a4ccc7e681995b713969db88bfd8082715874d835fce111f467
   languageName: node
   linkType: hard
 
@@ -3013,10 +3013,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.16.13":
-  version: 18.16.13
-  resolution: "@types/node@npm:18.16.13"
-  checksum: 85fd505ba622e86edd359209367aa927e558fa46f4ebe874d689c573fa1b2a0f78da9d8f1a49b3bd84ae25a3ed189425b3cec1385bc75436e02309c698da1340
+"@types/node@npm:18.16.15":
+  version: 18.16.15
+  resolution: "@types/node@npm:18.16.15"
+  checksum: 9659de1e8669234516f3313626b14153b431e8ca7c9ae57aff261e2ec1e8997aef6db834cf2853a24a6c4a8573a6976e9a41487d030e683a0b837842f879ed51
   languageName: node
   linkType: hard
 
@@ -10476,14 +10476,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-git@npm:3.18.0":
-  version: 3.18.0
-  resolution: "simple-git@npm:3.18.0"
+"simple-git@npm:3.19.0":
+  version: 3.19.0
+  resolution: "simple-git@npm:3.19.0"
   dependencies:
     "@kwsites/file-exists": "npm:^1.1.1"
     "@kwsites/promise-deferred": "npm:^1.1.1"
     debug: "npm:^4.3.4"
-  checksum: 8973c5082168f263b7e9bfc39859f851f0d3247973c034625f60e2f86a807810327bef7925f2c9d3687745e39d14e144018b801d0ae623247698e368b9ebef41
+  checksum: b2a4864ac6f107829d823ea5e066c0662bd647f723171e2d848a80c3c80397951b8e9c473fd8edf6f6fbb55a5346ac430f628e2f1ad1ce688f9691296ea95469
   languageName: node
   linkType: hard
 
@@ -11326,12 +11326,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:3.10.0":
-  version: 3.10.0
-  resolution: "type-fest@npm:3.10.0"
-  peerDependencies:
-    typescript: ">=4.7.0"
-  checksum: 21eea1438c31c7f1dacf19a18833fbde06c4a48ac36d83ccadfe699331986221a3874ba9c448bd66f4698ef780f5a6f14eac9699aacb81b66dad78a3532d7a7f
+"type-fest@npm:3.11.0, type-fest@npm:^3.0.0, type-fest@npm:^3.8.0":
+  version: 3.11.0
+  resolution: "type-fest@npm:3.11.0"
+  checksum: 3857d14dde15d75988f9d2c5238d855e1fc1457eceb192036c974a77e18ec31d59f3ab08d5134a2e3fc03be5d4979e2401ca8cdd42bdbe961cbb8ccd62efcd6f
   languageName: node
   linkType: hard
 
@@ -11381,13 +11379,6 @@ __metadata:
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: d63c7c5fd7583cc6d35ccd23e96686eeb1e6f387c83a858625734ea2cf974c6be38bcbc43663da5e10469a1b4119089def1e8def03bf2aee540f0ad4fcd25902
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^3.0.0, type-fest@npm:^3.8.0":
-  version: 3.11.0
-  resolution: "type-fest@npm:3.11.0"
-  checksum: 3857d14dde15d75988f9d2c5238d855e1fc1457eceb192036c974a77e18ec31d59f3ab08d5134a2e3fc03be5d4979e2401ca8cdd42bdbe961cbb8ccd62efcd6f
   languageName: node
   linkType: hard
 
@@ -11763,13 +11754,13 @@ __metadata:
   resolution: "wbfy@workspace:."
   dependencies:
     "@octokit/core": "npm:4.2.1"
-    "@types/eslint": "npm:8.37.0"
+    "@types/eslint": "npm:8.40.0"
     "@types/jest": "npm:29.5.1"
     "@types/js-yaml": "npm:4.0.5"
     "@types/libsodium-wrappers": "npm:0.7.10"
     "@types/lodash.clonedeep": "npm:4.5.7"
     "@types/micromatch": "npm:4.0.2"
-    "@types/node": "npm:18.16.13"
+    "@types/node": "npm:18.16.15"
     "@types/yargs": "npm:17.0.24"
     "@typescript-eslint/eslint-plugin": "npm:5.59.7"
     "@typescript-eslint/parser": "npm:5.59.7"
@@ -11802,10 +11793,10 @@ __metadata:
     pinst: "npm:3.0.0"
     prettier: "npm:2.8.8"
     semantic-release: "npm:21.0.2"
-    simple-git: "npm:3.18.0"
+    simple-git: "npm:3.19.0"
     sort-package-json: "npm:2.4.1"
     ts-node: "npm:10.9.1"
-    type-fest: "npm:3.10.0"
+    type-fest: "npm:3.11.0"
     typescript: "npm:5.0.4"
     vitest: "npm:0.31.1"
     yargs: "npm:17.7.2"
