@@ -140,7 +140,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       depending: {
         blitz: (dependencies['blitz'] || devDependencies['blitz'] || '').replace('^', '')[0],
         firebase: !!devDependencies['firebase-tools'],
-        playwright: !!devDependencies['playwright'],
+        playwright: !!devDependencies['playwright'] || !!devDependencies['@playwright/test'],
         prisma: !!dependencies['prisma'],
         pyright: !!devDependencies['pyright'],
         reactNative: !!dependencies['react-native'],

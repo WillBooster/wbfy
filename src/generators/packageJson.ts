@@ -107,6 +107,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       jsonObj.version = '0.0.0-semantically-released';
     }
+    if (config.depending.playwright) {
+      delete jsonObj.devDependencies['playwright'];
+      devDependencies.push('@playwright/test');
+    }
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
     } else {
