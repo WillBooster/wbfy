@@ -96,7 +96,8 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.versionsText) {
     postMergeCommands.push('run_if_changed "\\..+-version" "asdf install"');
   }
-  postMergeCommands.push('run_if_changed "package\\.json" "yarn"');
+  const rmNextDirectory = config.depending.blitz ? ' && rm -Rf .next' : '';
+  postMergeCommands.push(`run_if_changed "package\\.json" "yarn${rmNextDirectory}"`);
   if (config.containingPoetryLock) {
     postMergeCommands.push('run_if_changed "poetry\\.lock" "poetry install"');
   }
