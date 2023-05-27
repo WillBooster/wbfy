@@ -77,7 +77,7 @@ packaged.yaml
 *.sqlite3-journal
 `;
     }
-    if (config.depending.playwright) {
+    if (config.depending.playwrightTest) {
       headUserContent += `test-results/
 `;
     }

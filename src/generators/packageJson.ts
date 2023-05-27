@@ -107,13 +107,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       jsonObj.version = '0.0.0-semantically-released';
     }
-    if (config.depending.playwright) {
-      if (jsonObj.dependencies['playwright'] || jsonObj.dependencies['@playwright/test']) {
-        dependencies.push('@playwright/test');
-      } else {
-        devDependencies.push('@playwright/test');
-      }
-      // TODO: remove the following migration code in future
+    if (config.depending.playwrightTest) {
+      devDependencies.push('@playwright/test');
+      delete jsonObj.dependencies['@playwright/test'];
       delete jsonObj.dependencies['playwright'];
       delete jsonObj.devDependencies['playwright'];
     }

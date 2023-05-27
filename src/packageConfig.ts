@@ -36,7 +36,7 @@ export interface PackageConfig {
     blitz?: string;
     firebase: boolean;
     next: boolean;
-    playwright: boolean;
+    playwrightTest: boolean;
     prisma: boolean;
     pyright: boolean;
     reactNative: boolean;
@@ -142,11 +142,9 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         blitz: (dependencies['blitz'] || devDependencies['blitz'] || '').replace('^', '')[0],
         firebase: !!devDependencies['firebase-tools'],
         next: !!dependencies['next'],
-        playwright:
+        playwrightTest:
           !!dependencies['@playwright/test'] ||
           !!devDependencies['@playwright/test'] ||
-          // TODO: remove the following migration code in future
-          !!dependencies['playwright'] ||
           !!devDependencies['playwright'],
         prisma: !!dependencies['prisma'],
         pyright: !!devDependencies['pyright'],
