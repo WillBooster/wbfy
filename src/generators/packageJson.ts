@@ -108,8 +108,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.version = '0.0.0-semantically-released';
     }
     if (config.depending.playwright) {
-      devDependencies.push('@playwright/test');
+      if (jsonObj.dependencies['playwright'] || jsonObj.dependencies['@playwright/test']) {
+        dependencies.push('@playwright/test');
+      } else {
+        devDependencies.push('@playwright/test');
+      }
       // TODO: remove the following migration code in future
+      delete jsonObj.dependencies['playwright'];
       delete jsonObj.devDependencies['playwright'];
     }
     if (config.containingSubPackageJsons) {
@@ -119,8 +124,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
   }
   if (config.depending.wb) {
-    devDependencies.push('@willbooster/wb');
+    if (jsonObj.dependencies['@willbooster/shared-scripts'] || jsonObj.dependencies['@willbooster/wb']) {
+      dependencies.push('@willbooster/wb');
+    } else {
+      devDependencies.push('@willbooster/wb');
+    }
     // TODO: remove the following migration code in future
+    delete jsonObj.dependencies['@willbooster/shared-scripts'];
     delete jsonObj.devDependencies['@willbooster/shared-scripts'];
     for (const key of Object.keys(jsonObj.scripts)) {
       jsonObj.scripts[key] = jsonObj.scripts[key].replace(/wb\s+db/, 'wb prisma');

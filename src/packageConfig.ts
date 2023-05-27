@@ -143,8 +143,10 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         firebase: !!devDependencies['firebase-tools'],
         next: !!dependencies['next'],
         playwright:
+          !!dependencies['@playwright/test'] ||
           !!devDependencies['@playwright/test'] ||
           // TODO: remove the following migration code in future
+          !!dependencies['playwright'] ||
           !!devDependencies['playwright'],
         prisma: !!dependencies['prisma'],
         pyright: !!devDependencies['pyright'],
@@ -156,8 +158,10 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
         ),
         storybook: !!devDependencies['@storybook/react'],
         wb:
+          !!dependencies['@willbooster/wb'] ||
           !!devDependencies['@willbooster/wb'] ||
           // TODO: remove the following migration code in future
+          !!dependencies['@willbooster/shared-scripts'] ||
           !!devDependencies['@willbooster/shared-scripts'],
       },
       release: {
