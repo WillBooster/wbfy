@@ -108,8 +108,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.version = '0.0.0-semantically-released';
     }
     if (config.depending.playwright) {
-      delete jsonObj.devDependencies['playwright'];
       devDependencies.push('@playwright/test');
+      // TODO: remove the following migration
+      delete jsonObj.devDependencies['playwright'];
     }
     if (config.containingSubPackageJsons) {
       jsonObj.workspaces = ['packages/*'];
@@ -117,8 +118,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       delete jsonObj.workspaces;
     }
   }
-  if (config.depending.sharedScript) {
-    devDependencies.push('@willbooster/shared-scripts');
+  if (config.depending.wb) {
+    devDependencies.push('@willbooster/wb');
+    // TODO: remove the following migration
+    delete jsonObj.devDependencies['@willbooster/shared-scripts'];
+    for (const key of Object.keys(jsonObj.scripts)) {
+      jsonObj.scripts[key] = jsonObj.scripts[key].replace(/wb\s+db/, 'wb prisma');
+    }
   }
 
   if (
@@ -360,7 +366,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
       delete scripts.typecheck;
     }
   } else {
-    if (config.depending.sharedScript) {
+    if (config.depending.wb) {
       scripts.typecheck = 'wb typecheck';
     }
     if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
