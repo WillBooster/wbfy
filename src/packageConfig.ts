@@ -35,13 +35,14 @@ export interface PackageConfig {
   depending: {
     blitz?: string;
     firebase: boolean;
+    next: boolean;
     playwright: boolean;
     prisma: boolean;
     pyright: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
-    wb: boolean;
     storybook: boolean;
+    wb: boolean;
   };
   release: {
     branches: string[];
@@ -140,9 +141,10 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       depending: {
         blitz: (dependencies['blitz'] || devDependencies['blitz'] || '').replace('^', '')[0],
         firebase: !!devDependencies['firebase-tools'],
+        next: !!dependencies['next'],
         playwright:
           !!devDependencies['@playwright/test'] ||
-          // TODO: remove the following migration
+          // TODO: remove the following migration code in future
           !!devDependencies['playwright'],
         prisma: !!dependencies['prisma'],
         pyright: !!devDependencies['pyright'],
@@ -152,11 +154,11 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
           releaseBranches.length > 0 ||
           releasePlugins.length > 0
         ),
+        storybook: !!devDependencies['@storybook/react'],
         wb:
           !!devDependencies['@willbooster/wb'] ||
-          // TODO: remove the following migration
+          // TODO: remove the following migration code in future
           !!devDependencies['@willbooster/shared-scripts'],
-        storybook: !!devDependencies['@storybook/react'],
       },
       release: {
         branches: releaseBranches,

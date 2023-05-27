@@ -109,7 +109,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
     if (config.depending.playwright) {
       devDependencies.push('@playwright/test');
-      // TODO: remove the following migration
+      // TODO: remove the following migration code in future
       delete jsonObj.devDependencies['playwright'];
     }
     if (config.containingSubPackageJsons) {
@@ -120,7 +120,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
   if (config.depending.wb) {
     devDependencies.push('@willbooster/wb');
-    // TODO: remove the following migration
+    // TODO: remove the following migration code in future
     delete jsonObj.devDependencies['@willbooster/shared-scripts'];
     for (const key of Object.keys(jsonObj.scripts)) {
       jsonObj.scripts[key] = jsonObj.scripts[key].replace(/wb\s+db/, 'wb prisma');
@@ -276,6 +276,12 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   } else if (config.depending.prisma && !jsonObj.scripts['gen-code']?.startsWith('prisma generate')) {
     jsonObj.scripts['gen-code'] = 'prisma generate';
   }
+
+  if (config.depending.next) {
+    // To prevent multiple versions of @types/react from mixing.
+    delete jsonObj.devDependencies['@types/react'];
+  }
+
   if (Object.keys(jsonObj.dependencies).length === 0) {
     delete jsonObj.dependencies;
   }

@@ -11,12 +11,15 @@ export async function fixDockerfile(config: PackageConfig): Promise<void> {
     const filePath = path.join(config.dirPath, 'Dockerfile');
     const oldContent = await fs.readFile(filePath, 'utf8');
 
+    // TODO: remove the following migration code in future
     let newContent = oldContent.replaceAll('then(process.stdout.write)', 'then(t => process.stdout.write(t))');
     if (oldContent.includes('FROM node')) {
-      newContent = newContent.replaceAll(
-        /curl https:\/\/raw.githubusercontent.com\/WillBooster(\S+)/g,
-        'node -e \'fetch("https://raw.githubusercontent.com/WillBooster$1").then(r => r.text()).then(t => process.stdout.write(t))\''
-      );
+      newContent = newContent
+        .replaceAll(
+          /curl https:\/\/raw.githubusercontent.com\/WillBooster(\S+)/g,
+          'node -e \'fetch("https://raw.githubusercontent.com/WillBooster$1").then(r => r.text()).then(t => process.stdout.write(t))\''
+        )
+        .replaceAll('wb db', 'wb prisma');
     }
 
     if (oldContent === newContent) return;
