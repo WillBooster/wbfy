@@ -139,7 +139,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingTypeScriptInPackages: containsAny('packages/**/{app,src,tests,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
       containingJsxOrTsxInPackages: containsAny('packages/**/{app,src,tests}/**/*.{t,j}sx', dirPath),
       depending: {
-        blitz: (dependencies['blitz'] || devDependencies['blitz'] || '').replace('^', '')[0],
+        blitz: (dependencies['blitz'] || '').replace('^', '')[0],
         firebase: !!devDependencies['firebase-tools'],
         next: !!dependencies['next'],
         playwrightTest:
