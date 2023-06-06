@@ -1,4 +1,4 @@
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 
 export const EslintUtil = {
   getLintFixSuffix(config: PackageConfig): string {

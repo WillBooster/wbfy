@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 

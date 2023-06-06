@@ -5,7 +5,7 @@ import merge from 'deepmerge';
 import { globby } from 'globby';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 import { EslintUtil } from '../utils/eslintUtil.js';
 import { extensions } from '../utils/extensions.js';
 import { gitHubUtil } from '../utils/githubUtil.js';

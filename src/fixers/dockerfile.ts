@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 
 export async function fixDockerfile(config: PackageConfig): Promise<void> {
   return logger.function('fixDockerfile', async () => {

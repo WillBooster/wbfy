@@ -1,4 +1,5 @@
-import child_process, { SpawnSyncOptions } from 'node:child_process';
+import type { SpawnSyncOptions } from 'node:child_process';
+import child_process from 'node:child_process';
 
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {

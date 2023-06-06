@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { globbySync } from 'globby';
 import { simpleGit } from 'simple-git';
-import { PackageJson } from 'type-fest';
+import type { PackageJson } from 'type-fest';
 
 import { gitHubUtil, octokit } from './utils/githubUtil.js';
 

@@ -5,7 +5,7 @@ import merge from 'deepmerge';
 import cloneDeep from 'lodash.clonedeep';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { overwriteMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';

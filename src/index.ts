@@ -31,7 +31,8 @@ import { setupLabels } from './github/label.js';
 import { setupSecrets } from './github/secret.js';
 import { setupSettings } from './github/settings.js';
 import { options } from './options.js';
-import { getPackageConfig, PackageConfig } from './packageConfig.js';
+import type { PackageConfig } from './packageConfig.js';
+import { getPackageConfig } from './packageConfig.js';
 import { promisePool } from './utils/promisePool.js';
 import { spawnSync } from './utils/spawnUtil.js';
 

@@ -3,10 +3,10 @@ import path from 'node:path';
 
 import merge from 'deepmerge';
 import cloneDeep from 'lodash.clonedeep';
-import { TsConfigJson } from 'type-fest';
+import type { TsConfigJson } from 'type-fest';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { sortKeys } from '../utils/objectUtil.js';

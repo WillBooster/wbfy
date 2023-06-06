@@ -8,7 +8,7 @@ import yaml from 'js-yaml';
 import cloneDeep from 'lodash.clonedeep';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { sortKeys } from '../utils/objectUtil.js';
 import { promisePool } from '../utils/promisePool.js';

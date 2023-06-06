@@ -1,7 +1,7 @@
 import path from 'node:path';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { promisePool } from '../utils/promisePool.js';

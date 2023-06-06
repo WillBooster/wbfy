@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { logger } from '../logger.js';
-import { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig } from '../packageConfig.js';
 import { EslintUtil } from '../utils/eslintUtil.js';
 import { extensions } from '../utils/extensions.js';
 import { fsUtil } from '../utils/fsUtil.js';
