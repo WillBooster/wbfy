@@ -108,8 +108,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.version = '0.0.0-semantically-released';
     }
     if (config.depending.playwrightTest) {
-      devDependencies.push('@playwright/test');
-      delete jsonObj.dependencies['@playwright/test'];
+      // Since llm-toolbox requires @playwright/test in dependencies
+      if (!jsonObj.dependencies['@playwright/test']) {
+        devDependencies.push('@playwright/test');
+        delete jsonObj.dependencies['@playwright/test'];
+      }
       delete jsonObj.dependencies['playwright'];
       delete jsonObj.devDependencies['playwright'];
     }
