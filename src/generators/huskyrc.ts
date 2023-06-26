@@ -109,8 +109,8 @@ async function core(config: PackageConfig): Promise<void> {
     );
   } else if (config.depending.prisma) {
     postMergeCommands.push(
-      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/prisma migrate deploy"',
-      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/prisma generate"'
+      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma migrate deploy"',
+      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma generate"'
     );
   }
   const postMergeCommand = content.replace(DEFAULT_COMMAND, `${settings.postMerge}\n\n${postMergeCommands.join('\n')}`);
