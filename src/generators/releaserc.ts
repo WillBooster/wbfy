@@ -38,7 +38,9 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
               [
                 oldConfig,
                 {
+                  // cf. https://github.com/semantic-release/semantic-release/issues/2204#issuecomment-1508417704
                   successComment: false,
+                  failComment: false,
                   labels: ['r: semantic-release'],
                   releasedLabels: ['released :bookmark:'],
                 },
