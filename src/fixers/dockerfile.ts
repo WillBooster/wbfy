@@ -20,6 +20,14 @@ export async function fixDockerfile(config: PackageConfig): Promise<void> {
           'node -e \'fetch("https://raw.githubusercontent.com/WillBooster$1").then(r => r.text()).then(t => process.stdout.write(t))\''
         )
         .replaceAll('wb db', 'wb prisma');
+      if (newContent.includes('node node_modules/.bin/wb') && !newContent.includes('procps')) {
+        // `wb` depends on `tree-kill` which requires `ps` command contained in `procps` package
+        newContent = newContent.replaceAll(/apt-get -qq install -y --no-install-recommends (.+)\\/g, (substr, args) => {
+          const packages = args.trim().split(/\s+/);
+          packages.push('procps');
+          return `apt-get -qq install -y --no-install-recommends ${packages.sort().join(' ')} \\`;
+        });
+      }
     }
 
     if (oldContent === newContent) return;

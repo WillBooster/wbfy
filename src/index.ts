@@ -6,6 +6,7 @@ import yargs from 'yargs';
 
 import { fixAbbreviations } from './fixers/abbreviations.js';
 import { fixDockerfile } from './fixers/dockerfile.js';
+import { fixPlaywrightConfig } from './fixers/playwrightConfig.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { generateVersionConfigs } from './generators/asdf.js';
@@ -113,6 +114,9 @@ async function main(): Promise<void> {
     for (const config of allPackageConfigs) {
       if (config.containingTypeScript || config.containingTypeScriptInPackages) {
         promises.push(fixTypeDefinitions(config, config.root ? allPackageConfigs : [config]));
+      }
+      if (config.depending.playwrightTest) {
+        promises.push(fixPlaywrightConfig(rootConfig));
       }
       await generateGitignore(config, rootConfig);
       await promisePool.promiseAll();
