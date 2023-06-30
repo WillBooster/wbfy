@@ -311,7 +311,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
     job.with['deploy_command'] = job.with['deploy_command'].replace(/\s+--json/, '');
   }
   if (config.containingDockerfile) {
-    if (kind.startsWith('deploy') || kind.startsWith('test')) {
+    if (job.with['ci_size'] !== 'extra-large' && (kind.startsWith('deploy') || kind.startsWith('test'))) {
       job.with['ci_size'] = 'large';
     }
     if (kind.startsWith('deploy')) {
