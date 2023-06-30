@@ -82,7 +82,7 @@
   },
   "packageManager": "yarn@4.0.0-rc.47",
   "engines": {
-    "node": ">=16.15.0"
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public"
