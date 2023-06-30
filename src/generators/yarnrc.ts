@@ -16,6 +16,10 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       spawnSync('yarn', ['set', 'version', latestVersion], config.dirPath, 1);
     }
 
+    // TODO: move the following statement to the bottom to format .yarnrc.yml
+    // after https://github.com/yarnpkg/berry/issues/5545 is fixed
+    spawnSync('yarn', ['dlx', 'yarn-plugin-auto-install'], config.dirPath);
+
     const releasesPath = path.join(config.dirPath, '.yarn', 'releases');
     await fs.promises.mkdir(releasesPath, { recursive: true });
     for (const file of await fs.promises.readdir(releasesPath)) {
@@ -33,6 +37,9 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.defaultSemverRangePrefix = '';
     settings.nodeLinker = 'node-modules';
     settings.nmMode = 'hardlinks-global';
+    // cf. https://github.com/yarnpkg/berry/pull/5544#issuecomment-1613691793
+    // cf. https://github.com/yarnpkg/berry/pull/5544#issuecomment-1613989089
+    settings.injectEnvironmentFiles = [];
     // cf. https://github.com/yarnpkg/berry/pull/4698
     settings.enableGlobalCache = true;
     const originalLength = settings.plugins?.length ?? 0;
@@ -45,8 +52,6 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       delete settings.plugins;
     }
     await fs.promises.writeFile(yarnrcYmlPath, yaml.dump(settings, { lineWidth: -1 }));
-
-    spawnSync('yarn', ['dlx', 'yarn-plugin-auto-install'], config.dirPath);
   });
 }
 
