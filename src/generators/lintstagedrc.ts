@@ -21,8 +21,8 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.containingJavaScript || config.containingTypeScript) {
     const eslint = `
   '${getEslintKey(config)}': [${JSON.stringify(
-      `${packagePrefix}eslint --fix${EslintUtil.getLintFixSuffix(config)}`
-    )}, '${packagePrefix}prettier --cache --write'],`;
+    `${packagePrefix}eslint --fix${EslintUtil.getLintFixSuffix(config)}`
+  )}, '${packagePrefix}prettier --cache --write'],`;
     lines.push(eslint);
   }
   const packagesFilter = config.root ? " && !file.includes('/packages/')" : '';
