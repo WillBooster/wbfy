@@ -33,7 +33,7 @@ export interface PackageConfig {
   containingTypeScriptInPackages: boolean;
   containingJsxOrTsxInPackages: boolean;
   depending: {
-    blitz?: string;
+    blitz: boolean;
     firebase: boolean;
     next: boolean;
     playwrightTest: boolean;
@@ -139,7 +139,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingTypeScriptInPackages: containsAny('packages/**/{app,src,tests,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
       containingJsxOrTsxInPackages: containsAny('packages/**/{app,src,tests}/**/*.{t,j}sx', dirPath),
       depending: {
-        blitz: (dependencies['blitz'] || '').replace('^', '')[0],
+        blitz: !!dependencies['blitz'],
         firebase: !!devDependencies['firebase-tools'],
         next: !!dependencies['next'],
         playwrightTest:
@@ -192,7 +192,7 @@ function containsAny(pattern: string, dirPath: string): boolean {
 }
 
 function getEslintExtensionBase(config: PackageConfig): string | undefined {
-  if (config.depending.blitz === '2') {
+  if (config.depending.blitz) {
     return '@willbooster/eslint-config-blitz-next';
   } else if (config.containingTypeScript) {
     return config.containingJsxOrTsx ? '@willbooster/eslint-config-ts-react' : '@willbooster/eslint-config-ts';

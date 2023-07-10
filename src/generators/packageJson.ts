@@ -248,25 +248,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (config.depending.blitz) {
-    if (config.depending.blitz === '0') {
-      // These cause an error of eslint-plugin-import loading
-      devDependencies = devDependencies.filter((dep) => !dep.includes('@typescript-eslint/'));
-      // This causes eslint errors
-      devDependencies = devDependencies.filter(
-        (d) =>
-          d !== 'eslint-plugin-react' &&
-          d !== 'eslint-import-resolver-typescript' &&
-          d !== 'eslint-plugin-import' &&
-          d !== 'eslint-plugin-react-hooks'
-      );
-    } else {
-      dependencies.push(
-        `@blitzjs/auth@${BLITZ_VERSION}`,
-        `@blitzjs/next@${BLITZ_VERSION}`,
-        `@blitzjs/rpc@${BLITZ_VERSION}`,
-        `next@${NEXT_VERSION}`
-      );
-    }
+    dependencies.push(
+      `@blitzjs/auth@${BLITZ_VERSION}`,
+      `@blitzjs/next@${BLITZ_VERSION}`,
+      `@blitzjs/rpc@${BLITZ_VERSION}`,
+      `next@${NEXT_VERSION}`
+    );
+    // Prefer eslint-config-next's dependencies
+    devDependencies = devDependencies.filter((d) => d !== 'eslint-plugin-react' && d !== 'eslint-plugin-react-hooks');
     if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
       jsonObj.scripts['gen-code'] = 'blitz codegen';
     } else if (!jsonObj.scripts['gen-code'].includes('blitz prisma generate')) {

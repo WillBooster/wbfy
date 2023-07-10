@@ -27,7 +27,7 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     }
 
     // Don't upgrade Next.js automatically
-    if (config.depending.blitz && config.depending.blitz !== '0') {
+    if (config.depending.blitz) {
       newSettings.packageRules ??= [];
       if (!newSettings.packageRules.some((rule: any) => rule.packageNames.includes('next'))) {
         newSettings.packageRules.push({ packageNames: ['next'], enabled: false });
