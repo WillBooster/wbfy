@@ -36,9 +36,7 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       newSettings.extends = oldSettings.extends;
       oldSettings.extends = newExtends;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-      if (config.depending.blitz === '0') {
-        addExtensionToHead(newSettings, 'blitz');
-      } else if (config.depending.blitz === '2') {
+      if (config.depending.blitz) {
         addExtensionToHead(newSettings, './node_modules/@blitzjs/next/eslint');
       }
     } catch {
