@@ -10,7 +10,7 @@ import { promisePool } from '../utils/promisePool.js';
 import { getSrcDirs } from '../utils/srcDirectories.js';
 
 export async function generateLintstagedrc(config: PackageConfig): Promise<void> {
-  return logger.function('generateLintstagedrc', async () => {
+  return logger.functionIgnoringException('generateLintstagedrc', async () => {
     await core(config);
   });
 }

@@ -5,7 +5,7 @@ import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 
 export async function fixDockerfile(config: PackageConfig): Promise<void> {
-  return logger.function('fixDockerfile', async () => {
+  return logger.functionIgnoringException('fixDockerfile', async () => {
     if (!config.containingDockerfile) return;
 
     const filePath = path.join(config.dirPath, 'Dockerfile');

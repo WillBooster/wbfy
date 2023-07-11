@@ -4,7 +4,7 @@ import path from 'node:path';
 import { logger } from '../logger.js';
 
 export async function fixTestDirectories(packageDirPaths: string[]): Promise<void> {
-  return logger.function('fixTestDirectories', async () => {
+  return logger.functionIgnoringException('fixTestDirectories', async () => {
     await Promise.all(
       packageDirPaths.map(async (packageDirPath) => {
         const oldTestDirPath = path.join(packageDirPath, '__tests__');

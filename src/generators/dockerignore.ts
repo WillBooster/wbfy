@@ -13,7 +13,7 @@ const commonContent = `
 `;
 
 export async function generateDockerignore(config: PackageConfig): Promise<void> {
-  return logger.function('generateDockerignore', async () => {
+  return logger.functionIgnoringException('generateDockerignore', async () => {
     const filePath = path.resolve(config.dirPath, '.dockerignore');
     if (config.containingDockerfile) {
       const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';

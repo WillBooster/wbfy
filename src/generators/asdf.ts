@@ -9,7 +9,7 @@ import { convertVersionIntoNumber } from '../utils/version.js';
 import { JAVA_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
 
 export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
-  return logger.function('generateVersionConfigs', async () => {
+  return logger.functionIgnoringException('generateVersionConfigs', async () => {
     await core(config);
   });
 }

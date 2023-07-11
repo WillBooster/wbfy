@@ -35,7 +35,7 @@ indent_style = tab
 `;
 
 export async function generateEditorconfig(config: PackageConfig): Promise<void> {
-  return logger.function('generateEditorconfig', async () => {
+  return logger.functionIgnoringException('generateEditorconfig', async () => {
     const filePath = path.resolve(config.dirPath, '.editorconfig');
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });

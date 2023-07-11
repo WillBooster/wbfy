@@ -9,7 +9,7 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 export async function fixAbbreviations(dirPath: string): Promise<void> {
-  return logger.function('fixAbbreviations', async () => {
+  return logger.functionIgnoringException('fixAbbreviations', async () => {
     const mdFiles = await globby('**/*.md', { dot: true, cwd: dirPath, gitignore: true });
     if (options.isVerbose) {
       console.info(`Found ${mdFiles.length} markdown files in ${dirPath}`);

@@ -20,7 +20,7 @@ Icon[\r]
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
-  return logger.function('generateGitignore', async () => {
+  return logger.functionIgnoringException('generateGitignore', async () => {
     const filePath = path.resolve(config.dirPath, '.gitignore');
     const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';
     let headUserContent = ignoreFileUtil.getHeadUserContent(content) + commonContent;

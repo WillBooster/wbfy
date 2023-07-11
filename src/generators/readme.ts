@@ -7,7 +7,7 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 export async function generateReadme(config: PackageConfig): Promise<void> {
-  return logger.function('generateReadme', async () => {
+  return logger.functionIgnoringException('generateReadme', async () => {
     const filePath = path.resolve(config.dirPath, 'README.md');
     let newContent = await fs.promises.readFile(filePath, 'utf8');
 

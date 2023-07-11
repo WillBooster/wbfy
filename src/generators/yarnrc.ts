@@ -9,7 +9,7 @@ import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
-  return logger.function('generateYarnrcYml', async () => {
+  return logger.functionIgnoringException('generateYarnrcYml', async () => {
     const currentVersion = spawnSyncWithStringResult('yarn', ['--version'], config.dirPath);
     const latestVersion = getLatestVersion('@yarnpkg/cli', config.dirPath);
     if (getMajorNumber(currentVersion) <= getMajorNumber(latestVersion) && currentVersion !== latestVersion) {

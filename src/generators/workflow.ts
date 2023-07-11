@@ -147,7 +147,7 @@ type KnownKind =
   | 'add-issue-to-project';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
-  return logger.function('generateWorkflow', async () => {
+  return logger.functionIgnoringException('generateWorkflow', async () => {
     const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
     await fs.promises.mkdir(workflowsPath, { recursive: true });
 

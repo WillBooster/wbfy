@@ -8,7 +8,7 @@ import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil.js';
 const deprecatedSecretNames = ['READY_DISCORD_WEBHOOK_URL'];
 
 export async function setupSecrets(config: PackageConfig): Promise<void> {
-  return logger.function('setupSecrets', async () => {
+  return logger.functionIgnoringException('setupSecrets', async () => {
     if (!hasGitHubToken) return;
 
     const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');

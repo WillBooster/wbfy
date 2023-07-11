@@ -62,7 +62,7 @@ const subJsonObj = {
 };
 
 export async function generateTsconfig(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
-  return logger.function('generateTsconfig', async () => {
+  return logger.functionIgnoringException('generateTsconfig', async () => {
     if (rootConfig.depending.blitz) return;
 
     let newSettings = cloneDeep(config.root ? rootJsonObj : subJsonObj) as TsConfigJson;

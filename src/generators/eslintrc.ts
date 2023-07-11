@@ -10,7 +10,7 @@ import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
-  return logger.function('generateEslintrc', async () => {
+  return logger.functionIgnoringException('generateEslintrc', async () => {
     const bases = [];
     if (config.eslintBase) {
       bases.push(config.eslintBase);

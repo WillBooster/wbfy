@@ -134,7 +134,7 @@ const newContent = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 
 export async function generateIdeaSettings(config: PackageConfig): Promise<void> {
-  return logger.function('generateIdeaSettings', async () => {
+  return logger.functionIgnoringException('generateIdeaSettings', async () => {
     const dirPath = path.resolve(config.dirPath, '.idea');
     if (fs.existsSync(dirPath)) {
       const filePath = path.resolve(dirPath, 'watcherTasks.xml');

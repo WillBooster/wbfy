@@ -15,7 +15,7 @@ const jsonObj = {
 };
 
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
-  return logger.function('generateRenovateJson', async () => {
+  return logger.functionIgnoringException('generateRenovateJson', async () => {
     let newSettings: any = cloneDeep(jsonObj);
     const filePath = path.resolve(config.dirPath, '.renovaterc.json');
     try {

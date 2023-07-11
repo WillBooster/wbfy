@@ -5,7 +5,7 @@ import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 
 export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> {
-  return logger.function('fixPlaywrightConfig', async () => {
+  return logger.functionIgnoringException('fixPlaywrightConfig', async () => {
     const filePath = path.join(config.dirPath, 'playwright.config.ts');
     const oldContent = await fs.readFile(filePath, 'utf8');
 

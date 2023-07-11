@@ -11,7 +11,7 @@ export async function fixTypeDefinitions(
   config: PackageConfig,
   configsIncludingChildren: PackageConfig[]
 ): Promise<void> {
-  return logger.function('fixTypeDefinitions', async () => {
+  return logger.functionIgnoringException('fixTypeDefinitions', async () => {
     const libTypeDirPath = path.resolve(config.dirPath, '@types');
     const srcTypeDirPath =
       config.root && config.containingSubPackageJsons ? undefined : path.resolve(config.dirPath, 'src', 'types');

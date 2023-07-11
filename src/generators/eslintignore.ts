@@ -22,7 +22,7 @@ test-fixtures/
 `;
 
 export async function generateEslintignore(config: PackageConfig): Promise<void> {
-  return logger.function('generateEslintignore', async () => {
+  return logger.functionIgnoringException('generateEslintignore', async () => {
     const filePath = path.resolve(config.dirPath, '.eslintignore');
     const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';
     const headUserContent = ignoreFileUtil.getHeadUserContent(content);

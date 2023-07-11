@@ -19,7 +19,7 @@ test-fixtures/
 `;
 
 export async function generatePrettierignore(config: PackageConfig): Promise<void> {
-  return logger.function('generatePrettierignore', async () => {
+  return logger.functionIgnoringException('generatePrettierignore', async () => {
     const filePath = path.resolve(config.dirPath, '.prettierignore');
     const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';
     const headUserContent = ignoreFileUtil.getHeadUserContent(content);

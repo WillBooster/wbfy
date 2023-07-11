@@ -51,7 +51,7 @@ export async function generatePackageJson(
   rootConfig: PackageConfig,
   skipAddingDeps: boolean
 ): Promise<void> {
-  return logger.function('generatePackageJson', async () => {
+  return logger.functionIgnoringException('generatePackageJson', async () => {
     await core(config, rootConfig, skipAddingDeps);
   });
 }

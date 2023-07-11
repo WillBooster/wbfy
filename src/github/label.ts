@@ -3,7 +3,7 @@ import type { PackageConfig } from '../packageConfig.js';
 import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil.js';
 
 export async function setupLabels(config: PackageConfig): Promise<void> {
-  return logger.function('setupLabels', async () => {
+  return logger.functionIgnoringException('setupLabels', async () => {
     if (!hasGitHubToken) return;
 
     const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');

@@ -16,7 +16,7 @@ ${[...extensions.codeWith2IndentSize, ...extensions.codeWith4IndentSize, ...exte
 `;
 
 export async function generateGitattributes(config: PackageConfig): Promise<void> {
-  return logger.function('generateGitattributes', async () => {
+  return logger.functionIgnoringException('generateGitattributes', async () => {
     const filePath = path.resolve(config.dirPath, '.gitattributes');
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });

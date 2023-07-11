@@ -16,7 +16,7 @@ const jsonObj = {
 };
 
 export async function generatePyrightConfigJson(config: PackageConfig): Promise<void> {
-  return logger.function('generatePyrightConfigJson', async () => {
+  return logger.functionIgnoringException('generatePyrightConfigJson', async () => {
     let newSettings: unknown = cloneDeep(jsonObj);
     const filePath = path.resolve(config.dirPath, 'pyrightconfig.json');
     try {
