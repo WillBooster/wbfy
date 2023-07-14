@@ -1460,16 +1460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:7.22.5":
-  version: 7.22.5
-  resolution: "@babel/runtime@npm:7.22.5"
-  dependencies:
-    regenerator-runtime: "npm:^0.13.11"
-  checksum: 11dcaeecd2246857ccf22f939fcae28a58d29e410607bfa28b95d9b03e298a3e3df8a530e22637d5bfccfc1661fb39cc50c06b404b5d53454bd93889c7dd3eb8
-  languageName: node
-  linkType: hard
-
-"@babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:7.22.6, @babel/runtime@npm:^7.8.4":
   version: 7.22.6
   resolution: "@babel/runtime@npm:7.22.6"
   dependencies:
@@ -8425,12 +8416,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimal-promise-pool@npm:2.1.13":
-  version: 2.1.13
-  resolution: "minimal-promise-pool@npm:2.1.13"
+"minimal-promise-pool@npm:3.0.1":
+  version: 3.0.1
+  resolution: "minimal-promise-pool@npm:3.0.1"
   dependencies:
-    "@babel/runtime": "npm:7.22.5"
-  checksum: ac581dec971a58302a87cf3aa5812eb7ac5d52fde6383138328ce5dcec1a962bc2f700c3e96cd1eb1b1db6e855a07272c8b586fb1c29a3df5f791316408a1ced
+    "@babel/runtime": "npm:7.22.6"
+  checksum: 8e2109bc7dfc73662bb9d73e7cd2479d2859620f1528c8f5c7493fe7eb039335ecb40b0627a3078ac998a00f23fed01ff7bf7e5e50e84435beec70cc351700fe
   languageName: node
   linkType: hard
 
@@ -11704,7 +11695,7 @@ __metadata:
     lint-staged: "npm:13.2.3"
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.5"
-    minimal-promise-pool: "npm:2.1.13"
+    minimal-promise-pool: "npm:3.0.1"
     pinst: "npm:3.0.0"
     prettier: "npm:3.0.0"
     semantic-release: "npm:21.0.7"
