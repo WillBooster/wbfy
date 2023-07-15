@@ -89,7 +89,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.root) {
     // To install the latest pinst
-    devDependencies.push('husky', '@willbooster/renovate-config');
+    devDependencies.push('husky');
     if (config.publicRepo || config.referredByOtherRepo) {
       // https://typicode.github.io/husky/#/?id=install-1
       devDependencies.push('pinst');
@@ -128,9 +128,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     } else {
       devDependencies.push('@willbooster/wb');
     }
-    // TODO: remove the following migration code in future
-    delete jsonObj.dependencies['@willbooster/shared-scripts'];
-    delete jsonObj.devDependencies['@willbooster/shared-scripts'];
     for (const key of Object.keys(jsonObj.scripts)) {
       jsonObj.scripts[key] = jsonObj.scripts[key].replace(/wb\s+db/, 'wb prisma');
     }
@@ -312,9 +309,12 @@ async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
   delete jsonObj.scripts['typecheck/warn'];
   delete jsonObj.scripts['typecheck:gen-code'];
   delete jsonObj.scripts['typecheck:codegen'];
+  delete jsonObj.dependencies['@willbooster/shared-scripts'];
   delete jsonObj.dependencies['tslib'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
+  delete jsonObj.devDependencies['@willbooster/renovate-config'];
+  delete jsonObj.devDependencies['@willbooster/shared-scripts'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
   delete jsonObj.devDependencies['eslint-import-resolver-node'];
   delete jsonObj.devDependencies['eslint-plugin-prettier'];

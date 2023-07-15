@@ -11,7 +11,8 @@ import { overwriteMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 const jsonObj = {
-  extends: ['@willbooster'],
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: ['github>WillBooster/willbooster-configs:renovate.json5'],
 };
 
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
@@ -22,6 +23,7 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(oldContent) as any;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
+      newSettings.extends = newSettings.extends.filter((item: string) => item !== '@willbooster');
     } catch {
       // do nothing
     }
