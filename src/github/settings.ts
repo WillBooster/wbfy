@@ -1,5 +1,3 @@
-import type { PackageConfig } from '../packageConfig.js';
-
-export async function setupSettings(config: PackageConfig): Promise<void> {
+export async function setupSettings(): Promise<void> {
   // TODO: implement code for https://github.com/WillBooster/wbfy/issues/324
 }

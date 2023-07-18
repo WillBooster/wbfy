@@ -58,13 +58,6 @@ export function getLatestVersion(packageName: string, dirPath: string): string {
   const versions = JSON.parse(versionsJson) as string[];
   return versions.at(-1) as string;
 }
-
-function importOrRemovePlugin(config: PackageConfig, plugins: string[], requirePlugin: boolean, plugin: string): void {
-  if (requirePlugin !== plugins.includes(plugin)) {
-    spawnSync('yarn', ['plugin', requirePlugin ? 'import' : 'remove', plugin], config.dirPath);
-  }
-}
-
 function getMajorNumber(version: string): number {
   const [major] = version.split('.');
   return Number(major);

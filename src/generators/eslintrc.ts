@@ -18,7 +18,7 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
     if (config !== rootConfig) {
       bases.push('../../.eslintrc.json');
     }
-    let newSettings: any = { root: true, extends: bases };
+    let newSettings = { root: true, extends: bases };
 
     const filePath = path.resolve(config.dirPath, '.eslintrc.json');
     try {
@@ -35,7 +35,9 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       const newExtends = newSettings.extends;
       newSettings.extends = oldSettings.extends;
       oldSettings.extends = newExtends;
-      newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
+      newSettings = merge.all([newSettings, oldSettings, newSettings], {
+        arrayMerge: combineMerge,
+      }) as typeof newSettings;
       if (config.depending.blitz) {
         addExtensionToHead(newSettings, './node_modules/@blitzjs/next/eslint');
       }
@@ -47,6 +49,6 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
   });
 }
 
-function addExtensionToHead(newSettings: any, extension: string): void {
+function addExtensionToHead(newSettings: { extends: string[] }, extension: string): void {
   newSettings.extends = [extension, ...newSettings.extends.filter((e: string) => e !== extension)];
 }

@@ -88,6 +88,12 @@ const workflows = {
       },
     },
   },
+  sync: {
+    name: 'Sync',
+    jobs: {
+      sync: { uses: 'WillBooster/reusable-workflows/.github/workflows/sync.yml@main' },
+    },
+  },
   'notify-ready': {
     name: 'Notify ready',
     on: {
@@ -133,18 +139,9 @@ const workflows = {
       },
     },
   },
-} as Record<KnownKind, any>;
+};
 
-type KnownKind =
-  | 'test'
-  | 'release'
-  | 'sync'
-  | 'wbfy'
-  | 'wbfy-merge'
-  | 'semantic-pr'
-  | 'notify-ready'
-  | 'close-comment'
-  | 'add-issue-to-project';
+type KnownKind = keyof typeof workflows;
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateWorkflow', async () => {
@@ -181,7 +178,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
-  let newSettings = cloneDeep(workflows[kind] || {});
+  let newSettings = cloneDeep(workflows[kind]);
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');

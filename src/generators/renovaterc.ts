@@ -15,14 +15,18 @@ const jsonObj = {
   extends: ['github>WillBooster/willbooster-configs:renovate.json5'],
 };
 
+type Settings = typeof jsonObj & { packageRules: { packageNames: string[]; enabled?: boolean }[] };
+
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateRenovateJson', async () => {
-    let newSettings: any = cloneDeep(jsonObj);
+    let newSettings = cloneDeep(jsonObj) as Settings;
     const filePath = path.resolve(config.dirPath, '.renovaterc.json');
     try {
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
-      const oldSettings = JSON.parse(oldContent) as any;
-      newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
+      const oldSettings = JSON.parse(oldContent);
+      newSettings = merge.all([newSettings, oldSettings, newSettings], {
+        arrayMerge: overwriteMerge,
+      }) as Settings;
       newSettings.extends = newSettings.extends.filter((item: string) => item !== '@willbooster');
     } catch {
       // do nothing
@@ -31,7 +35,7 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     // Don't upgrade Next.js automatically
     if (config.depending.blitz) {
       newSettings.packageRules ??= [];
-      if (!newSettings.packageRules.some((rule: any) => rule.packageNames.includes('next'))) {
+      if (!newSettings.packageRules.some((rule: { packageNames: string[] }) => rule.packageNames.includes('next'))) {
         newSettings.packageRules.push({ packageNames: ['next'], enabled: false });
       }
     }

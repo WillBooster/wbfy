@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import merge from 'deepmerge';
 import { globby } from 'globby';
+import type { PackageJson, SetRequired } from 'type-fest';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
@@ -59,24 +60,22 @@ export async function generatePackageJson(
 async function core(config: PackageConfig, rootConfig: PackageConfig, skipAddingDeps: boolean): Promise<void> {
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fs.promises.readFile(filePath, 'utf8');
-  const jsonObj = JSON.parse(jsonText);
+  const jsonObj = JSON.parse(jsonText) as PackageJson;
   jsonObj.scripts = jsonObj.scripts || {};
   jsonObj.dependencies = jsonObj.dependencies || {};
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   jsonObj.peerDependencies = jsonObj.peerDependencies || {};
 
-  await removeDeprecatedStuff(jsonObj);
+  await removeDeprecatedStuff(jsonObj as SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>);
 
   if (jsonObj.name !== '@willbooster/prettier-config') {
     jsonObj.prettier = '@willbooster/prettier-config';
   }
 
-  for (const scriptKey of Object.keys(jsonObj.scripts)) {
+  for (const [key, value] of Object.entries(jsonObj.scripts as Record<string, string>)) {
     // Fresh repo still requires 'yarn install'
-    if (!jsonObj.scripts[scriptKey].includes('git clone')) {
-      jsonObj.scripts[scriptKey] = jsonObj.scripts[scriptKey]
-        .replace(/yarn\s*&&\s*/, '')
-        .replace(/yarn\s*install\s*&&\s*/, '');
+    if (!value.includes('git clone')) {
+      jsonObj.scripts[key] = value.replace(/yarn\s*&&\s*/, '').replace(/yarn\s*install\s*&&\s*/, '');
     }
   }
 
@@ -128,8 +127,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     } else {
       devDependencies.push('@willbooster/wb');
     }
-    for (const key of Object.keys(jsonObj.scripts)) {
-      jsonObj.scripts[key] = jsonObj.scripts[key].replace(/wb\s+db/, 'wb prisma');
+    for (const [key, value] of Object.entries(jsonObj.scripts as Record<string, string>)) {
+      jsonObj.scripts[key] = value.replace(/wb\s+db/, 'wb prisma');
     }
   }
 
@@ -189,7 +188,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     if (!config.containingJavaScript && !config.containingTypeScript) {
       delete jsonObj.scripts.lint;
       delete jsonObj.scripts['lint-fix'];
-      jsonObj.scripts.cleanup = jsonObj.scripts.cleanup.replace(' && yarn lint-fix', '');
+      jsonObj.scripts.cleanup = jsonObj.scripts.cleanup?.replace(' && yarn lint-fix', '');
     } else {
       jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
     }
@@ -300,7 +299,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 }
 
 // TODO: remove the following migration code in future
-async function removeDeprecatedStuff(jsonObj: any): Promise<void> {
+async function removeDeprecatedStuff(
+  jsonObj: SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>
+): Promise<void> {
   if (jsonObj.author === 'WillBooster LLC') {
     jsonObj.author = 'WillBooster Inc.';
   }
