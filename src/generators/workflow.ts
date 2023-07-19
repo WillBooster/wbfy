@@ -25,9 +25,9 @@ const workflows = {
         'paths-ignore': ['**.md', '**/docs/**'],
       },
     },
-    // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-using-a-fallback-value
+    // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
     concurrency: {
-      group: '${{ github.workflow }}-${{ github.head_ref || github.run_id }}',
+      group: '${{ github.workflow }}-${{ github.ref }}',
       'cancel-in-progress': true,
     },
     jobs: {
