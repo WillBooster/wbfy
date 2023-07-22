@@ -1,10 +1,10 @@
 import merge from 'deepmerge';
 
-export function overwriteMerge(destinationArray: any[], sourceArray: any[]): any[] {
+export function overwriteMerge<T>(destinationArray: T[], sourceArray: T[]): T[] {
   return sourceArray;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function combineMerge(target: any[], source: any[], options: any): any[] {
   const destination = [...target];
 

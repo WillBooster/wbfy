@@ -85,7 +85,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       path.basename(path.resolve(dirPath, '..')) !== 'packages' ||
       !fs.existsSync(path.resolve(dirPath, '..', '..', 'package.json'));
 
-    let repoInfo: Record<string, any> | undefined;
+    let repoInfo: Record<string, unknown> | undefined;
     if (isRoot) {
       repoInfo = await fetchRepoInfo(dirPath, packageJson);
     }
@@ -205,7 +205,7 @@ function getEslintExtensionBase(config: PackageConfig): string | undefined {
   }
 }
 
-async function fetchRepoInfo(dirPath: string, packageJson: PackageJson): Promise<Record<string, any> | undefined> {
+async function fetchRepoInfo(dirPath: string, packageJson: PackageJson): Promise<Record<string, unknown> | undefined> {
   const git = simpleGit(dirPath);
   const remotes = await git.getRemotes(true);
   const origin = remotes.find((r) => r.name === 'origin');
@@ -222,7 +222,7 @@ async function fetchRepoInfo(dirPath: string, packageJson: PackageJson): Promise
   }
 }
 
-async function requestRepoInfo(urlOrFullName: string): Promise<Record<string, any> | undefined> {
+async function requestRepoInfo(urlOrFullName: string): Promise<Record<string, unknown> | undefined> {
   const [org, name] = gitHubUtil.getOrgAndName(urlOrFullName);
   if (!org || !name) return;
 

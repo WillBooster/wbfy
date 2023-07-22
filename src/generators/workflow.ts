@@ -10,10 +10,55 @@ import cloneDeep from 'lodash.clonedeep';
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { combineMerge } from '../utils/mergeUtil.js';
-import { sortKeys } from '../utils/objectUtil.js';
+import { moveToBottom, sortKeys } from '../utils/objectUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-const workflows = {
+interface Workflow {
+  name: string;
+  on: On;
+  concurrency?: Concurrency;
+  jobs: { [key: string]: Job };
+}
+
+interface Concurrency {
+  group: string;
+  'cancel-in-progress': boolean;
+}
+
+interface On {
+  issues?: Types;
+  pull_request?: PullRequest;
+  pull_request_target?: Types;
+  push?: Push;
+  schedule?: Schedule[];
+  workflow_dispatch?: null;
+}
+
+interface PullRequest {
+  'paths-ignore'?: string[];
+  types?: string[];
+}
+
+interface Push {
+  branches: string[];
+  'paths-ignore'?: string[];
+}
+
+interface Schedule {
+  cron: string;
+}
+
+interface Types {
+  types: string[];
+}
+
+interface Job {
+  uses: string;
+  secrets?: Record<string, unknown>;
+  with?: Record<string, unknown>;
+}
+
+const workflows: Record<string, Workflow> = {
   test: {
     name: 'Test',
     on: {
@@ -90,6 +135,7 @@ const workflows = {
   },
   sync: {
     name: 'Sync',
+    on: {},
     jobs: {
       sync: { uses: 'WillBooster/reusable-workflows/.github/workflows/sync.yml@main' },
     },
@@ -182,8 +228,8 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
-    const oldSettings = yaml.load(oldContent);
-    newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
+    const oldSettings = yaml.load(oldContent) as Workflow;
+    newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge }) as Workflow;
   } catch {
     // do nothing
   }
@@ -198,9 +244,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     };
     // Move jobs to the bottom
     if (newSettings.jobs) {
-      const jobs = newSettings.jobs;
-      delete newSettings.jobs;
-      newSettings.jobs = jobs;
+      moveToBottom(newSettings, 'jobs');
     }
     if (newSettings.on?.push) {
       newSettings.on.push['paths-ignore'] = [
@@ -209,7 +253,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     }
   }
 
-  for (const job of Object.values(newSettings.jobs) as any[]) {
+  for (const job of Object.values(newSettings.jobs)) {
     // Ignore non-reusable workflows
     if (!job.uses?.includes?.('/reusable-workflows/')) return;
 
@@ -218,9 +262,9 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
 
   switch (kind) {
     case 'release': {
-      if (newSettings.on.schedule) {
+      if (newSettings.on?.schedule) {
         delete newSettings.on.push;
-      } else if (config.release.branches.length > 0) {
+      } else if (newSettings.on?.push && config.release.branches.length > 0) {
         newSettings.on.push.branches = config.release.branches;
       } else {
         // Don't use release.yml if release branch is not specified
@@ -230,7 +274,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
       break;
     }
     case 'wbfy': {
-      setSchedule(newSettings, 20, 24);
+      if (newSettings.on) setSchedule(newSettings, 20, 24);
       break;
     }
     case 'wbfy-merge': {
@@ -246,7 +290,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     await fs.promises.rm(path.join(workflowsPath, 'semantic-release.yml'), { force: true });
   } else if (kind === 'sync') {
     await fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true });
-    if (!newSettings.jobs.sync) return;
+    if (!newSettings.jobs.sync || !newSettings.jobs.sync.with) return;
 
     newSettings.jobs['sync-force'] = newSettings.jobs.sync;
     const params = newSettings.jobs.sync.with.sync_params_without_dest;
@@ -260,7 +304,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   }
 }
 
-function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
+function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   job.with ||= {};
   job.secrets ||= {};
 
@@ -290,7 +334,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   if (kind === 'sync') {
     const params = job.with?.sync_params_without_dest;
     if (params) {
-      job.with.sync_params_without_dest = params.replace('sync ', '');
+      job.with.sync_params_without_dest = params.toString().replace('sync ', '');
     }
   }
 
@@ -305,7 +349,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
 
   // Don't use `fly deploy --json` since it causes an error
   if (kind.startsWith('deploy') && job.secrets['FLY_API_TOKEN'] && job.with['deploy_command']) {
-    job.with['deploy_command'] = job.with['deploy_command'].replace(/\s+--json/, '');
+    job.with['deploy_command'] = job.with['deploy_command'].toString().replace(/\s+--json/, '');
   }
   if (config.containingDockerfile) {
     if (job.with['ci_size'] !== 'extra-large' && (kind.startsWith('deploy') || kind.startsWith('test'))) {
@@ -339,7 +383,7 @@ function normalizeJob(config: PackageConfig, job: any, kind: KnownKind): void {
   }
 }
 
-function setSchedule(newSettings: any, inclusiveMinHourJst: number, exclusiveMaxHourJst: number): void {
+function setSchedule(newSettings: Workflow, inclusiveMinHourJst: number, exclusiveMaxHourJst: number): void {
   const [minuteUtc, hourUtc] = ((newSettings.on.schedule?.[0]?.cron as string) ?? '').split(' ').map(Number);
   if (minuteUtc !== 0 && Number.isInteger(hourUtc)) {
     const hourJst = (hourUtc + 9) % 24;
@@ -356,7 +400,7 @@ function setSchedule(newSettings: any, inclusiveMinHourJst: number, exclusiveMax
   newSettings.on.schedule = [{ cron }];
 }
 
-async function writeYaml(newSettings: any, filePath: string): Promise<void> {
+async function writeYaml(newSettings: Workflow, filePath: string): Promise<void> {
   const yamlText = yaml.dump(newSettings, {
     lineWidth: -1,
     noCompatMode: true,
@@ -367,13 +411,14 @@ async function writeYaml(newSettings: any, filePath: string): Promise<void> {
   await fs.promises.writeFile(filePath, yamlText);
 }
 
-function migrateWorkflow(newSettings: any): void {
+function migrateWorkflow(newSettings: Workflow): void {
   // TODO: Remove them after 2023-03-31
   delete newSettings.jobs['add-to-project'];
 }
 
-function migrateJob(job: any): void {
+function migrateJob(job: Job): void {
   // TODO: Remove them after 2023-03-31
+  if (!job.with) return;
   delete job.with['non_self_hosted'];
   delete job.with['notify_discord'];
   delete job.with['require_fly'];
