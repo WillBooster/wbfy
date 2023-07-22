@@ -1,3 +1,13 @@
+export function moveToBottom<TObj extends Record<TKey, unknown>, TKey extends string | number | symbol>(
+  obj: TObj,
+  key: TKey
+): TObj {
+  const value = obj[key];
+  delete obj[key];
+  (obj as Record<TKey, unknown>)[key] = value;
+  return obj;
+}
+
 export function sortKeys<T extends Record<string, unknown>>(obj: T): T {
   const keyAndValues = Object.entries(obj).sort(([key1], [key2]) => key1.localeCompare(key2));
   for (const [key, value] of keyAndValues) {
