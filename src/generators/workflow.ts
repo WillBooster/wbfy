@@ -58,7 +58,7 @@ interface Job {
   with?: Record<string, unknown>;
 }
 
-const workflows: Record<string, Workflow> = {
+const workflows = {
   test: {
     name: 'Test',
     on: {
@@ -185,9 +185,9 @@ const workflows: Record<string, Workflow> = {
       },
     },
   },
-};
+} as const;
 
-type KnownKind = keyof typeof workflows;
+type KnownKind = keyof typeof workflows | 'deploy';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateWorkflow', async () => {
@@ -224,7 +224,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
-  let newSettings = cloneDeep(workflows[kind]);
+  let newSettings = cloneDeep(workflows[kind as keyof typeof workflows] ?? {}) as Workflow;
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
