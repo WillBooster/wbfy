@@ -25,6 +25,7 @@ export interface PackageConfig {
   containingPomXml: boolean;
   containingPubspecYaml: boolean;
   containingTemplateYaml: boolean;
+  containingVscodeSettingsJson: boolean;
 
   containingJavaScript: boolean;
   containingTypeScript: boolean;
@@ -132,6 +133,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       containingPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
       containingPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       containingTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
+      containingVscodeSettingsJson: fs.existsSync(path.resolve(dirPath, '.vscode', 'settings.json')),
       containingJavaScript: containsAny('{app,src,tests,scripts}/**/*.{cjs,mjs,js,jsx}', dirPath),
       containingTypeScript: containsAny('{app,src,tests,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
       containingJsxOrTsx: containsAny('{app,src,tests}/**/*.{t,j}sx', dirPath),
