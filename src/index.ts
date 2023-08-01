@@ -26,6 +26,7 @@ import { generateReadme } from './generators/readme.js';
 import { generateReleaserc } from './generators/releaserc.js';
 import { generateRenovateJson } from './generators/renovaterc.js';
 import { generateTsconfig } from './generators/tsconfig.js';
+import { generateVscodeSettings } from './generators/vscodeSettings.js';
 import { generateWorkflows } from './generators/workflow.js';
 import { generateYarnrcYml } from './generators/yarnrc.js';
 import { setupLabels } from './github/label.js';
@@ -127,6 +128,9 @@ async function main(): Promise<void> {
       await generatePackageJson(config, rootConfig, argv.skipDeps);
 
       promises.push(generateLintstagedrc(config));
+      if (config.containingVscodeSettingsJson && config.containingPackageJson) {
+        promises.push(generateVscodeSettings(config));
+      }
       if (config.containingTypeScript || config.containingTypeScriptInPackages) {
         promises.push(generateTsconfig(config, rootConfig));
       }
