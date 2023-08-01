@@ -9,14 +9,6 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { sortKeys } from '../utils/objectUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-function excludeSetting(excludeFile: string): unknown {
-  return {
-    'files.watcherExclude': {
-      [excludeFile]: true,
-    },
-  };
-}
-
 export async function generateVscodeSettings(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateVscodeSettings', async () => {
     try {
@@ -34,4 +26,12 @@ export async function generateVscodeSettings(config: PackageConfig): Promise<voi
       // do nothing
     }
   });
+}
+
+function excludeSetting(excludeFile: string): unknown {
+  return {
+    'files.watcherExclude': {
+      [excludeFile]: true,
+    },
+  };
 }
