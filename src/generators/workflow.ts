@@ -72,7 +72,7 @@ const workflows = {
     },
     // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
     concurrency: {
-      group: '${{ github.workflow }}-${{ github.head_ref || github.ref_name || github.ref }}',
+      group: '${{ github.workflow }}-${{ github.ref }}',
       'cancel-in-progress': true,
     },
     jobs: {
