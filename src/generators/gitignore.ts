@@ -17,7 +17,7 @@ dist/
 temp/
 Icon[\r]
 !.keep
-mount/*.hash
+*/mount/*.hash
 
 `;
 
