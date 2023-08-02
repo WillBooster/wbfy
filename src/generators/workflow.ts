@@ -66,7 +66,7 @@ const workflows = {
         'paths-ignore': ['**.md', '**/docs/**'],
       },
       push: {
-        branches: ['main', 'wbfy', 'renovate/**'],
+        branches: ['main', 'wbfy'],
         'paths-ignore': ['**.md', '**/docs/**'],
       },
     },
