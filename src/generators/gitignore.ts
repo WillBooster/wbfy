@@ -17,6 +17,7 @@ dist/
 temp/
 Icon[\r]
 !.keep
+mount/*.hash
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
