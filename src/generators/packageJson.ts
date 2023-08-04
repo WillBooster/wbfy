@@ -279,7 +279,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     delete jsonObj.peerDependencies;
   }
 
-  await fs.promises.writeFile(filePath, JSON.stringify(jsonObj));
+  let newJsonText = JSON.stringify(jsonObj);
+  newJsonText = await fixScriptNames(jsonObj.scripts, newJsonText, config);
+  await fs.promises.writeFile(filePath, newJsonText);
 
   if (!skipAddingDeps) {
     // We cannot add dependencies which are already included in devDependencies.
@@ -394,4 +396,42 @@ async function generatePrettierSuffix(dirPath: string): Promise<string> {
     .filter((l) => l && !l.startsWith('#') && !l.includes('/'));
 
   return lines.map((line) => ` "!**/${line}/**"`).join('');
+}
+
+async function fixScriptNames(
+  scripts: PackageJson.Scripts,
+  newJsonText: string,
+  config: PackageConfig
+): Promise<string> {
+  const oldAndNewScriptNames: [string, string][] = [];
+  for (const [key] of Object.keys(scripts)) {
+    if (key[0] !== ':' && key.includes(':')) {
+      oldAndNewScriptNames.push([key, key.replaceAll(':', '-')]);
+    }
+  }
+  if (oldAndNewScriptNames.length === 0) return newJsonText;
+
+  for (const [oldName, newName] of oldAndNewScriptNames) {
+    newJsonText = newJsonText.replaceAll(oldName, newName);
+  }
+  const files = await globby(['**/*.{md,cjs,mjs,js,jsx,cts,mts,ts,tsx}', '**/Dockerfile'], {
+    cwd: config.dirPath,
+    dot: true,
+    gitignore: true,
+  });
+  for (const file of files) {
+    await promisePool.run(async () => {
+      const filePath = path.join(config.dirPath, file);
+      const oldContent = await fs.promises.readFile(filePath, 'utf8');
+      let newContent = oldContent;
+      for (const [oldName, newName] of oldAndNewScriptNames) {
+        newContent = newContent.replaceAll(oldName, newName);
+      }
+      if (newContent !== oldContent) {
+        await fs.promises.writeFile(filePath, newContent);
+      }
+    });
+  }
+  await promisePool.promiseAll();
+  return newJsonText;
 }
