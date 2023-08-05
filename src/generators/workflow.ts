@@ -273,6 +273,12 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
       }
       break;
     }
+    case 'test': {
+      if (newSettings.on?.push) {
+        newSettings.on.push.branches = newSettings.on.push.branches.filter((branch) => branch !== 'renovate/**');
+      }
+      break;
+    }
     case 'wbfy': {
       if (newSettings.on) setSchedule(newSettings, 20, 24);
       break;
