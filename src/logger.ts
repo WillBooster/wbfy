@@ -8,9 +8,7 @@ class Logger {
     try {
       await func();
     } catch (error) {
-      if (options.isVerbose) {
-        console.info(`Error occurred in ${name}: ${error instanceof Error ? error.stack : error}}`);
-      }
+      console.info(`Error occurred in ${name}: ${error instanceof Error ? error.stack : error}}`);
     }
     if (options.isVerbose) {
       console.info(`---------- ${name} end ----------`);
