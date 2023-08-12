@@ -347,6 +347,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     typecheck: 'tsc --noEmit --Pretty',
   };
   if (config.containingSubPackageJsons) {
+    const oldTest = scripts.test;
     scripts = merge(
       { ...scripts },
       {
@@ -362,13 +363,13 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
         typecheck: 'yarn workspaces foreach --parallel --verbose run typecheck',
       }
     );
+    if (oldTest.includes('wb test')) {
+      scripts.test = oldTest;
+    }
     if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
       delete scripts.typecheck;
     }
   } else {
-    if (config.depending.wb) {
-      scripts.typecheck = 'wb typecheck';
-    }
     if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
       delete scripts.typecheck;
     }
@@ -376,6 +377,9 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
       scripts.typecheck = scripts.typecheck ? `${scripts.typecheck} && ` : '';
       scripts.typecheck += 'pyright';
     }
+  }
+  if (config.depending.wb) {
+    scripts.typecheck = 'wb typecheck';
   }
   return scripts;
 }
