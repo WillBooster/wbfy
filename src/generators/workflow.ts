@@ -170,7 +170,7 @@ const workflows = {
     },
   },
   'add-issue-to-project': {
-    name: 'Add issue to github project',
+    name: 'Add issue to GitHub project',
     on: {
       issues: {
         types: ['labeled'],
@@ -181,6 +181,25 @@ const workflows = {
         uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
         secrets: {
           GH_PROJECT_URL: '${{ secrets.GH_PROJECT_URL }}',
+        },
+      },
+    },
+  },
+  'add-ready-issue-to-project': {
+    name: 'Add ready issue to GitHub project',
+    on: {
+      issues: {
+        types: ['labeled'],
+      },
+    },
+    jobs: {
+      'add-ready-issue-to-project': {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
+        with: {
+          label: 'ready :rocket:',
+        },
+        secrets: {
+          GH_PROJECT_URL: 'https://github.com/orgs/WillBoosterLab/projects/5',
         },
       },
     },
@@ -212,6 +231,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       fileNameSet.add('release.yml');
     }
     if (rootConfig.publicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
+      fileNameSet.add('add-ready-issue-to-project.yml');
       fileNameSet.add('notify-ready.yml');
     }
 
@@ -319,7 +339,8 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'release' ||
     kind === 'wbfy' ||
     kind === 'wbfy-merge' ||
-    kind === 'add-issue-to-project'
+    kind === 'add-issue-to-project' ||
+    kind === 'add-ready-issue-to-project'
   ) {
     job.secrets['GH_TOKEN'] = config.publicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
