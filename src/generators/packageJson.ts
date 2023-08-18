@@ -351,16 +351,16 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     scripts = merge(
       { ...scripts },
       {
-        format: `sort-package-json && yarn prettify && yarn workspaces foreach --parallel --verbose run format`,
-        lint: `yarn workspaces foreach --parallel --verbose run lint`,
-        'lint-fix': 'yarn workspaces foreach --parallel --verbose run lint-fix',
+        format: `sort-package-json && yarn prettify && yarn workspaces foreach --all --parallel --verbose run format`,
+        lint: `yarn workspaces foreach --all --parallel --verbose run lint`,
+        'lint-fix': 'yarn workspaces foreach --all --parallel --verbose run lint-fix',
         prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
           ','
         )}}" "!**/packages/**" "!**/test-fixtures/**"`,
         // CI=1 prevents vitest from enabling watch.
         // FORCE_COLOR=3 make wb enable color output.
-        test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --verbose run test',
-        typecheck: 'yarn workspaces foreach --parallel --verbose run typecheck',
+        test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --all --verbose run test',
+        typecheck: 'yarn workspaces foreach --all --parallel --verbose run typecheck',
       }
     );
     if (oldTest?.includes('wb test')) {
