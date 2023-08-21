@@ -281,6 +281,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     delete jsonObj.devDependencies['@types/react'];
   }
 
+  if (!jsonObj.dependencies?.prettier) {
+    // Because @types/prettier blocks prettier execution.
+    delete jsonObj.devDependencies['@types/prettier'];
+  }
+
   if (Object.keys(jsonObj.dependencies).length === 0) {
     delete jsonObj.dependencies;
   }
