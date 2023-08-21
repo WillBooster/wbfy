@@ -81,6 +81,18 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config));
   jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
+  // Deal with breaking changes in yarn berry 4.0.0-rc.49
+  for (const [key, value] of Object.entries(jsonObj.scripts)) {
+    if (!value?.includes('yarn workspaces foreach')) continue;
+    if (
+      value.includes('--all') ||
+      value.includes('--recursive') ||
+      value.includes('--since') ||
+      value.includes('--worktree')
+    )
+      continue;
+    jsonObj.scripts[key] = value.replace('yarn workspaces foreach', 'yarn workspaces foreach --all');
+  }
 
   let dependencies: string[] = [];
   let devDependencies = ['lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config'];
