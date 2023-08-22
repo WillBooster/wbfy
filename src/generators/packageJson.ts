@@ -260,6 +260,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       `@blitzjs/auth@${BLITZ_VERSION}`,
       `@blitzjs/next@${BLITZ_VERSION}`,
       `@blitzjs/rpc@${BLITZ_VERSION}`,
+      `blitz@${BLITZ_VERSION}`,
       `next@${NEXT_VERSION}`
     );
     // Prefer eslint-config-next's dependencies
