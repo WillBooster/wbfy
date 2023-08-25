@@ -257,6 +257,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.depending.blitz) {
     dependencies.push(
+      `blitz@${BLITZ_VERSION}`,
       `@blitzjs/auth@${BLITZ_VERSION}`,
       `@blitzjs/next@${BLITZ_VERSION}`,
       `@blitzjs/rpc@${BLITZ_VERSION}`,
