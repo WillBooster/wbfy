@@ -73,7 +73,11 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
       newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
     }
     if (config.esmPackage) {
-      newSettings.compilerOptions = { ...newSettings.compilerOptions, moduleResolution: 'NodeNext' };
+      newSettings.compilerOptions = {
+        ...newSettings.compilerOptions,
+        module: 'NodeNext',
+        moduleResolution: 'NodeNext',
+      };
     }
 
     const filePath = path.resolve(config.dirPath, 'tsconfig.json');
@@ -85,8 +89,10 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
       }
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
-      delete newSettings.compilerOptions?.module;
-      delete newSettings.compilerOptions?.moduleResolution;
+      if (!config.esmPackage) {
+        delete newSettings.compilerOptions?.module;
+        delete newSettings.compilerOptions?.moduleResolution;
+      }
       if (oldSettings.compilerOptions?.jsx) {
         delete newSettings.compilerOptions?.jsx;
       }
