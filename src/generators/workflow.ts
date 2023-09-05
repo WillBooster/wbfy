@@ -185,6 +185,25 @@ const workflows = {
       },
     },
   },
+  'add-focused-issue-to-project': {
+    name: 'Add focused issue to GitHub project',
+    on: {
+      issues: {
+        types: ['labeled'],
+      },
+    },
+    jobs: {
+      'add-focused-issue-to-project': {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
+        with: {
+          label: 'focused :dart:',
+        },
+        secrets: {
+          GH_PROJECT_URL: 'https://github.com/orgs/WillBooster/projects/7',
+        },
+      },
+    },
+  },
   'add-ready-issue-to-project': {
     name: 'Add ready issue to GitHub project',
     on: {
@@ -225,6 +244,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       'semantic-pr.yml',
       'close-comment.yml',
       'add-issue-to-project.yml',
+      'add-focused-issue-to-project.yml',
       ...entries.filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml')).map((dirent) => dirent.name),
     ]);
     if (rootConfig.depending.semanticRelease) {
@@ -340,6 +360,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'wbfy' ||
     kind === 'wbfy-merge' ||
     kind === 'add-issue-to-project' ||
+    kind === 'add-focused-issue-to-project' ||
     kind === 'add-ready-issue-to-project'
   ) {
     job.secrets['GH_TOKEN'] = config.publicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';

@@ -47,7 +47,7 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await setupLabel(owner, repo, 't: style :lipstick:', 'BFDBFE');
       await setupLabel(owner, repo, 't: test :test_tube:', 'BFDBFE');
       await setupLabel(owner, repo, 'project', '24292F');
-      await setupLabel(owner, repo, 'focus :dart:', '22C55E');
+      await setupLabel(owner, repo, 'focused :dart:', '22C55E');
 
       await deleteLabel(owner, repo, 'bug');
       await deleteLabel(owner, repo, 'documentation');
