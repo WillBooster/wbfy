@@ -108,7 +108,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.scripts['postpack'] = 'pinst --enable';
     }
     if (config.depending.semanticRelease) {
-      devDependencies.push('conventional-changelog-conventionalcommits');
+      // TODO: remove the version specification after semantic-release support version 7+
+      devDependencies.push('conventional-changelog-conventionalcommits@6.1.0');
       if (
         !jsonObj.devDependencies['semantic-release'] &&
         !jsonObj.devDependencies['multi-semantic-release'] &&
@@ -257,6 +258,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.depending.blitz) {
     dependencies.push(
+      `blitz@${BLITZ_VERSION}`,
       `@blitzjs/auth@${BLITZ_VERSION}`,
       `@blitzjs/next@${BLITZ_VERSION}`,
       `@blitzjs/rpc@${BLITZ_VERSION}`,
