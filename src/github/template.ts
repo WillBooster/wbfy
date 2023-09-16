@@ -29,7 +29,7 @@ Close #<IssueNumber>
 export async function generateGitHubTemplates(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateGitHubTemplates', async () => {
     for (const [fileName, content] of Object.entries(templates)) {
-      const filePath = path.resolve(config.dirPath, fileName);
+      const filePath = path.resolve(config.dirPath, '.github', fileName);
       await promisePool.run(() => fsUtil.generateFile(filePath, content));
     }
   });
