@@ -7,6 +7,7 @@ import yargs from 'yargs';
 import { fixAbbreviations } from './fixers/abbreviations.js';
 import { fixDockerfile } from './fixers/dockerfile.js';
 import { fixPlaywrightConfig } from './fixers/playwrightConfig.js';
+import { fixPrismaEnvFiles } from './fixers/prisma.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { generateVersionConfigs } from './generators/asdf.js';
@@ -96,6 +97,7 @@ async function main(): Promise<void> {
     await generateYarnrcYml(rootConfig);
     await Promise.all([
       fixDockerfile(rootConfig),
+      fixPrismaEnvFiles(rootConfig),
       abbreviationPromise.then(() => generateReadme(rootConfig)),
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
