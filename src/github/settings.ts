@@ -1,6 +1,23 @@
 import type { PackageConfig } from '../packageConfig.js';
+import { gitHubUtil, octokit } from '../utils/githubUtil.js';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function setupSettings(config: PackageConfig): Promise<void> {
-  // TODO: implement code for https://github.com/WillBooster/wbfy/issues/324
+  const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');
+  if (!owner || !repo) return;
+  if (owner !== 'WillBooster' && owner !== 'WillBoosterLab') return;
+
+  await octokit.request('PATCH /repos/{owner}/{repo}', {
+    owner,
+    repo,
+    allow_merge_commit: false,
+    allow_squash_merge: true,
+    allow_rebase_merge: false,
+    delete_branch_on_merge: true,
+    squash_merge_commit_title: 'PR_TITLE',
+    squash_merge_commit_message: 'PR_BODY',
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+    ...(config.repository?.startsWith('github:WillBooster/') ? { allow_auto_merge: true } : {}),
+  });
 }
