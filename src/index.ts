@@ -32,6 +32,7 @@ import { generateYarnrcYml } from './generators/yarnrc.js';
 import { setupLabels } from './github/label.js';
 import { setupSecrets } from './github/secret.js';
 import { setupSettings } from './github/settings.js';
+import { generateGitHubTemplates } from './github/template.js';
 import { options } from './options.js';
 import type { PackageConfig } from './packageConfig.js';
 import { getPackageConfig } from './packageConfig.js';
@@ -99,6 +100,7 @@ async function main(): Promise<void> {
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),
+      generateGitHubTemplates(rootConfig),
       generateHuskyrc(rootConfig),
       generateIdeaSettings(rootConfig),
       generateLintstagedrc(rootConfig),
