@@ -14,7 +14,7 @@ export async function setupSettings(config: PackageConfig): Promise<void> {
     allow_rebase_merge: false,
     delete_branch_on_merge: true,
     squash_merge_commit_title: 'PR_TITLE',
-    squash_merge_commit_message: 'PR_BODY',
+    squash_merge_commit_message: 'BLANK',
     headers: {
       'X-GitHub-Api-Version': '2022-11-28',
     },
