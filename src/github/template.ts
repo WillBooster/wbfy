@@ -1,4 +1,7 @@
+import fs from 'node:fs';
 import path from 'node:path';
+
+import { distance } from 'fastest-levenshtein';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
@@ -28,9 +31,16 @@ Close #<IssueNumber>
 
 export async function generateGitHubTemplates(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateGitHubTemplates', async () => {
-    for (const [fileName, content] of Object.entries(templates)) {
+    for (const [fileName, newContent] of Object.entries(templates)) {
       const filePath = path.resolve(config.dirPath, '.github', fileName);
-      await promisePool.run(() => fsUtil.generateFile(filePath, content));
+      if (fs.existsSync(filePath)) {
+        const oldContent = await fs.promises.readFile(filePath, 'utf8');
+        if (distance(oldContent, newContent) > newContent.length / 2) {
+          continue;
+        }
+      }
+
+      await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
     }
   });
 }

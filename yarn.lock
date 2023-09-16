@@ -5927,7 +5927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fastest-levenshtein@npm:^1.0.16":
+"fastest-levenshtein@npm:1.0.16, fastest-levenshtein@npm:^1.0.16":
   version: 1.0.16
   resolution: "fastest-levenshtein@npm:1.0.16"
   checksum: 7e3d8ae812a7f4fdf8cad18e9cde436a39addf266a5986f653ea0d81e0de0900f50c0f27c6d5aff3f686bcb48acbd45be115ae2216f36a6a13a7dbbf5cad878b
@@ -12073,6 +12073,7 @@ __metadata:
     eslint-plugin-sort-class-members: "npm:1.18.0"
     eslint-plugin-sort-destructure-keys: "npm:1.5.0"
     eslint-plugin-unicorn: "npm:48.0.1"
+    fastest-levenshtein: "npm:1.0.16"
     globby: "npm:13.2.2"
     husky: "npm:8.0.3"
     jest: "npm:29.7.0"
