@@ -38,8 +38,11 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
       newSettings = merge.all([newSettings, oldSettings, newSettings], {
         arrayMerge: combineMerge,
       }) as typeof newSettings;
+      // TODO: Remove the following code after all Blitz.js projects are updated.
       if (config.depending.blitz) {
-        addExtensionToHead(newSettings, './node_modules/@blitzjs/next/eslint');
+        newSettings.extends = newSettings.extends.filter(
+          (ext: string) => ext !== './node_modules/@blitzjs/next/eslint'
+        );
       }
     } catch {
       // do nothing
@@ -47,8 +50,4 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
     const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
-}
-
-function addExtensionToHead(newSettings: { extends: string[] }, extension: string): void {
-  newSettings.extends = [extension, ...newSettings.extends.filter((e: string) => e !== extension)];
 }

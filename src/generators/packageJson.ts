@@ -6,7 +6,7 @@ import { globby } from 'globby';
 import type { PackageJson, SetRequired } from 'type-fest';
 
 import { logger } from '../logger.js';
-import type { PackageConfig } from '../packageConfig.js';
+import type { PackageConfig, EslintExtensionBase } from '../packageConfig.js';
 import { EslintUtil } from '../utils/eslintUtil.js';
 import { extensions } from '../utils/extensions.js';
 import { gitHubUtil } from '../utils/githubUtil.js';
@@ -34,17 +34,23 @@ const tsCommonDeps = [
 
 const reactCommonDeps = ['eslint-plugin-react', 'eslint-plugin-react-hooks'];
 
-const devDeps: { [prop: string]: string[] } = {
+const eslintDeps: Record<EslintExtensionBase, string[]> = {
   '@willbooster/eslint-config-js': ['@willbooster/eslint-config-js', ...jsCommonDeps],
   '@willbooster/eslint-config-js-react': ['@willbooster/eslint-config-js-react', ...jsCommonDeps, ...reactCommonDeps],
   '@willbooster/eslint-config-ts': ['@willbooster/eslint-config-ts', ...tsCommonDeps],
   '@willbooster/eslint-config-ts-react': ['@willbooster/eslint-config-ts-react', ...tsCommonDeps, ...reactCommonDeps],
   '@willbooster/eslint-config-blitz-next': [
     '@willbooster/eslint-config-blitz-next',
+    'eslint-config-next',
     ...tsCommonDeps,
     ...reactCommonDeps,
   ],
-  '../../.eslintrc.json': [],
+  '@willbooster/eslint-config-next': [
+    '@willbooster/eslint-config-next',
+    'eslint-config-next',
+    ...tsCommonDeps,
+    ...reactCommonDeps,
+  ],
 };
 
 export async function generatePackageJson(
@@ -163,7 +169,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (config.eslintBase) {
-    devDependencies.push(...devDeps[config.eslintBase]);
+    devDependencies.push(...eslintDeps[config.eslintBase]);
   }
 
   if (config.willBoosterConfigs) {
@@ -348,7 +354,7 @@ async function removeDeprecatedStuff(
   delete jsonObj.scripts['python-format'];
   delete jsonObj.scripts['format-python'];
   delete jsonObj.scripts['prettier'];
-  for (const deps of Object.values(devDeps)) {
+  for (const deps of Object.values(eslintDeps)) {
     for (const dep of deps) {
       delete jsonObj.devDependencies[dep];
     }

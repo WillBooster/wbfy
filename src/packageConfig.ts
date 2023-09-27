@@ -50,7 +50,7 @@ export interface PackageConfig {
     github: boolean;
     npm: boolean;
   };
-  eslintBase?: string;
+  eslintBase?: EslintExtensionBase;
   versionsText?: string;
   packageJson?: PackageJson;
 }
@@ -193,9 +193,19 @@ function containsAny(pattern: string, dirPath: string): boolean {
   return globbySync(pattern, { dot: true, cwd: dirPath }).length > 0;
 }
 
-function getEslintExtensionBase(config: PackageConfig): string | undefined {
+export type EslintExtensionBase =
+  | '@willbooster/eslint-config-ts-react'
+  | '@willbooster/eslint-config-ts'
+  | '@willbooster/eslint-config-js-react'
+  | '@willbooster/eslint-config-js'
+  | '@willbooster/eslint-config-next'
+  | '@willbooster/eslint-config-blitz-next';
+
+function getEslintExtensionBase(config: PackageConfig): EslintExtensionBase | undefined {
   if (config.depending.blitz) {
     return '@willbooster/eslint-config-blitz-next';
+  } else if (config.depending.next) {
+    return '@willbooster/eslint-config-next';
   } else if (config.containingTypeScript) {
     return config.containingJsxOrTsx ? '@willbooster/eslint-config-ts-react' : '@willbooster/eslint-config-ts';
   } else {

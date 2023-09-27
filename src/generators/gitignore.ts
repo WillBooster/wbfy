@@ -66,10 +66,12 @@ packaged.yaml
     }
 
     if (config.depending.blitz) {
-      names.push('nextjs');
       headUserContent += `.blitz/
 .blitz**
 `;
+    }
+    if (config.depending.next) {
+      names.push('nextjs');
     }
     if (rootConfig.depending.firebase || config.depending.firebase) {
       names.push('firebase');
