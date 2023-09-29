@@ -40,6 +40,7 @@ export async function generateGitHubTemplates(config: PackageConfig): Promise<vo
         }
       }
 
+      await fs.promises.mkdir(path.resolve(config.dirPath, '.github'), { recursive: true });
       await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
     }
   });

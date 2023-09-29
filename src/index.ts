@@ -32,7 +32,7 @@ import { generateWorkflows } from './generators/workflow.js';
 import { generateYarnrcYml } from './generators/yarnrc.js';
 import { setupLabels } from './github/label.js';
 import { setupSecrets } from './github/secret.js';
-import { setupSettings } from './github/settings.js';
+import { setupGitHubSettings } from './github/settings.js';
 import { generateGitHubTemplates } from './github/template.js';
 import { options } from './options.js';
 import type { PackageConfig } from './packageConfig.js';
@@ -111,7 +111,7 @@ async function main(): Promise<void> {
       generateWorkflows(rootConfig),
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
-      setupSettings(rootConfig),
+      setupGitHubSettings(rootConfig),
     ]);
     await promisePool.promiseAll();
 
