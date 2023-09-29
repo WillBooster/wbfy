@@ -50,8 +50,8 @@
     "@types/libsodium-wrappers": "0.7.11",
     "@types/lodash.clonedeep": "4.5.7",
     "@types/micromatch": "4.0.3",
-    "@types/node": "18.17.18",
-    "@types/yargs": "17.0.25",
+    "@types/node": "18.18.1",
+    "@types/yargs": "17.0.26",
     "@typescript-eslint/eslint-plugin": "6.7.3",
     "@typescript-eslint/parser": "6.7.3",
     "@willbooster/eslint-config-ts": "10.5.0",
@@ -77,7 +77,7 @@
     "ts-node": "10.9.1",
     "type-fest": "4.3.2",
     "typescript": "5.2.2",
-    "vitest": "0.34.5"
+    "vitest": "0.34.6"
   },
   "packageManager": "yarn@4.0.0-rc.51",
   "engines": {
