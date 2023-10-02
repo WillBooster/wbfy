@@ -114,8 +114,12 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.scripts['postpack'] = 'pinst --enable';
     }
     if (config.depending.semanticRelease) {
-      // TODO: remove the version specification after semantic-release support version 7+
-      devDependencies.push('conventional-changelog-conventionalcommits@6.1.0');
+      const version =
+        jsonObj.devDependencies['multi-semantic-release'] || jsonObj.devDependencies['@qiwi/multi-semantic-release']
+          ? // TODO: remove the version specification after multi-semantic-release supports version 7+
+            '@6.1.0'
+          : '';
+      devDependencies.push(`conventional-changelog-conventionalcommits${version}`);
       if (
         !jsonObj.devDependencies['semantic-release'] &&
         !jsonObj.devDependencies['multi-semantic-release'] &&
