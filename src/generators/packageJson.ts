@@ -6,7 +6,7 @@ import { globby } from 'globby';
 import type { PackageJson, SetRequired } from 'type-fest';
 
 import { logger } from '../logger.js';
-import type { PackageConfig, EslintExtensionBase } from '../packageConfig.js';
+import type { EslintExtensionBase, PackageConfig } from '../packageConfig.js';
 import { EslintUtil } from '../utils/eslintUtil.js';
 import { extensions } from '../utils/extensions.js';
 import { gitHubUtil } from '../utils/githubUtil.js';

@@ -20,6 +20,7 @@ import { generateGitignore } from './generators/gitignore.js';
 import { generateHuskyrc } from './generators/huskyrc.js';
 import { generateIdeaSettings } from './generators/idea.js';
 import { generateLintstagedrc } from './generators/lintstagedrc.js';
+import { generateNextConfigJson } from './generators/nextconfig.js';
 import { generatePackageJson } from './generators/packageJson.js';
 import { generatePrettierignore } from './generators/prettierignore.js';
 import { generatePyrightConfigJson } from './generators/pyrightconfig.js';
@@ -121,7 +122,10 @@ async function main(): Promise<void> {
         promises.push(fixTypeDefinitions(config, config.root ? allPackageConfigs : [config]));
       }
       if (config.depending.playwrightTest) {
-        promises.push(fixPlaywrightConfig(rootConfig));
+        promises.push(fixPlaywrightConfig(config));
+      }
+      if (config.depending.next) {
+        promises.push(generateNextConfigJson(config));
       }
       await generateGitignore(config, rootConfig);
       await promisePool.promiseAll();
