@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import sodium from 'libsodium-wrappers';
 
 import { logger } from '../logger.js';
+import { options } from '../options.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil.js';
 
@@ -11,7 +12,7 @@ const deprecatedSecretNames = ['READY_DISCORD_WEBHOOK_URL'];
 
 export async function setupSecrets(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('setupSecrets', async () => {
-    if (!hasGitHubToken) return;
+    if (!hasGitHubToken || !options.doesUploadEnvVars) return;
 
     const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');
     if (!owner || !repo || owner !== 'WillBoosterLab') return;

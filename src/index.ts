@@ -52,6 +52,12 @@ async function main(): Promise<void> {
       });
     })
     .options({
+      env: {
+        description: 'Upload environment variables as secrets to GitHub',
+        type: 'boolean',
+        default: false,
+        alias: 'e',
+      },
       skipDeps: {
         description: 'Skip dependency installation',
         type: 'boolean',
@@ -67,6 +73,7 @@ async function main(): Promise<void> {
     })
     .strict().argv;
   options.isVerbose = argv.verbose;
+  options.doesUploadEnvVars = argv.env;
 
   for (const rootDirPath of argv.paths as string[]) {
     const packagesDirPath = path.join(rootDirPath, 'packages');
