@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import type { ConfigurationValueMap } from '@yarnpkg/core';
 import yaml from 'js-yaml';
 
 import { logger } from '../logger.js';
@@ -8,14 +9,11 @@ import type { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 
-interface Settings {
+interface Settings extends Partial<ConfigurationValueMap> {
   defaultSemverRangePrefix: string;
-  enableGlobalCache: boolean;
-  injectEnvironmentFiles?: string[];
   nmMode: string;
   nodeLinker: string;
   plugins?: Plugin[];
-  yarnPath: string;
 }
 
 interface Plugin {
@@ -49,6 +47,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.defaultSemverRangePrefix = '';
     settings.nodeLinker = 'node-modules';
     settings.nmMode = 'hardlinks-global';
+    delete settings.compressionLevel;
     if (settings.injectEnvironmentFiles?.length === 0) {
       delete settings.injectEnvironmentFiles;
     }
