@@ -3468,10 +3468,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:4.0.7":
-  version: 4.0.7
-  resolution: "@willbooster/shared-lib@npm:4.0.7"
-  checksum: e592758d6b6bddf635f85de9faa260cc2cf5400d3672065ffd939b5ecf35eb0f385e33924d2d5b014ea548d0e9a8bbeab215f0ed99beceffa03e3336e918f87f
+"@willbooster/shared-lib@npm:4.0.8":
+  version: 4.0.8
+  resolution: "@willbooster/shared-lib@npm:4.0.8"
+  checksum: c0731509863b80c052097e007087a1118f3c56094c70d6866888a755c8b20322d4405badd55a510378968aea7cdcc7ba21c5af946e85fab573278c3d1ecb1b47
   languageName: node
   linkType: hard
 
@@ -4204,9 +4204,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:11.0.5":
-  version: 11.0.5
-  resolution: "build-ts@npm:11.0.5"
+"build-ts@npm:11.0.6":
+  version: 11.0.6
+  resolution: "build-ts@npm:11.0.6"
   dependencies:
     "@babel/core": "npm:7.23.2"
     "@babel/plugin-proposal-decorators": "npm:7.23.2"
@@ -4243,7 +4243,7 @@ __metadata:
     yargs: "npm:17.7.2"
   bin:
     build-ts: bin/index.js
-  checksum: 00774fbe7569cccc84f14cfe9779e45d0f9ddca8b1a7419593571238dc0efee7063fffe2dd7f83a7931b3734f5f827c98b50470688aff70cb2747bd5c03b60cb
+  checksum: dad4c6f67a709c267c79f0333c05cda50f9cce53e3e3091f8067dac5409503a3c94f477f65618bc23de8e23ba7f836fa1cfbadd0feccec22b1aec0d4f8674735
   languageName: node
   linkType: hard
 
@@ -11644,9 +11644,9 @@ __metadata:
     "@typescript-eslint/parser": "npm:6.9.0"
     "@willbooster/eslint-config-ts": "npm:10.5.1"
     "@willbooster/prettier-config": "npm:9.1.2"
-    "@willbooster/shared-lib": "npm:4.0.7"
+    "@willbooster/shared-lib": "npm:4.0.8"
     "@yarnpkg/core": "npm:4.0.0"
-    build-ts: "npm:11.0.5"
+    build-ts: "npm:11.0.6"
     conventional-changelog-conventionalcommits: "npm:7.0.2"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:16.3.1"
