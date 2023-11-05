@@ -77,7 +77,7 @@ packaged.yaml
       names.push('firebase');
     }
     if (rootConfig.depending.prisma) {
-      headUserContent += `*.sqlite3
+      headUserContent += `*.sqlite3*
 *.sqlite3-journal
 `;
     }
@@ -93,6 +93,10 @@ android/app/src/main/assets/
     }
     if (config.depending.storybook) {
       names.push('storybookjs');
+    }
+    if (config.depending.litestream) {
+      headUserContent += `gcp-sa-key.json
+`;
     }
 
     let generated = '';

@@ -10,6 +10,7 @@ import { gitHubUtil, octokit } from './utils/githubUtil.js';
 
 export interface PackageConfig {
   dirPath: string;
+  dockerfile: string;
   root: boolean;
   publicRepo: boolean;
   referredByOtherRepo: boolean;
@@ -36,6 +37,7 @@ export interface PackageConfig {
   depending: {
     blitz: boolean;
     firebase: boolean;
+    litestream: boolean;
     next: boolean;
     playwrightTest: boolean;
     prisma: boolean;
@@ -114,8 +116,16 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       }
     }
 
+    let dockerfile = '';
+    try {
+      dockerfile = await fsp.readFile(path.resolve(dirPath, 'Dockerfile'), 'utf8');
+    } catch {
+      // do nothing
+    }
+
     const config: PackageConfig = {
       dirPath,
+      dockerfile,
       root: isRoot,
       publicRepo: repoInfo?.private === false,
       referredByOtherRepo: !!packageJson.files,
@@ -123,9 +133,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       esmPackage,
       willBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       containingSubPackageJsons: containsAny('packages/**/package.json', dirPath),
-      containingDockerfile:
-        fs.existsSync(path.resolve(dirPath, 'Dockerfile')) ||
-        fs.existsSync(path.resolve(dirPath, 'docker-compose.yml')),
+      containingDockerfile: !!dockerfile || fs.existsSync(path.resolve(dirPath, 'docker-compose.yml')),
       containingGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
       containingGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
       containingPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
@@ -143,6 +151,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       depending: {
         blitz: !!dependencies['blitz'],
         firebase: !!devDependencies['firebase-tools'],
+        litestream: dockerfile.includes('install-litestream.sh'),
         next: !!dependencies['next'],
         playwrightTest:
           !!dependencies['@playwright/test'] ||
