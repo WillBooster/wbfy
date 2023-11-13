@@ -247,9 +247,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       if (dirNameSet.size > 0) {
         const dirNamesStr = [...dirNameSet].join(' ');
-        jsonObj.scripts[
-          'format-code'
-        ] = `poetry run isort --profile black ${dirNamesStr} && poetry run black ${dirNamesStr}`;
+        jsonObj.scripts['format-code'] =
+          `poetry run isort --profile black ${dirNamesStr} && poetry run black ${dirNamesStr}`;
         if (jsonObj.scripts.lint) {
           jsonObj.scripts.lint = `poetry run flake8 ${dirNamesStr} && ${jsonObj.scripts.lint}`;
         } else {
