@@ -13,6 +13,8 @@ const newContent = `* text=auto
 ${[...extensions.codeWith2IndentSize, ...extensions.codeWith4IndentSize, ...extensions.markdownLike]
   .map((ext) => `*.${ext} text eol=lf`)
   .join('\n')}
+
+dist/** linguist-generated=true
 `;
 
 export async function generateGitattributes(config: PackageConfig): Promise<void> {
