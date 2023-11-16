@@ -8,13 +8,13 @@ import { options } from '../options.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-export async function fixAbbreviations(dirPath: string): Promise<void> {
+export async function fixTypos(dirPath: string): Promise<void> {
   return logger.functionIgnoringException('fixAbbreviations', async () => {
-    const mdFiles = await globby('**/*.md', { dot: true, cwd: dirPath, gitignore: true });
+    const docFiles = await globby('**/*.md', { dot: true, cwd: dirPath, gitignore: true });
     if (options.isVerbose) {
-      console.info(`Found ${mdFiles.length} markdown files in ${dirPath}`);
+      console.info(`Found ${docFiles.length} markdown files in ${dirPath}`);
     }
-    for (const mdFile of mdFiles) {
+    for (const mdFile of docFiles) {
       const filePath = path.join(dirPath, mdFile);
       await promisePool.run(async () => {
         const content = await fs.promises.readFile(filePath, 'utf8');
@@ -37,6 +37,26 @@ export async function fixAbbreviations(dirPath: string): Promise<void> {
     }
     for (const tsFile of tsFiles) {
       const filePath = path.join(dirPath, tsFile);
+      const oldContent = await fs.promises.readFile(filePath, 'utf8');
+      const newContent = oldContent
+        .replaceAll(/\/\/(.*)c\.f\./g, '//$1cf.')
+        .replaceAll(/\/\/(.*)eg\./g, '//$1e.g.')
+        .replaceAll(/\/\/(.*)ie\./g, '//$1i.e.');
+
+      if (oldContent === newContent) continue;
+      await fsUtil.generateFile(filePath, newContent);
+    }
+
+    const textBasedFiles = await globby('**/*.{csv,htm,html,tsv,xml,yaml,yml}', {
+      dot: true,
+      cwd: dirPath,
+      gitignore: true,
+    });
+    if (options.isVerbose) {
+      console.info(`Found ${textBasedFiles.length} text-based files in ${dirPath}`);
+    }
+    for (const file of textBasedFiles) {
+      const filePath = path.join(dirPath, file);
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
       const newContent = oldContent
         .replaceAll(/\/\/(.*)c\.f\./g, '//$1cf.')

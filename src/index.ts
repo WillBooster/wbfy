@@ -4,12 +4,12 @@ import path from 'node:path';
 import { ignoreErrorAsync } from '@willbooster/shared-lib';
 import yargs from 'yargs';
 
-import { fixAbbreviations } from './fixers/abbreviations.js';
 import { fixDockerfile } from './fixers/dockerfile.js';
 import { fixPlaywrightConfig } from './fixers/playwrightConfig.js';
 import { fixPrismaEnvFiles } from './fixers/prisma.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
+import { fixTypos } from './fixers/typos.js';
 import { generateVersionConfigs } from './generators/asdf.js';
 import { generateDockerignore } from './generators/dockerignore.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
@@ -81,7 +81,7 @@ async function main(): Promise<void> {
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
     await fixTestDirectories([rootDirPath, ...subDirPaths]);
-    const abbreviationPromise = fixAbbreviations(rootDirPath);
+    const abbreviationPromise = fixTypos(rootDirPath);
 
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
