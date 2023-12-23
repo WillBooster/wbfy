@@ -18,12 +18,13 @@ const rootJsonObj = {
     module: 'ESNext',
     moduleResolution: 'Node',
     jsx: 'react-jsx',
+    experimentalDecorators: true, // for decorator
     alwaysStrict: true,
     strict: true,
-    skipLibCheck: true,
-    allowSyntheticDefaultImports: true,
-    esModuleInterop: true,
-    resolveJsonModule: true,
+    skipLibCheck: true, // because libraries may have broken types
+    allowSyntheticDefaultImports: true, // allow `import React from 'react'`
+    esModuleInterop: true, // allow default import from CommonJS/AMD/UMD modules
+    resolveJsonModule: true, // allow to import JSON files
     declaration: true,
     sourceMap: true,
     importHelpers: false,
@@ -46,12 +47,13 @@ const subJsonObj = {
     module: 'ESNext',
     moduleResolution: 'Node',
     jsx: 'react-jsx',
+    experimentalDecorators: true, // for decorator
     alwaysStrict: true,
     strict: true,
-    skipLibCheck: true,
-    allowSyntheticDefaultImports: true,
-    esModuleInterop: true,
-    resolveJsonModule: true,
+    skipLibCheck: true, // because libraries may have broken types
+    allowSyntheticDefaultImports: true, // allow `import React from 'react'`
+    esModuleInterop: true, // allow default import from CommonJS/AMD/UMD modules
+    resolveJsonModule: true, // allow to import JSON files
     declaration: true,
     sourceMap: true,
     importHelpers: false,
@@ -103,7 +105,7 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     } catch {
       // do nothing
     }
-    sortKeys(newSettings.compilerOptions ?? {});
+    sortKeys(newSettings);
     newSettings.include?.sort();
     const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));

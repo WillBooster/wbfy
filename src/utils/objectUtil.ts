@@ -13,6 +13,11 @@ export function sortKeys<T extends Record<string, unknown>>(obj: T): T {
   for (const [key, value] of keyAndValues) {
     delete obj[key];
     (obj as Record<string, unknown>)[key] = value;
+
+    // if value is an object, sort the keys of the object
+    if (typeof value === 'object' && value !== null) {
+      sortKeys(value as Record<string, unknown>);
+    }
   }
   return obj;
 }
