@@ -18,7 +18,6 @@ const rootJsonObj = {
     module: 'ESNext',
     moduleResolution: 'Node',
     jsx: 'react-jsx',
-    experimentalDecorators: true, // for decorator
     alwaysStrict: true,
     strict: true,
     skipLibCheck: true, // because libraries may have broken types
@@ -47,7 +46,6 @@ const subJsonObj = {
     module: 'ESNext',
     moduleResolution: 'Node',
     jsx: 'react-jsx',
-    experimentalDecorators: true, // for decorator
     alwaysStrict: true,
     strict: true,
     skipLibCheck: true, // because libraries may have broken types
@@ -108,6 +106,8 @@ export async function generateTsconfig(config: PackageConfig, rootConfig: Packag
     sortKeys(newSettings);
     newSettings.include?.sort();
     const newContent = JSON.stringify(newSettings);
+    // Don't use old decorator
+    delete newSettings.compilerOptions?.experimentalDecorators;
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }
