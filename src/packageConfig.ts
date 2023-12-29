@@ -5,6 +5,7 @@ import path from 'node:path';
 import { globbySync } from 'globby';
 import { simpleGit } from 'simple-git';
 import type { PackageJson } from 'type-fest';
+import { z } from 'zod';
 
 import { gitHubUtil, octokit } from './utils/githubUtil.js';
 
@@ -55,7 +56,21 @@ export interface PackageConfig {
   eslintBase?: EslintExtensionBase;
   versionsText?: string;
   packageJson?: PackageJson;
+  wbfyJson?: WbfyJson;
 }
+
+type WbfyJson = z.infer<typeof wbfyJsonSchema>;
+
+const wbfyJsonSchema = z.object({
+  typos: z
+    .object({
+      all: z.record(z.string()).optional(),
+      doc: z.record(z.string()).optional(),
+      ts: z.record(z.string()).optional(),
+      text: z.record(z.string()).optional(),
+    })
+    .optional(),
+});
 
 export async function getPackageConfig(dirPath: string): Promise<PackageConfig | undefined> {
   const packageJsonPath = path.resolve(dirPath, 'package.json');
@@ -123,6 +138,16 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       // do nothing
     }
 
+    // Read wbfy.json
+    const wbfyJsonPath = path.resolve(dirPath, 'wbfy.json');
+    let wbfyJson: WbfyJson | undefined;
+    try {
+      const wbfyJsonText = await fsp.readFile(wbfyJsonPath, 'utf8');
+      wbfyJson = wbfyJsonSchema.parse(JSON.parse(wbfyJsonText));
+    } catch {
+      // do nothing
+    }
+
     const config: PackageConfig = {
       dirPath,
       dockerfile,
@@ -180,6 +205,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       },
       versionsText,
       packageJson,
+      wbfyJson,
     };
     config.eslintBase = getEslintExtensionBase(config);
     if (

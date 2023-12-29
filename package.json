@@ -41,7 +41,8 @@
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "4.0.0",
     "simple-git": "3.21.0",
-    "yargs": "17.7.2"
+    "yargs": "17.7.2",
+    "zod": "3.22.4"
   },
   "devDependencies": {
     "@types/eslint": "8.56.0",

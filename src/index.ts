@@ -81,13 +81,13 @@ async function main(): Promise<void> {
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
     await fixTestDirectories([rootDirPath, ...subDirPaths]);
-    const abbreviationPromise = fixTypos(rootDirPath);
 
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
       continue;
     }
+    const abbreviationPromise = fixTypos(rootConfig);
 
     const nullableSubPackageConfigs = await Promise.all(subDirPaths.map((subDirPath) => getPackageConfig(subDirPath)));
     const subPackageConfigs = nullableSubPackageConfigs.filter((config) => !!config) as PackageConfig[];
