@@ -31,7 +31,7 @@
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
     "@octokit/core": "5.0.2",
-    "@willbooster/shared-lib": "5.0.4",
+    "@willbooster/shared-lib": "5.0.5",
     "deepmerge": "4.3.1",
     "dotenv": "16.3.1",
     "fastest-levenshtein": "1.0.16",
@@ -40,7 +40,7 @@
     "libsodium-wrappers": "0.7.13",
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "4.0.0",
-    "simple-git": "3.21.0",
+    "simple-git": "3.22.0",
     "yargs": "17.7.2",
     "zod": "3.22.4"
   },
@@ -76,7 +76,7 @@
     "semantic-release": "22.0.12",
     "sort-package-json": "2.6.0",
     "ts-node": "10.9.2",
-    "type-fest": "4.8.3",
+    "type-fest": "4.9.0",
     "typescript": "5.3.3",
     "vitest": "1.1.0"
   },

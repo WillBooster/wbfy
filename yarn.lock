@@ -3554,10 +3554,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:5.0.4":
-  version: 5.0.4
-  resolution: "@willbooster/shared-lib@npm:5.0.4"
-  checksum: f43b8375c66152e4c29de9878589ba806afbf1d5674484035971a5e4849244d7890694b3d9fbe789d3c69a5add93df53b66f11b5d97b604edf5aa4dd13025d13
+"@willbooster/shared-lib@npm:5.0.5":
+  version: 5.0.5
+  resolution: "@willbooster/shared-lib@npm:5.0.5"
+  checksum: 509963d075f1414d3687d9ac59f882b538d23cb1b2c0d763ec5731d4717098dbfdc1b0da1eafbce6272bd25d442e9308c0084a147e5cb7ac85a45eb8e759cd8b
   languageName: node
   linkType: hard
 
@@ -10364,14 +10364,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-git@npm:3.21.0":
-  version: 3.21.0
-  resolution: "simple-git@npm:3.21.0"
+"simple-git@npm:3.22.0":
+  version: 3.22.0
+  resolution: "simple-git@npm:3.22.0"
   dependencies:
     "@kwsites/file-exists": "npm:^1.1.1"
     "@kwsites/promise-deferred": "npm:^1.1.1"
     debug: "npm:^4.3.4"
-  checksum: b3083da7736f1bac448cfe7d359d257cfe128091041d23c3ed9a35cddab4d454abdac8d9928b33920e4eaf328d350b68d62bac18bf6fbf3f31d8ef05b6d20f02
+  checksum: cc12f7563e4de82a48c1b2517d5471f699b4e12ff25843d230854b6d8d567ca8ee9d6e6b40aa6aae214e956040563902c9a406e798df03b435fe863b829d0cc5
   languageName: node
   linkType: hard
 
@@ -11170,10 +11170,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:4.8.3, type-fest@npm:^4.6.0, type-fest@npm:^4.7.1":
-  version: 4.8.3
-  resolution: "type-fest@npm:4.8.3"
-  checksum: 978edf5d00651e944b8c4d50f765a4cc09126e7fb90b46ed157265012e2f8aeb178c0ca493a175213ffa1705a795e4b5579c2ef4bc27bdd3462cdceccbf386f7
+"type-fest@npm:4.9.0":
+  version: 4.9.0
+  resolution: "type-fest@npm:4.9.0"
+  checksum: 7e6423f7337928a7323ce8a68cfbbaf30ecb70b9c635207899e58297d219c71be4a8c50b52afb9fe09c9f44b2c4276d0a44bb95acabab7bc942455f980aad267
   languageName: node
   linkType: hard
 
@@ -11223,6 +11223,13 @@ __metadata:
   version: 3.13.1
   resolution: "type-fest@npm:3.13.1"
   checksum: 547d22186f73a8c04590b70dcf63baff390078c75ea8acd366bbd510fd0646e348bd1970e47ecf795b7cff0b41d26e9c475c1fedd6ef5c45c82075fbf916b629
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^4.6.0, type-fest@npm:^4.7.1":
+  version: 4.8.3
+  resolution: "type-fest@npm:4.8.3"
+  checksum: 978edf5d00651e944b8c4d50f765a4cc09126e7fb90b46ed157265012e2f8aeb178c0ca493a175213ffa1705a795e4b5579c2ef4bc27bdd3462cdceccbf386f7
   languageName: node
   linkType: hard
 
@@ -11634,7 +11641,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:6.16.0"
     "@willbooster/eslint-config-ts": "npm:10.5.1"
     "@willbooster/prettier-config": "npm:9.1.2"
-    "@willbooster/shared-lib": "npm:5.0.4"
+    "@willbooster/shared-lib": "npm:5.0.5"
     "@yarnpkg/core": "npm:4.0.2"
     build-ts: "npm:11.0.20"
     conventional-changelog-conventionalcommits: "npm:7.0.2"
@@ -11660,10 +11667,10 @@ __metadata:
     pinst: "npm:3.0.0"
     prettier: "npm:3.1.1"
     semantic-release: "npm:22.0.12"
-    simple-git: "npm:3.21.0"
+    simple-git: "npm:3.22.0"
     sort-package-json: "npm:2.6.0"
     ts-node: "npm:10.9.2"
-    type-fest: "npm:4.8.3"
+    type-fest: "npm:4.9.0"
     typescript: "npm:5.3.3"
     vitest: "npm:1.1.0"
     yargs: "npm:17.7.2"
