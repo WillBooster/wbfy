@@ -182,7 +182,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
           !!dependencies['@playwright/test'] ||
           !!devDependencies['@playwright/test'] ||
           !!devDependencies['playwright'],
-        prisma: !!dependencies['prisma'],
+        prisma: !!dependencies['@prisma/client'] || !!devDependencies['prisma'],
         pyright: !!devDependencies['pyright'],
         reactNative: !!dependencies['react-native'],
         semanticRelease: !!(
