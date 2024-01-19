@@ -48,30 +48,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.23.6":
-  version: 7.23.6
-  resolution: "@babel/core@npm:7.23.6"
-  dependencies:
-    "@ampproject/remapping": "npm:^2.2.0"
-    "@babel/code-frame": "npm:^7.23.5"
-    "@babel/generator": "npm:^7.23.6"
-    "@babel/helper-compilation-targets": "npm:^7.23.6"
-    "@babel/helper-module-transforms": "npm:^7.23.3"
-    "@babel/helpers": "npm:^7.23.6"
-    "@babel/parser": "npm:^7.23.6"
-    "@babel/template": "npm:^7.22.15"
-    "@babel/traverse": "npm:^7.23.6"
-    "@babel/types": "npm:^7.23.6"
-    convert-source-map: "npm:^2.0.0"
-    debug: "npm:^4.1.0"
-    gensync: "npm:^1.0.0-beta.2"
-    json5: "npm:^2.2.3"
-    semver: "npm:^6.3.1"
-  checksum: a02bae7d916029b70706dc301535e1b31e5d216f55d4ee6f64a15825c6b69ee2c14c52a213d1497ec414e925ed4e9d897d41fb0d75df9fea28ed2c0008790e31
-  languageName: node
-  linkType: hard
-
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3":
+"@babel/core@npm:7.23.7, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3":
   version: 7.23.7
   resolution: "@babel/core@npm:7.23.7"
   dependencies:
@@ -137,7 +114,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@npm:^7.22.15, @babel/helper-create-class-features-plugin@npm:^7.23.6":
+"@babel/helper-create-class-features-plugin@npm:^7.22.15, @babel/helper-create-class-features-plugin@npm:^7.23.6, @babel/helper-create-class-features-plugin@npm:^7.23.7":
   version: 7.23.7
   resolution: "@babel/helper-create-class-features-plugin@npm:7.23.7"
   dependencies:
@@ -181,6 +158,21 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
   checksum: 60126f5f719b9e2114df62e3bf3ac0797b71d8dc733db60192eb169b004fde72ee309fa5848c5fdfe98b8e8863c46f55e16da5aa8a4e420b4d2670cd0c5dd708
+  languageName: node
+  linkType: hard
+
+"@babel/helper-define-polyfill-provider@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@babel/helper-define-polyfill-provider@npm:0.5.0"
+  dependencies:
+    "@babel/helper-compilation-targets": "npm:^7.22.6"
+    "@babel/helper-plugin-utils": "npm:^7.22.5"
+    debug: "npm:^4.1.1"
+    lodash.debounce: "npm:^4.0.8"
+    resolve: "npm:^1.14.2"
+  peerDependencies:
+    "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
+  checksum: 2b053b96a0c604a7e0f5c7d13a8a55f4451d938f7af42bd40f62a87df15e6c87a0b1dbd893a0f0bb51077b54dc3ba00a58b166531a5940ad286ab685dd8979ec
   languageName: node
   linkType: hard
 
@@ -344,7 +336,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@npm:^7.23.6, @babel/helpers@npm:^7.23.7":
+"@babel/helpers@npm:^7.23.7":
   version: 7.23.8
   resolution: "@babel/helpers@npm:7.23.8"
   dependencies:
@@ -399,7 +391,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@npm:^7.23.3":
+"@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@npm:^7.23.7":
   version: 7.23.7
   resolution: "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@npm:7.23.7"
   dependencies:
@@ -411,19 +403,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-decorators@npm:7.23.6":
-  version: 7.23.6
-  resolution: "@babel/plugin-proposal-decorators@npm:7.23.6"
+"@babel/plugin-proposal-decorators@npm:7.23.7":
+  version: 7.23.7
+  resolution: "@babel/plugin-proposal-decorators@npm:7.23.7"
   dependencies:
-    "@babel/helper-create-class-features-plugin": "npm:^7.23.6"
+    "@babel/helper-create-class-features-plugin": "npm:^7.23.7"
     "@babel/helper-plugin-utils": "npm:^7.22.5"
-    "@babel/helper-replace-supers": "npm:^7.22.20"
-    "@babel/helper-skip-transparent-expression-wrappers": "npm:^7.22.5"
-    "@babel/helper-split-export-declaration": "npm:^7.22.6"
     "@babel/plugin-syntax-decorators": "npm:^7.23.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 3ab6126ca4d463e3070ebbff734a00750776e475c69cabd35f25bbb6e5b7b355fa63f863c73e18f2ba9104f8acc728bdd4dbc1bacb88160714e0632287ccb5f4
+  checksum: 49457b186d3ac5130ed27bc3af1fcfbca495d6e68ad9e800cd0cfefc0720158563db170ca5c99f03cfe12ff2affc088eeaba7d766b2d9c0538e2a85e21e557ed
   languageName: node
   linkType: hard
 
@@ -713,7 +702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-async-generator-functions@npm:^7.23.4":
+"@babel/plugin-transform-async-generator-functions@npm:^7.23.7":
   version: 7.23.7
   resolution: "@babel/plugin-transform-async-generator-functions@npm:7.23.7"
   dependencies:
@@ -787,7 +776,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-classes@npm:^7.23.5":
+"@babel/plugin-transform-classes@npm:^7.23.8":
   version: 7.23.8
   resolution: "@babel/plugin-transform-classes@npm:7.23.8"
   dependencies:
@@ -1228,19 +1217,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@npm:7.23.6":
-  version: 7.23.6
-  resolution: "@babel/plugin-transform-runtime@npm:7.23.6"
+"@babel/plugin-transform-runtime@npm:7.23.7":
+  version: 7.23.7
+  resolution: "@babel/plugin-transform-runtime@npm:7.23.7"
   dependencies:
     "@babel/helper-module-imports": "npm:^7.22.15"
     "@babel/helper-plugin-utils": "npm:^7.22.5"
-    babel-plugin-polyfill-corejs2: "npm:^0.4.6"
-    babel-plugin-polyfill-corejs3: "npm:^0.8.5"
-    babel-plugin-polyfill-regenerator: "npm:^0.5.3"
+    babel-plugin-polyfill-corejs2: "npm:^0.4.7"
+    babel-plugin-polyfill-corejs3: "npm:^0.8.7"
+    babel-plugin-polyfill-regenerator: "npm:^0.5.4"
     semver: "npm:^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 94a7ee92f073df53fd8bebf9ed391a95553716077da1c6c3a57f10f042358c938495d55e6b09b4b50544c01f03560c4770c17698e1c24817a15d3668e8231249
+  checksum: 0d5038462a5762c3a88d820785f685ce1b659075527a3ad538647fd9ce486052777d5aea3d62e626639d60441a04dd0ded2ed32c86b92cf8afbdbd3d54460c13
   languageName: node
   linkType: hard
 
@@ -1361,9 +1350,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:7.23.6":
-  version: 7.23.6
-  resolution: "@babel/preset-env@npm:7.23.6"
+"@babel/preset-env@npm:7.23.8":
+  version: 7.23.8
+  resolution: "@babel/preset-env@npm:7.23.8"
   dependencies:
     "@babel/compat-data": "npm:^7.23.5"
     "@babel/helper-compilation-targets": "npm:^7.23.6"
@@ -1371,7 +1360,7 @@ __metadata:
     "@babel/helper-validator-option": "npm:^7.23.5"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "npm:^7.23.3"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "npm:^7.23.3"
-    "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "npm:^7.23.3"
+    "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "npm:^7.23.7"
     "@babel/plugin-proposal-private-property-in-object": "npm:7.21.0-placeholder-for-preset-env.2"
     "@babel/plugin-syntax-async-generators": "npm:^7.8.4"
     "@babel/plugin-syntax-class-properties": "npm:^7.12.13"
@@ -1392,13 +1381,13 @@ __metadata:
     "@babel/plugin-syntax-top-level-await": "npm:^7.14.5"
     "@babel/plugin-syntax-unicode-sets-regex": "npm:^7.18.6"
     "@babel/plugin-transform-arrow-functions": "npm:^7.23.3"
-    "@babel/plugin-transform-async-generator-functions": "npm:^7.23.4"
+    "@babel/plugin-transform-async-generator-functions": "npm:^7.23.7"
     "@babel/plugin-transform-async-to-generator": "npm:^7.23.3"
     "@babel/plugin-transform-block-scoped-functions": "npm:^7.23.3"
     "@babel/plugin-transform-block-scoping": "npm:^7.23.4"
     "@babel/plugin-transform-class-properties": "npm:^7.23.3"
     "@babel/plugin-transform-class-static-block": "npm:^7.23.4"
-    "@babel/plugin-transform-classes": "npm:^7.23.5"
+    "@babel/plugin-transform-classes": "npm:^7.23.8"
     "@babel/plugin-transform-computed-properties": "npm:^7.23.3"
     "@babel/plugin-transform-destructuring": "npm:^7.23.3"
     "@babel/plugin-transform-dotall-regex": "npm:^7.23.3"
@@ -1440,14 +1429,14 @@ __metadata:
     "@babel/plugin-transform-unicode-regex": "npm:^7.23.3"
     "@babel/plugin-transform-unicode-sets-regex": "npm:^7.23.3"
     "@babel/preset-modules": "npm:0.1.6-no-external-plugins"
-    babel-plugin-polyfill-corejs2: "npm:^0.4.6"
-    babel-plugin-polyfill-corejs3: "npm:^0.8.5"
-    babel-plugin-polyfill-regenerator: "npm:^0.5.3"
+    babel-plugin-polyfill-corejs2: "npm:^0.4.7"
+    babel-plugin-polyfill-corejs3: "npm:^0.8.7"
+    babel-plugin-polyfill-regenerator: "npm:^0.5.4"
     core-js-compat: "npm:^3.31.0"
     semver: "npm:^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 5b24d179af52f082d04b9b98cc4777e37bf31a97cef5a91d8917e996dbd75f2f743c88c40f80744cb8529355bb674619d150c0260c32d834aa4067e21d0c8962
+  checksum: e602ad954645f1a509644e3d2c72b3c63bdc2273c377e7a83b78f076eca215887ea3624ffc36aaad03deb9ac8acd89e247fd4562b96e0f2b679485e20d8ff25f
   languageName: node
   linkType: hard
 
@@ -1522,7 +1511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.23.6, @babel/traverse@npm:^7.23.7":
+"@babel/traverse@npm:^7.23.7":
   version: 7.23.7
   resolution: "@babel/traverse@npm:7.23.7"
   dependencies:
@@ -2657,24 +2646,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-android-arm-eabi@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-android-arm-eabi@npm:4.9.0"
-  conditions: os=android & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-android-arm-eabi@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.9.5"
   conditions: os=android & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@rollup/rollup-android-arm64@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-android-arm64@npm:4.9.0"
-  conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
@@ -2685,24 +2660,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-darwin-arm64@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-darwin-arm64@npm:4.9.0"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-darwin-arm64@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-darwin-arm64@npm:4.9.5"
   conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@rollup/rollup-darwin-x64@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-darwin-x64@npm:4.9.0"
-  conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
@@ -2713,24 +2674,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-arm-gnueabihf@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-linux-arm-gnueabihf@npm:4.9.0"
-  conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-linux-arm-gnueabihf@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-linux-arm-gnueabihf@npm:4.9.5"
   conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@rollup/rollup-linux-arm64-gnu@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-linux-arm64-gnu@npm:4.9.0"
-  conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
@@ -2741,24 +2688,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-arm64-musl@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-linux-arm64-musl@npm:4.9.0"
-  conditions: os=linux & cpu=arm64 & libc=musl
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-linux-arm64-musl@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-linux-arm64-musl@npm:4.9.5"
   conditions: os=linux & cpu=arm64 & libc=musl
-  languageName: node
-  linkType: hard
-
-"@rollup/rollup-linux-riscv64-gnu@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-linux-riscv64-gnu@npm:4.9.0"
-  conditions: os=linux & cpu=riscv64 & libc=glibc
   languageName: node
   linkType: hard
 
@@ -2769,24 +2702,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.9.0"
-  conditions: os=linux & cpu=x64 & libc=glibc
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-linux-x64-gnu@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-linux-x64-gnu@npm:4.9.5"
   conditions: os=linux & cpu=x64 & libc=glibc
-  languageName: node
-  linkType: hard
-
-"@rollup/rollup-linux-x64-musl@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-linux-x64-musl@npm:4.9.0"
-  conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
@@ -2797,13 +2716,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-win32-arm64-msvc@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-win32-arm64-msvc@npm:4.9.0"
-  conditions: os=win32 & cpu=arm64
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-win32-arm64-msvc@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-win32-arm64-msvc@npm:4.9.5"
@@ -2811,24 +2723,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-win32-ia32-msvc@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-win32-ia32-msvc@npm:4.9.0"
-  conditions: os=win32 & cpu=ia32
-  languageName: node
-  linkType: hard
-
 "@rollup/rollup-win32-ia32-msvc@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-win32-ia32-msvc@npm:4.9.5"
   conditions: os=win32 & cpu=ia32
-  languageName: node
-  linkType: hard
-
-"@rollup/rollup-win32-x64-msvc@npm:4.9.0":
-  version: 4.9.0
-  resolution: "@rollup/rollup-win32-x64-msvc@npm:4.9.0"
-  conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
@@ -3595,13 +3493,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib-node@npm:5.0.5":
-  version: 5.0.5
-  resolution: "@willbooster/shared-lib-node@npm:5.0.5"
+"@willbooster/shared-lib-node@npm:5.0.10":
+  version: 5.0.10
+  resolution: "@willbooster/shared-lib-node@npm:5.0.10"
   dependencies:
-    dotenv: "npm:16.3.1"
+    dotenv: "npm:16.3.2"
     tree-kill: "npm:1.2.2"
-  checksum: e662f8603707d5c30ae64b657320e14bf61a3007a5aad14ed16515f34a4250f4023084594004798273cac826b4420112b7006296b036e1634f44e251e6794484
+  checksum: b12c470f91798df93d4aca17e6314a1e27da2d31da0440d5590d66ecd75ecdac023c4d54ed481a3ec6f911ffc8e966a15b53c5e792287fc479f112e8bdc9b1a2
   languageName: node
   linkType: hard
 
@@ -4065,20 +3963,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs2@npm:^0.4.6":
-  version: 0.4.7
-  resolution: "babel-plugin-polyfill-corejs2@npm:0.4.7"
+"babel-plugin-polyfill-corejs2@npm:^0.4.7":
+  version: 0.4.8
+  resolution: "babel-plugin-polyfill-corejs2@npm:0.4.8"
   dependencies:
     "@babel/compat-data": "npm:^7.22.6"
-    "@babel/helper-define-polyfill-provider": "npm:^0.4.4"
+    "@babel/helper-define-polyfill-provider": "npm:^0.5.0"
     semver: "npm:^6.3.1"
   peerDependencies:
     "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
-  checksum: f80f7284ec72c63e7dd751e0bdf25e9978df195a79e0887470603bfdea13ee518d62573cf360bb1bc01b80819e54915dd5edce9cff14c52d0af5f984aa3d36a3
+  checksum: 843e7528de0e03a31a6f3837896a95f75b0b24b0294a077246282372279e974400b0bdd82399e8f9cbfe42c87ed56540fd71c33eafb7c8e8b9adac546ecc5fe5
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-corejs3@npm:0.8.7, babel-plugin-polyfill-corejs3@npm:^0.8.5":
+"babel-plugin-polyfill-corejs3@npm:0.9.0":
+  version: 0.9.0
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.9.0"
+  dependencies:
+    "@babel/helper-define-polyfill-provider": "npm:^0.5.0"
+    core-js-compat: "npm:^3.34.0"
+  peerDependencies:
+    "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
+  checksum: b857010736c5e42e20b683973dae862448a42082fcc95b3ef188305a6864a4f94b5cbd568e49e4cd7172c6b2eace7bc403c3ba0984fbe5479474ade01126d559
+  languageName: node
+  linkType: hard
+
+"babel-plugin-polyfill-corejs3@npm:^0.8.7":
   version: 0.8.7
   resolution: "babel-plugin-polyfill-corejs3@npm:0.8.7"
   dependencies:
@@ -4090,14 +4000,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-polyfill-regenerator@npm:^0.5.3":
-  version: 0.5.4
-  resolution: "babel-plugin-polyfill-regenerator@npm:0.5.4"
+"babel-plugin-polyfill-regenerator@npm:^0.5.4":
+  version: 0.5.5
+  resolution: "babel-plugin-polyfill-regenerator@npm:0.5.5"
   dependencies:
-    "@babel/helper-define-polyfill-provider": "npm:^0.4.4"
+    "@babel/helper-define-polyfill-provider": "npm:^0.5.0"
   peerDependencies:
     "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
-  checksum: 0b903f5fe2f8c487b4260935dfe60bd9a95bcaee7ae63958f063045093b16d4e8288c232199d411261300aa21f6b106a3cb83c42cc996de013b337f5825a79fe
+  checksum: 2aab692582082d54e0df9f9373dca1b223e65b4e7e96440160f27ed8803d417a1fa08da550f08aa3820d2010329ca91b68e2b6e9bd7aed51c93d46dfe79629bb
   languageName: node
   linkType: hard
 
@@ -4258,16 +4168,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:11.0.20":
-  version: 11.0.20
-  resolution: "build-ts@npm:11.0.20"
+"build-ts@npm:12.0.5":
+  version: 12.0.5
+  resolution: "build-ts@npm:12.0.5"
   dependencies:
-    "@babel/core": "npm:7.23.6"
-    "@babel/plugin-proposal-decorators": "npm:7.23.6"
+    "@babel/core": "npm:7.23.7"
+    "@babel/plugin-proposal-decorators": "npm:7.23.7"
     "@babel/plugin-proposal-explicit-resource-management": "npm:7.23.3"
     "@babel/plugin-syntax-import-assertions": "npm:7.23.3"
-    "@babel/plugin-transform-runtime": "npm:7.23.6"
-    "@babel/preset-env": "npm:7.23.6"
+    "@babel/plugin-transform-runtime": "npm:7.23.7"
+    "@babel/preset-env": "npm:7.23.8"
     "@babel/preset-react": "npm:7.23.3"
     "@babel/preset-typescript": "npm:7.23.3"
     "@rollup/plugin-babel": "npm:6.0.4"
@@ -4277,19 +4187,19 @@ __metadata:
     "@rollup/plugin-replace": "npm:5.0.4"
     "@rollup/plugin-terser": "npm:0.4.4"
     "@rollup/pluginutils": "npm:5.1.0"
-    "@willbooster/shared-lib-node": "npm:5.0.5"
-    babel-plugin-polyfill-corejs3: "npm:0.8.7"
+    "@willbooster/shared-lib-node": "npm:5.0.10"
+    babel-plugin-polyfill-corejs3: "npm:0.9.0"
     babel-plugin-transform-remove-console: "npm:6.9.4"
     chalk: "npm:5.3.0"
-    core-js: "npm:3.34.0"
-    core-js-pure: "npm:3.34.0"
+    core-js: "npm:3.35.0"
+    core-js-pure: "npm:3.35.0"
     date-time: "npm:4.0.0"
     pretty-ms: "npm:8.0.0"
-    rollup: "npm:4.9.0"
+    rollup: "npm:4.9.5"
     rollup-plugin-analyzer: "npm:4.0.0"
     rollup-plugin-keep-import: "npm:1.0.2"
     rollup-plugin-node-externals: "npm:6.1.2"
-    rollup-plugin-preserve-directives: "npm:0.2.0"
+    rollup-plugin-preserve-directives: "npm:0.3.1"
     rollup-plugin-string: "npm:3.0.0"
     rollup-plugin-ts: "npm:3.4.5"
     signal-exit: "npm:4.1.0"
@@ -4298,7 +4208,7 @@ __metadata:
     yargs: "npm:17.7.2"
   bin:
     build-ts: bin/index.js
-  checksum: a4324d47804d7842ffa505bf8dfcb9a85ff5bd667a5aa609abda353a805530350cb9b58bc1b99ac7e2aa861dd977f0ca1efc7d49075ab176832467d102596e9c
+  checksum: c4e6a037edca26cbb8d629fd516186086460af39bee35a251319707f5c83da0f6439863ebd512746160b4d36d825ad451e4b081834bd8aa0b91e4a0d1ef3db02
   languageName: node
   linkType: hard
 
@@ -4852,17 +4762,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:3.34.0":
-  version: 3.34.0
-  resolution: "core-js-pure@npm:3.34.0"
-  checksum: 64b628ffa0f9166b327cb7f490b59faa04b3ae72f314c5198c74087fcac5d62c78e7a0b0132e8bbf191d844fc59c3a8ef558e8fea7c1f78f4ad768f43cab2b9f
+"core-js-pure@npm:3.35.0":
+  version: 3.35.0
+  resolution: "core-js-pure@npm:3.35.0"
+  checksum: 4e58b6b2b3759ffbfe3f904beafd547751aaefa87b94245136aced963120bc2cefc8787c7a980cd397c2c408eca141e0993fcda7ed2383c93ce53bc421acfec4
   languageName: node
   linkType: hard
 
-"core-js@npm:3.34.0":
-  version: 3.34.0
-  resolution: "core-js@npm:3.34.0"
-  checksum: 408a77898abe03bf3e5dec2a451c36f4745081cca9022f8bdf9b817d57bb6d3a534d555f47a4b95e1daa5e21dbc79122eac2402e25720d425f5925127e55dcd8
+"core-js@npm:3.35.0":
+  version: 3.35.0
+  resolution: "core-js@npm:3.35.0"
+  checksum: 1d545ff4406f2afa5e681f44b45ed5f7f119d158b380234d5aa7787ce7e47fc7a635b98b74c28c766ba8191e3db8c2316ad6ab4ff1ddecbc3fd618413a52c29c
   languageName: node
   linkType: hard
 
@@ -5156,17 +5066,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:16.3.1, dotenv@npm:^16.3.1":
-  version: 16.3.1
-  resolution: "dotenv@npm:16.3.1"
-  checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
-  languageName: node
-  linkType: hard
-
 "dotenv@npm:16.3.2":
   version: 16.3.2
   resolution: "dotenv@npm:16.3.2"
   checksum: a87d62cef0810b670cb477db1a24a42a093b6b428c9e65c185ce1d6368ad7175234b13547718ba08da18df43faae4f814180cc0366e11be1ded2277abc4dd22e
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.3.1":
+  version: 16.3.1
+  resolution: "dotenv@npm:16.3.1"
+  checksum: b95ff1bbe624ead85a3cd70dbd827e8e06d5f05f716f2d0cbc476532d54c7c9469c3bc4dd93ea519f6ad711cb522c00ac9a62b6eb340d5affae8008facc3fbd7
   languageName: node
   linkType: hard
 
@@ -8193,7 +8103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.30.0, magic-string@npm:^0.30.2, magic-string@npm:^0.30.3, magic-string@npm:^0.30.5":
+"magic-string@npm:^0.30.2, magic-string@npm:^0.30.3, magic-string@npm:^0.30.5":
   version: 0.30.5
   resolution: "magic-string@npm:0.30.5"
   dependencies:
@@ -9929,14 +9839,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-preserve-directives@npm:0.2.0":
-  version: 0.2.0
-  resolution: "rollup-plugin-preserve-directives@npm:0.2.0"
+"rollup-plugin-preserve-directives@npm:0.3.1":
+  version: 0.3.1
+  resolution: "rollup-plugin-preserve-directives@npm:0.3.1"
   dependencies:
-    magic-string: "npm:^0.30.0"
+    magic-string: "npm:^0.30.5"
   peerDependencies:
-    rollup: 2.x || 3.x
-  checksum: 2c1ba9206f92a47425ccef05e4b49cd6e1fab0a3a5f1bdf0c86253167f93a28fd9283996541de6f9a86a5a7f3819e2fe7364ce18c43cad166e62a28669c7b279
+    rollup: 2.x || 3.x || 4.x
+  checksum: fbc15a2690706c0ade3e1416c893e6afd2a7ec6ac798087cc76f263b8b45f023911caa4ecbd10d7a72f7e0c7120841962bbc5532217192233eabf5572e20b76c
   languageName: node
   linkType: hard
 
@@ -10001,60 +9911,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:4.9.0":
-  version: 4.9.0
-  resolution: "rollup@npm:4.9.0"
-  dependencies:
-    "@rollup/rollup-android-arm-eabi": "npm:4.9.0"
-    "@rollup/rollup-android-arm64": "npm:4.9.0"
-    "@rollup/rollup-darwin-arm64": "npm:4.9.0"
-    "@rollup/rollup-darwin-x64": "npm:4.9.0"
-    "@rollup/rollup-linux-arm-gnueabihf": "npm:4.9.0"
-    "@rollup/rollup-linux-arm64-gnu": "npm:4.9.0"
-    "@rollup/rollup-linux-arm64-musl": "npm:4.9.0"
-    "@rollup/rollup-linux-riscv64-gnu": "npm:4.9.0"
-    "@rollup/rollup-linux-x64-gnu": "npm:4.9.0"
-    "@rollup/rollup-linux-x64-musl": "npm:4.9.0"
-    "@rollup/rollup-win32-arm64-msvc": "npm:4.9.0"
-    "@rollup/rollup-win32-ia32-msvc": "npm:4.9.0"
-    "@rollup/rollup-win32-x64-msvc": "npm:4.9.0"
-    fsevents: "npm:~2.3.2"
-  dependenciesMeta:
-    "@rollup/rollup-android-arm-eabi":
-      optional: true
-    "@rollup/rollup-android-arm64":
-      optional: true
-    "@rollup/rollup-darwin-arm64":
-      optional: true
-    "@rollup/rollup-darwin-x64":
-      optional: true
-    "@rollup/rollup-linux-arm-gnueabihf":
-      optional: true
-    "@rollup/rollup-linux-arm64-gnu":
-      optional: true
-    "@rollup/rollup-linux-arm64-musl":
-      optional: true
-    "@rollup/rollup-linux-riscv64-gnu":
-      optional: true
-    "@rollup/rollup-linux-x64-gnu":
-      optional: true
-    "@rollup/rollup-linux-x64-musl":
-      optional: true
-    "@rollup/rollup-win32-arm64-msvc":
-      optional: true
-    "@rollup/rollup-win32-ia32-msvc":
-      optional: true
-    "@rollup/rollup-win32-x64-msvc":
-      optional: true
-    fsevents:
-      optional: true
-  bin:
-    rollup: dist/bin/rollup
-  checksum: eba46d63c807bda74215db4ec6abb59d8a0bb0233b3ae77cd9510179e85daf1472191a519006e3d1519077eb90c9596febe7b34b0396940e7bd2e835dd98d51a
-  languageName: node
-  linkType: hard
-
-"rollup@npm:^4.2.0":
+"rollup@npm:4.9.5, rollup@npm:^4.2.0":
   version: 4.9.5
   resolution: "rollup@npm:4.9.5"
   dependencies:
@@ -11620,7 +11477,7 @@ __metadata:
     "@willbooster/prettier-config": "npm:9.1.2"
     "@willbooster/shared-lib": "npm:5.0.6"
     "@yarnpkg/core": "npm:4.0.2"
-    build-ts: "npm:11.0.20"
+    build-ts: "npm:12.0.5"
     conventional-changelog-conventionalcommits: "npm:7.0.2"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:16.3.2"
