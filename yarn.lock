@@ -6464,12 +6464,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:9.0.7":
-  version: 9.0.7
-  resolution: "husky@npm:9.0.7"
+"husky@npm:9.0.8":
+  version: 9.0.8
+  resolution: "husky@npm:9.0.8"
   bin:
     husky: bin.js
-  checksum: 10c0/ac36838bc230b42ca878eeb6993cba5499b858700581fa9e8b579227af9ad47bdbf4c050f4145f51f33f77c16d359f329622b7050150c78a7c52be26cc24174e
+  checksum: 10c0/939f1c279d0d126bf3493b7770f63ca620fdaa0879db426cd80ea2fb74b816ee624f6d4c815ebc8d1f9fda884498f47d5b2b07afb643dff351afdff6112b9d47
   languageName: node
   linkType: hard
 
@@ -11463,7 +11463,7 @@ __metadata:
     eslint-plugin-unicorn: "npm:50.0.1"
     fastest-levenshtein: "npm:1.0.16"
     globby: "npm:14.0.0"
-    husky: "npm:9.0.7"
+    husky: "npm:9.0.8"
     jest: "npm:29.7.0"
     js-yaml: "npm:4.1.0"
     libsodium-wrappers: "npm:0.7.13"
