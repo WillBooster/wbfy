@@ -8,8 +8,6 @@ import { spawnSync } from '../utils/spawnUtil.js';
 
 import { generateScripts } from './packageJson.js';
 
-const DEFAULT_COMMAND = 'npm test';
-
 const settings = {
   preCommit: 'node node_modules/.bin/lint-staged',
   prePush: `yarn typecheck`,
@@ -60,12 +58,9 @@ async function core(config: PackageConfig): Promise<void> {
   spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
-  const content = await fs.promises.readFile(preCommitFilePath, 'utf8');
 
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }));
-  await promisePool.run(() =>
-    fs.promises.writeFile(preCommitFilePath, content.replace(DEFAULT_COMMAND, settings.preCommit))
-  );
+  await promisePool.run(() => fs.promises.writeFile(preCommitFilePath, settings.preCommit + '\n'));
 
   const { typecheck } = generateScripts(config);
   if (typecheck) {
@@ -79,7 +74,7 @@ async function core(config: PackageConfig): Promise<void> {
         .replace('pyright', 'node node_modules/.bin/pyright')
     );
     await promisePool.run(() =>
-      fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), content.replace(DEFAULT_COMMAND, prePush), {
+      fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), prePush + '\n', {
         mode: 0o755,
       })
     );
@@ -113,7 +108,7 @@ async function core(config: PackageConfig): Promise<void> {
       'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma generate"'
     );
   }
-  const postMergeCommand = content.replace(DEFAULT_COMMAND, `${settings.postMerge}\n\n${postMergeCommands.join('\n')}`);
+  const postMergeCommand = `${settings.postMerge}\n\n${postMergeCommands.join('\n')}\n`;
   await promisePool.run(() =>
     fs.promises.writeFile(path.resolve(dirPath, 'post-merge'), postMergeCommand, {
       mode: 0o755,

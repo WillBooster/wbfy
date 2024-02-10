@@ -107,6 +107,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (config.root) {
     // To install the latest pinst
     devDependencies.push('husky');
+    jsonObj.scripts['postinstall'] = 'husky';
     if (config.publicRepo || config.referredByOtherRepo) {
       // https://typicode.github.io/husky/#/?id=install-1
       devDependencies.push('pinst');
