@@ -14,7 +14,7 @@ import { promisePool } from '../utils/promisePool.js';
 
 const rootJsonObj = {
   compilerOptions: {
-    target: 'ESNext',
+    target: 'ES2022', // because decorators should be transpiled to ES2022 on Node.js
     module: 'ESNext',
     moduleResolution: 'Node',
     jsx: 'react-jsx',
@@ -42,7 +42,7 @@ const rootJsonObj = {
 
 const subJsonObj = {
   compilerOptions: {
-    target: 'ESNext',
+    target: 'ES2022', // because decorators should be transpiled to ES2022 on Node.js
     module: 'ESNext',
     moduleResolution: 'Node',
     jsx: 'react-jsx',
