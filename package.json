@@ -31,7 +31,7 @@
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
     "@octokit/core": "5.1.0",
-    "@willbooster/shared-lib": "5.0.8",
+    "@willbooster/shared-lib": "5.0.9",
     "deepmerge": "4.3.1",
     "dotenv": "16.4.5",
     "fastest-levenshtein": "1.0.16",
@@ -58,7 +58,7 @@
     "@willbooster/eslint-config-ts": "10.5.1",
     "@willbooster/prettier-config": "9.1.2",
     "@yarnpkg/core": "4.0.3",
-    "build-ts": "12.0.8",
+    "build-ts": "12.0.9",
     "conventional-changelog-conventionalcommits": "7.0.2",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
