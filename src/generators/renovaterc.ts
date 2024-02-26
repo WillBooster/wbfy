@@ -20,10 +20,7 @@ type Settings = typeof jsonObj & { packageRules: { packageNames: string[]; enabl
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateRenovateJson', async () => {
     let newSettings = cloneDeep(jsonObj) as Settings;
-    let filePath = path.resolve(config.dirPath, 'renovate.json');
-    if (fs.existsSync(`${filePath}5`)) {
-      filePath += '5';
-    }
+    const filePath = path.resolve(config.dirPath, 'renovate.json');
     try {
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(oldContent);
@@ -44,7 +41,7 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     }
 
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.dependabot'), { force: true }));
-    await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, 'renovate.json'), { force: true }));
+    await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.renovaterc.json'), { force: true }));
     const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
