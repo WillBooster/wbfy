@@ -147,7 +147,7 @@ async function main(): Promise<void> {
         promises.push(generateVscodeSettings(config));
       }
       if (config.containingTypeScript || config.containingTypeScriptInPackages) {
-        promises.push(generateTsconfig(config, rootConfig));
+        promises.push(generateTsconfig(config));
       }
       if (
         config.containingJavaScript ||
