@@ -12,6 +12,7 @@ import { promisePool } from '../utils/promisePool.js';
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 
 const commonContent = `
+.idea/copilot/
 .devcontainer/
 dist/
 temp/
