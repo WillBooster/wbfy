@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import merge from 'deepmerge';
-import { globby } from 'globby';
+import { globby, globbySync } from 'globby';
 import type { PackageJson, SetRequired } from 'type-fest';
 
 import { logger } from '../logger.js';
@@ -11,6 +11,7 @@ import { EslintUtil } from '../utils/eslintUtil.js';
 import { extensions } from '../utils/extensions.js';
 import { gitHubUtil } from '../utils/githubUtil.js';
 import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
+import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 import { getSrcDirs } from '../utils/srcDirectories.js';
@@ -140,9 +141,24 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       delete jsonObj.devDependencies['playwright'];
     }
     if (config.containingSubPackageJsons) {
-      jsonObj.workspaces = ['packages/*'];
-    } else {
-      delete jsonObj.workspaces;
+      // We don't allow non-array workspaces in monorepo.
+      jsonObj.workspaces = Array.isArray(jsonObj.workspaces)
+        ? merge.all([jsonObj.workspaces, ['packages/*']], {
+            arrayMerge: combineMerge,
+          })
+        : ['packages/*'];
+    } else if (Array.isArray(jsonObj.workspaces)) {
+      jsonObj.workspaces = jsonObj.workspaces.filter(
+        (workspace) =>
+          globbySync(workspace, {
+            dot: true,
+            cwd: config.dirPath,
+            gitignore: true,
+          }).length > 0
+      );
+      if (jsonObj.workspaces.length === 0) {
+        delete jsonObj.workspaces;
+      }
     }
   }
   if (config.depending.wb) {
