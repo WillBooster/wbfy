@@ -2933,9 +2933,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@semantic-release/release-notes-generator@npm:^12.0.0":
-  version: 12.1.0
-  resolution: "@semantic-release/release-notes-generator@npm:12.1.0"
+"@semantic-release/release-notes-generator@npm:^13.0.0":
+  version: 13.0.0
+  resolution: "@semantic-release/release-notes-generator@npm:13.0.0"
   dependencies:
     conventional-changelog-angular: "npm:^7.0.0"
     conventional-changelog-writer: "npm:^7.0.0"
@@ -2949,7 +2949,7 @@ __metadata:
     read-pkg-up: "npm:^11.0.0"
   peerDependencies:
     semantic-release: ">=20.1.0"
-  checksum: 10c0/29dee44ee90e6396386ac5187a1e23cd44ad64b7440348ea4e18c7440199007aa7a7d8f158cc773ea142288b2c212b666b77d57b769224e9e7cdcb2ef8978555
+  checksum: 10c0/46dbc2d59e11d1d4e9b75b7d07f955f74ef36e6f240456141f578ac8626c0bb731c04231f1ad4223d140b9734e5af0d477011c501475849eb24ac0bbdb95c829
   languageName: node
   linkType: hard
 
@@ -3617,10 +3617,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:5.0.10":
-  version: 5.0.10
-  resolution: "@willbooster/shared-lib@npm:5.0.10"
-  checksum: 10c0/0893b0a5c79421a2fa7745b3bccfab08ebacf079e3619ee1365984cce96be98ec0c526d257c2984bd3ffdea320f0bd0f85da17dda66da659f5e1cbe666210bf8
+"@willbooster/shared-lib@npm:5.0.11":
+  version: 5.0.11
+  resolution: "@willbooster/shared-lib@npm:5.0.11"
+  checksum: 10c0/9c0a949e2f70d80f9eb0c07b58c491f80023fc39f8ccdbfba439f5075f3e5f74dd3960fb0c5ffda3e2b1337a6d609666ba424f2396d63aaea638465ac4336b72
   languageName: node
   linkType: hard
 
@@ -10340,15 +10340,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semantic-release@npm:23.0.5":
-  version: 23.0.5
-  resolution: "semantic-release@npm:23.0.5"
+"semantic-release@npm:23.0.6":
+  version: 23.0.6
+  resolution: "semantic-release@npm:23.0.6"
   dependencies:
     "@semantic-release/commit-analyzer": "npm:^12.0.0"
     "@semantic-release/error": "npm:^4.0.0"
     "@semantic-release/github": "npm:^10.0.0"
     "@semantic-release/npm": "npm:^12.0.0"
-    "@semantic-release/release-notes-generator": "npm:^12.0.0"
+    "@semantic-release/release-notes-generator": "npm:^13.0.0"
     aggregate-error: "npm:^5.0.0"
     cosmiconfig: "npm:^9.0.0"
     debug: "npm:^4.0.0"
@@ -10375,7 +10375,7 @@ __metadata:
     yargs: "npm:^17.5.1"
   bin:
     semantic-release: bin/semantic-release.js
-  checksum: 10c0/a8ea1a143f567881ffe98ff3491fba445ddab9f777d439f6e7d8bb9ea22b263f345890a1cc320dc2d42bc3f8aa753015ab562fb280f89958624bf6a49b7f6820
+  checksum: 10c0/1c9c557dfe78a68e8cd1a5fda6e07ec6863e127a0df6036c0b58f596cde521b60468e87f6c0807ceff696fdfbfa48045d2b5753799e29504fe21597d7c075042
   languageName: node
   linkType: hard
 
@@ -10540,14 +10540,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-git@npm:3.23.0":
-  version: 3.23.0
-  resolution: "simple-git@npm:3.23.0"
+"simple-git@npm:3.24.0":
+  version: 3.24.0
+  resolution: "simple-git@npm:3.24.0"
   dependencies:
     "@kwsites/file-exists": "npm:^1.1.1"
     "@kwsites/promise-deferred": "npm:^1.1.1"
     debug: "npm:^4.3.4"
-  checksum: 10c0/f23ff9a6761b27debb8234f103b11c5b66d51e27cb3c3ab7dd53c7c8585809276b82925319538407851717875b64e2e03518369c7b958b75748ab84015ad0879
+  checksum: 10c0/4329e5be1a7af1ebb476354ed6edf6d2828dc221e15d22ce3e5e8028f537d5e9ac059d813911516f78e22dfa2ee4db4c8cf30bf912bd284e530b733bd6b5c3a0
   languageName: node
   linkType: hard
 
@@ -11363,10 +11363,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:4.13.1":
-  version: 4.13.1
-  resolution: "type-fest@npm:4.13.1"
-  checksum: 10c0/5ef2232fa78c0bc09249abbfd17d13ff154873846d7d7b264fa3e774ed33df244284cbdff367c6e3d4b46f1c40800482d55501a943d1fdd30ea6651b374b1353
+"type-fest@npm:4.14.0, type-fest@npm:^4.6.0, type-fest@npm:^4.7.1":
+  version: 4.14.0
+  resolution: "type-fest@npm:4.14.0"
+  checksum: 10c0/97d03f8af58bf50b83016eb8178f19698ef930479e21fd4d4555ad4e3617d4aff0e4400f6ab2a350975f18fa6439e7248172f92dea9229cd5e9942a2daa48806
   languageName: node
   linkType: hard
 
@@ -11409,13 +11409,6 @@ __metadata:
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: 10c0/a5a7ecf2e654251613218c215c7493574594951c08e52ab9881c9df6a6da0aeca7528c213c622bc374b4e0cb5c443aa3ab758da4e3c959783ce884c3194e12cb
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^4.6.0, type-fest@npm:^4.7.1":
-  version: 4.14.0
-  resolution: "type-fest@npm:4.14.0"
-  checksum: 10c0/97d03f8af58bf50b83016eb8178f19698ef930479e21fd4d4555ad4e3617d4aff0e4400f6ab2a350975f18fa6439e7248172f92dea9229cd5e9942a2daa48806
   languageName: node
   linkType: hard
 
@@ -11851,7 +11844,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:7.4.0"
     "@willbooster/eslint-config-ts": "npm:10.5.1"
     "@willbooster/prettier-config": "npm:9.1.2"
-    "@willbooster/shared-lib": "npm:5.0.10"
+    "@willbooster/shared-lib": "npm:5.0.11"
     "@yarnpkg/core": "npm:4.0.3"
     build-ts: "npm:12.1.0"
     conventional-changelog-conventionalcommits: "npm:7.0.2"
@@ -11876,11 +11869,11 @@ __metadata:
     minimal-promise-pool: "npm:4.0.0"
     pinst: "npm:3.0.0"
     prettier: "npm:3.2.5"
-    semantic-release: "npm:23.0.5"
-    simple-git: "npm:3.23.0"
+    semantic-release: "npm:23.0.6"
+    simple-git: "npm:3.24.0"
     sort-package-json: "npm:2.9.0"
     ts-node: "npm:10.9.2"
-    type-fest: "npm:4.13.1"
+    type-fest: "npm:4.14.0"
     typescript: "npm:5.4.3"
     vitest: "npm:1.4.0"
     yargs: "npm:17.7.2"
