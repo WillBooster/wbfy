@@ -107,7 +107,7 @@ android/app/src/main/assets/
         const url = `https://www.toptal.com/developers/gitignore/api/${name}`;
         const response = await fetch(url);
         const responseText = await response.text();
-        if (responseText.includes('Attention Required!') || responseText.includes('<title>')) {
+        if (!response.ok || responseText.includes('Attention Required!') || responseText.includes('<title>')) {
           console.error(`Failed to fetch ${url}`);
           return;
         }
