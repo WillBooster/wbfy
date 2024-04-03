@@ -7,11 +7,11 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
+// Exercodeではnode_modulesをCOPYする必要があるため、node_modulesを除外してはいけない。
 const commonContent = `
 **/*.sqlite3*
 **/.yarn/install-state.gz
 **/.venv
-**/node_modules
 `;
 
 export async function generateDockerignore(config: PackageConfig): Promise<void> {
