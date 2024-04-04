@@ -9,6 +9,7 @@ import { promisePool } from '../utils/promisePool.js';
 
 // Exercodeではnode_modulesをCOPYする必要があるため、node_modulesを除外してはいけない。
 const commonContent = `
+**/.idea
 **/*.sqlite3*
 **/.yarn/install-state.gz
 **/.venv
