@@ -18,6 +18,7 @@ export const extensions = {
     'puml',
     'rb',
     'vue',
+    'xml',
     'yaml',
     'yml',
   ].sort(),
