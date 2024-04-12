@@ -30,8 +30,8 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "@octokit/core": "6.1.1",
-    "@willbooster/shared-lib": "5.0.11",
+    "@octokit/core": "6.1.2",
+    "@willbooster/shared-lib": "5.0.12",
     "deepmerge": "4.3.1",
     "dotenv": "16.4.5",
     "fastest-levenshtein": "1.0.16",
@@ -45,16 +45,16 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@types/eslint": "8.56.7",
+    "@types/eslint": "8.56.9",
     "@types/jest": "29.5.12",
     "@types/js-yaml": "4.0.9",
-    "@types/libsodium-wrappers": "0.7.13",
+    "@types/libsodium-wrappers": "0.7.14",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/micromatch": "4.0.6",
-    "@types/node": "20.12.4",
+    "@types/node": "20.12.7",
     "@types/yargs": "17.0.32",
-    "@typescript-eslint/eslint-plugin": "7.5.0",
-    "@typescript-eslint/parser": "7.5.0",
+    "@typescript-eslint/eslint-plugin": "7.6.0",
+    "@typescript-eslint/parser": "7.6.0",
     "@willbooster/eslint-config-ts": "10.5.1",
     "@willbooster/prettier-config": "9.1.2",
     "@yarnpkg/core": "4.0.3",
@@ -73,12 +73,12 @@
     "micromatch": "4.0.5",
     "pinst": "3.0.0",
     "prettier": "3.2.5",
-    "semantic-release": "23.0.7",
+    "semantic-release": "23.0.8",
     "sort-package-json": "2.10.0",
     "ts-node": "10.9.2",
     "type-fest": "4.15.0",
-    "typescript": "5.4.4",
-    "vitest": "1.4.0"
+    "typescript": "5.4.5",
+    "vitest": "1.5.0"
   },
   "packageManager": "yarn@4.1.1",
   "engines": {
