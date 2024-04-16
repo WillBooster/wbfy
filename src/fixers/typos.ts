@@ -20,7 +20,7 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
       const filePath = path.join(dirPath, mdFile);
       await promisePool.run(async () => {
         const content = await fs.promises.readFile(filePath, 'utf8');
-        let newContent = content.replaceAll('c.f.', 'cf.').replaceAll('eg.', 'e.g.').replaceAll('ie.', 'i.e.');
+        let newContent = fixAbbreviationsInText(content);
         newContent = replaceWithConfig(newContent, packageConfig, 'doc');
         if (content !== newContent) {
           await fsUtil.generateFile(filePath, newContent);
@@ -74,6 +74,13 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
 
     await promisePool.promiseAll();
   });
+}
+
+export function fixAbbreviationsInText(content: string): string {
+  return content
+    .replaceAll(/\bc\.f\.([^$])/g, 'cf.$1')
+    .replaceAll(/\beg\.([^$])/g, 'e.g.$1')
+    .replaceAll(/\bie\.([^$])/g, 'i.e.$1');
 }
 
 function replaceWithConfig(newContent: string, packageConfig: PackageConfig, propName: 'doc' | 'ts' | 'text'): string {
