@@ -18,7 +18,7 @@ import { getSrcDirs } from '../utils/srcDirectories.js';
 import { BLITZ_VERSION, NEXT_VERSION } from '../utils/versionConstants.js';
 
 const jsCommonDeps = [
-  'eslint',
+  'eslint@8.57.0',
   'eslint-config-prettier',
   'eslint-plugin-import',
   'eslint-plugin-sort-class-members',
@@ -178,7 +178,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     config.containingTypeScript ||
     config.containingTypeScriptInPackages
   ) {
-    devDependencies.push('eslint', 'micromatch');
+    devDependencies.push('eslint@8.57.0', 'micromatch');
     // TODO: not needed anymore?
     if (config.containingTypeScriptInPackages) {
       devDependencies.push('@typescript-eslint/parser');
