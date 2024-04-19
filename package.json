@@ -42,15 +42,15 @@
     "minimal-promise-pool": "4.0.0",
     "simple-git": "3.24.0",
     "yargs": "17.7.2",
-    "zod": "3.22.4"
+    "zod": "3.22.5"
   },
   "devDependencies": {
-    "@types/eslint": "8.56.9",
+    "@types/eslint": "8.56.10",
     "@types/jest": "29.5.12",
     "@types/js-yaml": "4.0.9",
     "@types/libsodium-wrappers": "0.7.14",
     "@types/lodash.clonedeep": "4.5.9",
-    "@types/micromatch": "4.0.6",
+    "@types/micromatch": "4.0.7",
     "@types/node": "20.12.7",
     "@types/yargs": "17.0.32",
     "@typescript-eslint/eslint-plugin": "7.7.0",

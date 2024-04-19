@@ -3191,13 +3191,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/eslint@npm:8.56.9":
-  version: 8.56.9
-  resolution: "@types/eslint@npm:8.56.9"
+"@types/eslint@npm:8.56.10":
+  version: 8.56.10
+  resolution: "@types/eslint@npm:8.56.10"
   dependencies:
     "@types/estree": "npm:*"
     "@types/json-schema": "npm:*"
-  checksum: 10c0/a800e3d10bd12fc837773101c35a65c189528e306bc41eca9f30176f5ede4d35944a0c0e16b668971db3521df2f2bef62ab2471740eadc72aeb39dbaba6c9101
+  checksum: 10c0/674349d6c342c3864d70f4d5a9965f96fb253801532752c8c500ad6a1c2e8b219e01ccff5dc8791dcb58b5483012c495708bb9f3ff929f5c9322b3da126c15d3
   languageName: node
   linkType: hard
 
@@ -3312,12 +3312,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/micromatch@npm:4.0.6":
-  version: 4.0.6
-  resolution: "@types/micromatch@npm:4.0.6"
+"@types/micromatch@npm:4.0.7":
+  version: 4.0.7
+  resolution: "@types/micromatch@npm:4.0.7"
   dependencies:
     "@types/braces": "npm:*"
-  checksum: 10c0/deba87b2bb740cb3f206c006baddc2d3f411fdba48e47452fb189a2a1a73cc3d6f6f2e6f52b970d1383e988afd9f12046e50f902ad740f1f8afa3faa273ab2a0
+  checksum: 10c0/972cdc349b611f18e3e43123865a46c053490f16cbd1d97e95c7d04ff7c8aef69bbae831249518d374e7bc0378e51ba088da9950422fbfced4b5bedde9738d13
   languageName: node
   linkType: hard
 
@@ -11934,12 +11934,12 @@ __metadata:
   resolution: "wbfy@workspace:."
   dependencies:
     "@octokit/core": "npm:6.1.2"
-    "@types/eslint": "npm:8.56.9"
+    "@types/eslint": "npm:8.56.10"
     "@types/jest": "npm:29.5.12"
     "@types/js-yaml": "npm:4.0.9"
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
-    "@types/micromatch": "npm:4.0.6"
+    "@types/micromatch": "npm:4.0.7"
     "@types/node": "npm:20.12.7"
     "@types/yargs": "npm:17.0.32"
     "@typescript-eslint/eslint-plugin": "npm:7.7.0"
@@ -11979,7 +11979,7 @@ __metadata:
     typescript: "npm:5.4.5"
     vitest: "npm:1.5.0"
     yargs: "npm:17.7.2"
-    zod: "npm:3.22.4"
+    zod: "npm:3.22.5"
   bin:
     wbfy: ./bin/wbfy.js
   languageName: unknown
@@ -12230,9 +12230,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:3.22.4":
-  version: 3.22.4
-  resolution: "zod@npm:3.22.4"
-  checksum: 10c0/7578ab283dac0eee66a0ad0fc4a7f28c43e6745aadb3a529f59a4b851aa10872b3890398b3160f257f4b6817b4ce643debdda4fb21a2c040adda7862cab0a587
+"zod@npm:3.22.5":
+  version: 3.22.5
+  resolution: "zod@npm:3.22.5"
+  checksum: 10c0/efa969e9c0a836e4c299ff86f6db7ccf5e14c5349586694e999b7beb53fcc797b9292bc3179b0b5f43e42bcc4ae184bf202fde3f28694bf9fb8b567779c2e12b
   languageName: node
   linkType: hard
