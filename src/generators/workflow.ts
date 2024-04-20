@@ -215,7 +215,8 @@ const workflows = {
       'add-ready-issue-to-project': {
         uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
         with: {
-          label: 'ready :rocket:',
+          labeled: 'ready :rocket:',
+          labelOperator: 'OR',
         },
         secrets: {
           GH_PROJECT_URL: 'https://github.com/orgs/WillBoosterLab/projects/5',
@@ -475,4 +476,5 @@ function migrateJob(job: Job): void {
     delete job.with['dot_env_path'];
   }
   delete job.with['cpu_arch'];
+  delete job.with['label'];
 }
