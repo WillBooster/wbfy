@@ -3661,10 +3661,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:5.0.13":
-  version: 5.0.13
-  resolution: "@willbooster/shared-lib@npm:5.0.13"
-  checksum: 10c0/72799838d6da852af10a430e99af9575a70342b4a346e16b11edf615d4e4cc11706b0580be691f854c2d046ec0cab402a2985f9c65ff71a4d94cf0d82f8e8efe
+"@willbooster/shared-lib@npm:5.0.14":
+  version: 5.0.14
+  resolution: "@willbooster/shared-lib@npm:5.0.14"
+  checksum: 10c0/145bd689568069fb73d9e15a787f4ca11bc21a42739b564a721cca1794f644c8caae982024e37a1d2aa3059e83598b58a22da639b59f84d638d150c02ebdfff0
   languageName: node
   linkType: hard
 
@@ -12006,7 +12006,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:7.7.1"
     "@willbooster/eslint-config-ts": "npm:10.6.0"
     "@willbooster/prettier-config": "npm:9.1.2"
-    "@willbooster/shared-lib": "npm:5.0.13"
+    "@willbooster/shared-lib": "npm:5.0.14"
     "@yarnpkg/core": "npm:4.0.3"
     build-ts: "npm:12.1.0"
     conventional-changelog-conventionalcommits: "npm:7.0.2"
