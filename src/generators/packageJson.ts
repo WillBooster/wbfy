@@ -105,13 +105,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   let devDependencies = ['lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config'];
   const poetryDevDependencies: string[] = [];
 
-  if (config.root) {
+  if (config.isRoot) {
     // To install the latest pinst
     devDependencies.push('husky');
     // '|| true' avoids errors when husky is not installed.
     jsonObj.scripts['prepare'] = 'husky || true'; // for non-yarn package managers.
     jsonObj.scripts['postinstall'] = 'husky || true'; // for yarn.
-    if (config.publicRepo || config.referredByOtherRepo) {
+    if (config.isPublicRepo || config.isReferredByOtherRepo) {
       // https://typicode.github.io/husky/#/?id=install-1
       devDependencies.push('pinst');
       jsonObj.scripts['prepack'] = 'pinst --disable';
@@ -142,7 +142,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       delete jsonObj.dependencies['playwright'];
       delete jsonObj.devDependencies['playwright'];
     }
-    if (config.containingSubPackageJsons) {
+    if (config.doesContainsSubPackageJsons) {
       // We don't allow non-array workspaces in monorepo.
       jsonObj.workspaces = Array.isArray(jsonObj.workspaces)
         ? merge.all([jsonObj.workspaces, ['packages/*']], {
@@ -175,19 +175,19 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (
-    config.containingJavaScript ||
-    config.containingJavaScriptInPackages ||
-    config.containingTypeScript ||
-    config.containingTypeScriptInPackages
+    config.doesContainsJavaScript ||
+    config.doesContainsJavaScriptInPackages ||
+    config.doesContainsTypeScript ||
+    config.doesContainsTypeScriptInPackages
   ) {
     devDependencies.push('eslint@8.57.0', 'micromatch');
     // TODO: not needed anymore?
-    if (config.containingTypeScriptInPackages) {
+    if (config.doesContainsTypeScriptInPackages) {
       devDependencies.push('@typescript-eslint/parser');
     }
   }
 
-  if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+  if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
     devDependencies.push('typescript');
   }
 
@@ -195,7 +195,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     devDependencies.push(...eslintDeps[config.eslintBase]);
   }
 
-  if (config.willBoosterConfigs) {
+  if (config.isWillBoosterConfigs) {
     dependencies = dependencies.filter((dep) => !dep.includes('@willbooster/'));
     devDependencies = devDependencies.filter((dep) => !dep.includes('@willbooster/'));
   }
@@ -204,13 +204,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj.name = path.basename(config.dirPath);
   }
 
-  if (config.containingSubPackageJsons) {
+  if (config.doesContainsSubPackageJsons) {
     jsonObj.private = true;
   }
   if (!jsonObj.license) {
     jsonObj.license = 'UNLICENSED';
   }
-  if (!jsonObj.private && jsonObj.license !== 'UNLICENSED' && rootConfig.publicRepo) {
+  if (!jsonObj.private && jsonObj.license !== 'UNLICENSED' && rootConfig.isPublicRepo) {
     jsonObj.publishConfig ??= {};
     jsonObj.publishConfig.access ??= 'public';
   }
@@ -218,7 +218,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (owner === 'WillBooster' || owner === 'WillBoosterLab') {
     jsonObj.author = 'WillBooster Inc.';
   }
-  if (!config.root && jsonObj.private && !jsonObj.main) {
+  if (!config.isRoot && jsonObj.private && !jsonObj.main) {
     // Make VSCode possible to refactor code across subpackages.
     jsonObj.main = './src';
   }
@@ -226,8 +226,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   // Since `"resolutions": { "npm/chalk": "^4.1.2" },` causes "Invalid npm token"
   delete jsonObj.resolutions?.['npm/chalk'];
 
-  if (!config.containingSubPackageJsons) {
-    if (!config.containingJavaScript && !config.containingTypeScript) {
+  if (!config.doesContainsSubPackageJsons) {
+    if (!config.doesContainsJavaScript && !config.doesContainsTypeScript) {
       delete jsonObj.scripts.lint;
       delete jsonObj.scripts['lint-fix'];
       jsonObj.scripts.cleanup = jsonObj.scripts.cleanup?.replace(' && yarn lint-fix', '');
@@ -235,7 +235,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
     }
 
-    if (config.containingPubspecYaml) {
+    if (config.doesContainsPubspecYaml) {
       jsonObj.scripts.lint = 'flutter analyze';
       jsonObj.scripts['lint-fix'] = 'yarn lint';
       const dirs = ['lib', 'test', 'test_driver'].filter((dir) => fs.existsSync(path.resolve(config.dirPath, dir)));
@@ -247,7 +247,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
     }
 
-    if (config.containingPoetryLock) {
+    if (config.doesContainsPoetryLock) {
       if (jsonObj.scripts.postinstall === 'poetry install') {
         delete jsonObj.scripts.postinstall;
       }
@@ -393,7 +393,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
     typecheck: 'tsc --noEmit --Pretty',
   };
-  if (config.containingSubPackageJsons) {
+  if (config.doesContainsSubPackageJsons) {
     const oldTest = scripts.test;
     scripts = merge(
       { ...scripts },
@@ -418,7 +418,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     scripts.typecheck += 'pyright';
   }
 
-  if (!config.containingTypeScript && !config.containingTypeScriptInPackages) {
+  if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
     delete scripts.typecheck;
   } else if (config.depending.wb) {
     scripts.typecheck = 'wb typecheck';

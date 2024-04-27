@@ -14,7 +14,7 @@ export async function fixTypeDefinitions(
   return logger.functionIgnoringException('fixTypeDefinitions', async () => {
     const libTypeDirPath = path.resolve(config.dirPath, '@types');
     const srcTypeDirPath =
-      config.root && config.containingSubPackageJsons ? undefined : path.resolve(config.dirPath, 'src', 'types');
+      config.isRoot && config.doesContainsSubPackageJsons ? undefined : path.resolve(config.dirPath, 'src', 'types');
 
     const dirents = await ignoreEnoentAsync(() => fs.readdir(libTypeDirPath, { withFileTypes: true }));
     if (!dirents) return;

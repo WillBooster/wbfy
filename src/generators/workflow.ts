@@ -251,7 +251,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     if (rootConfig.depending.semanticRelease) {
       fileNameSet.add('release.yml');
     }
-    if (rootConfig.publicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
+    if (rootConfig.isPublicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
       fileNameSet.add('add-ready-issue-to-project.yml');
       fileNameSet.add('notify-ready.yml');
     }
@@ -364,7 +364,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'add-focused-issue-to-project' ||
     kind === 'add-ready-issue-to-project'
   ) {
-    job.secrets['GH_TOKEN'] = config.publicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
+    job.secrets['GH_TOKEN'] = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
     job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
@@ -400,7 +400,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   if (kind.startsWith('deploy') && job.secrets['FLY_API_TOKEN'] && job.with['deploy_command']) {
     job.with['deploy_command'] = job.with['deploy_command'].toString().replace(/\s+--json/, '');
   }
-  if (config.containingDockerfile) {
+  if (config.doesContainsDockerfile) {
     if (job.with['ci_size'] !== 'extra-large' && (kind.startsWith('deploy') || kind.startsWith('test'))) {
       job.with['ci_size'] = 'large';
     }
@@ -410,7 +410,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   }
   // Because github.event.repository.private is always true if job is scheduled
   if (kind === 'release' || kind === 'test' || kind === 'wbfy' || kind === 'wbfy-merge' || kind.startsWith('deploy')) {
-    if (config.publicRepo) {
+    if (config.isPublicRepo) {
       job.with['github_hosted_runner'] = true;
     }
   } else {

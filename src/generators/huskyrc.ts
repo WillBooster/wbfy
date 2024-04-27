@@ -93,7 +93,7 @@ async function core(config: PackageConfig): Promise<void> {
   }
   const rmNextDirectory = config.depending.blitz || config.depending.next ? ' && rm -Rf .next' : '';
   postMergeCommands.push(`run_if_changed "package\\.json" "yarn${rmNextDirectory}"`);
-  if (config.containingPoetryLock) {
+  if (config.doesContainsPoetryLock) {
     postMergeCommands.push('run_if_changed "poetry\\.lock" "poetry install"');
   }
   if (config.depending.blitz) {

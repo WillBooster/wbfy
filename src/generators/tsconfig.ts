@@ -65,14 +65,14 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateTsconfig', async () => {
     if (config.depending.blitz || config.depending.next) return;
 
-    let newSettings = cloneDeep(config.root ? rootJsonObj : subJsonObj) as TsConfigJson;
-    if (!config.containingJsxOrTsx && !config.containingJsxOrTsxInPackages) {
+    let newSettings = cloneDeep(config.isRoot ? rootJsonObj : subJsonObj) as TsConfigJson;
+    if (!config.doesContainsJsxOrTsx && !config.doesContainsJsxOrTsxInPackages) {
       delete newSettings.compilerOptions?.jsx;
     }
-    if (config.root && !config.containingSubPackageJsons) {
+    if (config.isRoot && !config.doesContainsSubPackageJsons) {
       newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
     }
-    if (config.esmPackage) {
+    if (config.isEsmPackage) {
       newSettings.compilerOptions = {
         ...newSettings.compilerOptions,
         module: 'NodeNext',
@@ -89,7 +89,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       }
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
-      if (!config.esmPackage) {
+      if (!config.isEsmPackage) {
         delete newSettings.compilerOptions?.module;
         delete newSettings.compilerOptions?.moduleResolution;
       }

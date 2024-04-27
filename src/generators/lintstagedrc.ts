@@ -16,19 +16,19 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
 }
 
 async function core(config: PackageConfig): Promise<void> {
-  const packagePrefix = config.root ? 'node node_modules/.bin/' : 'node ../../node_modules/.bin/';
+  const packagePrefix = config.isRoot ? 'node node_modules/.bin/' : 'node ../../node_modules/.bin/';
   const lines: string[] = [];
-  if (config.containingJavaScript || config.containingTypeScript) {
+  if (config.doesContainsJavaScript || config.doesContainsTypeScript) {
     const eslint = `
   '${getEslintKey(config)}': [${JSON.stringify(
     `${packagePrefix}eslint --fix${EslintUtil.getLintFixSuffix(config)}`
   )}, '${packagePrefix}prettier --cache --write'],`;
     lines.push(eslint);
   }
-  const packagesFilter = config.root ? " && !file.includes('/packages/')" : '';
+  const packagesFilter = config.isRoot ? " && !file.includes('/packages/')" : '';
   lines.push(`
   './**/*.{${extensions.prettier.join(',')}}': files => {
-    ${config.containingJavaScript || config.containingTypeScript ? getEslintFilterForPrettier(config) : ''}
+    ${config.doesContainsJavaScript || config.doesContainsTypeScript ? getEslintFilterForPrettier(config) : ''}
     const filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});
     if (filteredFiles.length === 0) return [];
     const commands = [\`${packagePrefix}prettier --cache --write \${filteredFiles.join(' ')}\`];
@@ -37,7 +37,7 @@ async function core(config: PackageConfig): Promise<void> {
     }
     return commands;
   },`);
-  if (config.containingPubspecYaml) {
+  if (config.doesContainsPubspecYaml) {
     lines.push(`
   './{lib,test,test_driver}/**/*.dart': files => {
     const filteredFiles = files.filter(file => !file.includes('generated'))
@@ -46,7 +46,7 @@ async function core(config: PackageConfig): Promise<void> {
     return [\`flutter format \${filteredFiles.join(' ')}\`];
   },`);
   }
-  if (config.containingPoetryLock) {
+  if (config.doesContainsPoetryLock) {
     lines.push(`
   './**/*.py': [
     'poetry run isort --profile black --filter-files',
@@ -56,7 +56,7 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   const newContent = `${
-    config.containingJavaScript || config.containingTypeScript ? "const micromatch = require('micromatch');" : ''
+    config.doesContainsJavaScript || config.doesContainsTypeScript ? "const micromatch = require('micromatch');" : ''
   }
 
 module.exports = {${lines.join('')}

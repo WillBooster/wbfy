@@ -6,7 +6,7 @@ import type { PackageConfig } from '../packageConfig.js';
 
 export async function fixDockerfile(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('fixDockerfile', async () => {
-    if (!config.containingDockerfile) return;
+    if (!config.doesContainsDockerfile) return;
 
     const oldContent = config.dockerfile;
     const newContent = oldContent;

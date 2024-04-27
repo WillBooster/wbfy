@@ -30,23 +30,23 @@ export async function generateGitignore(config: PackageConfig, rootConfig: Packa
     const tailUserContent = ignoreFileUtil.getTailUserContent(content);
 
     const names = [...defaultNames];
-    if (config.containingGemfile) {
+    if (config.doesContainsGemfile) {
       names.push('ruby');
     }
-    if (config.containingGoMod) {
+    if (config.doesContainsGoMod) {
       names.push('go');
       headUserContent += `${path.basename(config.dirPath)}
 `;
     }
-    if (config.containingPackageJson) {
+    if (config.doesContainsPackageJson) {
       names.push('node');
     }
-    if (config.containingPomXml) {
+    if (config.doesContainsPomXml) {
       names.push('maven');
       headUserContent += `.idea/google-java-format.xml
 `;
     }
-    if (config.containingPubspecYaml) {
+    if (config.doesContainsPubspecYaml) {
       names.push('flutter', 'AndroidStudio', 'ruby');
       headUserContent += `.flutter-plugins-dependencies
 android/key.properties
@@ -54,13 +54,13 @@ ios/.bundle
 .idea/runConfigurations.xml
 `;
     }
-    if (config.containingTemplateYaml) {
+    if (config.doesContainsTemplateYaml) {
       headUserContent += `.aws-sam/
 packaged.yaml
 `;
     }
     // Because .venv should be ignored on root directory
-    if (config.containingPoetryLock) {
+    if (config.doesContainsPoetryLock) {
       names.push('python');
       headUserContent += `.venv/
 `;
@@ -123,7 +123,7 @@ android/app/src/main/assets/
     if (!(await ignoreFileUtil.isBerryZeroInstallEnabled(filePath))) {
       generated = generated.replace('!.yarn/cache', '# !.yarn/cache').replace('# .pnp.*', '.pnp.*');
     }
-    if (config.containingPomXml || config.containingPubspecYaml) {
+    if (config.doesContainsPomXml || config.doesContainsPubspecYaml) {
       generated = generated
         .replaceAll(/^# .idea\/artifacts$/gm, '.idea/artifacts')
         .replaceAll(/^# .idea\/compiler.xml$/gm, '.idea/compiler.xml')
@@ -133,12 +133,12 @@ android/app/src/main/assets/
         .replaceAll(/^# .idea\/modules$/gm, '.idea/modules')
         .replaceAll(/^# *.iml$/gm, '*.iml')
         .replaceAll(/^# *.ipr$/gm, '*.ipr');
-      if (config.containingPubspecYaml) {
+      if (config.doesContainsPubspecYaml) {
         generated = generated.replaceAll(/^.idea\/modules.xml$/gm, '# .idea/modules.xml');
       }
     }
     generated = generated.replaceAll(/^.idea\/?$/gm, '# .idea');
-    if (rootConfig.depending.reactNative || config.depending.reactNative || config.containingPubspecYaml) {
+    if (rootConfig.depending.reactNative || config.depending.reactNative || config.doesContainsPubspecYaml) {
       generated = generated.replaceAll(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
     }
     const newContent = headUserContent + generated + tailUserContent;

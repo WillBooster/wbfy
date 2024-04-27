@@ -31,7 +31,7 @@ async function core(config: PackageConfig): Promise<void> {
     .map((line) => line.trim());
   const lines = [...new Set(duplicatableLines)];
 
-  if (config.containingPoetryLock) {
+  if (config.doesContainsPoetryLock) {
     const response = await fetch('https://pypi.org/pypi/poetry/json');
     const json = await response.json();
     const poetryVersion = json?.info?.version;
@@ -43,7 +43,7 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.depending.firebase) {
     updateVersion(lines, 'java', JAVA_VERSION, true);
   }
-  if (config.containingPackageJson) {
+  if (config.doesContainsPackageJson) {
     const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
     updateVersion(lines, 'yarn', version);
   }

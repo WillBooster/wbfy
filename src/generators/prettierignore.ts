@@ -29,7 +29,7 @@ export async function generatePrettierignore(config: PackageConfig): Promise<voi
     const gitignoreContent = (await ignoreFileUtil.readGitignoreWithoutSeparators(gitignoreFilePath)) || '';
 
     let additionalContent = '';
-    if (config.containingPubspecYaml) {
+    if (config.doesContainsPubspecYaml) {
       additionalContent = `
 android/app/
 ios/Runner/Assets.xcassets/

@@ -42,8 +42,8 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
       await sodium.ready;
 
       for (const [name, secret] of Object.entries(parsed)) {
-        if (config.publicRepo && name === 'GH_BOT_PAT') continue;
-        if (!config.publicRepo && name === 'PUBLIC_GH_BOT_PAT') continue;
+        if (config.isPublicRepo && name === 'GH_BOT_PAT') continue;
+        if (!config.isPublicRepo && name === 'PUBLIC_GH_BOT_PAT') continue;
 
         // Convert Secret & Base64 key to Uint8Array.
         const rawKey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL);

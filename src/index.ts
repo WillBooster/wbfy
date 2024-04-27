@@ -125,8 +125,8 @@ async function main(): Promise<void> {
 
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
-      if (config.containingTypeScript || config.containingTypeScriptInPackages) {
-        promises.push(fixTypeDefinitions(config, config.root ? allPackageConfigs : [config]));
+      if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
+        promises.push(fixTypeDefinitions(config, config.isRoot ? allPackageConfigs : [config]));
       }
       if (config.depending.playwrightTest) {
         promises.push(fixPlaywrightConfig(config));
@@ -136,26 +136,26 @@ async function main(): Promise<void> {
       }
       await generateGitignore(config, rootConfig);
       await promisePool.promiseAll();
-      if (!config.root && !config.containingPackageJson) {
+      if (!config.isRoot && !config.doesContainsPackageJson) {
         continue;
       }
       await generatePrettierignore(config);
       await generatePackageJson(config, rootConfig, argv.skipDeps);
 
       promises.push(generateLintstagedrc(config));
-      if (config.containingVscodeSettingsJson && config.containingPackageJson) {
+      if (config.doesContainsVscodeSettingsJson && config.doesContainsPackageJson) {
         promises.push(generateVscodeSettings(config));
       }
-      if (config.containingTypeScript || config.containingTypeScriptInPackages) {
+      if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
         promises.push(generateTsconfig(config));
       }
       if (
-        config.containingJavaScript ||
-        config.containingJavaScriptInPackages ||
-        config.containingTypeScript ||
-        config.containingTypeScriptInPackages
+        config.doesContainsJavaScript ||
+        config.doesContainsJavaScriptInPackages ||
+        config.doesContainsTypeScript ||
+        config.doesContainsTypeScriptInPackages
       ) {
-        if (!rootConfig.willBoosterConfigs) {
+        if (!rootConfig.isWillBoosterConfigs) {
           promises.push(generateEslintrc(config, rootConfig));
         }
         promises.push(generateEslintignore(config));
