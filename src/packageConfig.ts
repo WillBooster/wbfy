@@ -156,7 +156,7 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       isPublicRepo: repoInfo?.private === false,
       isReferredByOtherRepo: !!packageJson.files,
       repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
-      isBun: versionsText.includes('bun') && fs.existsSync(path.join(dirPath, 'bunfig.toml')),
+      isBun: fs.existsSync(path.join(dirPath, 'bunfig.toml')),
       isEsmPackage: esmPackage,
       isWillBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       doesContainsSubPackageJsons: containsAny('packages/**/package.json', dirPath),
