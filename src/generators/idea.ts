@@ -8,7 +8,7 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 function createTaskOptions(runner: string, args: string, name: string, extension: string): string {
-  return `    <TaskOptions isEnabled="true">
+  return `<TaskOptions isEnabled="true">
       <option name="arguments" value="${args} $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
