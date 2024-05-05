@@ -8,7 +8,7 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 function createTaskOptions(runner: string, args: string, name: string, extension: string): string {
-  return `<TaskOptions isEnabled="true">
+  return `    <TaskOptions isEnabled="true">
       <option name="arguments" value="${args} $FilePathRelativeToProjectRoot$" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
@@ -34,7 +34,7 @@ function createTaskOptions(runner: string, args: string, name: string, extension
 const prettierContent = `<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    ${extensions.prettier.map((ext) => createTaskOptions('node', 'node_modules/.bin/prettier --cache --write', 'Prettier', ext)).join('')}
+${extensions.prettier.map((ext) => createTaskOptions('node', 'node_modules/.bin/prettier --cache --write', 'Prettier', ext)).join('')}
   </component>
 </project>
 `;
@@ -42,7 +42,7 @@ const prettierContent = `<?xml version="1.0" encoding="UTF-8"?>
 const biomeContent = `<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    ${extensions.prettier.map((ext) => createTaskOptions('bun', 'node_modules/.bin/biome check --apply', 'Biome', ext)).join('')}
+${extensions.prettier.map((ext) => createTaskOptions('bun', 'node_modules/.bin/biome check --apply', 'Biome', ext)).join('')}
   </component>
 </project>
 `;
