@@ -82,19 +82,19 @@ async function core(config: PackageConfig): Promise<void> {
 
   const postMergeCommands: string[] = [];
   if (config.versionsText) {
-    postMergeCommands.push('run_if_changed "\\..+-version" "asdf plugin update --all"');
+    postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf plugin update --all"`);
   }
   // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
   if (config.versionsText?.includes('python ')) {
-    postMergeCommands.push('run_if_changed "\\..+-version" "asdf install python"');
+    postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf install python"`);
   }
   if (config.versionsText) {
-    postMergeCommands.push('run_if_changed "\\..+-version" "asdf install"');
+    postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf install"`);
   }
   const rmNextDirectory = config.depending.blitz || config.depending.next ? ' && rm -Rf .next' : '';
   postMergeCommands.push(`run_if_changed "package\\.json" "yarn${rmNextDirectory}"`);
   if (config.doesContainsPoetryLock) {
-    postMergeCommands.push('run_if_changed "poetry\\.lock" "poetry install"');
+    postMergeCommands.push(String.raw`run_if_changed "poetry\.lock" "poetry install"`);
   }
   if (config.depending.blitz) {
     postMergeCommands.push(
