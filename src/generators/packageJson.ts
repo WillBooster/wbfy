@@ -73,7 +73,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   jsonObj.peerDependencies = jsonObj.peerDependencies || {};
 
-  await removeDeprecatedStuff(jsonObj as SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>);
+  await removeDeprecatedStuff(
+    rootConfig,
+    jsonObj as SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>
+  );
 
   if (jsonObj.name !== '@willbooster/prettier-config') {
     jsonObj.prettier = '@willbooster/prettier-config';
@@ -349,6 +352,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
 // TODO: remove the following migration code in future
 async function removeDeprecatedStuff(
+  rootConfig: PackageConfig,
   jsonObj: SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>
 ): Promise<void> {
   if (jsonObj.author === 'WillBooster LLC') {
@@ -376,9 +380,11 @@ async function removeDeprecatedStuff(
   delete jsonObj.scripts['python-format'];
   delete jsonObj.scripts['format-python'];
   delete jsonObj.scripts['prettier'];
-  for (const deps of Object.values(eslintDeps)) {
-    for (const dep of deps) {
-      delete jsonObj.devDependencies[dep];
+  if (!rootConfig.isWillBoosterConfigs) {
+    for (const deps of Object.values(eslintDeps)) {
+      for (const dep of deps) {
+        delete jsonObj.devDependencies[dep];
+      }
     }
   }
   await promisePool.run(() => fs.promises.rm('lerna.json', { force: true }));

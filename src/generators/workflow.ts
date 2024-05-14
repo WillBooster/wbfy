@@ -197,7 +197,6 @@ const workflows = {
         uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
         with: {
           labeled: 'ready :rocket:',
-          labelOperator: 'OR',
         },
         secrets: {
           GH_PROJECT_URL: 'https://github.com/orgs/WillBoosterLab/projects/5',
