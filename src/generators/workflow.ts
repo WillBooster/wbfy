@@ -458,4 +458,5 @@ function migrateJob(job: Job): void {
   }
   delete job.with['cpu_arch'];
   delete job.with['label'];
+  delete job.with['labelOperator'];
 }
