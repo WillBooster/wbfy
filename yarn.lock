@@ -3347,12 +3347,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:20.12.11":
+"@types/node@npm:*":
   version: 20.12.11
   resolution: "@types/node@npm:20.12.11"
   dependencies:
     undici-types: "npm:~5.26.4"
   checksum: 10c0/efaa7b08c50ba6e6982ac7d531ba08d5935539ba76e954807df1ff9382a319ead7e003ccaca5ad7cf33ecf53f212507f7c1f2794bd2ff52df6365fef21f6e1fb
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:20.12.12":
+  version: 20.12.12
+  resolution: "@types/node@npm:20.12.12"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: 10c0/f374b763c744e8f16e4f38cf6e2c0eef31781ec9228c9e43a6f267880fea420fab0a238b59f10a7cb3444e49547c5e3785787e371fc242307310995b21988812
   languageName: node
   linkType: hard
 
@@ -3660,10 +3669,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:5.0.14":
-  version: 5.0.14
-  resolution: "@willbooster/shared-lib@npm:5.0.14"
-  checksum: 10c0/145bd689568069fb73d9e15a787f4ca11bc21a42739b564a721cca1794f644c8caae982024e37a1d2aa3059e83598b58a22da639b59f84d638d150c02ebdfff0
+"@willbooster/shared-lib@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@willbooster/shared-lib@npm:5.1.0"
+  checksum: 10c0/7161f5fb70cde74e3bcedb059a0cdd9d46e1866c020630011a31c2f8b31ffe135ae736b8e76b74b3ec740ba11417eff1670f1cff19ce23ca0b782f2ba4e11b81
   languageName: node
   linkType: hard
 
@@ -10376,9 +10385,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semantic-release@npm:23.1.0":
-  version: 23.1.0
-  resolution: "semantic-release@npm:23.1.0"
+"semantic-release@npm:23.1.1":
+  version: 23.1.1
+  resolution: "semantic-release@npm:23.1.1"
   dependencies:
     "@semantic-release/commit-analyzer": "npm:^12.0.0"
     "@semantic-release/error": "npm:^4.0.0"
@@ -10389,7 +10398,7 @@ __metadata:
     cosmiconfig: "npm:^9.0.0"
     debug: "npm:^4.0.0"
     env-ci: "npm:^11.0.0"
-    execa: "npm:^8.0.0"
+    execa: "npm:^9.0.0"
     figures: "npm:^6.0.0"
     find-versions: "npm:^6.0.0"
     get-stream: "npm:^6.0.0"
@@ -10411,7 +10420,7 @@ __metadata:
     yargs: "npm:^17.5.1"
   bin:
     semantic-release: bin/semantic-release.js
-  checksum: 10c0/4396029521e9af112af8cdea7f1325e21c460c3510877601598b99a901ddf6d64c9b806ef0f4448d4fb1a1af8fb05cfdde9775a8b912a4e8a9e9fa6e7a2c3eff
+  checksum: 10c0/c54fb43917299737803ca89fd5c692e08c630ad8765617b30ac41fb21173db67ce4bc617811b29702d27badd5075d984fcc8bdf058c3b3ce81732016bb07f9ee
   languageName: node
   linkType: hard
 
@@ -11918,13 +11927,13 @@ __metadata:
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.7"
-    "@types/node": "npm:20.12.11"
+    "@types/node": "npm:20.12.12"
     "@types/yargs": "npm:17.0.32"
     "@typescript-eslint/eslint-plugin": "npm:7.9.0"
     "@typescript-eslint/parser": "npm:7.9.0"
     "@willbooster/eslint-config-ts": "npm:10.6.0"
     "@willbooster/prettier-config": "npm:9.1.2"
-    "@willbooster/shared-lib": "npm:5.0.14"
+    "@willbooster/shared-lib": "npm:5.1.0"
     "@yarnpkg/core": "npm:4.0.5"
     build-ts: "npm:12.1.0"
     conventional-changelog-conventionalcommits: "npm:8.0.0"
@@ -11949,7 +11958,7 @@ __metadata:
     minimal-promise-pool: "npm:4.0.0"
     pinst: "npm:3.0.0"
     prettier: "npm:3.2.5"
-    semantic-release: "npm:23.1.0"
+    semantic-release: "npm:23.1.1"
     simple-git: "npm:3.24.0"
     sort-package-json: "npm:2.10.0"
     ts-node: "npm:10.9.2"
