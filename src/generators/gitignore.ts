@@ -12,13 +12,13 @@ import { promisePool } from '../utils/promisePool.js';
 const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocode', 'emacs', 'vim', 'yarn'];
 
 const commonContent = `
+!.keep
+.env.production
+*/mount/*.hash
 .idea/copilot/chatSessions/
 .devcontainer/
 dist/
 temp/
-Icon[\r]
-!.keep
-*/mount/*.hash
 
 `;
 
