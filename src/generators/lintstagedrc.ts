@@ -28,9 +28,7 @@ async function core(config: PackageConfig): Promise<void> {
   const packagesFilter = config.isRoot ? " && !file.includes('/packages/')" : '';
   lines.push(`
   './**/*.{${extensions.prettier.join(',')}}': files => {
-    let filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});
-    filteredFiles = filteredFiles.map((file) => path.relative('', file));
-    ${config.doesContainsJavaScript || config.doesContainsTypeScript ? getEslintFilterForPrettier(config) : ''}
+    let filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});${getEslintFilterForPrettier(config)}
     if (filteredFiles.length === 0) return [];
     const commands = [\`${packagePrefix}prettier --cache --write \${filteredFiles.join(' ')}\`];
     if (filteredFiles.some(file => file.endsWith('package.json'))) {
@@ -74,5 +72,10 @@ function getEslintKey(config: PackageConfig): string {
 }
 
 function getEslintFilterForPrettier(config: PackageConfig): string {
-  return `filteredFiles = micromatch.not(filteredFiles, '${getEslintKey(config)}');`;
+  return config.doesContainsJavaScript || config.doesContainsTypeScript
+    ? `\n
+    filteredFiles = filteredFiles.map((file) => path.relative('', file));
+    filteredFiles = micromatch.not(filteredFiles, '${getEslintKey(config)}');
+    filteredFiles = filteredFiles.map((file) => path.resolve(file));`
+    : '';
 }
