@@ -41,7 +41,7 @@
     "libsodium-wrappers": "0.7.13",
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "4.0.0",
-    "simple-git": "3.24.0",
+    "simple-git": "3.25.0",
     "yargs": "17.7.2",
     "zod": "3.23.8"
   },
@@ -58,7 +58,7 @@
     "@typescript-eslint/parser": "7.13.0",
     "@willbooster/eslint-config-ts": "10.6.0",
     "@willbooster/prettier-config": "9.1.2",
-    "@yarnpkg/core": "4.0.5",
+    "@yarnpkg/core": "4.1.0",
     "build-ts": "12.1.0",
     "conventional-changelog-conventionalcommits": "8.0.0",
     "eslint": "8.57.0",
