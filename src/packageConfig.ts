@@ -215,7 +215,9 @@ export async function getPackageConfig(dirPath: string): Promise<PackageConfig |
       packageJson,
       wbfyJson,
     };
-    config.eslintBase = getEslintExtensionBase(config);
+    if (!config.isBun) {
+      config.eslintBase = getEslintExtensionBase(config);
+    }
     if (
       config.doesContainsGemfile ||
       config.doesContainsGoMod ||

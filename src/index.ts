@@ -11,6 +11,7 @@ import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { fixTypos } from './fixers/typos.js';
 import { generateVersionConfigs } from './generators/asdf.js';
+import { generateBiomeJsonc } from './generators/biome.js';
 import { generateDockerignore } from './generators/dockerignore.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
 import { generateEslintignore } from './generators/eslintignore.js';
@@ -155,7 +156,9 @@ async function main(): Promise<void> {
         config.doesContainsTypeScript ||
         config.doesContainsTypeScriptInPackages
       ) {
-        if (!rootConfig.isWillBoosterConfigs) {
+        if (rootConfig.isBun) {
+          promises.push(generateBiomeJsonc(config));
+        } else if (!rootConfig.isWillBoosterConfigs) {
           promises.push(generateEslintrc(config, rootConfig));
         }
         promises.push(generateEslintignore(config));
