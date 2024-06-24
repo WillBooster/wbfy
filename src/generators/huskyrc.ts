@@ -82,7 +82,10 @@ async function core(config: PackageConfig): Promise<void> {
 
   const postMergeCommands: string[] = [];
   if (config.versionsText) {
-    postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf plugin update --all"`);
+    postMergeCommands.push(
+      String.raw`run_if_changed "\..+-version" "awk '{print \$1}' .tool-versions | xargs -I{} asdf plugin add {}"`,
+      String.raw`run_if_changed "\..+-version" "asdf plugin update --all"`
+    );
   }
   // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
   if (config.versionsText?.includes('python ')) {

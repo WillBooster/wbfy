@@ -183,15 +183,22 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     config.doesContainsTypeScript ||
     config.doesContainsTypeScriptInPackages
   ) {
-    devDependencies.push('eslint@8.57.0', 'micromatch');
-    // TODO: not needed anymore?
-    if (config.doesContainsTypeScriptInPackages) {
-      devDependencies.push('@typescript-eslint/parser');
+    if (config.isBun) {
+      devDependencies.push('@biomejs/biome', '@willbooster/biome-config');
+    } else {
+      devDependencies.push('eslint@8.57.0', 'micromatch');
+      // TODO: not needed anymore?
+      if (config.doesContainsTypeScriptInPackages) {
+        devDependencies.push('@typescript-eslint/parser');
+      }
     }
   }
 
   if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
     devDependencies.push('typescript');
+    if (config.isBun) {
+      devDependencies.push('bun-types');
+    }
   }
 
   if (config.eslintBase) {
