@@ -52,7 +52,7 @@
     "@types/libsodium-wrappers": "0.7.14",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/micromatch": "4.0.9",
-    "@types/node": "20.14.12",
+    "@types/node": "20.14.14",
     "@types/yargs": "17.0.32",
     "@typescript-eslint/eslint-plugin": "8.0.0",
     "@typescript-eslint/parser": "8.0.0",
@@ -79,7 +79,7 @@
     "ts-node": "10.9.2",
     "type-fest": "4.23.0",
     "typescript": "5.5.4",
-    "vitest": "2.0.4"
+    "vitest": "2.0.5"
   },
   "packageManager": "yarn@4.3.1",
   "engines": {
