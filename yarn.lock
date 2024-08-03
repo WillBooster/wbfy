@@ -3811,9 +3811,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:4.1.1":
-  version: 4.1.1
-  resolution: "@yarnpkg/core@npm:4.1.1"
+"@yarnpkg/core@npm:4.1.2":
+  version: 4.1.2
+  resolution: "@yarnpkg/core@npm:4.1.2"
   dependencies:
     "@arcanis/slice-ansi": "npm:^1.1.1"
     "@types/semver": "npm:^7.1.0"
@@ -3824,7 +3824,7 @@ __metadata:
     "@yarnpkg/shell": "npm:^4.0.2"
     camelcase: "npm:^5.3.1"
     chalk: "npm:^3.0.0"
-    ci-info: "npm:^3.2.0"
+    ci-info: "npm:^4.0.0"
     clipanion: "npm:^4.0.0-rc.2"
     cross-spawn: "npm:7.0.3"
     diff: "npm:^5.1.0"
@@ -3841,7 +3841,7 @@ __metadata:
     treeify: "npm:^1.1.0"
     tslib: "npm:^2.4.0"
     tunnel: "npm:^0.0.6"
-  checksum: 10c0/7db63b4144b397a18ea92a468aed3338b3feabd8b812541a37de9d6ff380b65fdfcff926aa5a697430280ba31937c794fadd662f5523437e6098230516a27fdd
+  checksum: 10c0/c92941a58fa492b169ba6c4f20f49212306b0233d1d721533e40c78f7056b8738f00fd7142807e7418388d2c91f15b0f463ab033f48dacecaab75b7993c743c7
   languageName: node
   linkType: hard
 
@@ -12023,7 +12023,7 @@ __metadata:
     "@willbooster/eslint-config-ts": "npm:10.6.0"
     "@willbooster/prettier-config": "npm:9.1.2"
     "@willbooster/shared-lib": "npm:5.2.3"
-    "@yarnpkg/core": "npm:4.1.1"
+    "@yarnpkg/core": "npm:4.1.2"
     build-ts: "npm:13.1.8"
     conventional-changelog-conventionalcommits: "npm:8.0.0"
     deepmerge: "npm:4.3.1"
