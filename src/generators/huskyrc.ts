@@ -8,7 +8,7 @@ import { spawnSync } from '../utils/spawnUtil.js';
 
 import { generateScripts } from './packageJson.js';
 
-const settings = {
+const scripts = {
   preCommit: 'node node_modules/.bin/lint-staged',
   prePush: `yarn typecheck`,
   prePushForLab: `
@@ -60,11 +60,11 @@ async function core(config: PackageConfig): Promise<void> {
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
 
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }));
-  await promisePool.run(() => fs.promises.writeFile(preCommitFilePath, settings.preCommit + '\n'));
+  await promisePool.run(() => fs.promises.writeFile(preCommitFilePath, scripts.preCommit + '\n'));
 
   const { typecheck } = generateScripts(config);
   if (typecheck) {
-    let prePush = config.repository?.startsWith('github:WillBoosterLab/') ? settings.prePushForLab : settings.prePush;
+    let prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
     prePush = prePush.replace(
       'yarn typecheck',
       typecheck
@@ -79,10 +79,21 @@ async function core(config: PackageConfig): Promise<void> {
       })
     );
   }
+  const postMergeCommand = `${scripts.postMerge}\n\n${generatePostMergeCommands(config).join('\n')}\n`;
+  await promisePool.run(() =>
+    fs.promises.writeFile(path.resolve(dirPath, 'post-merge'), postMergeCommand, {
+      mode: 0o755,
+    })
+  );
+}
 
+export function generatePostMergeCommands(config: PackageConfig): string[] {
   const postMergeCommands: string[] = [];
   if (config.versionsText) {
-    postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf plugin update --all"`);
+    postMergeCommands.push(
+      String.raw`run_if_changed "\..+-version" "awk '{print \$1}' .tool-versions | xargs -I{} asdf plugin add {}"`,
+      String.raw`run_if_changed "\..+-version" "asdf plugin update --all"`
+    );
   }
   // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
   if (config.versionsText?.includes('python ')) {
@@ -91,8 +102,9 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.versionsText) {
     postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf install"`);
   }
+  const installCommand = config.isBun ? 'bun install' : 'yarn';
   const rmNextDirectory = config.depending.blitz || config.depending.next ? ' && rm -Rf .next' : '';
-  postMergeCommands.push(`run_if_changed "package\\.json" "yarn${rmNextDirectory}"`);
+  postMergeCommands.push(`run_if_changed "package\\.json" "${installCommand}${rmNextDirectory}"`);
   if (config.doesContainsPoetryLock) {
     postMergeCommands.push(String.raw`run_if_changed "poetry\.lock" "poetry install"`);
   }
@@ -108,10 +120,5 @@ async function core(config: PackageConfig): Promise<void> {
       'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma generate"'
     );
   }
-  const postMergeCommand = `${settings.postMerge}\n\n${postMergeCommands.join('\n')}\n`;
-  await promisePool.run(() =>
-    fs.promises.writeFile(path.resolve(dirPath, 'post-merge'), postMergeCommand, {
-      mode: 0o755,
-    })
-  );
+  return postMergeCommands;
 }

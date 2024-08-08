@@ -374,6 +374,10 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
   }
 
+  // Remove redundant parameters
+  if (job.with['dot_env_path'] === '.env') {
+    delete job.with['dot_env_path'];
+  }
   // Remove deprecated parameters
   migrateJob(job);
 
@@ -453,9 +457,6 @@ function migrateJob(job: Job): void {
   delete job.with['notify_discord'];
   delete job.with['require_fly'];
   delete job.with['require_gcloud'];
-  if (job.with['dot_env_path'] === '.env') {
-    delete job.with['dot_env_path'];
-  }
   delete job.with['cpu_arch'];
   delete job.with['label'];
   delete job.with['labelOperator'];
