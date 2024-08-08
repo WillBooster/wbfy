@@ -124,7 +124,7 @@ async function main(): Promise<void> {
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
       ...(rootConfig.isBun
-        ? [generateBunfigToml(), generateLefthook(rootConfig)]
+        ? [generateBunfigToml(rootConfig), generateLefthook(rootConfig)]
         : [generateHuskyrc(rootConfig), generateLintstagedrc(rootConfig)]),
     ]);
     await promisePool.promiseAll();
