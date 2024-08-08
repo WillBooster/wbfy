@@ -10,8 +10,9 @@ import { fixPrismaEnvFiles } from './fixers/prisma.js';
 import { fixTestDirectories } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { fixTypos } from './fixers/typos.js';
-import { generateVersionConfigs } from './generators/asdf.js';
+import { generateToolVersions } from './generators/asdf.js';
 import { generateBiomeJsonc } from './generators/biome.js';
+import { generateBunfigToml } from './generators/bunfig.js';
 import { generateDockerignore } from './generators/dockerignore.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
 import { generateEslintignore } from './generators/eslintignore.js';
@@ -20,6 +21,7 @@ import { generateGitattributes } from './generators/gitattributes.js';
 import { generateGitignore } from './generators/gitignore.js';
 import { generateHuskyrc } from './generators/huskyrc.js';
 import { generateIdeaSettings } from './generators/idea.js';
+import { generateLefthook } from './generators/lefthook.js';
 import { generateLintstagedrc } from './generators/lintstagedrc.js';
 import { generateNextConfigJson } from './generators/nextconfig.js';
 import { generatePackageJson } from './generators/packageJson.js';
@@ -101,9 +103,11 @@ async function main(): Promise<void> {
     }
 
     // Install tools via asdf at first
-    await generateVersionConfigs(rootConfig);
-    // Install yarn berry
-    await generateYarnrcYml(rootConfig);
+    await generateToolVersions(rootConfig);
+    if (!rootConfig.isBun) {
+      // Install yarn berry
+      await generateYarnrcYml(rootConfig);
+    }
     await Promise.all([
       fixDockerfile(rootConfig),
       fixPrismaEnvFiles(rootConfig),
@@ -112,15 +116,16 @@ async function main(): Promise<void> {
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),
       generateGitHubTemplates(rootConfig),
-      generateHuskyrc(rootConfig),
       generateIdeaSettings(rootConfig),
-      generateLintstagedrc(rootConfig),
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
       generateWorkflows(rootConfig),
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
+      ...(rootConfig.isBun
+        ? [generateBunfigToml(), generateLefthook(rootConfig)]
+        : [generateHuskyrc(rootConfig), generateLintstagedrc(rootConfig)]),
     ]);
     await promisePool.promiseAll();
 
@@ -143,7 +148,9 @@ async function main(): Promise<void> {
       await generatePrettierignore(config);
       await generatePackageJson(config, rootConfig, argv.skipDeps);
 
-      promises.push(generateLintstagedrc(config));
+      if (!rootConfig.isBun) {
+        promises.push(generateLintstagedrc(config));
+      }
       if (config.doesContainsVscodeSettingsJson && config.doesContainsPackageJson) {
         promises.push(generateVscodeSettings(config));
       }
@@ -170,10 +177,11 @@ async function main(): Promise<void> {
     await Promise.all(promises);
     await promisePool.promiseAll();
 
-    spawnSync('yarn', ['cleanup'], rootDirPath);
+    const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
+    spawnSync(packageManager, ['cleanup'], rootDirPath);
     // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock
     // corresponding to the contents of dependant sub-package in monorepo
-    spawnSync('yarn', ['install'], rootDirPath);
+    spawnSync(packageManager, ['install'], rootDirPath);
   }
 }
 

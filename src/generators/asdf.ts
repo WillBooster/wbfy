@@ -3,18 +3,19 @@ import path from 'node:path';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
+import { octokit } from '../utils/githubUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 import { convertVersionIntoNumber } from '../utils/version.js';
 import { JAVA_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
 
-export async function generateVersionConfigs(config: PackageConfig): Promise<void> {
+export async function generateToolVersions(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateVersionConfigs', async () => {
     await core(config);
   });
 }
 
-const CORE_TOOLS = new Set(['java', 'nodejs', 'python']);
+const CORE_TOOLS = new Set(['java', 'nodejs', 'bun', 'python']);
 const DEPRECATED_VERSION_PREFIXES = ['java', 'node', 'python'];
 
 async function core(config: PackageConfig): Promise<void> {
@@ -25,9 +26,11 @@ async function core(config: PackageConfig): Promise<void> {
     .split('\n')
     .map((line) => {
       const [name, version] = line.trim().split(/\s+/);
+      // To move the top of the list, we need to add a space.
       return `${CORE_TOOLS.has(name) ? ' ' : ''}${name} ${version}`;
     })
     .sort()
+    // Remove added spaces.
     .map((line) => line.trim());
   const lines = [...new Set(duplicatableLines)];
 
@@ -44,8 +47,13 @@ async function core(config: PackageConfig): Promise<void> {
     updateVersion(lines, 'java', JAVA_VERSION, true);
   }
   if (config.doesContainsPackageJson) {
-    const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
-    updateVersion(lines, 'yarn', version);
+    if (config.isBun) {
+      const version = await getLatestBunVersion();
+      if (version) updateVersion(lines, 'bun', version);
+    } else {
+      const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
+      updateVersion(lines, 'yarn', version);
+    }
   }
 
   for (const prefix of DEPRECATED_VERSION_PREFIXES) {
@@ -72,5 +80,28 @@ function updateVersion(lines: string[], toolName: string, newVersion: string, he
     }
   } else {
     lines.splice(head ? 0 : lines.length, 0, newLine);
+  }
+}
+
+async function getLatestBunVersion(): Promise<string | undefined> {
+  try {
+    // Fetch tags from the Bun repository
+    const response = await octokit.request('GET /repos/{owner}/{repo}/tags', {
+      owner: 'oven-sh',
+      repo: 'bun',
+      per_page: 1, // We only need the latest tag
+    });
+
+    const tags = response.data;
+    if (tags.length === 0) {
+      console.error('No tags found for Bun repository.');
+      return;
+    }
+
+    // The first tag should be the latest due to sorting
+    return tags[0].name;
+  } catch (error) {
+    console.error('Failed to fetch Bun tags due to:', error);
+    return;
   }
 }

@@ -197,7 +197,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
     devDependencies.push('typescript');
     if (config.isBun) {
-      devDependencies.push('bun-types');
+      devDependencies.push('@types/bun');
     }
   }
 
@@ -343,13 +343,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (!skipAddingDeps) {
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
+    const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
     if (dependencies.length > 0) {
-      spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
+      spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
     }
     // We cannot add devDependencies which are already included in dependencies.
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
-      spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
+      spawnSync(packageManager, ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
     if (poetryDevDependencies.length > 0) {
       spawnSync('poetry', ['add', '--group', 'dev', ...new Set(poetryDevDependencies)], config.dirPath);
@@ -398,45 +399,60 @@ async function removeDeprecatedStuff(
 }
 
 export function generateScripts(config: PackageConfig): Record<string, string> {
-  let scripts: Record<string, string> = {
-    cleanup: 'yarn format && yarn lint-fix',
-    format: `sort-package-json && yarn prettify`,
-    lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
-    'lint-fix': 'yarn lint --fix',
-    prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
-    typecheck: 'tsc --noEmit --Pretty',
-  };
-  if (config.doesContainsSubPackageJsons) {
-    const oldTest = scripts.test;
-    scripts = merge(
-      { ...scripts },
-      {
-        format: `sort-package-json && yarn prettify && yarn workspaces foreach --all --parallel --verbose run format`,
-        lint: `yarn workspaces foreach --all --parallel --verbose run lint`,
-        'lint-fix': 'yarn workspaces foreach --all --parallel --verbose run lint-fix',
-        prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
-          ','
-        )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-        // CI=1 prevents vitest from enabling watch.
-        // FORCE_COLOR=3 make wb enable color output.
-        test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --all --verbose run test',
-        typecheck: 'yarn workspaces foreach --all --parallel --verbose run typecheck',
-      }
-    );
-    if (oldTest?.includes('wb test')) {
-      scripts.test = oldTest;
+  if (config.isBun) {
+    const scripts: Record<string, string> = {
+      cleanup: 'bun --bun wb lint --fix --format',
+      format: `bun --bun wb lint --format`,
+      lint: `bun --bun wb lint`,
+      'lint-fix': 'bun --bun wb lint --fix',
+      test: 'bun --bun wb test',
+      typecheck: 'bun --bun wb typecheck',
+    };
+    if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
+      delete scripts.typecheck;
     }
-  } else if (config.depending.pyright) {
-    scripts.typecheck = scripts.typecheck ? `${scripts.typecheck} && ` : '';
-    scripts.typecheck += 'pyright';
-  }
+    return scripts;
+  } else {
+    let scripts: Record<string, string> = {
+      cleanup: 'yarn format && yarn lint-fix',
+      format: `sort-package-json && yarn prettify`,
+      lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
+      'lint-fix': 'yarn lint --fix',
+      prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
+      typecheck: 'tsc --noEmit --Pretty',
+    };
+    if (config.doesContainsSubPackageJsons) {
+      const oldTest = scripts.test;
+      scripts = merge(
+        { ...scripts },
+        {
+          format: `sort-package-json && yarn prettify && yarn workspaces foreach --all --parallel --verbose run format`,
+          lint: `yarn workspaces foreach --all --parallel --verbose run lint`,
+          'lint-fix': 'yarn workspaces foreach --all --parallel --verbose run lint-fix',
+          prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
+            ','
+          )}}" "!**/packages/**" "!**/test-fixtures/**"`,
+          // CI=1 prevents vitest from enabling watch.
+          // FORCE_COLOR=3 make wb enable color output.
+          test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --all --verbose run test',
+          typecheck: 'yarn workspaces foreach --all --parallel --verbose run typecheck',
+        }
+      );
+      if (oldTest?.includes('wb test')) {
+        scripts.test = oldTest;
+      }
+    } else if (config.depending.pyright) {
+      scripts.typecheck = scripts.typecheck ? `${scripts.typecheck} && ` : '';
+      scripts.typecheck += 'pyright';
+    }
 
-  if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
-    delete scripts.typecheck;
-  } else if (config.depending.wb) {
-    scripts.typecheck = 'wb typecheck';
+    if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
+      delete scripts.typecheck;
+    } else if (config.depending.wb) {
+      scripts.typecheck = 'wb typecheck';
+    }
+    return scripts;
   }
-  return scripts;
 }
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {
