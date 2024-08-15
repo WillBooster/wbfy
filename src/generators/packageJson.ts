@@ -90,7 +90,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config));
-  jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
+  if (config.isBun) {
+    delete jsonObj.scripts.prettify;
+  } else {
+    jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
+  }
   // Deal with breaking changes in yarn berry 4.0.0-rc.49
   for (const [key, value] of Object.entries(jsonObj.scripts)) {
     if (!value?.includes('yarn workspaces foreach')) continue;
@@ -105,20 +109,36 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   let dependencies: string[] = [];
-  let devDependencies = ['lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config'];
+  let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
   const poetryDevDependencies: string[] = [];
 
+  if (config.isBun) {
+    delete jsonObj.devDependencies['lint-staged'];
+  } else {
+    devDependencies.push('lint-staged');
+  }
+
   if (config.isRoot) {
-    // To install the latest pinst
-    devDependencies.push('husky');
-    // '|| true' avoids errors when husky is not installed.
-    jsonObj.scripts['prepare'] = 'husky || true'; // for non-yarn package managers.
-    jsonObj.scripts['postinstall'] = 'husky || true'; // for yarn.
-    if (config.isPublicRepo || config.isReferredByOtherRepo) {
-      // https://typicode.github.io/husky/#/?id=install-1
-      devDependencies.push('pinst');
-      jsonObj.scripts['prepack'] = 'pinst --disable';
-      jsonObj.scripts['postpack'] = 'pinst --enable';
+    if (config.isBun) {
+      jsonObj.scripts.prepare = 'lefthook install || true';
+      delete jsonObj.devDependencies['husky'];
+      delete jsonObj.devDependencies['pinst'];
+      delete jsonObj.scripts.postinstall;
+      delete jsonObj.scripts.prepack;
+      delete jsonObj.scripts.postpack;
+    } else {
+      // To install the latest husky
+      devDependencies.push('husky');
+      // '|| true' avoids errors when husky is not installed.
+      jsonObj.scripts.prepare = 'husky || true'; // for non-yarn package managers.
+      jsonObj.scripts.postinstall = 'husky || true'; // for yarn.
+      if (config.isPublicRepo || config.isReferredByOtherRepo) {
+        // To install the latest pinst
+        // https://typicode.github.io/husky/#/?id=install-1
+        devDependencies.push('pinst');
+        jsonObj.scripts.prepack = 'pinst --disable';
+        jsonObj.scripts.postpack = 'pinst --enable';
+      }
     }
     if (config.depending.semanticRelease) {
       const version =
@@ -183,15 +203,22 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     config.doesContainsTypeScript ||
     config.doesContainsTypeScriptInPackages
   ) {
-    devDependencies.push('eslint@8.57.0', 'micromatch');
-    // TODO: not needed anymore?
-    if (config.doesContainsTypeScriptInPackages) {
-      devDependencies.push('@typescript-eslint/parser');
+    if (config.isBun) {
+      devDependencies.push('@biomejs/biome', '@willbooster/biome-config');
+    } else {
+      devDependencies.push('eslint@8.57.0', 'micromatch');
+      // TODO: not needed anymore?
+      if (config.doesContainsTypeScriptInPackages) {
+        devDependencies.push('@typescript-eslint/parser');
+      }
     }
   }
 
   if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
     devDependencies.push('typescript');
+    if (config.isBun) {
+      devDependencies.push('@types/bun');
+    }
   }
 
   if (config.eslintBase) {
@@ -336,13 +363,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (!skipAddingDeps) {
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
+    const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
     if (dependencies.length > 0) {
-      spawnSync('yarn', ['add', ...new Set(dependencies)], config.dirPath);
+      spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
     }
     // We cannot add devDependencies which are already included in dependencies.
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
-      spawnSync('yarn', ['add', '-D', ...new Set(devDependencies)], config.dirPath);
+      spawnSync(packageManager, ['add', '-D', ...new Set(devDependencies)], config.dirPath);
     }
     if (poetryDevDependencies.length > 0) {
       spawnSync('poetry', ['add', '--group', 'dev', ...new Set(poetryDevDependencies)], config.dirPath);
@@ -391,45 +419,60 @@ async function removeDeprecatedStuff(
 }
 
 export function generateScripts(config: PackageConfig): Record<string, string> {
-  let scripts: Record<string, string> = {
-    cleanup: 'yarn format && yarn lint-fix',
-    format: `sort-package-json && yarn prettify`,
-    lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
-    'lint-fix': 'yarn lint --fix',
-    prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
-    typecheck: 'tsc --noEmit --Pretty',
-  };
-  if (config.doesContainsSubPackageJsons) {
-    const oldTest = scripts.test;
-    scripts = merge(
-      { ...scripts },
-      {
-        format: `sort-package-json && yarn prettify && yarn workspaces foreach --all --parallel --verbose run format`,
-        lint: `yarn workspaces foreach --all --parallel --verbose run lint`,
-        'lint-fix': 'yarn workspaces foreach --all --parallel --verbose run lint-fix',
-        prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
-          ','
-        )}}" "!**/packages/**" "!**/test-fixtures/**"`,
-        // CI=1 prevents vitest from enabling watch.
-        // FORCE_COLOR=3 make wb enable color output.
-        test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --all --verbose run test',
-        typecheck: 'yarn workspaces foreach --all --parallel --verbose run typecheck',
-      }
-    );
-    if (oldTest?.includes('wb test')) {
-      scripts.test = oldTest;
+  if (config.isBun) {
+    const scripts: Record<string, string> = {
+      cleanup: 'bun --bun wb lint --fix --format',
+      format: `bun --bun wb lint --format`,
+      lint: `bun --bun wb lint`,
+      'lint-fix': 'bun --bun wb lint --fix',
+      test: 'bun --bun wb test',
+      typecheck: 'bun --bun wb typecheck',
+    };
+    if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
+      delete scripts.typecheck;
     }
-  } else if (config.depending.pyright) {
-    scripts.typecheck = scripts.typecheck ? `${scripts.typecheck} && ` : '';
-    scripts.typecheck += 'pyright';
-  }
+    return scripts;
+  } else {
+    let scripts: Record<string, string> = {
+      cleanup: 'yarn format && yarn lint-fix',
+      format: `sort-package-json && yarn prettify`,
+      lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
+      'lint-fix': 'yarn lint --fix',
+      prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
+      typecheck: 'tsc --noEmit --Pretty',
+    };
+    if (config.doesContainsSubPackageJsons) {
+      const oldTest = scripts.test;
+      scripts = merge(
+        { ...scripts },
+        {
+          format: `sort-package-json && yarn prettify && yarn workspaces foreach --all --parallel --verbose run format`,
+          lint: `yarn workspaces foreach --all --parallel --verbose run lint`,
+          'lint-fix': 'yarn workspaces foreach --all --parallel --verbose run lint-fix',
+          prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
+            ','
+          )}}" "!**/packages/**" "!**/test-fixtures/**"`,
+          // CI=1 prevents vitest from enabling watch.
+          // FORCE_COLOR=3 make wb enable color output.
+          test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --all --verbose run test',
+          typecheck: 'yarn workspaces foreach --all --parallel --verbose run typecheck',
+        }
+      );
+      if (oldTest?.includes('wb test')) {
+        scripts.test = oldTest;
+      }
+    } else if (config.depending.pyright) {
+      scripts.typecheck = scripts.typecheck ? `${scripts.typecheck} && ` : '';
+      scripts.typecheck += 'pyright';
+    }
 
-  if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
-    delete scripts.typecheck;
-  } else if (config.depending.wb) {
-    scripts.typecheck = 'wb typecheck';
+    if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
+      delete scripts.typecheck;
+    } else if (config.depending.wb) {
+      scripts.typecheck = 'wb typecheck';
+    }
+    return scripts;
   }
-  return scripts;
 }
 
 async function generatePrettierSuffix(dirPath: string): Promise<string> {
