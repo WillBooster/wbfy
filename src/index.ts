@@ -92,7 +92,9 @@ async function main(): Promise<void> {
     }
     const abbreviationPromise = fixTypos(rootConfig);
 
-    const nullableSubPackageConfigs = await Promise.all(subDirPaths.map((subDirPath) => getPackageConfig(subDirPath)));
+    const nullableSubPackageConfigs = await Promise.all(
+      subDirPaths.map((subDirPath) => getPackageConfig(subDirPath, rootConfig))
+    );
     const subPackageConfigs = nullableSubPackageConfigs.filter((config) => !!config) as PackageConfig[];
     const allPackageConfigs = [rootConfig, ...subPackageConfigs];
 

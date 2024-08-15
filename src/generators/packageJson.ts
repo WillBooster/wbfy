@@ -205,6 +205,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   ) {
     if (config.isBun) {
       devDependencies.push('@biomejs/biome', '@willbooster/biome-config');
+      delete jsonObj.devDependencies['eslint'];
+      delete jsonObj.devDependencies['micromatch'];
+      delete jsonObj.devDependencies['@typescript-eslint/parser'];
     } else {
       devDependencies.push('eslint@8.57.0', 'micromatch');
       // TODO: not needed anymore?
@@ -363,7 +366,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (!skipAddingDeps) {
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
-    const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
+    const packageManager = config.isBun ? 'bun' : 'yarn';
     if (dependencies.length > 0) {
       spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
     }
