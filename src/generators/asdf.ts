@@ -10,7 +10,7 @@ import { convertVersionIntoNumber } from '../utils/version.js';
 import { JAVA_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
 
 export async function generateToolVersions(config: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('generateVersionConfigs', async () => {
+  return logger.functionIgnoringException('generateToolVersions', async () => {
     await core(config);
   });
 }
@@ -88,22 +88,14 @@ function updateVersion(lines: string[], toolName: string, newVersion: string, he
 
 async function getLatestVersionFromTagOnGitHub(organization: string, repository: string): Promise<string | undefined> {
   try {
-    // Fetch tags from the repository
-    const response = await octokit.request('GET /repos/{owner}/{repo}/tags', {
+    // Fetch the latest release from the repository
+    const response = await octokit.request('GET /repos/{owner}/{repo}/releases/latest', {
       owner: organization,
       repo: repository,
-      per_page: 1, // We only need the latest tag
     });
-
-    const tags = response.data;
-    if (tags.length === 0) {
-      console.error('No tags found for Bun repository.');
-      return;
-    }
-
-    // The first tag should be the latest due to sorting
-    const version = tags[0].name;
-    const versionNumberText = version.startsWith('v') ? version.slice(1) : version;
+    const version = response.data.tag_name;
+    const index = version.lastIndexOf('v');
+    const versionNumberText = index >= 0 ? version.slice(index + 1) : version;
     // Check the first character is a number
     return /^\d/.test(versionNumberText) ? versionNumberText : undefined;
   } catch (error) {
