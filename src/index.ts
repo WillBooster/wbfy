@@ -104,11 +104,6 @@ async function main(): Promise<void> {
 
     // Install tools via asdf at first
     await generateToolVersions(rootConfig);
-
-    if (Math.random() > 0) {
-      process.exit(0);
-    }
-
     if (!rootConfig.isBun) {
       // Install yarn berry
       await generateYarnrcYml(rootConfig);
