@@ -256,16 +256,18 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj.main = './src';
   }
 
-  // Since `"resolutions": { "npm/chalk": "^4.1.2" },` causes "Invalid npm token"
+  // Because `"resolutions": { "npm/chalk": "^4.1.2" },` causes "Invalid npm token"
   delete jsonObj.resolutions?.['npm/chalk'];
 
   if (!config.doesContainsSubPackageJsons) {
-    if (!config.doesContainsJavaScript && !config.doesContainsTypeScript) {
-      delete jsonObj.scripts.lint;
-      delete jsonObj.scripts['lint-fix'];
-      jsonObj.scripts.cleanup = jsonObj.scripts.cleanup?.replace(' && yarn lint-fix', '');
-    } else {
-      jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
+    if (!config.isBun) {
+      if (!config.doesContainsJavaScript && !config.doesContainsTypeScript) {
+        delete jsonObj.scripts.lint;
+        delete jsonObj.scripts['lint-fix'];
+        jsonObj.scripts.cleanup = jsonObj.scripts.cleanup?.replace(' && yarn lint-fix', '');
+      } else {
+        jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
+      }
     }
 
     if (config.doesContainsPubspecYaml) {
