@@ -165,10 +165,12 @@ async function main(): Promise<void> {
       ) {
         if (rootConfig.isBun) {
           promises.push(generateBiomeJsonc(config));
-        } else if (!rootConfig.isWillBoosterConfigs) {
-          promises.push(generateEslintrc(config, rootConfig));
+        } else {
+          if (!rootConfig.isWillBoosterConfigs) {
+            promises.push(generateEslintrc(config, rootConfig));
+          }
+          promises.push(generateEslintignore(config));
         }
-        promises.push(generateEslintignore(config));
       }
       if (config.depending.pyright) {
         promises.push(generatePyrightConfigJson(config));

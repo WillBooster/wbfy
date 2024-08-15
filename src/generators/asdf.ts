@@ -48,8 +48,11 @@ async function core(config: PackageConfig): Promise<void> {
   }
   if (config.doesContainsPackageJson) {
     if (config.isBun) {
-      const version = await getLatestBunVersion();
-      if (version) updateVersion(lines, 'bun', version);
+      const lefthookVersion = await getLatestVersionFromTagOnGitHub('evilmartians', 'lefthook');
+      if (lefthookVersion) updateVersion(lines, 'lefthook', lefthookVersion);
+
+      const bunVersion = await getLatestVersionFromTagOnGitHub('oven-sh', 'bun');
+      if (bunVersion) updateVersion(lines, 'bun', bunVersion);
     } else {
       const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
       updateVersion(lines, 'yarn', version);
@@ -83,12 +86,12 @@ function updateVersion(lines: string[], toolName: string, newVersion: string, he
   }
 }
 
-async function getLatestBunVersion(): Promise<string | undefined> {
+async function getLatestVersionFromTagOnGitHub(organization: string, repository: string): Promise<string | undefined> {
   try {
-    // Fetch tags from the Bun repository
+    // Fetch tags from the repository
     const response = await octokit.request('GET /repos/{owner}/{repo}/tags', {
-      owner: 'oven-sh',
-      repo: 'bun',
+      owner: organization,
+      repo: repository,
       per_page: 1, // We only need the latest tag
     });
 
@@ -99,7 +102,10 @@ async function getLatestBunVersion(): Promise<string | undefined> {
     }
 
     // The first tag should be the latest due to sorting
-    return tags[0].name;
+    const version = tags[0].name;
+    const versionNumberText = version.startsWith('v') ? version.slice(1) : version;
+    // Check the first character is a number
+    return /^\d/.test(versionNumberText) ? versionNumberText : undefined;
   } catch (error) {
     console.error('Failed to fetch Bun tags due to:', error);
     return;

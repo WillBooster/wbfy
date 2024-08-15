@@ -38,6 +38,8 @@ const newSettings = {
 const scripts = {
   prePush: `bun --bun node_modules/.bin/wb typecheck`,
   prePushForLab: `
+#!/bin/bash
+
 if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
   echo "************************************************"
   echo "*** Don't push main branch directly. Use PR! ***"
@@ -48,6 +50,8 @@ fi
 bun --bun node_modules/.bin/wb typecheck
 `.trim(),
   postMerge: `
+#!/bin/bash
+
 changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
 
 run_if_changed() {

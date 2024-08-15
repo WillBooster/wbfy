@@ -90,7 +90,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config));
-  jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
+  if (config.isBun) {
+    delete jsonObj.scripts.prettify;
+  } else {
+    jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
+  }
   // Deal with breaking changes in yarn berry 4.0.0-rc.49
   for (const [key, value] of Object.entries(jsonObj.scripts)) {
     if (!value?.includes('yarn workspaces foreach')) continue;
@@ -105,20 +109,36 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   let dependencies: string[] = [];
-  let devDependencies = ['lint-staged', 'prettier', 'sort-package-json', '@willbooster/prettier-config'];
+  let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
   const poetryDevDependencies: string[] = [];
 
+  if (config.isBun) {
+    delete jsonObj.devDependencies['lint-staged'];
+  } else {
+    devDependencies.push('lint-staged');
+  }
+
   if (config.isRoot) {
-    // To install the latest pinst
-    devDependencies.push('husky');
-    // '|| true' avoids errors when husky is not installed.
-    jsonObj.scripts['prepare'] = 'husky || true'; // for non-yarn package managers.
-    jsonObj.scripts['postinstall'] = 'husky || true'; // for yarn.
-    if (config.isPublicRepo || config.isReferredByOtherRepo) {
-      // https://typicode.github.io/husky/#/?id=install-1
-      devDependencies.push('pinst');
-      jsonObj.scripts['prepack'] = 'pinst --disable';
-      jsonObj.scripts['postpack'] = 'pinst --enable';
+    if (config.isBun) {
+      jsonObj.scripts.prepare = 'lefthook install || true';
+      delete jsonObj.devDependencies['husky'];
+      delete jsonObj.devDependencies['pinst'];
+      delete jsonObj.scripts.postinstall;
+      delete jsonObj.scripts.prepack;
+      delete jsonObj.scripts.postpack;
+    } else {
+      // To install the latest husky
+      devDependencies.push('husky');
+      // '|| true' avoids errors when husky is not installed.
+      jsonObj.scripts.prepare = 'husky || true'; // for non-yarn package managers.
+      jsonObj.scripts.postinstall = 'husky || true'; // for yarn.
+      if (config.isPublicRepo || config.isReferredByOtherRepo) {
+        // To install the latest pinst
+        // https://typicode.github.io/husky/#/?id=install-1
+        devDependencies.push('pinst');
+        jsonObj.scripts.prepack = 'pinst --disable';
+        jsonObj.scripts.postpack = 'pinst --enable';
+      }
     }
     if (config.depending.semanticRelease) {
       const version =
