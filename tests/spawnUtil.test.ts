@@ -10,9 +10,9 @@ const testFixturePackageRoot = path.resolve('..', 'test-fixtures-for-wbfy', 'pac
 
 test.each`
   dirPath                       | expected
-  ${'yarn1'}                    | ${'1.22.19'}
-  ${'yarn1-with-node-version'}  | ${'1.22.19'}
-  ${'yarn1-with-tool-versions'} | ${'1.22.19'}
+  ${'yarn1'}                    | ${'1.22.22'}
+  ${'yarn1-with-node-version'}  | ${'1.22.22'}
+  ${'yarn1-with-tool-versions'} | ${'1.22.22'}
   ${'berry'}                    | ${'3.2.1'}
   ${'berry-with-node-version'}  | ${'3.2.1'}
   ${'berry-with-tool-versions'} | ${'3.2.1'}
