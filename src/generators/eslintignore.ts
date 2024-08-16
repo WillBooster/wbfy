@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 
 import { logger } from '../logger.js';
@@ -24,6 +25,11 @@ test-fixtures/
 export async function generateEslintignore(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateEslintignore', async () => {
     const filePath = path.resolve(config.dirPath, '.eslintignore');
+    if (config.isBun) {
+      await promisePool.run(() => fs.promises.rm(filePath, { force: true }));
+      return;
+    }
+
     const content = (await fsUtil.readFileIgnoringError(filePath)) ?? '';
     const headUserContent = ignoreFileUtil.getHeadUserContent(content);
     const tailUserContent = ignoreFileUtil.getTailUserContent(content);

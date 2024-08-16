@@ -106,10 +106,8 @@ async function main(): Promise<void> {
 
     // Install tools via asdf at first
     await generateToolVersions(rootConfig);
-    if (!rootConfig.isBun) {
-      // Install yarn berry
-      await generateYarnrcYml(rootConfig);
-    }
+    // Install yarn berry
+    await generateYarnrcYml(rootConfig);
     await Promise.all([
       fixDockerfile(rootConfig),
       fixPrismaEnvFiles(rootConfig),
@@ -125,9 +123,9 @@ async function main(): Promise<void> {
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
-      ...(rootConfig.isBun
-        ? [generateBunfigToml(rootConfig), generateLefthook(rootConfig)]
-        : [generateHuskyrc(rootConfig), generateLintstagedrc(rootConfig)]),
+      ...(rootConfig.isBun ? [generateBunfigToml(rootConfig), generateLefthook(rootConfig)] : []),
+      generateHuskyrc(rootConfig),
+      generateLintstagedrc(rootConfig),
     ]);
     await promisePool.promiseAll();
 
@@ -150,9 +148,7 @@ async function main(): Promise<void> {
       await generatePrettierignore(config);
       await generatePackageJson(config, rootConfig, argv.skipDeps);
 
-      if (!rootConfig.isBun) {
-        promises.push(generateLintstagedrc(config));
-      }
+      promises.push(generateLintstagedrc(config));
       if (config.doesContainsVscodeSettingsJson && config.doesContainsPackageJson) {
         promises.push(generateVscodeSettings(config));
       }
@@ -167,12 +163,11 @@ async function main(): Promise<void> {
       ) {
         if (rootConfig.isBun) {
           promises.push(generateBiomeJsonc(config));
-        } else {
-          if (!rootConfig.isWillBoosterConfigs) {
-            promises.push(generateEslintrc(config, rootConfig));
-          }
-          promises.push(generateEslintignore(config));
         }
+        if (!rootConfig.isWillBoosterConfigs) {
+          promises.push(generateEslintrc(config, rootConfig));
+        }
+        promises.push(generateEslintignore(config));
       }
       if (config.depending.pyright) {
         promises.push(generatePyrightConfigJson(config));

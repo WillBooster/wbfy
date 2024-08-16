@@ -11,6 +11,12 @@ import { promisePool } from '../utils/promisePool.js';
 
 export async function generateEslintrc(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateEslintrc', async () => {
+    const filePath = path.resolve(config.dirPath, '.eslintrc.json');
+    if (config.isBun) {
+      await promisePool.run(() => fs.promises.rm(filePath, { force: true }));
+      return;
+    }
+
     const bases = [];
     if (config.eslintBase) {
       bases.push(config.eslintBase);
@@ -20,7 +26,6 @@ export async function generateEslintrc(config: PackageConfig, rootConfig: Packag
     }
     let newSettings = { root: true, extends: bases };
 
-    const filePath = path.resolve(config.dirPath, '.eslintrc.json');
     try {
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(oldContent);

@@ -16,6 +16,12 @@ export async function generateLintstagedrc(config: PackageConfig): Promise<void>
 }
 
 async function core(config: PackageConfig): Promise<void> {
+  const filePath = path.resolve(config.dirPath, '.lintstagedrc.cjs');
+  if (config.isBun) {
+    await promisePool.run(() => fs.promises.rm(filePath, { force: true }));
+    return;
+  }
+
   const packagePrefix = config.isRoot ? 'node node_modules/.bin/' : 'node ../../node_modules/.bin/';
   const lines: string[] = [];
   if (config.doesContainsJavaScript || config.doesContainsTypeScript) {
@@ -60,7 +66,6 @@ module.exports = {${lines.join('')}
 };
 `;
 
-  const filePath = path.resolve(config.dirPath, '.lintstagedrc.cjs');
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.js'), { force: true }));
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.lintstagedrc.json'), { force: true }));
   await promisePool.run(() => fsUtil.generateFile(filePath, newContent));

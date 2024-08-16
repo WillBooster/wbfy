@@ -55,6 +55,11 @@ async function core(config: PackageConfig): Promise<void> {
     fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
     fs.promises.rm(dirPath, { force: true, recursive: true }),
   ]);
+  if (config.isBun) {
+    spawnSync('git', ['config', '--unset', 'core.hooksPath'], config.dirPath);
+    return;
+  }
+
   spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');

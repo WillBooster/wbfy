@@ -24,6 +24,15 @@ interface Plugin {
 
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateYarnrcYml', async () => {
+    const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
+    if (config.isBun) {
+      await promisePool.run(() => fs.promises.rm(yarnrcYmlPath, { force: true }));
+      await promisePool.run(() =>
+        fs.promises.rm(path.resolve(config.dirPath, '.yarn'), { force: true, recursive: true })
+      );
+      return;
+    }
+
     const currentVersion = spawnSyncWithStringResult('yarn', ['--version'], config.dirPath);
     const latestVersion = getLatestVersion('@yarnpkg/cli', config.dirPath);
     if (getMajorNumber(currentVersion) <= getMajorNumber(latestVersion) && currentVersion !== latestVersion) {
@@ -42,7 +51,6 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     const yarnrcPath = path.resolve(config.dirPath, '.yarnrc');
     await promisePool.run(() => fs.promises.rm(yarnrcPath, { force: true }));
 
-    const yarnrcYmlPath = path.resolve(config.dirPath, '.yarnrc.yml');
     const settings = yaml.load(await fs.promises.readFile(yarnrcYmlPath, 'utf8')) as Settings;
     settings.defaultSemverRangePrefix = '';
     settings.nodeLinker = 'node-modules';
