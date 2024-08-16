@@ -30,6 +30,9 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       await promisePool.run(() =>
         fs.promises.rm(path.resolve(config.dirPath, '.yarn'), { force: true, recursive: true })
       );
+      await promisePool.run(() =>
+        fs.promises.rm(path.resolve(config.dirPath, 'yarn.lock'), { force: true, recursive: true })
+      );
       return;
     }
 
