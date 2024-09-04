@@ -42,7 +42,7 @@ ${extensions.prettier.map((ext) => createTaskOptions('node', 'node_modules/.bin/
 const biomeContent = `<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-${extensions.prettier.map((ext) => createTaskOptions('bun', 'node_modules/.bin/biome check --fix --no-errors-on-unmatched', 'Biome', ext)).join('')}
+${extensions.prettier.map((ext) => createTaskOptions('bun', '--bun node_modules/.bin/biome check --fix --no-errors-on-unmatched', 'Biome', ext)).join('')}
   </component>
 </project>
 `;

@@ -19,7 +19,6 @@ const commonContent = `
 .devcontainer/
 dist/
 temp/
-
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
@@ -141,7 +140,7 @@ android/app/src/main/assets/
     if (rootConfig.depending.reactNative || config.depending.reactNative || config.doesContainsPubspecYaml) {
       generated = generated.replaceAll(/^(.idea\/.+)$/gm, '$1\nandroid/$1');
     }
-    const newContent = headUserContent + generated + tailUserContent;
+    const newContent = headUserContent + '\n' + generated + tailUserContent;
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }
