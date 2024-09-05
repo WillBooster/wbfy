@@ -34,10 +34,22 @@ Close #<IssueNumber>
 
 ## Steps to Test
 
-1. Open the top page.
-2. Login \`dev@willbooster.com\` if not yet.
-3. Click \`Lessons\`.
-4. ...
+1. Open http://localhost-exercode.willbooster.net:3000/ja-JP/courses/_example/lessons/_example_a_plus_b/problems/_example_a_plus_b after login.
+2. Select the language \`C\`.
+3. Write the following code:
+   \`\`\`c
+   #include <stdio.h>
+
+   int main(void) {
+     int a, b;
+
+     scanf("%d %d", &a, &b);
+     printf("%d", a + b);
+     return 0;
+   }
+   \`\`\`
+4. Push \`Submit\` button.
+5. ...
 
 <!-- 日本語で記述しても大丈夫です。 -->
 `.trim(),
