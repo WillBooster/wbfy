@@ -14,19 +14,32 @@ Close #<IssueNumber>
 
 ## Self Check
 
-- [ ] I've confirmed \`All checks have passed\` on PR page. (You may leave this box unchecked due to long workflows.)
+- [ ] I've confirmed \`All checks have passed\` on this page. （このページで \`All checks have passed\` が表示されていることを確認した。）
+  - You may leave this box unchecked due to long workflows.
   - PR title follows [Angular's commit message format](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format).
     - PR title doesn't have \`WIP:\`.
   - All tests are passed.
     - Test command (e.g., \`yarn test\`) is passed.
     - Lint command (e.g., \`yarn lint\`) is passed.
-- [ ] I've reviewed my changes on PR's diff view.
+- [ ] I've reviewed my changes on GitHub PR's diff view. （GitHub上で自分の変更内容を確認した。）
+- [ ] I've written the steps to test. （テスト手順を記載した。）
+- [ ] I've added screenshots. （UIを変更した場合、スクリーンショットを追加した。）
+  - You may leave this box unchecked if you didn't modify the UI.
 
 <!-- Please add screenshots if you modify the UI.
 | Current                  | In coming                |
 | ------------------------ | ------------------------ |
 | <img src="" width="400"> | <img src="" width="400"> |
 -->
+
+## Steps to Test
+
+1. Open the top page.
+2. Login \`dev@willbooster.com\` if not yet.
+3. Click \`Lessons\`.
+4. ...
+
+<!-- 日本語で記述しても大丈夫です。 -->
 `.trim(),
 };
 
