@@ -41,7 +41,7 @@
     "libsodium-wrappers": "0.7.15",
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "4.1.1",
-    "simple-git": "3.25.0",
+    "simple-git": "3.26.0",
     "yargs": "17.7.2",
     "zod": "3.23.8"
   },
@@ -52,7 +52,7 @@
     "@types/libsodium-wrappers": "0.7.14",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/micromatch": "4.0.9",
-    "@types/node": "20.16.2",
+    "@types/node": "20.16.5",
     "@types/yargs": "17.0.33",
     "@typescript-eslint/eslint-plugin": "8.4.0",
     "@typescript-eslint/parser": "8.4.0",
