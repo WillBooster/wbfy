@@ -3500,12 +3500,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.16.2":
-  version: 20.16.2
-  resolution: "@types/node@npm:20.16.2"
+"@types/node@npm:20.16.5":
+  version: 20.16.5
+  resolution: "@types/node@npm:20.16.5"
   dependencies:
     undici-types: "npm:~6.19.2"
-  checksum: 10c0/74fac185dbd2c6b301cde75747c1cd6c9ca1ad7266147ea107a798837f40b8a05991177ebd7925fc7450d51334096259d186afad6e0d22864b7c97f8afef6ba7
+  checksum: 10c0/6af7994129815010bcbc4cf8221865559c8116ff43e74a6549525c2108267596fc2d18aff5d5ecfe089fb60a119f975631343e2c65c52bfa0955ed9dc56733d6
   languageName: node
   linkType: hard
 
@@ -10730,14 +10730,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-git@npm:3.25.0":
-  version: 3.25.0
-  resolution: "simple-git@npm:3.25.0"
+"simple-git@npm:3.26.0":
+  version: 3.26.0
+  resolution: "simple-git@npm:3.26.0"
   dependencies:
     "@kwsites/file-exists": "npm:^1.1.1"
     "@kwsites/promise-deferred": "npm:^1.1.1"
     debug: "npm:^4.3.5"
-  checksum: 10c0/2087dddac041eac6330cbb7fafea21f3e45786ea54e50ae07a49ba6a7134298e12727e5e4b6580310b679c7cb4f2a83804c04e7eab247eeabcd48d33b7885e16
+  checksum: 10c0/fa45c9ff26c45aa7390f69610e27c1ae474b3881977828009fe41b7ffe8ce371cc108b818b2153815299deffefed591e9148cfdad92d8ddb60ca29eaefaf5827
   languageName: node
   linkType: hard
 
@@ -12051,7 +12051,7 @@ __metadata:
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.9"
-    "@types/node": "npm:20.16.2"
+    "@types/node": "npm:20.16.5"
     "@types/yargs": "npm:17.0.33"
     "@typescript-eslint/eslint-plugin": "npm:8.4.0"
     "@typescript-eslint/parser": "npm:8.4.0"
@@ -12083,7 +12083,7 @@ __metadata:
     pinst: "npm:3.0.0"
     prettier: "npm:3.3.3"
     semantic-release: "npm:24.1.0"
-    simple-git: "npm:3.25.0"
+    simple-git: "npm:3.26.0"
     sort-package-json: "npm:2.10.1"
     ts-node: "npm:10.9.2"
     type-fest: "npm:4.26.0"
