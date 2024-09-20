@@ -41,7 +41,7 @@
     "libsodium-wrappers": "0.7.15",
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "4.1.1",
-    "simple-git": "3.26.0",
+    "simple-git": "3.27.0",
     "yargs": "17.7.2",
     "zod": "3.23.8"
   },
