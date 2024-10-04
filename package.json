@@ -79,7 +79,7 @@
     "ts-node": "10.9.2",
     "type-fest": "4.26.1",
     "typescript": "5.6.2",
-    "vitest": "2.1.1"
+    "vitest": "2.1.2"
   },
   "packageManager": "yarn@4.5.0",
   "engines": {
