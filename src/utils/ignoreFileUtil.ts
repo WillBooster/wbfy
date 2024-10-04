@@ -38,7 +38,7 @@ export const ignoreFileUtil = {
   },
   getHeadUserContent(content: string): string {
     const index = content.indexOf(this.separatorPrefix);
-    if (index >= 0) {
+    if (index !== -1) {
       return content
         .slice(0, content.indexOf('\n', index) + 1)
         .replaceAll(userContentHeaderRegex, `${userContentHeader} (head)\n`);

@@ -76,13 +76,13 @@ async function core(config: PackageConfig): Promise<void> {
 function updateVersion(lines: string[], toolName: string, newVersion: string, head = false): void {
   const index = lines.findIndex((l) => l.split(/\s+/)[0] === toolName);
   const newLine = `${toolName} ${newVersion}`;
-  if (index >= 0) {
+  if (index === -1) {
+    lines.splice(head ? 0 : lines.length, 0, newLine);
+  } else {
     const [, version] = lines[index].split(/\s+/);
     if (convertVersionIntoNumber(newVersion) > convertVersionIntoNumber(version)) {
       lines[index] = newLine;
     }
-  } else {
-    lines.splice(head ? 0 : lines.length, 0, newLine);
   }
 }
 
@@ -95,7 +95,7 @@ async function getLatestVersionFromTagOnGitHub(organization: string, repository:
     });
     const version = response.data.tag_name;
     const index = version.lastIndexOf('v');
-    const versionNumberText = index >= 0 ? version.slice(index + 1) : version;
+    const versionNumberText = index === -1 ? version : version.slice(index + 1);
     // Check the first character is a number
     return /^\d/.test(versionNumberText) ? versionNumberText : undefined;
   } catch (error) {

@@ -484,7 +484,7 @@ async function generatePrettierSuffix(dirPath: string): Promise<string> {
   const filePath = path.resolve(dirPath, '.prettierignore');
   const existingContent = await fs.promises.readFile(filePath, 'utf8');
   const index = existingContent.indexOf(ignoreFileUtil.separatorPrefix);
-  if (index < 0) return '';
+  if (index === -1) return '';
 
   const originalContent = existingContent.slice(0, index);
   const lines = originalContent
