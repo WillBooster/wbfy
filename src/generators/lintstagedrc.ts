@@ -41,7 +41,18 @@ async function core(config: PackageConfig): Promise<void> {
       commands.push('${packagePrefix}sort-package-json');
     }
     return commands;
-  },`);
+  },
+  './**/migration.sql': (files) => {
+  for (const file of files) {
+    const content = fs.readFileSync(file, 'utf-8');
+    if (content.includes('Warnings:')) {
+      return [
+        \`!!! '\${path.relative('', file)}' contains 'Warnings:' !!! Please solve the warnings and commit again.\`,
+      ];
+    }
+  }
+  return [];
+},`);
   if (config.doesContainsPubspecYaml) {
     lines.push(`
   './{lib,test,test_driver}/**/*.dart': files => {
