@@ -202,12 +202,7 @@ export async function getPackageConfig(
           releasePlugins.length > 0
         ),
         storybook: !!devDependencies['@storybook/react'],
-        wb:
-          !!dependencies['@willbooster/wb'] ||
-          !!devDependencies['@willbooster/wb'] ||
-          // TODO: remove the following migration code in future
-          !!dependencies['@willbooster/shared-scripts'] ||
-          !!devDependencies['@willbooster/shared-scripts'],
+        wb: !!dependencies['@willbooster/wb'] || !!devDependencies['@willbooster/wb'],
       },
       release: {
         branches: releaseBranches,

@@ -186,8 +186,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
     }
   }
-  if (config.depending.wb) {
-    if (jsonObj.dependencies['@willbooster/shared-scripts'] || jsonObj.dependencies['@willbooster/wb']) {
+  if (config.depending.wb || config.isBun) {
+    if (jsonObj.dependencies['@willbooster/wb']) {
       dependencies.push('@willbooster/wb');
     } else {
       devDependencies.push('@willbooster/wb');
@@ -396,12 +396,10 @@ async function removeDeprecatedStuff(
   delete jsonObj.scripts['typecheck/warn'];
   delete jsonObj.scripts['typecheck:gen-code'];
   delete jsonObj.scripts['typecheck:codegen'];
-  delete jsonObj.dependencies['@willbooster/shared-scripts'];
   delete jsonObj.dependencies['tslib'];
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/renovate-config'];
-  delete jsonObj.devDependencies['@willbooster/shared-scripts'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
   delete jsonObj.devDependencies['eslint-import-resolver-node'];
   delete jsonObj.devDependencies['eslint-plugin-prettier'];

@@ -71,8 +71,8 @@ run_if_changed() {
 `.trim(),
 };
 
-export async function generateLefthook(config: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('generateLefthook', async () => {
+export async function generateLefthookUpdatingPackageJson(config: PackageConfig): Promise<void> {
+  return logger.functionIgnoringException('generateLefthookUpdatingPackageJson', async () => {
     await core(config);
   });
 }

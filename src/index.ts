@@ -7,7 +7,7 @@ import yargs from 'yargs';
 import { fixDockerfile } from './fixers/dockerfile.js';
 import { fixPlaywrightConfig } from './fixers/playwrightConfig.js';
 import { fixPrismaEnvFiles } from './fixers/prisma.js';
-import { fixTestDirectories } from './fixers/testDirectory.js';
+import { fixTestDirectoriesUpdatingPackageJson } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { fixTypos } from './fixers/typos.js';
 import { generateToolVersions } from './generators/asdf.js';
@@ -19,9 +19,9 @@ import { generateEslintignore } from './generators/eslintignore.js';
 import { generateEslintrc } from './generators/eslintrc.js';
 import { generateGitattributes } from './generators/gitattributes.js';
 import { generateGitignore } from './generators/gitignore.js';
-import { generateHuskyrc } from './generators/huskyrc.js';
+import { generateHuskyrcUpdatingPackageJson } from './generators/huskyrc.js';
 import { generateIdeaSettings } from './generators/idea.js';
-import { generateLefthook } from './generators/lefthook.js';
+import { generateLefthookUpdatingPackageJson } from './generators/lefthook.js';
 import { generateLintstagedrc } from './generators/lintstagedrc.js';
 import { generateNextConfigJson } from './generators/nextconfig.js';
 import { generatePackageJson } from './generators/packageJson.js';
@@ -83,7 +83,7 @@ async function main(): Promise<void> {
     const dirents = (await ignoreErrorAsync(() => fs.readdir(packagesDirPath, { withFileTypes: true }))) ?? [];
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
-    await fixTestDirectories([rootDirPath, ...subDirPaths]);
+    await fixTestDirectoriesUpdatingPackageJson([rootDirPath, ...subDirPaths]);
 
     const rootConfig = await getPackageConfig(rootDirPath);
     if (!rootConfig) {
@@ -123,8 +123,12 @@ async function main(): Promise<void> {
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
-      ...(rootConfig.isBun ? [generateBunfigToml(rootConfig), generateLefthook(rootConfig)] : []),
-      generateHuskyrc(rootConfig),
+      ...(rootConfig.isBun
+        ? [
+            generateBunfigToml(rootConfig),
+            generateHuskyrcUpdatingPackageJson(rootConfig).then(() => generateLefthookUpdatingPackageJson(rootConfig)),
+          ]
+        : [generateHuskyrcUpdatingPackageJson(rootConfig)]),
       generateLintstagedrc(rootConfig),
     ]);
     await promisePool.promiseAll();

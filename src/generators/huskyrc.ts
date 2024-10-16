@@ -32,8 +32,8 @@ run_if_changed() {
 `.trim(),
 };
 
-export async function generateHuskyrc(config: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('generateHuskyrc', async () => {
+export async function generateHuskyrcUpdatingPackageJson(config: PackageConfig): Promise<void> {
+  return logger.functionIgnoringException('generateHuskyrcUpdatingPackageJson', async () => {
     await core(config);
   });
 }
