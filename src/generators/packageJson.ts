@@ -120,12 +120,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.isRoot) {
     if (config.isBun) {
-      jsonObj.scripts.prepare = 'lefthook install || true';
       delete jsonObj.devDependencies['husky'];
       delete jsonObj.devDependencies['pinst'];
-      delete jsonObj.scripts.postinstall;
-      delete jsonObj.scripts.prepack;
-      delete jsonObj.scripts.postpack;
+      jsonObj.scripts.prepare = 'lefthook install || true';
     } else {
       // To install the latest husky
       devDependencies.push('husky');

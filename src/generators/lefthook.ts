@@ -78,15 +78,8 @@ export async function generateLefthookUpdatingPackageJson(config: PackageConfig)
 }
 
 async function core(config: PackageConfig): Promise<void> {
-  const packageJsonPath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
-  const packageJson = JSON.parse(jsonText);
-  packageJson.scripts ||= {};
-  packageJson.scripts['prepare'] = 'lefthook install || true';
-
   const dirPath = path.resolve(config.dirPath, '.lefthook');
   await Promise.all([
-    fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
     fs.promises.writeFile(
       path.join(config.dirPath, 'lefthook.yml'),
       yaml.dump(newSettings, {
