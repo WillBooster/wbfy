@@ -71,7 +71,8 @@ async function core(config: PackageConfig): Promise<void> {
   ],`);
   }
 
-  const newContent = `const path = require('path');
+  const newContent = `const fs = require('fs');
+const path = require('path');
 ${config.doesContainsJavaScript || config.doesContainsTypeScript ? "const micromatch = require('micromatch');\n" : ''}
 module.exports = {${lines.join('')}
 };
