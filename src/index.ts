@@ -184,7 +184,11 @@ async function main(): Promise<void> {
     spawnSync(packageManager, ['cleanup'], rootDirPath);
     // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock
     // corresponding to the contents of dependant sub-package in monorepo
-    spawnSync(packageManager, ['install'], rootDirPath);
+    if (rootConfig.isBun) {
+      spawnSync(packageManager, ['update'], rootDirPath);
+    } else {
+      spawnSync(packageManager, ['install'], rootDirPath);
+    }
   }
 }
 
