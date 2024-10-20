@@ -7,7 +7,6 @@ export async function getLatestCommitHash(organization: string, repo: string): P
       repo,
       per_page: 1,
     });
-    console.info('commits:', commits);
     if (commits.length === 0) {
       throw new Error(`No commits found for ${organization}/${repo}`);
     }

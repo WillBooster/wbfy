@@ -538,21 +538,23 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
   jsonObj.dependencies = jsonObj.dependencies || {};
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   const packageNames = new Set([...Object.keys(jsonObj.dependencies), ...Object.keys(jsonObj.devDependencies)]);
-  console.info('packageNames:', packageNames);
   if (packageNames.has('@willbooster/auth')) {
     delete jsonObj.devDependencies['@willbooster/auth'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'auth');
     jsonObj.dependencies['@willbooster/auth'] = `git@github.com:WillBoosterLab/auth.git#${commitHash}`;
-  } else if (packageNames.has('@willbooster/code-analyzer')) {
+  }
+  if (packageNames.has('@willbooster/code-analyzer')) {
     delete jsonObj.dependencies['@willbooster/code-analyzer'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'code-analyzer');
     jsonObj.devDependencies['@willbooster/code-analyzer'] =
       `git@github.com:WillBoosterLab/code-analyzer.git#workspace=@code-analyzer/client&commit=${commitHash}`;
-  } else if (packageNames.has('@willbooster/judge')) {
+  }
+  if (packageNames.has('@willbooster/judge')) {
     delete jsonObj.dependencies['@willbooster/judge'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'judge');
     jsonObj.devDependencies['@willbooster/judge'] = `git@github.com:WillBoosterLab/judge.git#${commitHash}`;
-  } else if (packageNames.has('@willbooster/llm-proxy')) {
+  }
+  if (packageNames.has('@willbooster/llm-proxy')) {
     delete jsonObj.dependencies['@willbooster/llm-proxy'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'llm-proxy');
     jsonObj.devDependencies['@willbooster/llm-proxy'] =
