@@ -543,6 +543,12 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'auth');
     jsonObj.dependencies['@willbooster/auth'] = `git@github.com:WillBoosterLab/auth.git#${commitHash}`;
   }
+  if (packageNames.has('@discord-bot/shared')) {
+    delete jsonObj.devDependencies['@discord-bot/shared'];
+    const commitHash = await getLatestCommitHash('WillBoosterLab', 'discord-bot');
+    jsonObj.dependencies['@discord-bot/shared'] = `git@github.com:WillBoosterLab/discord-bot.git#${commitHash}`;
+  }
+
   if (packageNames.has('@willbooster/code-analyzer')) {
     delete jsonObj.dependencies['@willbooster/code-analyzer'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'code-analyzer');
