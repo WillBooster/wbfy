@@ -428,7 +428,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
       format: `bun --bun wb lint --format`,
       lint: `bun --bun wb lint`,
       'lint-fix': 'bun --bun wb lint --fix',
-      test: 'bun --bun wb test',
+      test: 'bun wb test',
       typecheck: 'bun --bun wb typecheck',
     };
     if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
