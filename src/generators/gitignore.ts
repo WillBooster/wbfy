@@ -76,7 +76,7 @@ packaged.yaml
     if (rootConfig.depending.firebase || config.depending.firebase) {
       names.push('firebase');
     }
-    if (rootConfig.depending.prisma) {
+    if (config.depending.prisma) {
       headUserContent += `*.sqlite3*
 *.sqlite3-journal
 `;
