@@ -15,7 +15,7 @@ const jsonObj = {
   extends: ['github>WillBooster/willbooster-configs:renovate.json5'],
 };
 
-type Settings = typeof jsonObj & { packageRules: { packageNames: string[]; enabled?: boolean }[] };
+type Settings = typeof jsonObj & { packageRules: { matchPackageNames: string[]; enabled?: boolean }[] };
 
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateRenovateJson', async () => {
@@ -39,8 +39,12 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     // Don't upgrade Next.js automatically
     if (config.depending.blitz) {
       newSettings.packageRules ??= [];
-      if (!newSettings.packageRules.some((rule: { packageNames: string[] }) => rule.packageNames.includes('next'))) {
-        newSettings.packageRules.push({ packageNames: ['next'], enabled: false });
+      if (
+        !newSettings.packageRules.some((rule: { matchPackageNames: string[] }) =>
+          rule.matchPackageNames.includes('next')
+        )
+      ) {
+        newSettings.packageRules.push({ matchPackageNames: ['next'], enabled: false });
       }
     }
 

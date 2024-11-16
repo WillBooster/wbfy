@@ -29,7 +29,7 @@ import { generatePrettierignore } from './generators/prettierignore.js';
 import { generatePyrightConfigJson } from './generators/pyrightconfig.js';
 import { generateReadme } from './generators/readme.js';
 import { generateReleaserc } from './generators/releaserc.js';
-import { generateRenovateJson } from './generators/renovaterc.js';
+import { generateRenovateJson } from './generators/renovateJson.js';
 import { generateTsconfig } from './generators/tsconfig.js';
 import { generateVscodeSettings } from './generators/vscodeSettings.js';
 import { generateWorkflows } from './generators/workflow.js';
