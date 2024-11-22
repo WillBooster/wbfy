@@ -3589,12 +3589,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:22.9.0":
+"@types/node@npm:*":
   version: 22.9.0
   resolution: "@types/node@npm:22.9.0"
   dependencies:
     undici-types: "npm:~6.19.8"
   checksum: 10c0/3f46cbe0a49bab4ba30494025e4c8a6e699b98ac922857aa1f0209ce11a1313ee46e6808b8f13fe5b8b960a9d7796b77c8d542ad4e9810e85ef897d5593b5d51
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:22.9.1":
+  version: 22.9.1
+  resolution: "@types/node@npm:22.9.1"
+  dependencies:
+    undici-types: "npm:~6.19.8"
+  checksum: 10c0/ea489ae603aa8874e4e88980aab6f2dad09c755da779c88dd142983bfe9609803c89415ca7781f723072934066f63daf2b3339ef084a8ad1a8079cf3958be243
   languageName: node
   linkType: hard
 
@@ -3932,21 +3941,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:5.2.6":
-  version: 5.2.6
-  resolution: "@willbooster/shared-lib@npm:5.2.6"
-  checksum: 10c0/f5c9d39ca966ee07c1d7749bd3c82741affdb9666698c212421ad94336eaa0b3b3ebde10f113e237225b5d7030bbd41d2442d21117e0695d44f6a550ab3c37b3
+"@willbooster/shared-lib@npm:5.2.7":
+  version: 5.2.7
+  resolution: "@willbooster/shared-lib@npm:5.2.7"
+  checksum: 10c0/bfb06f27d766ed4a67a66057d945a700fbc9443db2d98c77eea2c34b50a5d86b991e95eb73da11fe872a6bf8f05d92ac1806814832e48cbb192a791db273023b
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:4.1.4":
-  version: 4.1.4
-  resolution: "@yarnpkg/core@npm:4.1.4"
+"@yarnpkg/core@npm:4.1.5":
+  version: 4.1.5
+  resolution: "@yarnpkg/core@npm:4.1.5"
   dependencies:
     "@arcanis/slice-ansi": "npm:^1.1.1"
     "@types/semver": "npm:^7.1.0"
     "@types/treeify": "npm:^1.0.0"
-    "@yarnpkg/fslib": "npm:^3.1.0"
+    "@yarnpkg/fslib": "npm:^3.1.1"
     "@yarnpkg/libzip": "npm:^3.1.0"
     "@yarnpkg/parsers": "npm:^3.0.2"
     "@yarnpkg/shell": "npm:^4.1.0"
@@ -3969,7 +3978,7 @@ __metadata:
     treeify: "npm:^1.1.0"
     tslib: "npm:^2.4.0"
     tunnel: "npm:^0.0.6"
-  checksum: 10c0/f7f6543cefdf8cd7275d10354c9c473fb71411b0ed9dcfc091544473da29fb9750f4c5eccbee7b007e52de27ba42e484df7cdcf67e7e2a935945a3411640ab12
+  checksum: 10c0/a02b497c8209a19336f26bd28931d039bf10cb14f3fa98fe19d90860e7577c5a71004338f924b38c8ddcfca211aff053ded4b45f563bd428315aa40e67edc917
   languageName: node
   linkType: hard
 
@@ -3979,6 +3988,15 @@ __metadata:
   dependencies:
     tslib: "npm:^2.4.0"
   checksum: 10c0/e327aaf73fe2fff442a71f045fe006f13931a09021b5b868a993a644d4950cd3c5589f1d58ee9e38390bca83705a30b649db7ae462fe704fdb6cdeb12ed2232a
+  languageName: node
+  linkType: hard
+
+"@yarnpkg/fslib@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@yarnpkg/fslib@npm:3.1.1"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/e7478066397161a18e05c5041a09fd4362d0fa49650ffdfd9b70d5cf6e10628624d7065c28cac1ef654048e2c9b369ed0c0df8e73c57ad3fac4e90b790a61e2c
   languageName: node
   linkType: hard
 
@@ -12054,13 +12072,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.6.3":
-  version: 5.6.3
-  resolution: "typescript@npm:5.6.3"
+"typescript@npm:5.7.2":
+  version: 5.7.2
+  resolution: "typescript@npm:5.7.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/44f61d3fb15c35359bc60399cb8127c30bae554cd555b8e2b46d68fa79d680354b83320ad419ff1b81a0bdf324197b29affe6cc28988cd6a74d4ac60c94f9799
+  checksum: 10c0/a873118b5201b2ef332127ef5c63fb9d9c155e6fdbe211cbd9d8e65877283797cca76546bad742eea36ed7efbe3424a30376818f79c7318512064e8625d61622
   languageName: node
   linkType: hard
 
@@ -12074,13 +12092,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>":
-  version: 5.6.3
-  resolution: "typescript@patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"
+"typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>":
+  version: 5.7.2
+  resolution: "typescript@patch:typescript@npm%3A5.7.2#optional!builtin<compat/typescript>::version=5.7.2&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10c0/7c9d2e07c81226d60435939618c91ec2ff0b75fbfa106eec3430f0fcf93a584bc6c73176676f532d78c3594fe28a54b36eb40b3d75593071a7ec91301533ace7
+  checksum: 10c0/f3b8082c9d1d1629a215245c9087df56cb784f9fb6f27b5d55577a20e68afe2a889c040aacff6d27e35be165ecf9dca66e694c42eb9a50b3b2c451b36b5675cb
   languageName: node
   linkType: hard
 
@@ -12439,14 +12457,14 @@ __metadata:
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.9"
-    "@types/node": "npm:22.9.0"
+    "@types/node": "npm:22.9.1"
     "@types/yargs": "npm:17.0.33"
     "@typescript-eslint/eslint-plugin": "npm:8.15.0"
     "@typescript-eslint/parser": "npm:8.15.0"
     "@willbooster/eslint-config-ts": "npm:10.6.1"
     "@willbooster/prettier-config": "npm:9.1.3"
-    "@willbooster/shared-lib": "npm:5.2.6"
-    "@yarnpkg/core": "npm:4.1.4"
+    "@willbooster/shared-lib": "npm:5.2.7"
+    "@yarnpkg/core": "npm:4.1.5"
     build-ts: "npm:13.1.8"
     conventional-changelog-conventionalcommits: "npm:8.0.0"
     deepmerge: "npm:4.3.1"
@@ -12475,7 +12493,7 @@ __metadata:
     sort-package-json: "npm:2.11.0"
     ts-node: "npm:10.9.2"
     type-fest: "npm:4.27.0"
-    typescript: "npm:5.6.3"
+    typescript: "npm:5.7.2"
     vitest: "npm:2.1.5"
     yargs: "npm:17.7.2"
     zod: "npm:3.23.8"
