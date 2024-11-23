@@ -78,7 +78,6 @@ packaged.yaml
     }
     if (config.depending.prisma) {
       headUserContent += `*.sqlite3*
-*.sqlite3-journal
 `;
     }
     if (config.depending.playwrightTest) {
