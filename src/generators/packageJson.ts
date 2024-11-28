@@ -361,6 +361,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   await updatePrivatePackages(jsonObj);
 
+  if (config.isBun) delete jsonObj.packageManager;
   let newJsonText = JSON.stringify(jsonObj);
   newJsonText = await fixScriptNames(jsonObj.scripts, newJsonText, config);
   await fs.promises.writeFile(filePath, newJsonText);
