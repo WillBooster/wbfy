@@ -321,6 +321,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     await fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true });
     if (!newSettings.jobs.sync || !newSettings.jobs.sync.with) return;
 
+    // Generate sync-force.yml based on sync.yml if it exists.
     newSettings.jobs['sync-force'] = newSettings.jobs.sync;
     const params = newSettings.jobs.sync.with.sync_params_without_dest;
     if (!params) return;
