@@ -124,6 +124,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       delete jsonObj.devDependencies['husky'];
       delete jsonObj.devDependencies['pinst'];
       jsonObj.scripts.prepare = 'lefthook install || true';
+      devDependencies.push('lefthook');
     } else {
       // To install the latest husky
       devDependencies.push('husky');

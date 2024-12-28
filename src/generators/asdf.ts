@@ -26,12 +26,14 @@ async function core(config: PackageConfig): Promise<void> {
     .split('\n')
     .map((line) => {
       const [name, version] = line.trim().split(/\s+/);
-      // To move the top of the list, we need to add a space.
+      // To move the top of the sorted list, we need to add a space.
       return `${CORE_TOOLS.has(name) ? ' ' : ''}${name} ${version}`;
     })
     .sort()
     // Remove added spaces.
-    .map((line) => line.trim());
+    .map((line) => line.trim())
+    // TODO: remove the following line after lefthook is installed via npm.
+    .filter((line) => !line.startsWith('lefthook'));
   const lines = [...new Set(duplicatableLines)];
 
   if (config.doesContainsPoetryLock) {
@@ -48,9 +50,6 @@ async function core(config: PackageConfig): Promise<void> {
   }
   if (config.doesContainsPackageJson) {
     if (config.isBun) {
-      const lefthookVersion = await getLatestVersionFromTagOnGitHub('evilmartians', 'lefthook');
-      if (lefthookVersion) updateVersion(lines, 'lefthook', lefthookVersion);
-
       const bunVersion = await getLatestVersionFromTagOnGitHub('oven-sh', 'bun');
       if (bunVersion) updateVersion(lines, 'bun', bunVersion);
     } else {
