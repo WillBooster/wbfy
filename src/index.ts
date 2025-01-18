@@ -1,4 +1,4 @@
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 import path from 'node:path';
 
 import { ignoreErrorAsync } from '@willbooster/shared-lib';
@@ -80,7 +80,7 @@ async function main(): Promise<void> {
 
   for (const rootDirPath of argv.paths as string[]) {
     const packagesDirPath = path.join(rootDirPath, 'packages');
-    const dirents = (await ignoreErrorAsync(() => fs.readdir(packagesDirPath, { withFileTypes: true }))) ?? [];
+    const dirents = (await ignoreErrorAsync(() => fs.promises.readdir(packagesDirPath, { withFileTypes: true }))) ?? [];
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
 
     await fixTestDirectoriesUpdatingPackageJson([rootDirPath, ...subDirPaths]);
@@ -186,6 +186,14 @@ async function main(): Promise<void> {
     // corresponding to the contents of dependant sub-package in monorepo
     if (rootConfig.isBun) {
       spawnSync(packageManager, ['update'], rootDirPath);
+      // TODO: Remove the following line after there is no bun.lockb
+      if (fs.existsSync(path.join(rootDirPath, 'bun.lockb'))) {
+        spawnSync(
+          packageManager,
+          ['install', '--save-text-lockfile', '--frozen-lockfile', '--lockfile-only'],
+          rootDirPath
+        );
+      }
     } else {
       spawnSync(packageManager, ['install'], rootDirPath);
     }
