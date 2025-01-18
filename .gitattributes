@@ -1,8 +1,6 @@
 * text=auto
 
-bun.lock linguist-language=json
-bun.lockb binary diff=lockb
-
+*.lockb binary diff=lockb
 *.vcproj text eol=crlf
 
 *.cjs text eol=lf
