@@ -187,7 +187,9 @@ async function main(): Promise<void> {
     if (rootConfig.isBun) {
       spawnSync(packageManager, ['update'], rootDirPath);
       // TODO: Remove the following line after there is no bun.lockb
-      if (fs.existsSync(path.join(rootDirPath, 'bun.lockb'))) {
+      const bunLockbPath = path.join(rootDirPath, 'bun.lockb');
+      if (fs.existsSync(bunLockbPath)) {
+        void fs.promises.rm(bunLockbPath);
         spawnSync(
           packageManager,
           ['install', '--save-text-lockfile', '--frozen-lockfile', '--lockfile-only'],
