@@ -565,7 +565,6 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
   if (packageNames.has('@willbooster/llm-proxy')) {
     delete jsonObj.dependencies['@willbooster/llm-proxy'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'llm-proxy');
-    jsonObj.devDependencies['@willbooster/llm-proxy'] =
-      `git@github.com:WillBoosterLab/llm-proxy.git#workspace=@llm-proxy/client&commit=${commitHash}`;
+    jsonObj.devDependencies['@willbooster/llm-proxy'] = `git@github.com:WillBoosterLab/llm-proxy.git#${commitHash}`;
   }
 }
