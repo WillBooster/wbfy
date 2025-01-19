@@ -115,14 +115,14 @@ export function generatePostMergeCommands(config: PackageConfig): string[] {
   }
   if (config.depending.blitz) {
     postMergeCommands.push(
-      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz prisma migrate deploy"',
-      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz prisma generate"',
-      'run_if_changed "db/schema.prisma" "node node_modules/.bin/blitz codegen"'
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/blitz prisma migrate deploy"`,
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/blitz prisma generate"`,
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/blitz codegen"`
     );
   } else if (config.depending.prisma) {
     postMergeCommands.push(
-      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma migrate deploy"',
-      'run_if_changed "prisma/schema.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma generate"'
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma migrate deploy"`,
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma generate"`
     );
   }
   return postMergeCommands;
