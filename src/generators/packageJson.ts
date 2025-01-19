@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import merge from 'deepmerge';
-import { globby, globbySync } from 'globby';
+import fg from 'fast-glob';
 import type { PackageJson, SetRequired } from 'type-fest';
 
 import { getLatestCommitHash } from '../github/commit.js';
@@ -11,6 +11,7 @@ import type { EslintExtensionBase, PackageConfig } from '../packageConfig.js';
 import { EslintUtil } from '../utils/eslintUtil.js';
 import { extensions } from '../utils/extensions.js';
 import { gitHubUtil } from '../utils/githubUtil.js';
+import { globIgnore } from '../utils/globUtil.js';
 import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
@@ -174,10 +175,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     } else if (Array.isArray(jsonObj.workspaces)) {
       jsonObj.workspaces = jsonObj.workspaces.filter(
         (workspace) =>
-          globbySync(workspace, {
+          fg.globSync(workspace, {
             dot: true,
             cwd: config.dirPath,
-            gitignore: true,
+            ignore: globIgnore,
           }).length > 0
       );
       if (jsonObj.workspaces.length === 0) {
@@ -285,11 +286,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       if (jsonObj.scripts.postinstall === 'poetry install') {
         delete jsonObj.scripts.postinstall;
       }
-      const pythonFiles = await globby('**/*.py', {
+      const pythonFiles = await fg.glob('**/*.py', {
         cwd: config.dirPath,
         dot: true,
-        gitignore: true,
-        ignore: ['test-fixtures'],
+        ignore: globIgnore,
       });
       const dirNameSet = new Set<string>();
       for (const pythonFile of pythonFiles) {
@@ -514,10 +514,10 @@ async function fixScriptNames(
   for (const [oldName, newName] of oldAndNewScriptNames) {
     newJsonText = newJsonText.replaceAll(oldName, newName);
   }
-  const files = await globby(['**/*.{md,cjs,mjs,js,jsx,cts,mts,ts,tsx}', '**/Dockerfile'], {
+  const files = await fg.glob(['**/*.{md,cjs,mjs,js,jsx,cts,mts,ts,tsx}', '**/Dockerfile'], {
     cwd: config.dirPath,
     dot: true,
-    gitignore: true,
+    ignore: globIgnore,
   });
   for (const file of files) {
     await promisePool.run(async () => {

@@ -2,12 +2,13 @@ import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
 
-import { globbySync } from 'globby';
+import fg from 'fast-glob';
 import { simpleGit } from 'simple-git';
 import type { PackageJson } from 'type-fest';
 import { z } from 'zod';
 
 import { gitHubUtil, octokit } from './utils/githubUtil.js';
+import { globIgnore } from './utils/globUtil.js';
 
 export interface PackageConfig {
   dirPath: string;
@@ -233,7 +234,7 @@ export async function getPackageConfig(
 }
 
 function containsAny(pattern: string, dirPath: string): boolean {
-  return globbySync(pattern, { dot: true, cwd: dirPath }).length > 0;
+  return fg.globSync(pattern, { dot: true, cwd: dirPath, ignore: globIgnore }).length > 0;
 }
 
 export type EslintExtensionBase =

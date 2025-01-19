@@ -1,18 +1,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { globby } from 'globby';
+import fg from 'fast-glob';
 
 import { logger } from '../logger.js';
 import { options } from '../options.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
+import { globIgnore } from '../utils/globUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('fixTypos', async () => {
     const dirPath = packageConfig.dirPath;
-    const docFiles = await globby('**/*.md', { dot: true, cwd: dirPath, gitignore: true });
+    const docFiles = await fg.glob('**/*.md', { dot: true, cwd: dirPath, ignore: globIgnore });
     if (options.isVerbose) {
       console.info(`Found ${docFiles.length} markdown files in ${dirPath}`);
     }
@@ -28,12 +29,12 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
       });
     }
 
-    const tsFiles = await globby(
+    const tsFiles = await fg.glob(
       [
         '{app,src,tests,scripts}/**/*.{cjs,mjs,js,jsx,cts,mts,ts,tsx}',
         'packages/**/{app,src,tests,scripts}/**/*.{cjs,mjs,js,jsx,cts,mts,ts,tsx}',
       ],
-      { dot: true, cwd: dirPath, gitignore: true }
+      { dot: true, cwd: dirPath, ignore: globIgnore }
     );
     if (options.isVerbose) {
       console.info(`Found ${tsFiles.length} TypeScript files in ${dirPath}`);
@@ -48,10 +49,10 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
       await fsUtil.generateFile(filePath, newContent);
     }
 
-    const textBasedFiles = await globby('**/*.{csv,htm,html,tsv,xml,yaml,yml}', {
+    const textBasedFiles = await fg.glob('**/*.{csv,htm,html,tsv,xml,yaml,yml}', {
       dot: true,
       cwd: dirPath,
-      gitignore: true,
+      ignore: globIgnore,
     });
     if (options.isVerbose) {
       console.info(`Found ${textBasedFiles.length} text-based files in ${dirPath}`);
