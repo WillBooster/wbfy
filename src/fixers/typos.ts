@@ -10,7 +10,7 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('fixAbbreviations', async () => {
+  return logger.functionIgnoringException('fixTypos', async () => {
     const dirPath = packageConfig.dirPath;
     const docFiles = await globby('**/*.md', { dot: true, cwd: dirPath, gitignore: true });
     if (options.isVerbose) {
@@ -20,7 +20,7 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
       const filePath = path.join(dirPath, mdFile);
       await promisePool.run(async () => {
         const content = await fs.promises.readFile(filePath, 'utf8');
-        let newContent = fixAbbreviationsInText(content);
+        let newContent = fixTyposInText(content);
         newContent = replaceWithConfig(newContent, packageConfig, 'doc');
         if (content !== newContent) {
           await fsUtil.generateFile(filePath, newContent);
@@ -41,10 +41,7 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
     for (const tsFile of tsFiles) {
       const filePath = path.join(dirPath, tsFile);
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
-      let newContent = oldContent
-        .replaceAll(/\/\/(.*)c\.f\./g, '//$1cf.')
-        .replaceAll(/\/\/(.*)eg\./g, '//$1e.g.')
-        .replaceAll(/\/\/(.*)ie\./g, '//$1i.e.');
+      let newContent = fixTyposInCode(oldContent);
       newContent = replaceWithConfig(newContent, packageConfig, 'ts');
 
       if (oldContent === newContent) continue;
@@ -62,10 +59,7 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
     for (const file of textBasedFiles) {
       const filePath = path.join(dirPath, file);
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
-      let newContent = oldContent
-        .replaceAll(/\/\/(.*)c\.f\./g, '//$1cf.')
-        .replaceAll(/\/\/(.*)eg\./g, '//$1e.g.')
-        .replaceAll(/\/\/(.*)ie\./g, '//$1i.e.');
+      let newContent = fixTyposInText(oldContent);
       newContent = replaceWithConfig(newContent, packageConfig, 'text');
 
       if (oldContent === newContent) continue;
@@ -76,11 +70,18 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
   });
 }
 
-export function fixAbbreviationsInText(content: string): string {
+export function fixTyposInText(content: string): string {
   return content
     .replaceAll(/\bc\.f\.([^$])/g, 'cf.$1')
     .replaceAll(/\beg\.([^$])/g, 'e.g.$1')
     .replaceAll(/\bie\.([^$])/g, 'i.e.$1');
+}
+
+function fixTyposInCode(content: string): string {
+  return content
+    .replaceAll(/\/\/(.*)c\.f\./g, '//$1cf.')
+    .replaceAll(/\/\/(.*)eg\./g, '//$1e.g.')
+    .replaceAll(/\/\/(.*)ie\./g, '//$1i.e.');
 }
 
 function replaceWithConfig(newContent: string, packageConfig: PackageConfig, propName: 'doc' | 'ts' | 'text'): string {

@@ -86,6 +86,7 @@ async function main(): Promise<void> {
     await fixTestDirectoriesUpdatingPackageJson([rootDirPath, ...subDirPaths]);
 
     const rootConfig = await getPackageConfig(rootDirPath);
+    console.log('rootConfig:', rootConfig);
     if (!rootConfig) {
       console.error(`there is no valid package.json in ${rootDirPath}`);
       continue;

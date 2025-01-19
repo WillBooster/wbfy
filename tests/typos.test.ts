@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 
-import { fixAbbreviationsInText } from '../src/fixers/typos.js';
+import { fixTyposInText } from '../src/fixers/typos.js';
 
 test.each([
   { input: 'This is c.f. an example', expected: 'This is cf. an example' },
@@ -10,5 +10,5 @@ test.each([
   { input: 'apple pie.', expected: 'apple pie.' },
   { input: 'peg.', expected: 'peg.' },
 ])('fixAbbreviationsInText', ({ expected, input }) => {
-  expect(fixAbbreviationsInText(input)).toEqual(expected);
+  expect(fixTyposInText(input)).toEqual(expected);
 });

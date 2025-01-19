@@ -540,31 +540,35 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
   jsonObj.dependencies = jsonObj.dependencies || {};
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   const packageNames = new Set([...Object.keys(jsonObj.dependencies), ...Object.keys(jsonObj.devDependencies)]);
-  if (packageNames.has('@willbooster/auth')) {
+  if (packageNames.has('@willbooster/auth') && !isWorkspacePackage(jsonObj, '@willbooster/auth')) {
     delete jsonObj.devDependencies['@willbooster/auth'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'auth');
     jsonObj.dependencies['@willbooster/auth'] = `git@github.com:WillBoosterLab/auth.git#${commitHash}`;
   }
-  if (packageNames.has('@discord-bot/shared')) {
+  if (packageNames.has('@discord-bot/shared') && !isWorkspacePackage(jsonObj, '@discord-bot/shared')) {
     delete jsonObj.devDependencies['@discord-bot/shared'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'discord-bot');
     jsonObj.dependencies['@discord-bot/shared'] = `git@github.com:WillBoosterLab/discord-bot.git#${commitHash}`;
   }
 
-  if (packageNames.has('@willbooster/code-analyzer')) {
+  if (packageNames.has('@willbooster/code-analyzer') && !isWorkspacePackage(jsonObj, '@willbooster/code-analyzer')) {
     delete jsonObj.dependencies['@willbooster/code-analyzer'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'code-analyzer');
     jsonObj.devDependencies['@willbooster/code-analyzer'] =
       `git@github.com:WillBoosterLab/code-analyzer.git#workspace=@code-analyzer/client&commit=${commitHash}`;
   }
-  if (packageNames.has('@willbooster/judge')) {
+  if (packageNames.has('@willbooster/judge') && !isWorkspacePackage(jsonObj, '@willbooster/judge')) {
     delete jsonObj.dependencies['@willbooster/judge'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'judge');
     jsonObj.devDependencies['@willbooster/judge'] = `git@github.com:WillBoosterLab/judge.git#${commitHash}`;
   }
-  if (packageNames.has('@willbooster/llm-proxy')) {
+  if (packageNames.has('@willbooster/llm-proxy') && !isWorkspacePackage(jsonObj, '@willbooster/llm-proxy')) {
     delete jsonObj.dependencies['@willbooster/llm-proxy'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'llm-proxy');
     jsonObj.devDependencies['@willbooster/llm-proxy'] = `git@github.com:WillBoosterLab/llm-proxy.git#${commitHash}`;
   }
+}
+
+function isWorkspacePackage(jsonObj: PackageJson, packageName: string): boolean {
+  return (jsonObj.devDependencies?.[packageName] || jsonObj.dependencies?.[packageName] || '').includes('workspace');
 }
