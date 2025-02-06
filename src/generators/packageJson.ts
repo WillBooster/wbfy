@@ -340,11 +340,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj.scripts['gen-code'] = 'prisma generate';
   }
 
-  if (config.depending.next) {
-    // To prevent multiple versions of @types/react from mixing.
-    delete jsonObj.devDependencies['@types/react'];
-  }
-
   if (!jsonObj.dependencies?.prettier) {
     // Because @types/prettier blocks prettier execution.
     delete jsonObj.devDependencies['@types/prettier'];
@@ -558,14 +553,14 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
       `git@github.com:WillBoosterLab/code-analyzer.git#workspace=@code-analyzer/client&commit=${commitHash}`;
   }
   if (packageNames.has('@willbooster/judge') && !isWorkspacePackage(jsonObj, '@willbooster/judge')) {
-    delete jsonObj.dependencies['@willbooster/judge'];
+    delete jsonObj.devDependencies['@willbooster/judge'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'judge');
-    jsonObj.devDependencies['@willbooster/judge'] = `git@github.com:WillBoosterLab/judge.git#${commitHash}`;
+    jsonObj.dependencies['@willbooster/judge'] = `git@github.com:WillBoosterLab/judge.git#${commitHash}`;
   }
   if (packageNames.has('@willbooster/llm-proxy') && !isWorkspacePackage(jsonObj, '@willbooster/llm-proxy')) {
-    delete jsonObj.dependencies['@willbooster/llm-proxy'];
+    delete jsonObj.devDependencies['@willbooster/llm-proxy'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'llm-proxy');
-    jsonObj.devDependencies['@willbooster/llm-proxy'] = `git@github.com:WillBoosterLab/llm-proxy.git#${commitHash}`;
+    jsonObj.dependencies['@willbooster/llm-proxy'] = `git@github.com:WillBoosterLab/llm-proxy.git#${commitHash}`;
   }
 }
 
