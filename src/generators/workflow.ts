@@ -271,7 +271,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     }
     if (newSettings.on?.push) {
       newSettings.on.push['paths-ignore'] = [
-        ...new Set<string>([...(newSettings.on.push['paths-ignore'] ?? []), '**.md', '**/docs/**']),
+        ...new Set(['**.md', '**/docs/**', ...(newSettings.on.push['paths-ignore'] ?? [])]),
       ];
     }
   }
