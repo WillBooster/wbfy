@@ -421,6 +421,7 @@ async function removeDeprecatedStuff(
 export function generateScripts(config: PackageConfig): Record<string, string> {
   if (config.isBun) {
     const scripts: Record<string, string> = {
+      'check-all': 'bun run cleanup && bun run typecheck && bun run test',
       cleanup: 'bun --bun wb lint --fix --format',
       format: `bun --bun wb lint --format`,
       lint: `bun --bun wb lint`,
