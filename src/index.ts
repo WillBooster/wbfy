@@ -15,8 +15,7 @@ import { generateBiomeJsonc } from './generators/biome.js';
 import { generateBunfigToml } from './generators/bunfig.js';
 import { generateDockerignore } from './generators/dockerignore.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
-import { generateEslintignore } from './generators/eslintignore.js';
-import { generateEslintrc } from './generators/eslintrc.js';
+import { generateEslintrc } from './generators/eslintConfig.js';
 import { generateGitattributes } from './generators/gitattributes.js';
 import { generateGitignore } from './generators/gitignore.js';
 import { generateHuskyrcUpdatingPackageJson } from './generators/huskyrc.js';
@@ -39,7 +38,6 @@ import { setupSecrets } from './github/secret.js';
 import { setupGitHubSettings } from './github/settings.js';
 import { generateGitHubTemplates } from './github/template.js';
 import { options } from './options.js';
-import type { PackageConfig } from './packageConfig.js';
 import { getPackageConfig } from './packageConfig.js';
 import { promisePool } from './utils/promisePool.js';
 import { spawnSync } from './utils/spawnUtil.js';
@@ -96,7 +94,7 @@ async function main(): Promise<void> {
     const nullableSubPackageConfigs = await Promise.all(
       subDirPaths.map((subDirPath) => getPackageConfig(subDirPath, rootConfig))
     );
-    const subPackageConfigs = nullableSubPackageConfigs.filter((config) => !!config) as PackageConfig[];
+    const subPackageConfigs = nullableSubPackageConfigs.filter((config) => !!config);
     const allPackageConfigs = [rootConfig, ...subPackageConfigs];
 
     if (options.isVerbose) {
@@ -170,9 +168,8 @@ async function main(): Promise<void> {
           promises.push(generateBiomeJsonc(config));
         }
         if (!rootConfig.isWillBoosterConfigs) {
-          promises.push(generateEslintrc(config, rootConfig));
+          promises.push(generateEslintrc(config));
         }
-        promises.push(generateEslintignore(config));
       }
       if (config.depending.pyright) {
         promises.push(generatePyrightConfigJson(config));

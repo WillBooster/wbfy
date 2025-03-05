@@ -17,11 +17,11 @@ const jsonObj = {
 
 export async function generateBiomeJsonc(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateBiomeJsonc', async () => {
-    let newSettings: unknown = cloneDeep(jsonObj);
+    let newSettings: object = cloneDeep(jsonObj);
     const filePath = path.resolve(config.dirPath, 'biome.jsonc');
     try {
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
-      const oldSettings = JSON.parse(oldContent);
+      const oldSettings = JSON.parse(oldContent) as object;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: overwriteMerge });
     } catch {
       // do nothing

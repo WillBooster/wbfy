@@ -15,7 +15,7 @@ export async function generateNextConfigJson(config: PackageConfig): Promise<voi
 
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     // Replace the JSON object from the file
-    const newContent = oldContent.replace(/=\s*{([\S\s]*)};/, (_, settingsText) => {
+    const newContent = oldContent.replace(/=\s*{([\S\s]*)};/, (_, settingsText: string) => {
       if (!settingsText.includes('eslint:')) {
         settingsText += 'eslint: { ignoreDuringBuilds: true },';
       }

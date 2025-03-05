@@ -23,7 +23,7 @@ export async function generateVscodeSettings(config: PackageConfig): Promise<voi
     try {
       const filePath = path.resolve(config.dirPath, '.vscode', 'settings.json');
       const existingContent = await fs.promises.readFile(filePath, 'utf8');
-      let settings = JSON.parse(existingContent);
+      let settings = JSON.parse(existingContent) as object;
       for (const excludeFilePattern of excludeFilePatterns) {
         settings = merge.all([settings, excludeSetting(excludeFilePattern)]);
       }
@@ -33,7 +33,7 @@ export async function generateVscodeSettings(config: PackageConfig): Promise<voi
       if (config.depending.next) {
         settings = merge.all([settings, excludeSetting('**/.next/**')]);
       }
-      sortKeys(settings ?? {});
+      sortKeys((settings as Record<string, unknown>) ?? {});
       const newContent = JSON.stringify(settings, undefined, 2);
       await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
     } catch {
@@ -42,7 +42,7 @@ export async function generateVscodeSettings(config: PackageConfig): Promise<voi
   });
 }
 
-function excludeSetting(excludeFilePattern: string): unknown {
+function excludeSetting(excludeFilePattern: string): object {
   return {
     'files.watcherExclude': {
       [excludeFilePattern]: true,

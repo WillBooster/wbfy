@@ -87,7 +87,7 @@ export async function getPackageConfig(
     let esmPackage = false;
     if (doesContainsPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath, 'utf8');
-      packageJson = JSON.parse(packageJsonText);
+      packageJson = JSON.parse(packageJsonText) as PackageJson;
       dependencies = packageJson.dependencies ?? {};
       devDependencies = packageJson.devDependencies ?? {};
       esmPackage = packageJson.type === 'module';
@@ -97,7 +97,12 @@ export async function getPackageConfig(
     let releasePlugins: string[] = [];
     try {
       const releasercJsonPath = path.resolve(dirPath, '.releaserc.json');
-      const json = JSON.parse(await fsp.readFile(releasercJsonPath, 'utf8'));
+      const json = JSON.parse(await fsp.readFile(releasercJsonPath, 'utf8')) as
+        | {
+            branches: string[];
+            plugins?: string[][];
+          }
+        | undefined;
       releaseBranches = json?.branches || [];
       releasePlugins = json?.plugins?.flat() || [];
     } catch {
@@ -159,7 +164,7 @@ export async function getPackageConfig(
       isRoot,
       isPublicRepo: repoInfo?.private === false,
       isReferredByOtherRepo: !!packageJson.files,
-      repository: repoInfo?.full_name ? `github:${repoInfo?.full_name}` : undefined,
+      repository: repoInfo?.full_name ? `github:${repoInfo.full_name as string}` : undefined,
       isBun: rootConfig?.isBun || fs.existsSync(path.join(dirPath, 'bunfig.toml')),
       isEsmPackage: esmPackage,
       isWillBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
@@ -242,13 +247,10 @@ export type EslintExtensionBase =
   | '@willbooster/eslint-config-ts'
   | '@willbooster/eslint-config-js-react'
   | '@willbooster/eslint-config-js'
-  | '@willbooster/eslint-config-next'
-  | '@willbooster/eslint-config-blitz-next';
+  | '@willbooster/eslint-config-next';
 
 function getEslintExtensionBase(config: PackageConfig): EslintExtensionBase | undefined {
-  if (config.depending.blitz) {
-    return '@willbooster/eslint-config-blitz-next';
-  } else if (config.depending.next) {
+  if (config.depending.next) {
     return '@willbooster/eslint-config-next';
   } else if (config.doesContainsTypeScript) {
     return config.doesContainsJsxOrTsx ? '@willbooster/eslint-config-ts-react' : '@willbooster/eslint-config-ts';

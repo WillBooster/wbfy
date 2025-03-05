@@ -12,6 +12,6 @@ export async function getLatestCommitHash(organization: string, repo: string): P
     }
     return commits[0].sha;
   } catch (error) {
-    throw new Error(`Failed to fetch commits for ${organization}/${repo}: ${error}`);
+    throw new Error(`Failed to fetch commits for ${organization}/${repo}: ${String(error)}`);
   }
 }

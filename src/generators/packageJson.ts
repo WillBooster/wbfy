@@ -16,40 +16,40 @@ import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
-import { getSrcDirs } from '../utils/srcDirectories.js';
 import { BLITZ_VERSION, NEXT_VERSION } from '../utils/versionConstants.js';
 
 const jsCommonDeps = [
-  'eslint@8.57.0',
+  'eslint',
   'eslint-config-prettier',
-  'eslint-plugin-import',
   'eslint-plugin-sort-class-members',
   'eslint-plugin-sort-destructure-keys',
   'eslint-plugin-unicorn',
+  'eslint-plugin-unused-imports',
+  'globals',
 ];
 
-const tsCommonDeps = [
-  ...jsCommonDeps,
-  '@typescript-eslint/eslint-plugin',
-  '@typescript-eslint/parser',
-  'eslint-import-resolver-typescript',
-];
+const tsCommonDeps = [...jsCommonDeps, 'typescript-eslint', 'eslint-import-resolver-typescript'];
 
 const reactCommonDeps = ['eslint-plugin-react', 'eslint-plugin-react-hooks'];
 
 const eslintDeps: Record<EslintExtensionBase, string[]> = {
-  '@willbooster/eslint-config-js': ['@willbooster/eslint-config-js', ...jsCommonDeps],
-  '@willbooster/eslint-config-js-react': ['@willbooster/eslint-config-js-react', ...jsCommonDeps, ...reactCommonDeps],
-  '@willbooster/eslint-config-ts': ['@willbooster/eslint-config-ts', ...tsCommonDeps],
-  '@willbooster/eslint-config-ts-react': ['@willbooster/eslint-config-ts-react', ...tsCommonDeps, ...reactCommonDeps],
-  '@willbooster/eslint-config-blitz-next': [
-    '@willbooster/eslint-config-blitz-next',
-    'eslint-config-next',
+  '@willbooster/eslint-config-js': ['@willbooster/eslint-config-js', 'eslint-plugin-import-x', ...jsCommonDeps],
+  '@willbooster/eslint-config-js-react': [
+    '@willbooster/eslint-config-js-react',
+    'eslint-plugin-import-x',
+    ...jsCommonDeps,
+    ...reactCommonDeps,
+  ],
+  '@willbooster/eslint-config-ts': ['@willbooster/eslint-config-ts', 'eslint-plugin-import-x', ...tsCommonDeps],
+  '@willbooster/eslint-config-ts-react': [
+    '@willbooster/eslint-config-ts-react',
+    'eslint-plugin-import-x',
     ...tsCommonDeps,
     ...reactCommonDeps,
   ],
   '@willbooster/eslint-config-next': [
     '@willbooster/eslint-config-next',
+    'eslint-plugin-import',
     'eslint-config-next',
     ...tsCommonDeps,
     ...reactCommonDeps,
@@ -207,13 +207,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       devDependencies.push('@biomejs/biome', '@willbooster/biome-config');
       delete jsonObj.devDependencies['eslint'];
       delete jsonObj.devDependencies['micromatch'];
-      delete jsonObj.devDependencies['@typescript-eslint/parser'];
+      delete jsonObj.devDependencies['typescript-eslint'];
     } else {
-      devDependencies.push('eslint@8.57.0', 'micromatch');
-      // TODO: not needed anymore?
-      if (config.doesContainsTypeScriptInPackages) {
-        devDependencies.push('@typescript-eslint/parser');
-      }
+      devDependencies.push('eslint', 'micromatch');
     }
   }
 
@@ -416,6 +412,11 @@ async function removeDeprecatedStuff(
     }
   }
   await promisePool.run(() => fs.promises.rm('lerna.json', { force: true }));
+
+  // Migrate from ESLint legacy configs to flat configs,
+  delete jsonObj.devDependencies['@typescript-eslint/eslint-plugin'];
+  delete jsonObj.devDependencies['@typescript-eslint/parser'];
+  delete jsonObj.devDependencies['eslint-plugin-import'];
 }
 
 export function generateScripts(config: PackageConfig): Record<string, string> {
@@ -438,7 +439,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
       'check-all': 'yarn cleanup && yarn typecheck && yarn test',
       cleanup: 'yarn format && yarn lint-fix',
       format: `sort-package-json && yarn prettify`,
-      lint: `eslint --color "./{${getSrcDirs(config)}}/**/*.{${extensions.eslint.join(',')}}"`,
+      lint: `eslint --color`,
       'lint-fix': 'yarn lint --fix',
       prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
       typecheck: 'tsc --noEmit --Pretty',

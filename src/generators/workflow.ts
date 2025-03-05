@@ -324,7 +324,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     // Generate sync-force.yml based on sync.yml if it exists.
     newSettings.jobs['sync-force'] = newSettings.jobs.sync;
     const params = newSettings.jobs.sync.with.sync_params_without_dest;
-    if (!params) return;
+    if (typeof params !== 'string') return;
 
     newSettings.jobs.sync.with.sync_params_without_dest = `--force ${params}`;
     newSettings.name = 'Force to Sync';
@@ -364,8 +364,8 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
 
   if (kind === 'sync') {
     const params = job.with?.sync_params_without_dest;
-    if (params) {
-      job.with.sync_params_without_dest = params.toString().replace('sync ', '');
+    if (typeof params === 'string') {
+      job.with.sync_params_without_dest = params.replace('sync ', '');
     }
   }
 
@@ -383,8 +383,8 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   migrateJob(job);
 
   // Don't use `fly deploy --json` since it causes an error
-  if (kind.startsWith('deploy') && job.secrets['FLY_API_TOKEN'] && job.with['deploy_command']) {
-    job.with['deploy_command'] = job.with['deploy_command'].toString().replace(/\s+--json/, '');
+  if (kind.startsWith('deploy') && job.secrets['FLY_API_TOKEN'] && typeof job.with['deploy_command'] === 'string') {
+    job.with['deploy_command'] = job.with['deploy_command'].replace(/\s+--json/, '');
   }
   if (config.doesContainsDockerfile) {
     if (job.with['ci_size'] !== 'extra-large' && (kind.startsWith('deploy') || kind.startsWith('test'))) {
@@ -419,7 +419,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
 }
 
 function setSchedule(newSettings: Workflow, inclusiveMinHourJst: number, exclusiveMaxHourJst: number): void {
-  const [minuteUtc, hourUtc] = ((newSettings.on.schedule?.[0]?.cron as string) ?? '').split(' ').map(Number);
+  const [minuteUtc, hourUtc] = ((newSettings.on.schedule?.[0]?.cron as string) || '').split(' ').map(Number);
   if (minuteUtc !== 0 && Number.isInteger(hourUtc)) {
     const hourJst = (hourUtc + 9) % 24;
     const inRange =

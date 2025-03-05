@@ -4,7 +4,7 @@ import child_process from 'node:child_process';
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {
     const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
-    console.log(`$ ${newCmd} ${newArgs.join(' ')} at ${options.cwd}`);
+    console.log(`$ ${newCmd} ${newArgs.join(' ')} at ${cwd}`);
     const ret = child_process.spawnSync(newCmd, newArgs, options);
     if (ret.status === 0) break;
   } while (--retry >= 0);
@@ -16,7 +16,7 @@ export function spawnSyncWithStringResult(command: string, args: string[], cwd: 
   const proc = child_process.spawnSync(newCmd, newArgs, options);
   const error = proc.stderr.toString().trim();
   if (error) {
-    console.error(`${newCmd} [${newArgs.map((s) => `"${s}"`)}] caused the following error:\n ${error}`);
+    console.error(`${newCmd} [${newArgs.map((s) => `"${s}"`).join(', ')}] caused the following error:\n ${error}`);
   }
   return proc.stdout.toString().trim();
 }

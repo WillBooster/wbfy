@@ -27,7 +27,7 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     }
     try {
       const oldContent = await fs.promises.readFile(filePath, 'utf8');
-      const oldSettings = JSON.parse(oldContent);
+      const oldSettings = JSON.parse(oldContent) as Settings;
       newSettings = merge.all([newSettings, oldSettings, newSettings], {
         arrayMerge: overwriteMerge,
       }) as Settings;

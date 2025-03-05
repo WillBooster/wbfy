@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import type { PackageJson } from 'type-fest';
+
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
@@ -41,7 +43,7 @@ export async function generateHuskyrcUpdatingPackageJson(config: PackageConfig):
 async function core(config: PackageConfig): Promise<void> {
   const packageJsonPath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
-  const packageJson = JSON.parse(jsonText);
+  const packageJson = JSON.parse(jsonText) as PackageJson;
   packageJson.scripts ||= {};
   delete packageJson.scripts['postinstall'];
   delete packageJson.scripts['postpublish'];

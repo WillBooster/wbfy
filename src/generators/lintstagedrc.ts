@@ -84,8 +84,8 @@ module.exports = {${lines.join('')}
 }
 
 function getEslintKey(config: PackageConfig): string {
-  const dirs = getSrcDirs(config);
-  return `./{${dirs.join(',')}}/**/*.{${extensions.eslint.join(',')}}`;
+  const dirs = getSrcDirs(config).map((dir) => `${dir}/**/`);
+  return `{,${dirs.join(',')}}*.{${extensions.eslint.join(',')}}`;
 }
 
 function getEslintFilterForPrettier(config: PackageConfig): string {

@@ -38,10 +38,10 @@ async function core(config: PackageConfig): Promise<void> {
 
   if (config.doesContainsPoetryLock) {
     const response = await fetch('https://pypi.org/pypi/poetry/json');
-    const json = await response.json();
+    const json = (await response.json()) as { info?: { version: string } } | undefined;
     const poetryVersion = json?.info?.version;
     if (poetryVersion) {
-      updateVersion(lines, 'poetry', json?.info?.version);
+      updateVersion(lines, 'poetry', poetryVersion);
     }
     updateVersion(lines, 'python', PYTHON_VERSION, true);
   }
