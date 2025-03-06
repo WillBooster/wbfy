@@ -11,8 +11,9 @@ export async function generateEslintrc(config: PackageConfig): Promise<void> {
     // Remove deprecated files
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.eslintrc.json'), { force: true }));
     await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.eslintignore'), { force: true }));
+    await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, 'eslint.config.js'), { force: true }));
 
-    const filePath = path.resolve(config.dirPath, 'eslint.config.js');
+    const filePath = path.resolve(config.dirPath, 'eslint.config.mjs');
     if (config.isBun) {
       await promisePool.run(() => fs.promises.rm(filePath, { force: true }));
       return;
