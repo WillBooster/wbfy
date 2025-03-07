@@ -3506,9 +3506,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-js@npm:11.0.2":
-  version: 11.0.2
-  resolution: "@willbooster/eslint-config-js@npm:11.0.2"
+"@willbooster/eslint-config-js@npm:11.0.3":
+  version: 11.0.3
+  resolution: "@willbooster/eslint-config-js@npm:11.0.3"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
@@ -3519,15 +3519,15 @@ __metadata:
     eslint-plugin-unicorn: ">=57"
     eslint-plugin-unused-imports: ">=4"
     globals: ">=16"
-  checksum: 10c0/f990a22f9f044de6972271b317e4be4590fcb45ff8c767ceb5653f92205d689e9674207e7fecdf4538801f87035ea94525a1d9d6626687a5a63c150101a2e617
+  checksum: 10c0/068b5c6e327565c672d01efed650994a99bf24eb36a2b8e3fbbca9e812dd50ee412a86d23869c0d95c6b84e86f3c4b918e2b69cd085fa5d52956ef79f1ba6ee4
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-ts@npm:11.0.3":
-  version: 11.0.3
-  resolution: "@willbooster/eslint-config-ts@npm:11.0.3"
+"@willbooster/eslint-config-ts@npm:11.0.6":
+  version: 11.0.6
+  resolution: "@willbooster/eslint-config-ts@npm:11.0.6"
   dependencies:
-    "@willbooster/eslint-config-js": "npm:11.0.2"
+    "@willbooster/eslint-config-js": "npm:11.0.3"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
@@ -3541,7 +3541,7 @@ __metadata:
     globals: ">=16"
     typescript: ">=5"
     typescript-eslint: ">=8"
-  checksum: 10c0/b8b8e751ace630ee660f37648553ab44574465044dea323ff6a39bdd23c1392fde96f6f5e61e94cc2a7a70d4c9074a5bad084b25cd60fd5b354749d1cae8a12e
+  checksum: 10c0/0d44b82901209210c6ad74bc1dcbf53f7979809b68b91d8fec387ce215809885d748093c01dba88bebaa3730318c20db7aa17b0cfaa4a3816bffdd202fe9213f
   languageName: node
   linkType: hard
 
@@ -5202,14 +5202,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:10.0.2":
-  version: 10.0.2
-  resolution: "eslint-config-prettier@npm:10.0.2"
+"eslint-config-prettier@npm:10.1.1":
+  version: 10.1.1
+  resolution: "eslint-config-prettier@npm:10.1.1"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
-    eslint-config-prettier: build/bin/cli.js
-  checksum: 10c0/e0ef3c442661a26fc6e82acec5bb9a418c4a8f65ec8adf0983d3aaba7716d2ed448358b063cce6e3c272c847d14cb856ddf30031770c6571e2b2c3e2a439afd4
+    eslint-config-prettier: bin/cli.js
+  checksum: 10c0/3dbfdf6495dd62e2e1644ea9e8e978100dabcd8740fd264df1222d130001a1e8de05d6ed6c67d3a60727386a07507f067d1ca79af6d546910414beab19e7966e
   languageName: node
   linkType: hard
 
@@ -10885,7 +10885,7 @@ __metadata:
     "@types/micromatch": "npm:4.0.9"
     "@types/node": "npm:22.13.8"
     "@types/yargs": "npm:17.0.33"
-    "@willbooster/eslint-config-ts": "npm:11.0.3"
+    "@willbooster/eslint-config-ts": "npm:11.0.6"
     "@willbooster/prettier-config": "npm:10.0.0"
     "@willbooster/shared-lib": "npm:5.2.14"
     "@willbooster/shared-lib-node": "npm:6.1.9"
@@ -10895,7 +10895,7 @@ __metadata:
     deepmerge: "npm:4.3.1"
     dotenv: "npm:16.4.7"
     eslint: "npm:9.21.0"
-    eslint-config-prettier: "npm:10.0.2"
+    eslint-config-prettier: "npm:10.1.1"
     eslint-import-resolver-typescript: "npm:3.8.3"
     eslint-plugin-import-x: "npm:4.6.1"
     eslint-plugin-sort-class-members: "npm:1.21.0"
