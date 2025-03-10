@@ -3646,12 +3646,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-js@npm:11.0.3":
-  version: 11.0.3
-  resolution: "@willbooster/eslint-config-js@npm:11.0.3"
+"@willbooster/eslint-config-js@npm:11.1.0":
+  version: 11.1.0
+  resolution: "@willbooster/eslint-config-js@npm:11.1.0"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
+    eslint-config-flat-gitignore: ">=2.1"
     eslint-config-prettier: ">=10"
     eslint-plugin-import-x: ">=4"
     eslint-plugin-sort-class-members: ">=1.21"
@@ -3659,18 +3660,19 @@ __metadata:
     eslint-plugin-unicorn: ">=57"
     eslint-plugin-unused-imports: ">=4"
     globals: ">=16"
-  checksum: 10c0/068b5c6e327565c672d01efed650994a99bf24eb36a2b8e3fbbca9e812dd50ee412a86d23869c0d95c6b84e86f3c4b918e2b69cd085fa5d52956ef79f1ba6ee4
+  checksum: 10c0/c3dab88b66832faeca0fdf88eb3da31d02b9a38bc09721f0d351b7ecb7af17341d60e951bf5e292a3b63051bcc056bac7f25bb8db739689ceeae477b5b24c323
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-ts@npm:11.0.6":
-  version: 11.0.6
-  resolution: "@willbooster/eslint-config-ts@npm:11.0.6"
+"@willbooster/eslint-config-ts@npm:11.1.0":
+  version: 11.1.0
+  resolution: "@willbooster/eslint-config-ts@npm:11.1.0"
   dependencies:
-    "@willbooster/eslint-config-js": "npm:11.0.3"
+    "@willbooster/eslint-config-js": "npm:11.1.0"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
+    eslint-config-flat-gitignore: ">=2.1"
     eslint-config-prettier: ">=10"
     eslint-import-resolver-typescript: ">=3"
     eslint-plugin-import-x: ">=4"
@@ -3681,7 +3683,7 @@ __metadata:
     globals: ">=16"
     typescript: ">=5"
     typescript-eslint: ">=8"
-  checksum: 10c0/0d44b82901209210c6ad74bc1dcbf53f7979809b68b91d8fec387ce215809885d748093c01dba88bebaa3730318c20db7aa17b0cfaa4a3816bffdd202fe9213f
+  checksum: 10c0/c0c66a5d813ed1bb4fb6e8e8fbc7507765e0e4cf90f7c5fd165143f38d94544a924b57b7133eead52580f227f952690b4b05e494ec81ea89409c8411d31a8b63
   languageName: node
   linkType: hard
 
@@ -11091,7 +11093,7 @@ __metadata:
     "@types/micromatch": "npm:4.0.9"
     "@types/node": "npm:22.13.10"
     "@types/yargs": "npm:17.0.33"
-    "@willbooster/eslint-config-ts": "npm:11.0.6"
+    "@willbooster/eslint-config-ts": "npm:11.1.0"
     "@willbooster/prettier-config": "npm:10.0.0"
     "@willbooster/shared-lib": "npm:5.2.15"
     "@willbooster/shared-lib-node": "npm:6.1.10"
