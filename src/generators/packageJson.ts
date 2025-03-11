@@ -20,6 +20,7 @@ import { BLITZ_VERSION, NEXT_VERSION } from '../utils/versionConstants.js';
 
 const jsCommonDeps = [
   'eslint',
+  'eslint-config-flat-gitignore',
   'eslint-config-prettier',
   'eslint-plugin-sort-class-members',
   'eslint-plugin-sort-destructure-keys',
