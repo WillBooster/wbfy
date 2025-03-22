@@ -3811,9 +3811,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-ts@npm:11.1.0":
-  version: 11.1.0
-  resolution: "@willbooster/eslint-config-ts@npm:11.1.0"
+"@willbooster/eslint-config-ts@npm:11.1.1":
+  version: 11.1.1
+  resolution: "@willbooster/eslint-config-ts@npm:11.1.1"
   dependencies:
     "@willbooster/eslint-config-js": "npm:11.1.0"
   peerDependencies:
@@ -3830,7 +3830,7 @@ __metadata:
     globals: ">=16"
     typescript: ">=5"
     typescript-eslint: ">=8"
-  checksum: 10c0/c0c66a5d813ed1bb4fb6e8e8fbc7507765e0e4cf90f7c5fd165143f38d94544a924b57b7133eead52580f227f952690b4b05e494ec81ea89409c8411d31a8b63
+  checksum: 10c0/3fbbea6d420ed971195ba1bd32de9adf38e6c1d221f3bf74e69aa5277781c2b538746bacb3314e2d247ab3de9f6b3a70040d1a41e02a2bc7c6bbe839b2df695f
   languageName: node
   linkType: hard
 
@@ -11276,7 +11276,7 @@ __metadata:
     "@types/micromatch": "npm:4.0.9"
     "@types/node": "npm:22.13.11"
     "@types/yargs": "npm:17.0.33"
-    "@willbooster/eslint-config-ts": "npm:11.1.0"
+    "@willbooster/eslint-config-ts": "npm:11.1.1"
     "@willbooster/prettier-config": "npm:10.0.0"
     "@willbooster/shared-lib": "npm:5.2.17"
     "@willbooster/shared-lib-node": "npm:6.1.12"
