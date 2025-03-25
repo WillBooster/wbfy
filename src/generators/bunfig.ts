@@ -5,10 +5,8 @@ import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
+// Don't add `exact = true` since libraries sometimes want to use non-exact dependencies.
 const newContent = `telemetry = false
-
-[install]
-exact = true
 
 [run]
 bun = true
