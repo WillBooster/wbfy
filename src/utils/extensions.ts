@@ -22,9 +22,9 @@ export const extensions = {
     'xml',
     'yaml',
     'yml',
+    'sh',
   ].sort(),
   codeWith4IndentSize: ['go', 'gradle', 'py'].sort(),
-  codeWith8IndentSize: ['sh'].sort(),
   markdownLike: ['md'].sort(),
   eslint: ['cjs', 'mjs', 'js', 'cts', 'mts', 'ts', 'tsx', 'jsx'].sort(),
   prettier: [
