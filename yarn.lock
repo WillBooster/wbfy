@@ -3407,12 +3407,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:22.13.11":
+"@types/node@npm:*":
   version: 22.13.11
   resolution: "@types/node@npm:22.13.11"
   dependencies:
     undici-types: "npm:~6.20.0"
   checksum: 10c0/f6ee33d36372242535c38640fe7550a6640d8a775ec19b55bfc11775b521cba072d892ca92a912332ce01b317293d645c1bf767f3f882ec719f2404a3d2a5b96
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:22.13.14":
+  version: 22.13.14
+  resolution: "@types/node@npm:22.13.14"
+  dependencies:
+    undici-types: "npm:~6.20.0"
+  checksum: 10c0/fa2ab5b8277bfbcc86c42e46a3ea9871b0d559894cc9d955685d17178c9499f0b1bf03d1d1ea8d92ef2dda818988f4035acb8abf9dc15423a998fa56173ab804
   languageName: node
   linkType: hard
 
@@ -3978,9 +3987,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:4.2.1":
-  version: 4.2.1
-  resolution: "@yarnpkg/core@npm:4.2.1"
+"@yarnpkg/core@npm:4.3.0":
+  version: 4.3.0
+  resolution: "@yarnpkg/core@npm:4.3.0"
   dependencies:
     "@arcanis/slice-ansi": "npm:^1.1.1"
     "@types/semver": "npm:^7.1.0"
@@ -4008,7 +4017,7 @@ __metadata:
     treeify: "npm:^1.1.0"
     tslib: "npm:^2.4.0"
     tunnel: "npm:^0.0.6"
-  checksum: 10c0/6943450ea0955cffb71e64c0154ecb81721ce8e9a6b4575d357d26732e1c632b805b52d305fd09e55607d38fba169cc680ad84ff3ca48d23a146ccda0a0e1b5e
+  checksum: 10c0/db5fec40cdbdcd71866e2fd39d5540197f278a15077ba886867201c9f707f0e3ae314043d12da6ed690c5440939fa2c6ddb74fc3b3b2f24a02df350f3227b0ae
   languageName: node
   linkType: hard
 
@@ -5632,9 +5641,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-typescript@npm:4.2.5":
-  version: 4.2.5
-  resolution: "eslint-import-resolver-typescript@npm:4.2.5"
+"eslint-import-resolver-typescript@npm:4.2.7":
+  version: 4.2.7
+  resolution: "eslint-import-resolver-typescript@npm:4.2.7"
   dependencies:
     debug: "npm:^4.4.0"
     get-tsconfig: "npm:^4.10.0"
@@ -5651,7 +5660,7 @@ __metadata:
       optional: true
     eslint-plugin-import-x:
       optional: true
-  checksum: 10c0/9134c4dd6e8b3cf1356d6bff68939153c81255c0ac7f694e829c3c7f5e785936591cfe43209d866c8a3b379d3a8dcd203651ec49bd99361fcb54dc0c2b9ce8fc
+  checksum: 10c0/de3676402f88d7827a2ce70245ae10e57f2fdd028e658970266d6da5a071a36ea1fb069f871299b8ab826f675c1b9aa69603181be4654db04140e9b7d33f4c0e
   languageName: node
   linkType: hard
 
@@ -10955,10 +10964,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:4.37.0, type-fest@npm:^4.37.0, type-fest@npm:^4.6.0":
-  version: 4.37.0
-  resolution: "type-fest@npm:4.37.0"
-  checksum: 10c0/5bad189f66fbe3431e5d36befa08cab6010e56be68b7467530b7ef94c3cf81ef775a8ac3047c8bbda4dd3159929285870357498d7bc1df062714f9c5c3a84926
+"type-fest@npm:4.38.0":
+  version: 4.38.0
+  resolution: "type-fest@npm:4.38.0"
+  checksum: 10c0/db9990d682a08697cf8ae67ac3cdbca734c742c96615e8888401d7d54e376b390e6a5d3be25fe3b4b439e1bb88a7da461da678a614ece8caccd9c0a07dd2e5f4
   languageName: node
   linkType: hard
 
@@ -10980,6 +10989,13 @@ __metadata:
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: 10c0/a5a7ecf2e654251613218c215c7493574594951c08e52ab9881c9df6a6da0aeca7528c213c622bc374b4e0cb5c443aa3ab758da4e3c959783ce884c3194e12cb
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^4.37.0, type-fest@npm:^4.6.0":
+  version: 4.37.0
+  resolution: "type-fest@npm:4.37.0"
+  checksum: 10c0/5bad189f66fbe3431e5d36befa08cab6010e56be68b7467530b7ef94c3cf81ef775a8ac3047c8bbda4dd3159929285870357498d7bc1df062714f9c5c3a84926
   languageName: node
   linkType: hard
 
@@ -11462,13 +11478,13 @@ __metadata:
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.9"
-    "@types/node": "npm:22.13.11"
+    "@types/node": "npm:22.13.14"
     "@types/yargs": "npm:17.0.33"
     "@willbooster/eslint-config-ts": "npm:11.1.1"
     "@willbooster/prettier-config": "npm:10.0.0"
     "@willbooster/shared-lib": "npm:5.2.17"
     "@willbooster/shared-lib-node": "npm:6.1.12"
-    "@yarnpkg/core": "npm:4.2.1"
+    "@yarnpkg/core": "npm:4.3.0"
     build-ts: "npm:13.1.32"
     conventional-changelog-conventionalcommits: "npm:8.0.0"
     deepmerge: "npm:4.3.1"
@@ -11476,7 +11492,7 @@ __metadata:
     eslint: "npm:9.23.0"
     eslint-config-flat-gitignore: "npm:2.1.0"
     eslint-config-prettier: "npm:10.1.1"
-    eslint-import-resolver-typescript: "npm:4.2.5"
+    eslint-import-resolver-typescript: "npm:4.2.7"
     eslint-plugin-import-x: "npm:4.9.3"
     eslint-plugin-sort-class-members: "npm:1.21.0"
     eslint-plugin-sort-destructure-keys: "npm:2.0.0"
@@ -11499,7 +11515,7 @@ __metadata:
     simple-git: "npm:3.27.0"
     sort-package-json: "npm:3.0.0"
     ts-node: "npm:10.9.2"
-    type-fest: "npm:4.37.0"
+    type-fest: "npm:4.38.0"
     typescript: "npm:5.8.2"
     typescript-eslint: "npm:8.28.0"
     vitest: "npm:3.0.9"
