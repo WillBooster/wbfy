@@ -5392,16 +5392,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-typescript@npm:4.2.7":
-  version: 4.2.7
-  resolution: "eslint-import-resolver-typescript@npm:4.2.7"
+"eslint-import-resolver-typescript@npm:4.3.1":
+  version: 4.3.1
+  resolution: "eslint-import-resolver-typescript@npm:4.3.1"
   dependencies:
     debug: "npm:^4.4.0"
     get-tsconfig: "npm:^4.10.0"
     is-bun-module: "npm:^2.0.0"
     stable-hash: "npm:^0.0.5"
     tinyglobby: "npm:^0.2.12"
-    unrs-resolver: "npm:^1.3.2"
+    unrs-resolver: "npm:^1.3.3"
   peerDependencies:
     eslint: "*"
     eslint-plugin-import: "*"
@@ -5411,13 +5411,13 @@ __metadata:
       optional: true
     eslint-plugin-import-x:
       optional: true
-  checksum: 10c0/de3676402f88d7827a2ce70245ae10e57f2fdd028e658970266d6da5a071a36ea1fb069f871299b8ab826f675c1b9aa69603181be4654db04140e9b7d33f4c0e
+  checksum: 10c0/ed6ff5f71e41495d0045625497fbcdc09a54bcca959b118a35e505edaaf5dd9fcd2d5d10477b952fe59d1d9cb2703f43cc30595a7ba9b569169515c1646d51ea
   languageName: node
   linkType: hard
 
-"eslint-plugin-import-x@npm:4.9.3":
-  version: 4.9.3
-  resolution: "eslint-plugin-import-x@npm:4.9.3"
+"eslint-plugin-import-x@npm:4.9.4":
+  version: 4.9.4
+  resolution: "eslint-plugin-import-x@npm:4.9.4"
   dependencies:
     "@types/doctrine": "npm:^0.0.9"
     "@typescript-eslint/utils": "npm:^8.28.0"
@@ -5430,10 +5430,10 @@ __metadata:
     semver: "npm:^7.7.1"
     stable-hash: "npm:^0.0.5"
     tslib: "npm:^2.8.1"
-    unrs-resolver: "npm:^1.3.1"
+    unrs-resolver: "npm:^1.3.3"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
-  checksum: 10c0/b87f2a3b4d2f5652a6e1b06c2ffc2d4e55846681a89a04290f19b4ecbead6979556768fefe0242875b73c415f31171f995be2088e162e10b93890f614f59c984
+  checksum: 10c0/df6fba9b905cac783ec975b0966f6378f44080a621b50bf3a4836934c2e26dbf830b02403efe4dcf97c2b49c5d11c530272339debf72ccffa6d06afc3c6e447f
   languageName: node
   linkType: hard
 
@@ -10823,7 +10823,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unrs-resolver@npm:^1.3.1, unrs-resolver@npm:^1.3.2":
+"unrs-resolver@npm:^1.3.3":
   version: 1.3.3
   resolution: "unrs-resolver@npm:1.3.3"
   dependencies:
@@ -11110,8 +11110,8 @@ __metadata:
     eslint: "npm:9.23.0"
     eslint-config-flat-gitignore: "npm:2.1.0"
     eslint-config-prettier: "npm:10.1.1"
-    eslint-import-resolver-typescript: "npm:4.2.7"
-    eslint-plugin-import-x: "npm:4.9.3"
+    eslint-import-resolver-typescript: "npm:4.3.1"
+    eslint-plugin-import-x: "npm:4.9.4"
     eslint-plugin-sort-class-members: "npm:1.21.0"
     eslint-plugin-sort-destructure-keys: "npm:2.0.0"
     eslint-plugin-unicorn: "npm:58.0.0"
