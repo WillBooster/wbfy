@@ -158,8 +158,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.version = '0.0.0-semantically-released';
     }
     if (config.depending.playwrightTest) {
+      // Since artillery requires a specific version of @playwright/test
+      const hasArtillery = jsonObj.dependencies['artillery'] || jsonObj.devDependencies['artillery'];
       // Since llm-toolbox requires @playwright/test in dependencies
-      if (!jsonObj.dependencies['@playwright/test']) {
+      if (!hasArtillery && !jsonObj.dependencies['@playwright/test']) {
         devDependencies.push('@playwright/test');
         delete jsonObj.dependencies['@playwright/test'];
       }
