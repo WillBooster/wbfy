@@ -3770,22 +3770,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:5.2.19":
-  version: 5.2.19
-  resolution: "@willbooster/shared-lib@npm:5.2.19"
-  checksum: 10c0/3f1bad8becfb3b3b4bfa37aff2b476bc8a4fd2d3778f0cbdc725661ab6171cd157be4abaad969cd4ad4b01376e9db78486afb415153da60a80687f598817fed4
+"@willbooster/shared-lib-node@npm:6.1.14":
+  version: 6.1.14
+  resolution: "@willbooster/shared-lib-node@npm:6.1.14"
+  dependencies:
+    dotenv: "npm:16.5.0"
+    tree-kill: "npm:1.2.2"
+  checksum: 10c0/59a5b3ccab7b13b4f93136427f89fa9edd182ec6b5ccd29f25ae5a1aa4b6faec0797a7a61e03c5c9f21fe981ce8af6d0de471e05068a41b9c70e3d0c054e3610
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:4.4.0":
-  version: 4.4.0
-  resolution: "@yarnpkg/core@npm:4.4.0"
+"@willbooster/shared-lib@npm:5.2.20":
+  version: 5.2.20
+  resolution: "@willbooster/shared-lib@npm:5.2.20"
+  checksum: 10c0/1264e23d9b701ca73c8c7bf398315228011e2cdc40cdcef54d7c3de6c310f905ecff3370bb0bb2404e4847f2d4bf974948c692c942610a139519860caf09b8f5
+  languageName: node
+  linkType: hard
+
+"@yarnpkg/core@npm:4.4.1":
+  version: 4.4.1
+  resolution: "@yarnpkg/core@npm:4.4.1"
   dependencies:
     "@arcanis/slice-ansi": "npm:^1.1.1"
     "@types/semver": "npm:^7.1.0"
     "@types/treeify": "npm:^1.0.0"
     "@yarnpkg/fslib": "npm:^3.1.2"
-    "@yarnpkg/libzip": "npm:^3.2.0"
+    "@yarnpkg/libzip": "npm:^3.2.1"
     "@yarnpkg/parsers": "npm:^3.0.3"
     "@yarnpkg/shell": "npm:^4.1.2"
     camelcase: "npm:^5.3.1"
@@ -3807,7 +3817,7 @@ __metadata:
     treeify: "npm:^1.1.0"
     tslib: "npm:^2.4.0"
     tunnel: "npm:^0.0.6"
-  checksum: 10c0/8d6a7f63ed342fd6aa3808044124228c9bed4e4f94af331e570f0c452da838ebb2be98b5a87d5567f3eb03ef49e26547718fd9740de3c204802b121f3ac69e13
+  checksum: 10c0/203e78c3de1e2404f1ecfce5a305b2a39826e5aa7b3a70edc6758683c8746deee21ce3ab7f2d0ad1496e12b834524280c67ef735f70303e1ab8e3883586b91e8
   languageName: node
   linkType: hard
 
@@ -3820,16 +3830,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/libzip@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@yarnpkg/libzip@npm:3.2.0"
+"@yarnpkg/libzip@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "@yarnpkg/libzip@npm:3.2.1"
   dependencies:
     "@types/emscripten": "npm:^1.39.6"
     "@yarnpkg/fslib": "npm:^3.1.2"
     tslib: "npm:^2.4.0"
   peerDependencies:
     "@yarnpkg/fslib": ^3.1.2
-  checksum: 10c0/ee9415a436be4d196756a834840c9f068130ba073d7b45bb3cfeed86fa385603f1f36e71fca9c41ae19e0c598d8e3f9bc33eeb391b20504f076e591b9562873c
+  checksum: 10c0/067b57953fe6f7f624b4ca0cabdeb117eaed351ec7c7571551e0380f5b396260fe0350812ab9d003238f01b37398c878d3d1b6b944654d39484a98aa38db3283
   languageName: node
   linkType: hard
 
@@ -10678,10 +10688,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:4.39.1, type-fest@npm:^4.39.1, type-fest@npm:^4.6.0":
-  version: 4.39.1
-  resolution: "type-fest@npm:4.39.1"
-  checksum: 10c0/f5bf302eb2e2f70658be1757aa578f4a09da3f65699b0b12b7ae5502ccea76e5124521a6e6b69540f442c3dc924c394202a2ab58718d0582725c7ac23c072594
+"type-fest@npm:4.40.0":
+  version: 4.40.0
+  resolution: "type-fest@npm:4.40.0"
+  checksum: 10c0/b39d4da6f9a154e3db7e714cd05ccf56b53f4f0bbf74dd294cb6be4921b16ecca5cb00cb81b53ab621a31c8e8509c74b5101895ada47af9de368a317d24538a3
   languageName: node
   linkType: hard
 
@@ -10703,6 +10713,13 @@ __metadata:
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: 10c0/a5a7ecf2e654251613218c215c7493574594951c08e52ab9881c9df6a6da0aeca7528c213c622bc374b4e0cb5c443aa3ab758da4e3c959783ce884c3194e12cb
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^4.39.1, type-fest@npm:^4.6.0":
+  version: 4.39.1
+  resolution: "type-fest@npm:4.39.1"
+  checksum: 10c0/f5bf302eb2e2f70658be1757aa578f4a09da3f65699b0b12b7ae5502ccea76e5124521a6e6b69540f442c3dc924c394202a2ab58718d0582725c7ac23c072594
   languageName: node
   linkType: hard
 
@@ -11138,9 +11155,9 @@ __metadata:
     "@types/yargs": "npm:17.0.33"
     "@willbooster/eslint-config-ts": "npm:11.2.0"
     "@willbooster/prettier-config": "npm:10.0.0"
-    "@willbooster/shared-lib": "npm:5.2.19"
-    "@willbooster/shared-lib-node": "npm:6.1.13"
-    "@yarnpkg/core": "npm:4.4.0"
+    "@willbooster/shared-lib": "npm:5.2.20"
+    "@willbooster/shared-lib-node": "npm:6.1.14"
+    "@yarnpkg/core": "npm:4.4.1"
     build-ts: "npm:13.1.37"
     conventional-changelog-conventionalcommits: "npm:8.0.0"
     deepmerge: "npm:4.3.1"
@@ -11171,12 +11188,12 @@ __metadata:
     simple-git: "npm:3.27.0"
     sort-package-json: "npm:3.0.0"
     ts-node: "npm:10.9.2"
-    type-fest: "npm:4.39.1"
+    type-fest: "npm:4.40.0"
     typescript: "npm:5.8.3"
     typescript-eslint: "npm:8.30.1"
     vitest: "npm:3.1.1"
     yargs: "npm:17.7.2"
-    zod: "npm:3.24.2"
+    zod: "npm:3.24.3"
   bin:
     wbfy: ./bin/wbfy.js
   languageName: unknown
@@ -11399,9 +11416,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:3.24.2":
-  version: 3.24.2
-  resolution: "zod@npm:3.24.2"
-  checksum: 10c0/c638c7220150847f13ad90635b3e7d0321b36cce36f3fc6050ed960689594c949c326dfe2c6fa87c14b126ee5d370ccdebd6efb304f41ef5557a4aaca2824565
+"zod@npm:3.24.3":
+  version: 3.24.3
+  resolution: "zod@npm:3.24.3"
+  checksum: 10c0/ab0369810968d0329a1a141e9418e01e5c9c2a4905cbb7cb7f5a131d6e9487596e1400e21eeff24c4a8ee28dacfa5bd6103893765c055b7a98c2006a5a4fc68d
   languageName: node
   linkType: hard
