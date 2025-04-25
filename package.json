@@ -54,7 +54,7 @@
     "@types/libsodium-wrappers": "0.7.14",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/micromatch": "4.0.9",
-    "@types/node": "22.14.1",
+    "@types/node": "22.15.2",
     "@types/yargs": "17.0.33",
     "@willbooster/eslint-config-ts": "11.2.0",
     "@willbooster/prettier-config": "10.0.0",
@@ -83,7 +83,7 @@
     "type-fest": "4.40.0",
     "typescript": "5.8.3",
     "typescript-eslint": "8.31.0",
-    "vitest": "3.1.1"
+    "vitest": "3.1.2"
   },
   "packageManager": "yarn@4.9.1",
   "engines": {
