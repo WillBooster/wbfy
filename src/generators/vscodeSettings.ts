@@ -33,6 +33,14 @@ export async function generateVscodeSettings(config: PackageConfig): Promise<voi
       if (config.depending.next) {
         settings = merge.all([settings, excludeSetting('**/.next/**')]);
       }
+      // LLMによるvibe codingでは、自動フォーマットやコードアクションを無効化することで
+      // 生成されたコードの元の形式を維持できる
+      if ('editor.codeActionsOnSave' in settings) {
+        delete settings['editor.codeActionsOnSave'];
+      }
+      if ('editor.formatOnSave' in settings) {
+        delete settings['editor.formatOnSave'];
+      }
       sortKeys((settings as Record<string, unknown>) ?? {});
       const newContent = JSON.stringify(settings, undefined, 2);
       await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
