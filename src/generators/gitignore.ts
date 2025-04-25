@@ -15,6 +15,7 @@ const commonContent = `
 !.keep
 .env.production
 */mount/*.hash
+.idea/AugmentWebviewStateStore.xml
 .idea/copilot/chatSessions/
 .devcontainer/
 dist/
