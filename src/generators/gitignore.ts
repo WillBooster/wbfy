@@ -13,12 +13,12 @@ const defaultNames = ['windows', 'macos', 'linux', 'jetbrains', 'visualstudiocod
 
 const commonContent = `
 !.keep
-.env.production
-*/mount/*.hash
 .aider*
+.env.production
 .idea/AugmentWebviewStateStore.xml
 .idea/copilot/chatSessions/
 .devcontainer/
+*/mount/*.hash
 dist/
 temp/
 `;
