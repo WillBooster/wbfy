@@ -3267,12 +3267,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:22.15.2":
+"@types/node@npm:*":
   version: 22.15.2
   resolution: "@types/node@npm:22.15.2"
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10c0/39da31d5fc63b14fabd217bb8a921c4a7fc3d99f233440209f9fc2d5d736e8773f7efc65223e2fd0e8db8390b0baab9c0cd2e951c2ece8b237f07313ab3cf295
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:22.15.3":
+  version: 22.15.3
+  resolution: "@types/node@npm:22.15.3"
+  dependencies:
+    undici-types: "npm:~6.21.0"
+  checksum: 10c0/2879f012d1aeba0bfdb5fed80d165f4f2cb3d1f2e1f98a24b18d4a211b4ace7d64bf2622784c78355982ffc1081ba79d0934efc2fb8353913e5871a63609661f
   languageName: node
   linkType: hard
 
@@ -4359,9 +4368,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:13.1.40":
-  version: 13.1.40
-  resolution: "build-ts@npm:13.1.40"
+"build-ts@npm:13.2.1":
+  version: 13.2.1
+  resolution: "build-ts@npm:13.2.1"
   dependencies:
     "@babel/core": "npm:7.26.10"
     "@babel/plugin-proposal-decorators": "npm:7.25.9"
@@ -4399,7 +4408,7 @@ __metadata:
     yargs: "npm:17.7.2"
   bin:
     build-ts: bin/index.js
-  checksum: 10c0/bcc2b9fa946a72cf4d3963026abd65984dfc4e5b3324ade6b47cb611d8c02d2db243e613215b51d1093a0a0784480288be1916351963c5ef99ec3cd8381db577
+  checksum: 10c0/febdf09a9cad3db7d4af6520dd285b5cdfb984c9401ee0f5c259e1c06fe83ef2085a0f512dbb3ba979a84b2efcaac56ea0404ca566b5013b9fabbdf8f0c1e9ba
   languageName: node
   linkType: hard
 
@@ -10696,10 +10705,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:4.40.0":
-  version: 4.40.0
-  resolution: "type-fest@npm:4.40.0"
-  checksum: 10c0/b39d4da6f9a154e3db7e714cd05ccf56b53f4f0bbf74dd294cb6be4921b16ecca5cb00cb81b53ab621a31c8e8509c74b5101895ada47af9de368a317d24538a3
+"type-fest@npm:4.40.1, type-fest@npm:^4.39.1, type-fest@npm:^4.6.0":
+  version: 4.40.1
+  resolution: "type-fest@npm:4.40.1"
+  checksum: 10c0/590cb7d4dcd3da83efe49b5b52cd041661f6fa29f18cb76650fe1fdeb4090688e92955656e9d981e606abb13d25c0418be8c6c6504d80e87fe18dc9ca0888392
   languageName: node
   linkType: hard
 
@@ -10721,13 +10730,6 @@ __metadata:
   version: 2.19.0
   resolution: "type-fest@npm:2.19.0"
   checksum: 10c0/a5a7ecf2e654251613218c215c7493574594951c08e52ab9881c9df6a6da0aeca7528c213c622bc374b4e0cb5c443aa3ab758da4e3c959783ce884c3194e12cb
-  languageName: node
-  linkType: hard
-
-"type-fest@npm:^4.39.1, type-fest@npm:^4.6.0":
-  version: 4.40.1
-  resolution: "type-fest@npm:4.40.1"
-  checksum: 10c0/590cb7d4dcd3da83efe49b5b52cd041661f6fa29f18cb76650fe1fdeb4090688e92955656e9d981e606abb13d25c0418be8c6c6504d80e87fe18dc9ca0888392
   languageName: node
   linkType: hard
 
@@ -11167,14 +11169,14 @@ __metadata:
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.9"
-    "@types/node": "npm:22.15.2"
+    "@types/node": "npm:22.15.3"
     "@types/yargs": "npm:17.0.33"
     "@willbooster/eslint-config-ts": "npm:11.2.0"
     "@willbooster/prettier-config": "npm:10.0.0"
     "@willbooster/shared-lib": "npm:5.2.22"
     "@willbooster/shared-lib-node": "npm:6.1.16"
     "@yarnpkg/core": "npm:4.4.1"
-    build-ts: "npm:13.1.40"
+    build-ts: "npm:13.2.1"
     conventional-changelog-conventionalcommits: "npm:8.0.0"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:16.5.0"
@@ -11204,7 +11206,7 @@ __metadata:
     simple-git: "npm:3.27.0"
     sort-package-json: "npm:3.1.0"
     ts-node: "npm:10.9.2"
-    type-fest: "npm:4.40.0"
+    type-fest: "npm:4.40.1"
     typescript: "npm:5.8.3"
     typescript-eslint: "npm:8.31.1"
     vitest: "npm:3.1.2"
