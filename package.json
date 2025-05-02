@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "build-ts app",
-    "check-all": "yarn cleanup && yarn typecheck && yarn test",
+    "check-for-ai": "yarn cleanup && yarn typecheck && yarn test",
     "cleanup": "yarn format && yarn lint-fix",
     "format": "sort-package-json && yarn prettify",
     "postinstall": "husky || true",

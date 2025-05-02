@@ -425,7 +425,7 @@ async function removeDeprecatedStuff(
 export function generateScripts(config: PackageConfig): Record<string, string> {
   if (config.isBun) {
     const scripts: Record<string, string> = {
-      'check-all': 'bun run cleanup && bun run typecheck && bun run test',
+      'check-for-ai': 'bun run cleanup && bun run typecheck && bun run test --silent',
       cleanup: 'bun --bun wb lint --fix --format',
       format: `bun --bun wb lint --format`,
       lint: `bun --bun wb lint`,
@@ -439,7 +439,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     return scripts;
   } else {
     let scripts: Record<string, string> = {
-      'check-all': 'yarn format > /dev/null && yarn lint-fix && yarn typecheck && yarn test',
+      'check-for-ai': 'yarn format > /dev/null && yarn lint-fix && yarn typecheck && yarn test --silent',
       cleanup: 'yarn format && yarn lint-fix',
       format: `sort-package-json && yarn prettify`,
       lint: `eslint --color`,
