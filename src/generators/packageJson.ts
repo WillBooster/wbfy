@@ -439,7 +439,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     return scripts;
   } else {
     let scripts: Record<string, string> = {
-      'check-all': 'yarn cleanup && yarn typecheck && yarn test',
+      'check-all': 'yarn format > /dev/null && yarn lint-fix && yarn typecheck && yarn test',
       cleanup: 'yarn format && yarn lint-fix',
       format: `sort-package-json && yarn prettify`,
       lint: `eslint --color`,
