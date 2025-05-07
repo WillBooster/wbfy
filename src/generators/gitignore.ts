@@ -19,6 +19,7 @@ const commonContent = `
 .idea/copilot/chatSessions/
 .devcontainer/
 */mount/*.hash
+__generated__/
 dist/
 temp/
 `;
