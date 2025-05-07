@@ -93,6 +93,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config));
+
+  if ('gen-code' in jsonObj.scripts && 'check-for-ai' in jsonObj.scripts) {
+    jsonObj.scripts['check-for-ai'] = `yarn gen-code > /dev/null && ${jsonObj.scripts['check-for-ai']}`;
+  }
+
   if (config.isBun) {
     delete jsonObj.scripts.prettify;
   } else {
@@ -141,6 +146,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         jsonObj.scripts.postpack = 'pinst --enable';
       }
     }
+
     if (config.depending.semanticRelease) {
       const version =
         jsonObj.devDependencies['multi-semantic-release'] || jsonObj.devDependencies['@qiwi/multi-semantic-release']
@@ -157,6 +163,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
       jsonObj.version = '0.0.0-semantically-released';
     }
+
     if (config.depending.playwrightTest) {
       // Since artillery requires a specific version of @playwright/test
       const hasArtillery = jsonObj.dependencies['artillery'] || jsonObj.devDependencies['artillery'];
@@ -168,6 +175,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       delete jsonObj.dependencies['playwright'];
       delete jsonObj.devDependencies['playwright'];
     }
+
     if (config.doesContainsSubPackageJsons) {
       // We don't allow non-array workspaces in monorepo.
       jsonObj.workspaces = Array.isArray(jsonObj.workspaces)
@@ -189,6 +197,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
     }
   }
+
   if (config.depending.wb || config.isBun) {
     if (jsonObj.dependencies['@willbooster/wb']) {
       dependencies.push('@willbooster/wb');
