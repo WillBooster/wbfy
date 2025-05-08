@@ -10508,9 +10508,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sort-package-json@npm:3.2.0":
-  version: 3.2.0
-  resolution: "sort-package-json@npm:3.2.0"
+"sort-package-json@npm:3.2.1":
+  version: 3.2.1
+  resolution: "sort-package-json@npm:3.2.1"
   dependencies:
     detect-indent: "npm:^7.0.1"
     detect-newline: "npm:^4.0.1"
@@ -10521,7 +10521,7 @@ __metadata:
     tinyglobby: "npm:^0.2.12"
   bin:
     sort-package-json: cli.js
-  checksum: 10c0/14c210c6f07ae326cebd006a9d5bbe76951d7689124806abc70a668124cd380e0488be0a351b22274e5e5a8862255e70c9c985fc9fe512e9c2a78a51218601bc
+  checksum: 10c0/383a62dbea96a030e90f9c3ac42fa4fb7700904f125a50700a1f75b048bb319d4104c57a989ef8f7b7a8f1553fe7b10e49ebcfd13a5ca08658541fd0bdcd202f
   languageName: node
   linkType: hard
 
@@ -11766,7 +11766,7 @@ __metadata:
     prettier: "npm:3.5.3"
     semantic-release: "npm:24.2.3"
     simple-git: "npm:3.27.0"
-    sort-package-json: "npm:3.2.0"
+    sort-package-json: "npm:3.2.1"
     ts-node: "npm:10.9.2"
     type-fest: "npm:4.40.1"
     typescript: "npm:5.8.3"
