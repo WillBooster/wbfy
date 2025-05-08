@@ -416,6 +416,7 @@ async function removeDeprecatedStuff(
   delete jsonObj.scripts['python-format'];
   delete jsonObj.scripts['format-python'];
   delete jsonObj.scripts['prettier'];
+  delete jsonObj.scripts['check-all'];
   if (!rootConfig.isWillBoosterConfigs) {
     for (const deps of Object.values(eslintDeps)) {
       for (const dep of deps) {
