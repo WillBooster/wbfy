@@ -75,6 +75,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   jsonObj.dependencies = jsonObj.dependencies || {};
   jsonObj.devDependencies = jsonObj.devDependencies || {};
   jsonObj.peerDependencies = jsonObj.peerDependencies || {};
+  const packageManager = config.isBun ? 'bun' : 'yarn';
 
   await removeDeprecatedStuff(
     rootConfig,
@@ -94,8 +95,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config));
 
-  if ('gen-code' in jsonObj.scripts && 'check-for-ai' in jsonObj.scripts) {
-    jsonObj.scripts['check-for-ai'] = `yarn gen-code > /dev/null && ${jsonObj.scripts['check-for-ai']}`;
+  if ('check-for-ai' in jsonObj.scripts) {
+    if ('gen-code' in jsonObj.scripts) {
+      jsonObj.scripts['check-for-ai'] = `${packageManager} gen-code > /dev/null && ${jsonObj.scripts['check-for-ai']}`;
+    }
+    jsonObj.scripts['check-for-ai'] = `${packageManager} install > /dev/null && ${jsonObj.scripts['check-for-ai']}`;
   }
 
   if (config.isBun) {
@@ -373,7 +377,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (!skipAddingDeps) {
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
-    const packageManager = config.isBun ? 'bun' : 'yarn';
     if (dependencies.length > 0) {
       spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
     }
