@@ -452,7 +452,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     return scripts;
   } else {
     let scripts: Record<string, string> = {
-      'check-for-ai': 'yarn format > /dev/null && yarn lint-fix && yarn typecheck && yarn test --silent',
+      'check-for-ai': 'yarn format > /dev/null && yarn lint-fix --quiet && yarn typecheck && yarn test --silent',
       cleanup: 'yarn format && yarn lint-fix',
       format: `sort-package-json && yarn prettify`,
       lint: `eslint --color`,
