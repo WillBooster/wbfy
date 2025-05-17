@@ -34,7 +34,7 @@
   "dependencies": {
     "@octokit/core": "6.1.5",
     "@willbooster/shared-lib": "5.3.1",
-    "@willbooster/shared-lib-node": "6.1.18",
+    "@willbooster/shared-lib-node": "6.1.19",
     "deepmerge": "4.3.1",
     "dotenv": "16.5.0",
     "fast-glob": "3.3.3",
