@@ -32,7 +32,7 @@
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
-    "@octokit/core": "6.1.5",
+    "@octokit/core": "7.0.2",
     "@willbooster/shared-lib": "5.4.0",
     "@willbooster/shared-lib-node": "6.1.19",
     "deepmerge": "4.3.1",
