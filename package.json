@@ -44,7 +44,7 @@
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "4.1.2",
     "simple-git": "3.27.0",
-    "yargs": "17.7.2",
+    "yargs": "18.0.0",
     "zod": "3.25.42"
   },
   "devDependencies": {
