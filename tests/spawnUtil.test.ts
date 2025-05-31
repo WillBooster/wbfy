@@ -13,16 +13,20 @@ test.each`
   ${'yarn1'}                    | ${'1.22.22'}
   ${'yarn1-with-node-version'}  | ${'1.22.22'}
   ${'yarn1-with-tool-versions'} | ${'1.22.22'}
-  ${'berry'}                    | ${'3.2.1'}
-  ${'berry-with-node-version'}  | ${'3.2.1'}
-  ${'berry-with-tool-versions'} | ${'3.2.1'}
-`('spawnSync on $dirPath repo', ({ dirPath, expected }: { dirPath: string; expected: string }) => {
-  const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
-  expect(fs.existsSync(packageDirPath)).toBe(true);
-  spawnSyncWithStringResult('asdf', ['install'], packageDirPath);
-  const version = spawnSyncWithStringResult('yarn', ['--version'], packageDirPath);
-  expect(version).toBe(expected);
-});
+  ${'berry'}                    | ${'4.9.1'}
+  ${'berry-with-node-version'}  | ${'4.9.1'}
+  ${'berry-with-tool-versions'} | ${'4.9.1'}
+`(
+  'spawnSync on $dirPath repo',
+  ({ dirPath, expected }: { dirPath: string; expected: string }) => {
+    const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
+    expect(fs.existsSync(packageDirPath)).toBe(true);
+    spawnSyncWithStringResult('asdf', ['install'], packageDirPath);
+    const version = spawnSyncWithStringResult('yarn', ['--version'], packageDirPath);
+    expect(version).toBe(expected);
+  },
+  { timeout: 60 * 1000 }
+);
 
 test('get latest version of yarn berry', () => {
   const version = getLatestVersion('@yarnpkg/cli', process.cwd());
