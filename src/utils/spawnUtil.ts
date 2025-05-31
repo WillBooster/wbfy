@@ -29,7 +29,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   }
 
   if (env.ASDF_DIR) {
-    args = ['-l', '-c', `. ${env.ASDF_DIR}/asdf.sh && ${command} ${args.join(' ')}`];
+    args = ['-l', '-c', `${command} ${args.join(' ')}`];
     command = 'bash';
   }
   return [
