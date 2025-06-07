@@ -152,12 +152,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
 
     if (config.depending.semanticRelease) {
-      const version =
-        jsonObj.devDependencies['multi-semantic-release'] || jsonObj.devDependencies['@qiwi/multi-semantic-release']
-          ? // TODO: remove the version specification after multi-semantic-release supports version 7+
-            '@6.1.0'
-          : '';
-      devDependencies.push(`conventional-changelog-conventionalcommits${version}`);
       if (
         !jsonObj.devDependencies['semantic-release'] &&
         !jsonObj.devDependencies['multi-semantic-release'] &&
