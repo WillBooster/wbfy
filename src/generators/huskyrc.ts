@@ -71,7 +71,11 @@ async function core(config: PackageConfig): Promise<void> {
 
   const { typecheck } = generateScripts(config);
   if (typecheck) {
-    let prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
+    let prePush =
+      config.repository?.startsWith('github:WillBoosterLab/') &&
+      !config.repository?.toLocaleLowerCase().includes('exercode')
+        ? scripts.prePushForLab
+        : scripts.prePush;
     prePush = prePush.replace(
       'yarn typecheck',
       typecheck
