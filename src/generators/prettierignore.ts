@@ -12,6 +12,7 @@ android/
 ios/
 no-format/
 test-fixtures/
+test/fixtures/
 *.d.ts
 *.min.js
 .yarn/

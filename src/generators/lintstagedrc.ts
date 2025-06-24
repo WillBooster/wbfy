@@ -34,7 +34,7 @@ async function core(config: PackageConfig): Promise<void> {
   const packagesFilter = config.isRoot ? " && !file.includes('/packages/')" : '';
   lines.push(`
   './**/*.{${extensions.prettier.join(',')}}': files => {
-    let filteredFiles = files.filter(file => !file.includes('/test-fixtures/')${packagesFilter});${getEslintFilterForPrettier(config)}
+    let filteredFiles = files.filter(file => !file.includes('/test-fixtures/') && !file.includes('/test/fixtures/')${packagesFilter});${getEslintFilterForPrettier(config)}
     if (filteredFiles.length === 0) return [];
     const commands = [\`${packagePrefix}prettier --cache --write \${filteredFiles.join(' ')}\`];
     if (filteredFiles.some(file => file.endsWith('package.json'))) {

@@ -451,7 +451,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
       format: `sort-package-json && yarn prettify`,
       lint: `eslint --color`,
       'lint-fix': 'yarn lint --fix',
-      prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test-fixtures/**"`,
+      prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test{-,/}fixtures/**"`,
       typecheck: 'tsc --noEmit --Pretty',
     };
     if (config.doesContainsSubPackageJsons) {
@@ -464,7 +464,7 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
           'lint-fix': 'yarn workspaces foreach --all --parallel --verbose run lint-fix',
           prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(
             ','
-          )}}" "!**/packages/**" "!**/test-fixtures/**"`,
+          )}}" "!**/packages/**" "!**/test{-,/}fixtures/**"`,
           // CI=1 prevents vitest from enabling watch.
           // FORCE_COLOR=3 make wb enable color output.
           test: 'CI=1 FORCE_COLOR=3 yarn workspaces foreach --all --verbose run test',
