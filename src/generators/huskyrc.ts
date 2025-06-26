@@ -14,6 +14,16 @@ const scripts = {
   preCommit: 'node node_modules/.bin/lint-staged',
   prePush: `yarn typecheck`,
   prePushForLab: `
+if [ $(git branch --show-current) = "main" ]; then
+  echo "************************************************"
+  echo "*** Don't push main branch directly. Use PR! ***"
+  echo "************************************************"
+  exit 1
+fi
+
+yarn typecheck
+`.trim(),
+  prePushForLabExceptAdmin: `
 if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
   echo "************************************************"
   echo "*** Don't push main branch directly. Use PR! ***"
@@ -71,11 +81,11 @@ async function core(config: PackageConfig): Promise<void> {
 
   const { typecheck } = generateScripts(config);
   if (typecheck) {
-    let prePush =
-      config.repository?.startsWith('github:WillBoosterLab/') &&
-      !config.repository?.toLocaleLowerCase().includes('exercode')
+    let prePush = config.repository?.startsWith('github:WillBoosterLab/')
+      ? config.repository?.toLocaleLowerCase().includes('exercode')
         ? scripts.prePushForLab
-        : scripts.prePush;
+        : scripts.prePushForLabExceptAdmin
+      : scripts.prePush;
     prePush = prePush.replace(
       'yarn typecheck',
       typecheck
