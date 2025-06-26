@@ -62,12 +62,9 @@ const workflows = {
   test: {
     name: 'Test',
     on: {
-      pull_request: {
-        'paths-ignore': ['**.md', '**/docs/**'],
-      },
+      pull_request: '',
       push: {
         branches: ['main', 'wbfy'],
-        'paths-ignore': ['**.md', '**/docs/**'],
       },
     },
     // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
@@ -297,6 +294,9 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
       break;
     }
     case 'test': {
+      // Don't use `paths-ignore` for test because GitHub's Branch Protection and Rulesets require job running.
+      delete newSettings.on?.pull_request?.['paths-ignore'];
+      delete newSettings.on?.push?.['paths-ignore'];
       if (newSettings.on?.push) {
         newSettings.on.push.branches = newSettings.on.push.branches.filter((branch) => branch !== 'renovate/**');
       }
