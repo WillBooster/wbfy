@@ -3997,9 +3997,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-js@npm:11.3.0":
-  version: 11.3.0
-  resolution: "@willbooster/eslint-config-js@npm:11.3.0"
+"@willbooster/eslint-config-js@npm:11.3.3":
+  version: 11.3.3
+  resolution: "@willbooster/eslint-config-js@npm:11.3.3"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
@@ -4011,15 +4011,15 @@ __metadata:
     eslint-plugin-unicorn: ">=57"
     eslint-plugin-unused-imports: ">=4"
     globals: ">=16"
-  checksum: 10c0/40c95f2c3a3bf97d6748d9cec743d126ffb77e0793ac9c39f0f15789e9aa2526ba5970919430767dd1d3b74a7530cc1070d64083ce2d7f7105ccb0b32ecaf284
+  checksum: 10c0/0800949c1fc418b9fda819c3dfb61ac7ee81af8e09592bb9306acffbc0f6fdc3d04a5f91775962e43bc61ca0e95275aae9ef1b09c2a7eb5fe94faa69e1ff1fd0
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-ts@npm:11.3.0":
-  version: 11.3.0
-  resolution: "@willbooster/eslint-config-ts@npm:11.3.0"
+"@willbooster/eslint-config-ts@npm:11.3.3":
+  version: 11.3.3
+  resolution: "@willbooster/eslint-config-ts@npm:11.3.3"
   dependencies:
-    "@willbooster/eslint-config-js": "npm:11.3.0"
+    "@willbooster/eslint-config-js": "npm:11.3.3"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
@@ -4034,17 +4034,17 @@ __metadata:
     globals: ">=16"
     typescript: ">=5"
     typescript-eslint: ">=8"
-  checksum: 10c0/3cd3e65bf5671b96b82fbae56bb4d3a97bb14e2696d843b5fcb29cd2d0b4198748861a70c2db280d49e04d039c67f51b550d352475f307f06d93bd81dfac2ab1
+  checksum: 10c0/f91145f6faae559c01c97130cc7a5afb00956bcfdd8ae22103cecaafd709a48c8f1ed9c58ee743209a465f24152016d6a977f230b8fbb2c54e579f5dbeb4738a
   languageName: node
   linkType: hard
 
-"@willbooster/prettier-config@npm:10.1.0":
-  version: 10.1.0
-  resolution: "@willbooster/prettier-config@npm:10.1.0"
+"@willbooster/prettier-config@npm:10.1.3":
+  version: 10.1.3
+  resolution: "@willbooster/prettier-config@npm:10.1.3"
   peerDependencies:
     prettier: ">=3"
     prettier-plugin-java: ">=2.6"
-  checksum: 10c0/d11d5bce016e9d6d3376169cb42749a48c4664aecc9485acc190b2d005133598bb269b03e62ce3f9f6ce3255b53740310b0a4c82bd2f10d8f809a0cc497ceba0
+  checksum: 10c0/9b62d874d9eab320e643e5cb6e3fcbb35bba0dfe03e32baed9da79803f0a884fe06e35884538ea1b81b2429dbe70bd53343c7c753b5dc80a9c2e343397e5c704
   languageName: node
   linkType: hard
 
@@ -11516,8 +11516,8 @@ __metadata:
     "@types/micromatch": "npm:4.0.9"
     "@types/node": "npm:22.15.32"
     "@types/yargs": "npm:17.0.33"
-    "@willbooster/eslint-config-ts": "npm:11.3.0"
-    "@willbooster/prettier-config": "npm:10.1.0"
+    "@willbooster/eslint-config-ts": "npm:11.3.3"
+    "@willbooster/prettier-config": "npm:10.1.3"
     "@willbooster/shared-lib": "npm:5.4.4"
     "@willbooster/shared-lib-node": "npm:6.2.3"
     "@yarnpkg/core": "npm:4.4.2"
