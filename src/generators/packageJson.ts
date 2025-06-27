@@ -121,7 +121,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   let dependencies: string[] = [];
-  let devDependencies = ['prettier', 'sort-package-json', '@willbooster/prettier-config'];
+  let devDependencies = ['prettier', 'prettier-plugin-java', 'sort-package-json', '@willbooster/prettier-config'];
   const poetryDevDependencies: string[] = [];
 
   if (config.isBun) {
