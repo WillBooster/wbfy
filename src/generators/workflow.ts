@@ -62,7 +62,7 @@ const workflows = {
   test: {
     name: 'Test',
     on: {
-      pull_request: '',
+      pull_request: null,
       push: {
         branches: ['main', 'wbfy'],
       },
@@ -436,13 +436,7 @@ function setSchedule(newSettings: Workflow, inclusiveMinHourJst: number, exclusi
 }
 
 async function writeYaml(newSettings: Workflow, filePath: string): Promise<void> {
-  const yamlText = yaml.dump(newSettings, {
-    lineWidth: -1,
-    noCompatMode: true,
-    styles: {
-      '!!null': 'empty',
-    },
-  });
+  const yamlText = yaml.dump(newSettings, { lineWidth: -1, noCompatMode: true, styles: { '!!null': 'empty' } });
   await fs.promises.writeFile(filePath, yamlText);
 }
 
