@@ -30,6 +30,7 @@ export const extensions = {
   prettier: [
     'cjs',
     'mjs',
+    'java',
     'js',
     'jsx',
     'cts',
