@@ -24,7 +24,7 @@ export const extensions = {
     'yml',
     'sh',
   ].sort(),
-  codeWith4IndentSize: ['go', 'gradle', 'py'].sort(),
+  codeWith4IndentSize: ['go', 'gradle', 'java', 'py'].sort(),
   markdownLike: ['md'].sort(),
   eslint: ['cjs', 'mjs', 'js', 'cts', 'mts', 'ts', 'tsx', 'jsx'].sort(),
   prettier: [
