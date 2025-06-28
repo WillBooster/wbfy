@@ -10,6 +10,7 @@ import { fixPrismaEnvFiles } from './fixers/prisma.js';
 import { fixTestDirectoriesUpdatingPackageJson } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { fixTypos } from './fixers/typos.js';
+import { generateAgentInstructions } from './generators/agents.js';
 import { generateToolVersions } from './generators/asdf.js';
 import { generateBiomeJsonc } from './generators/biome.js';
 import { generateBunfigToml } from './generators/bunfig.js';
@@ -111,6 +112,7 @@ async function main(): Promise<void> {
       fixDockerfile(rootConfig),
       fixPrismaEnvFiles(rootConfig),
       abbreviationPromise.then(() => generateReadme(rootConfig)),
+      generateAgentInstructions(rootConfig, allPackageConfigs),
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
       generateGitattributes(rootConfig),
