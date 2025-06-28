@@ -40,6 +40,11 @@ ${
 ## Coding Style
 
 - When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
+${
+  allConfigs.some((c) => c.depending.next)
+    ? `- Since this project uses the React Compiler, you do not need to use \`useCallback\` or \`useMemo\` for performance optimization.`
+    : ''
+}
 `
     .replaceAll(/\n{3,}/g, '\n\n')
     .trim();
