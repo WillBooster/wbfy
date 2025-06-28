@@ -372,12 +372,22 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
     if (dependencies.length > 0) {
-      spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
+      if (config.isBun) {
+        spawnSync(packageManager, ['remove', ...new Set(dependencies)], config.dirPath);
+        spawnSync(packageManager, ['add', '--exact', ...new Set(dependencies)], config.dirPath);
+      } else {
+        spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
+      }
     }
     // We cannot add devDependencies which are already included in dependencies.
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
-      spawnSync(packageManager, ['add', '-D', ...new Set(devDependencies)], config.dirPath);
+      if (config.isBun) {
+        spawnSync(packageManager, ['remove', ...new Set(dependencies)], config.dirPath);
+        spawnSync(packageManager, ['add', '-D', '--exact', ...new Set(dependencies)], config.dirPath);
+      } else {
+        spawnSync(packageManager, ['add', '-D', ...new Set(devDependencies)], config.dirPath);
+      }
     }
     if (poetryDevDependencies.length > 0) {
       spawnSync('poetry', ['add', '--group', 'dev', ...new Set(poetryDevDependencies)], config.dirPath);
