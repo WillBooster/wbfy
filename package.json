@@ -26,7 +26,7 @@
     "release": "yarn build && semantic-release",
     "start": "build-ts run src/index.ts --env .env --",
     "start-prod": "yarn build && yarn wbfy",
-    "test": "vitest tests",
+    "test": "vitest test",
     "test/ci-setup": "cd .. && pwd && rm -Rf test-fixtures-for-wbfy && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
     "typecheck": "tsc --noEmit --Pretty"
   },

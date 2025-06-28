@@ -31,8 +31,8 @@ export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
 
     const tsFiles = await fg.glob(
       [
-        '{app,src,tests,scripts}/**/*.{cjs,mjs,js,jsx,cts,mts,ts,tsx}',
-        'packages/**/{app,src,tests,scripts}/**/*.{cjs,mjs,js,jsx,cts,mts,ts,tsx}',
+        '{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx,cts,mts,ts,tsx}',
+        'packages/**/{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx,cts,mts,ts,tsx}',
       ],
       { dot: true, cwd: dirPath, ignore: globIgnore }
     );

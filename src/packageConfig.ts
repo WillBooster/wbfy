@@ -178,18 +178,18 @@ export async function getPackageConfig(
       doesContainsPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
       doesContainsTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
       doesContainsVscodeSettingsJson: fs.existsSync(path.resolve(dirPath, '.vscode', 'settings.json')),
-      doesContainsJavaScript: containsAny('{app,src,tests,scripts}/**/*.{cjs,mjs,js,jsx}', dirPath),
-      doesContainsTypeScript: containsAny('{app,src,tests,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
-      doesContainsJsxOrTsx: containsAny('{app,src,tests}/**/*.{t,j}sx', dirPath),
+      doesContainsJavaScript: containsAny('{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx}', dirPath),
+      doesContainsTypeScript: containsAny('{app,src,test,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
+      doesContainsJsxOrTsx: containsAny('{app,src,test}/**/*.{t,j}sx', dirPath),
       doesContainsJavaScriptInPackages: containsAny(
-        'packages/**/{app,src,tests,scripts}/**/*.{cjs,mjs,js,jsx}',
+        'packages/**/{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx}',
         dirPath
       ),
       doesContainsTypeScriptInPackages: containsAny(
-        'packages/**/{app,src,tests,scripts}/**/*.{cts,mts,ts,tsx}',
+        'packages/**/{app,src,test,scripts}/**/*.{cts,mts,ts,tsx}',
         dirPath
       ),
-      doesContainsJsxOrTsxInPackages: containsAny('packages/**/{app,src,tests}/**/*.{t,j}sx', dirPath),
+      doesContainsJsxOrTsxInPackages: containsAny('packages/**/{app,src,test}/**/*.{t,j}sx', dirPath),
       depending: {
         blitz: !!dependencies['blitz'],
         firebase: !!devDependencies['firebase-tools'],

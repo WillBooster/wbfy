@@ -33,10 +33,10 @@ const rootJsonObj = {
   },
   include: [
     'src/**/*',
-    'tests/**/*',
+    'test/**/*',
     'scripts/**/*',
     'packages/*/src/**/*',
-    'packages/*/tests/**/*',
+    'packages/*/test/**/*',
     'packages/*/scripts/**/*',
   ],
 };
@@ -60,7 +60,7 @@ const subJsonObj = {
     outDir: 'dist',
     typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
   },
-  include: ['src/**/*', 'tests/**/*', 'scripts/**/*'],
+  include: ['src/**/*', 'test/**/*', 'scripts/**/*'],
 };
 
 export async function generateTsconfig(config: PackageConfig): Promise<void> {
@@ -100,7 +100,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
       newSettings.include = newSettings.include?.filter(
-        (dirPath: string) => !dirPath.includes('@types') && !dirPath.includes('__tests__')
+        (dirPath: string) => !dirPath.includes('@types') && !dirPath.includes('__tests__') && !dirPath.includes('tests')
       );
     } catch {
       // do nothing
