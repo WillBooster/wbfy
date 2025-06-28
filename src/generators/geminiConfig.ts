@@ -1,10 +1,14 @@
+import fs from 'node:fs';
 import path from 'node:path';
 
+import merge from 'deepmerge';
 import yaml from 'js-yaml';
+import cloneDeep from 'lodash.clonedeep';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
+import { overwriteMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 const defaultConfig = {
@@ -30,7 +34,16 @@ export async function generateGeminiConfig(config: PackageConfig): Promise<void>
     const configFilePath = path.resolve(dirPath, 'config.yml');
     const styleguideFilePath = path.resolve(dirPath, 'styleguide.md');
 
-    const yamlContent = yaml.dump(defaultConfig, {
+    let newConfig: object = cloneDeep(defaultConfig);
+    try {
+      const oldContent = await fs.promises.readFile(configFilePath, 'utf8');
+      const oldConfig = yaml.load(oldContent) as object;
+      newConfig = merge.all([newConfig, oldConfig, newConfig], { arrayMerge: overwriteMerge });
+    } catch {
+      // do nothing - file doesn't exist or can't be parsed
+    }
+
+    const yamlContent = yaml.dump(newConfig, {
       lineWidth: -1,
       noCompatMode: true,
       styles: {
