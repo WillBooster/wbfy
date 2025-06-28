@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "build": "build-ts app",
-    "check-for-ai": "yarn install > /dev/null && yarn format > /dev/null && yarn lint-fix --quiet && yarn typecheck && yarn test --silent",
+    "check-all-for-ai": "yarn check-for-ai && yarn test --silent",
+    "check-for-ai": "yarn install > /dev/null && yarn format > /dev/null && yarn lint-fix --quiet && yarn typecheck",
     "cleanup": "yarn format && yarn lint-fix",
     "format": "sort-package-json && yarn prettify",
     "postinstall": "husky || true",
@@ -61,7 +62,7 @@
     "@yarnpkg/core": "4.4.2",
     "build-ts": "15.0.7",
     "conventional-changelog-conventionalcommits": "9.0.0",
-    "eslint": "9.29.0",
+    "eslint": "9.30.0",
     "eslint-config-flat-gitignore": "2.1.0",
     "eslint-config-prettier": "10.1.5",
     "eslint-import-resolver-typescript": "4.4.4",

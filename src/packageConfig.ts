@@ -40,6 +40,7 @@ export interface PackageConfig {
   depending: {
     blitz: boolean;
     firebase: boolean;
+    genI18nTs: boolean;
     litestream: boolean;
     next: boolean;
     playwrightTest: boolean;
@@ -193,6 +194,7 @@ export async function getPackageConfig(
       depending: {
         blitz: !!dependencies['blitz'],
         firebase: !!devDependencies['firebase-tools'],
+        genI18nTs: !!devDependencies['gen-i18n-ts'],
         litestream: dockerfile.includes('install-litestream.sh'),
         next: !!dependencies['next'],
         playwrightTest:
