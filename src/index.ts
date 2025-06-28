@@ -17,6 +17,7 @@ import { generateBunfigToml } from './generators/bunfig.js';
 import { generateDockerignore } from './generators/dockerignore.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
 import { generateEslintrc } from './generators/eslintConfig.js';
+import { generateGeminiSettings } from './generators/geminiSettings.js';
 import { generateGitattributes } from './generators/gitattributes.js';
 import { generateGitignore } from './generators/gitignore.js';
 import { generateHuskyrcUpdatingPackageJson } from './generators/huskyrc.js';
@@ -115,6 +116,7 @@ async function main(): Promise<void> {
       generateAgentInstructions(rootConfig, allPackageConfigs),
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
+      generateGeminiSettings(rootConfig),
       generateGitattributes(rootConfig),
       generateGitHubTemplates(rootConfig),
       generateIdeaSettings(rootConfig),
