@@ -74,7 +74,10 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       delete newSettings.compilerOptions?.jsx;
     }
     if (config.isRoot && !config.doesContainsSubPackageJsons) {
-      newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
+      newSettings.include = newSettings.include?.filter(
+        (dirPath: string) =>
+          !dirPath.startsWith('packages/*/') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
+      );
     }
     if (config.isEsmPackage) {
       newSettings.compilerOptions = {
@@ -102,7 +105,8 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
       newSettings.include = newSettings.include?.filter(
-        (dirPath: string) => !dirPath.includes('@types') && !dirPath.includes('__tests__') && !dirPath.includes('tests')
+        (dirPath: string) =>
+          !dirPath.includes('@types') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
       );
     } catch {
       // do nothing

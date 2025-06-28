@@ -383,8 +383,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
       if (config.isBun) {
-        spawnSync(packageManager, ['remove', ...new Set(dependencies)], config.dirPath);
-        spawnSync(packageManager, ['add', '-D', '--exact', ...new Set(dependencies)], config.dirPath);
+        spawnSync(packageManager, ['remove', ...new Set(devDependencies)], config.dirPath);
+        spawnSync(packageManager, ['add', '-D', '--exact', ...new Set(devDependencies)], config.dirPath);
       } else {
         spawnSync(packageManager, ['add', '-D', ...new Set(devDependencies)], config.dirPath);
       }
