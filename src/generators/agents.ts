@@ -42,6 +42,5 @@ ${
 - When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
 `
     .replaceAll(/\n{3,}/g, '\n\n')
-    .replaceAll('\n', ' ')
     .trim();
 }
