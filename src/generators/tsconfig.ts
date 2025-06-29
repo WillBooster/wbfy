@@ -74,10 +74,8 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       delete newSettings.compilerOptions?.jsx;
     }
     if (config.isRoot && !config.doesContainsSubPackageJsons) {
-      newSettings.include = newSettings.include?.filter(
-        (dirPath: string) =>
-          !dirPath.startsWith('packages/*/') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
-      );
+      newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
+      newSettings.exclude = newSettings.exclude?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
     }
     if (config.isEsmPackage) {
       newSettings.compilerOptions = {
