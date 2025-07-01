@@ -30,7 +30,7 @@ export const extensions = {
   prettier: [
     'cjs',
     'mjs',
-    // 'java', // after https://github.com/jhipster/prettier-java/issues/737
+    'java',
     'js',
     'jsx',
     'cts',
