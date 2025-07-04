@@ -9,7 +9,11 @@ export async function generateAgentInstructions(config: PackageConfig, allConfig
   return logger.functionIgnoringException('generateAgentInstructions', async () => {
     if (!config.isRoot) return;
 
-    const content = generateClaudeContent(config, allConfigs);
+    // Check if AGENTS_EXTRA.md exists and read its content
+    const agentsExtraPath = path.resolve(config.dirPath, 'AGENTS_EXTRA.md');
+    const extraContent = await fsUtil.readFileIgnoringError(agentsExtraPath);
+
+    const content = generateClaudeContent(config, allConfigs, extraContent);
     for (const fileName of ['CLAUDE.md', 'AGENTS.md']) {
       const filePath = path.resolve(config.dirPath, fileName);
       await promisePool.run(() => fsUtil.generateFile(filePath, content));
@@ -17,9 +21,9 @@ export async function generateAgentInstructions(config: PackageConfig, allConfig
   });
 }
 
-function generateClaudeContent(config: PackageConfig, allConfigs: PackageConfig[]): string {
+function generateClaudeContent(config: PackageConfig, allConfigs: PackageConfig[], extraContent?: string): string {
   const packageManager = config.isBun ? 'bun' : 'yarn';
-  return `
+  const baseContent = `
 # Project Information
 
 - Name: ${config.packageJson?.name}
@@ -48,4 +52,6 @@ ${
 `
     .replaceAll(/\n{3,}/g, '\n\n')
     .trim();
+
+  return extraContent ? baseContent + '\n\n' + extraContent.trim() : baseContent;
 }
