@@ -24,7 +24,7 @@ export async function generateAgentInstructions(config: PackageConfig, allConfig
 function generateClaudeContent(config: PackageConfig, allConfigs: PackageConfig[], extraContent?: string): string {
   const packageManager = config.isBun ? 'bun' : 'yarn';
   const baseContent = `
-# Project Information
+## Project Information
 
 - Name: ${config.packageJson?.name}
 - Description: ${config.packageJson?.description}
