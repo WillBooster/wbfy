@@ -82,10 +82,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj as SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>
   );
 
-  if (jsonObj.name !== '@willbooster/prettier-config') {
-    jsonObj.prettier = '@willbooster/prettier-config';
-  }
-
   for (const [key, value] of Object.entries(jsonObj.scripts as Record<string, string>)) {
     // Fresh repo still requires 'yarn install'
     if (!value.includes('git clone')) {
@@ -121,8 +117,16 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   let dependencies: string[] = [];
-  let devDependencies = ['prettier', 'prettier-plugin-java', 'sort-package-json', '@willbooster/prettier-config'];
+  let devDependencies = ['prettier', 'sort-package-json'];
   const poetryDevDependencies: string[] = [];
+
+  if (
+    !fs.existsSync(path.join(rootConfig.dirPath, '.prettierrc.json')) &&
+    !fs.existsSync(path.join(config.dirPath, '.prettierrc.json'))
+  ) {
+    jsonObj.prettier = '@willbooster/prettier-config';
+    devDependencies.push('prettier-plugin-java', '@willbooster/prettier-config');
+  }
 
   if (config.isBun) {
     delete jsonObj.devDependencies['lint-staged'];
