@@ -1,4 +1,4 @@
-# Project Information
+## Project Information
 
 - Name: wbfy
 - Description: A tool for applying WillBooster's conventional configures to npm packages
