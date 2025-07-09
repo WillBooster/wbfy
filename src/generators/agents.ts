@@ -14,7 +14,7 @@ export async function generateAgentInstructions(config: PackageConfig, allConfig
     const extraContent = await fsUtil.readFileIgnoringError(agentsExtraPath);
 
     const content = generateClaudeContent(config, allConfigs, extraContent);
-    for (const fileName of ['CLAUDE.md', 'AGENTS.md']) {
+    for (const fileName of ['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']) {
       const filePath = path.resolve(config.dirPath, fileName);
       await promisePool.run(() => fsUtil.generateFile(filePath, content));
     }
@@ -37,9 +37,10 @@ ${
     ? `- If you introduce new string literals in React components, update language resource files in \`i18n\` directory like \`i18n/ja-JP.json\`. Reference these strings using the \`i18n\` utility, for example: \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
     : ''
 }
-- After making code changes, use \`${packageManager} check-for-ai\` to run type checks and the linter.
-- If you have completely finished your work, run \`${packageManager} check-all-for-ai\` to also execute tests (this may take up to 30 minutes).
-- After \`${packageManager} check-all-for-ai\` passes, commit your changes to the current branch and push.
+- After making code changes, commit them to the current branch using the \`--no-verify\` option. Make sure to add a new line at the end of your commit message with: \`Co-authored-by: WillBooster (Agent) <agent@willbooster.com>\`.
+- Once you have committed your changes, run \`${packageManager} check-for-ai\` to perform type checking and linting.
+- When your work is fully complete, run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes).
+- Once \`${packageManager} check-all-for-ai\` passes, commit any remaining changes to the current branch and push.
 
 ## Coding Style
 

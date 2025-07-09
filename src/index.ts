@@ -18,7 +18,7 @@ import { generateDockerignore } from './generators/dockerignore.js';
 import { generateEditorconfig } from './generators/editorconfig.js';
 import { generateEslintrc } from './generators/eslintConfig.js';
 import { generateGeminiConfig } from './generators/geminiConfig.js';
-import { generateGeminiSettings } from './generators/geminiSettings.js';
+import { removeGeminiSettings } from './generators/geminiSettings.js';
 import { generateGitattributes } from './generators/gitattributes.js';
 import { generateGitignore } from './generators/gitignore.js';
 import { generateHuskyrcUpdatingPackageJson } from './generators/huskyrc.js';
@@ -118,7 +118,7 @@ async function main(): Promise<void> {
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
       generateGeminiConfig(rootConfig),
-      generateGeminiSettings(rootConfig),
+      removeGeminiSettings(rootConfig),
       generateGitattributes(rootConfig),
       generateGitHubTemplates(rootConfig),
       generateIdeaSettings(rootConfig),

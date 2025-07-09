@@ -51,7 +51,7 @@ export async function generateGeminiConfig(config: PackageConfig): Promise<void>
       },
     });
 
-    const styleguideContent = '日本語で回答してください。';
+    const styleguideContent = '日本語でレビューしてください。';
 
     await Promise.all([
       promisePool.run(() => fsUtil.generateFile(configFilePath, yamlContent)),
