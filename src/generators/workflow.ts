@@ -395,7 +395,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     }
   }
   // Because github.event.repository.private is always true if job is scheduled
-  if (kind === 'release' || kind === 'test' || kind === 'wbfy' || kind === 'wbfy-merge' || kind.startsWith('deploy')) {
+  if (kind === 'release' || kind === 'test' || kind.startsWith('deploy')) {
     if (config.isPublicRepo) {
       job.with['github_hosted_runner'] = true;
     }
