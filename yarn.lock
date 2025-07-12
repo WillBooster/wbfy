@@ -2535,7 +2535,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/core@npm:7.0.2, @octokit/core@npm:^7.0.0":
+"@octokit/core@npm:7.0.3":
+  version: 7.0.3
+  resolution: "@octokit/core@npm:7.0.3"
+  dependencies:
+    "@octokit/auth-token": "npm:^6.0.0"
+    "@octokit/graphql": "npm:^9.0.1"
+    "@octokit/request": "npm:^10.0.2"
+    "@octokit/request-error": "npm:^7.0.0"
+    "@octokit/types": "npm:^14.0.0"
+    before-after-hook: "npm:^4.0.0"
+    universal-user-agent: "npm:^7.0.0"
+  checksum: 10c0/51427b4c3337e15b394d60277b673c5628a72d245a23b1a446e4249d15e37983fa01d09f10c8ab281207e024929f4d2f6cc27a4d345ec0ece2df78d42586d846
+  languageName: node
+  linkType: hard
+
+"@octokit/core@npm:^7.0.0":
   version: 7.0.2
   resolution: "@octokit/core@npm:7.0.2"
   dependencies:
@@ -3409,12 +3424,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:24.0.10":
+"@types/node@npm:*":
   version: 24.0.10
   resolution: "@types/node@npm:24.0.10"
   dependencies:
     undici-types: "npm:~7.8.0"
   checksum: 10c0/11dbd869d3e12ee7b7818113588950e538783e45d227122174c763cb05977defbd1e01b44b5ccd4b8997e42c3df7f7b83c6ee05cfa43d924c8882886bc5f6582
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:24.0.13":
+  version: 24.0.13
+  resolution: "@types/node@npm:24.0.13"
+  dependencies:
+    undici-types: "npm:~7.8.0"
+  checksum: 10c0/e1f3d4ea8973b1f2f987814ac5343d05ad8b56bf7fa41755295dee0ce0f7b4e2de4f3daef5296429180228970cef0d70f2ad873c61dbafc6f5eeca9d023aba76
   languageName: node
   linkType: hard
 
@@ -4989,12 +5013,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conventional-changelog-conventionalcommits@npm:9.0.0":
-  version: 9.0.0
-  resolution: "conventional-changelog-conventionalcommits@npm:9.0.0"
+"conventional-changelog-conventionalcommits@npm:9.1.0":
+  version: 9.1.0
+  resolution: "conventional-changelog-conventionalcommits@npm:9.1.0"
   dependencies:
     compare-func: "npm:^2.0.0"
-  checksum: 10c0/96352c228cb14f0a5bc8628b2285361d72c39906070abe9c38e0d76d741c9f2653b20520ebed51d9a8d41d597c67d79220d4afba9f27e6cef4dc381c7fd4f9c3
+  checksum: 10c0/b1dfbb8ce5983bb80837c35f089fb0f9603a1b067f34be680f88fde20871792e461e29d119d468bc293f38a1ca916c1c40a841f8c049a0a1efaa40582f4fecc9
   languageName: node
   linkType: hard
 
@@ -5270,6 +5294,13 @@ __metadata:
   version: 17.0.1
   resolution: "dotenv@npm:17.0.1"
   checksum: 10c0/79d3381832ffc6ada0cab8158120c6190e8f8680c1ff985e9d4d1345229219923b23b800969ff47412a71f965da582c7a86a5ea0d257f9106f8f3522ceb5befa
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:17.2.0":
+  version: 17.2.0
+  resolution: "dotenv@npm:17.2.0"
+  checksum: 10c0/d4cb5c2a09c288c921ef47a78f51c765a763266e23e84465cde6a87b28b9f7fc5a9d1fe349ed3c880b4c7297f82dd736dba5b08fe95ce53833ce4a7258d0fc43
   languageName: node
   linkType: hard
 
@@ -9806,9 +9837,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semantic-release@npm:24.2.6":
-  version: 24.2.6
-  resolution: "semantic-release@npm:24.2.6"
+"semantic-release@npm:24.2.7":
+  version: 24.2.7
+  resolution: "semantic-release@npm:24.2.7"
   dependencies:
     "@semantic-release/commit-analyzer": "npm:^13.0.0-beta.1"
     "@semantic-release/error": "npm:^4.0.0"
@@ -9841,7 +9872,7 @@ __metadata:
     yargs: "npm:^17.5.1"
   bin:
     semantic-release: bin/semantic-release.js
-  checksum: 10c0/62268d972cf571b3581b9a418a3b08ac92cedc7e5683caccccc17cd155943fa2978a28ab4cf8338ff8726e073706861f1b9251d5d98c2712f646b84bc85ac326
+  checksum: 10c0/d54a64a30a271dd578c84d3341a8f285646fc3ca9e4fad5a35a049a8cffb1b3eafaded5167e94ac62320d834471cb6a28e12e54169b8cf4c502b10b8f58967e6
   languageName: node
   linkType: hard
 
@@ -11242,14 +11273,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "wbfy@workspace:."
   dependencies:
-    "@octokit/core": "npm:7.0.2"
+    "@octokit/core": "npm:7.0.3"
     "@types/eslint": "npm:9.6.1"
     "@types/jest": "npm:30.0.0"
     "@types/js-yaml": "npm:4.0.9"
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.9"
-    "@types/node": "npm:24.0.10"
+    "@types/node": "npm:24.0.13"
     "@types/yargs": "npm:17.0.33"
     "@willbooster/eslint-config-ts": "npm:11.4.0"
     "@willbooster/prettier-config": "npm:10.2.0"
@@ -11257,9 +11288,9 @@ __metadata:
     "@willbooster/shared-lib-node": "npm:7.0.1"
     "@yarnpkg/core": "npm:4.4.2"
     build-ts: "npm:15.0.11"
-    conventional-changelog-conventionalcommits: "npm:9.0.0"
+    conventional-changelog-conventionalcommits: "npm:9.1.0"
     deepmerge: "npm:4.3.1"
-    dotenv: "npm:17.0.1"
+    dotenv: "npm:17.2.0"
     eslint: "npm:9.30.1"
     eslint-config-flat-gitignore: "npm:2.1.0"
     eslint-config-prettier: "npm:10.1.5"
@@ -11283,7 +11314,7 @@ __metadata:
     pinst: "npm:3.0.0"
     prettier: "npm:3.6.2"
     prettier-plugin-java: "npm:2.7.1"
-    semantic-release: "npm:24.2.6"
+    semantic-release: "npm:24.2.7"
     simple-git: "npm:3.28.0"
     sort-package-json: "npm:3.4.0"
     ts-node: "npm:10.9.2"
@@ -11292,7 +11323,7 @@ __metadata:
     typescript-eslint: "npm:8.36.0"
     vitest: "npm:3.2.4"
     yargs: "npm:18.0.0"
-    zod: "npm:3.25.74"
+    zod: "npm:3.25.76"
   bin:
     wbfy: ./bin/wbfy.js
   languageName: unknown
@@ -11536,9 +11567,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:3.25.74":
-  version: 3.25.74
-  resolution: "zod@npm:3.25.74"
-  checksum: 10c0/59e38b046ac333b5bd1ba325a83b6798721227cbfb1e69dfc7159bd7824b904241ab923026edb714fafefec3624265ae374a70aee9a5a45b365bd31781ffa105
+"zod@npm:3.25.76":
+  version: 3.25.76
+  resolution: "zod@npm:3.25.76"
+  checksum: 10c0/5718ec35e3c40b600316c5b4c5e4976f7fee68151bc8f8d90ec18a469be9571f072e1bbaace10f1e85cf8892ea12d90821b200e980ab46916a6166a4260a983c
   languageName: node
   linkType: hard
