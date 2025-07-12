@@ -303,11 +303,11 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
       break;
     }
     case 'wbfy': {
-      if (newSettings.on) setSchedule(newSettings, 20, 24);
+      if (newSettings.on) setSchedule(newSettings, 20, 24, false);
       break;
     }
     case 'wbfy-merge': {
-      setSchedule(newSettings, 1, 4);
+      setSchedule(newSettings, 1, 4, true);
       break;
     }
     // No default
@@ -418,7 +418,12 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   }
 }
 
-function setSchedule(newSettings: Workflow, inclusiveMinHourJst: number, exclusiveMaxHourJst: number): void {
+function setSchedule(
+  newSettings: Workflow,
+  inclusiveMinHourJst: number,
+  exclusiveMaxHourJst: number,
+  runTwice: boolean
+): void {
   const [minuteUtc, hourUtc] = ((newSettings.on.schedule?.[0]?.cron as string) || '').split(' ').map(Number);
   if (minuteUtc !== 0 && Number.isInteger(hourUtc)) {
     const hourJst = (hourUtc + 9) % 24;
@@ -431,7 +436,10 @@ function setSchedule(newSettings: Workflow, inclusiveMinHourJst: number, exclusi
 
   const minJst = 1 + Math.floor(Math.random() * 59);
   const hourJst = inclusiveMinHourJst + Math.floor(Math.random() * (exclusiveMaxHourJst - inclusiveMinHourJst));
-  const cron = `${minJst} ${(hourJst - 9 + 24) % 24} * * *`;
+  const newHourUtc = hourJst - 9 + 24;
+  const cron = runTwice
+    ? `${minJst} ${newHourUtc % 24},${(newHourUtc + 1) % 24} * * *`
+    : `${minJst} ${newHourUtc % 24} * * *`;
   newSettings.on.schedule = [{ cron }];
 }
 
