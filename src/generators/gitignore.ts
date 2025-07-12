@@ -22,6 +22,7 @@ const commonContent = `
 __generated__/
 dist/
 temp/
+tmp/
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
