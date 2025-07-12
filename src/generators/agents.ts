@@ -18,14 +18,18 @@ export async function generateAgentInstructions(config: PackageConfig, allConfig
       ['CLAUDE.md', 'Claude Code'],
       ['GEMINI.md', 'Gemini CLI'],
     ]) {
-      const content = generateClaudeContent(config, allConfigs, toolName, extraContent);
+      const content = generateAgentInstruction(config, allConfigs, toolName, extraContent);
       const filePath = path.resolve(config.dirPath, fileName);
       await promisePool.run(() => fsUtil.generateFile(filePath, content));
     }
+
+    const cursorRulesPath = path.resolve(config.dirPath, '.cursor/rules/general.mdc');
+    const cursorRulesContent = generateCursorGeneralMdcContent(config, allConfigs, extraContent);
+    await promisePool.run(() => fsUtil.generateFile(cursorRulesPath, cursorRulesContent));
   });
 }
 
-function generateClaudeContent(
+function generateAgentInstruction(
   config: PackageConfig,
   allConfigs: PackageConfig[],
   toolName: string,
@@ -63,4 +67,14 @@ ${
     .trim();
 
   return extraContent ? baseContent + '\n\n' + extraContent.trim() : baseContent;
+}
+
+function generateCursorGeneralMdcContent(
+  config: PackageConfig,
+  allConfigs: PackageConfig[],
+  extraContent?: string
+): string {
+  const frontmatter = `---\ndescription: General Coding Rules\nglobs:\nalwaysApply: true\n---`;
+  const body = generateAgentInstruction(config, allConfigs, 'Cursor', extraContent);
+  return `${frontmatter}\n\n${body}`;
 }
