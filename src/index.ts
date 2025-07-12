@@ -185,22 +185,18 @@ async function main(): Promise<void> {
     await promisePool.promiseAll();
 
     const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
+    // Refresh lock files
+    if (rootConfig.isBun) {
+      fs.rmSync(path.join(rootDirPath, 'bun.lock'), { force: true });
+      spawnSync(packageManager, ['update'], rootDirPath);
+    } else {
+      fs.rmSync(path.join(rootDirPath, 'yarn.lock'), { force: true });
+      spawnSync(packageManager, ['install'], rootDirPath);
+    }
     spawnSync(packageManager, ['cleanup'], rootDirPath);
     // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock
     // corresponding to the contents of dependant sub-package in monorepo
-    if (rootConfig.isBun) {
-      spawnSync(packageManager, ['update'], rootDirPath);
-      // TODO: Remove the following line after there is no bun.lockb
-      const bunLockbPath = path.join(rootDirPath, 'bun.lockb');
-      if (fs.existsSync(bunLockbPath)) {
-        void fs.promises.rm(bunLockbPath);
-        spawnSync(
-          packageManager,
-          ['install', '--save-text-lockfile', '--frozen-lockfile', '--lockfile-only'],
-          rootDirPath
-        );
-      }
-    } else {
+    if (!rootConfig.isBun) {
       spawnSync(packageManager, ['install'], rootDirPath);
     }
   }
