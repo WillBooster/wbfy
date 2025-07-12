@@ -519,7 +519,7 @@ async function generatePrettierSuffix(dirPath: string): Promise<string> {
     })
     .filter((l) => l && !l.startsWith('#') && !l.includes('/'));
 
-  return lines.map((line) => ` "!**/${line}/**"`).join('');
+  return `${lines.map((line) => ` "!**/${line}/**"`).join('')} || true`;
 }
 
 async function fixScriptNames(
