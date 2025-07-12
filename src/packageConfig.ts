@@ -67,10 +67,10 @@ type WbfyJson = z.infer<typeof wbfyJsonSchema>;
 const wbfyJsonSchema = z.object({
   typos: z
     .object({
-      all: z.record(z.string()).optional(),
-      doc: z.record(z.string()).optional(),
-      ts: z.record(z.string()).optional(),
-      text: z.record(z.string()).optional(),
+      all: z.record(z.string(), z.string()).optional(),
+      doc: z.record(z.string(), z.string()).optional(),
+      ts: z.record(z.string(), z.string()).optional(),
+      text: z.record(z.string(), z.string()).optional(),
     })
     .optional(),
 });
