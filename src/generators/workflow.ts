@@ -425,7 +425,7 @@ function setSchedule(
   runTwice: boolean
 ): void {
   const [minuteUtc, hourUtc] = ((newSettings.on.schedule?.[0]?.cron as string) || '').split(' ').map(Number);
-  if (minuteUtc !== 0 && Number.isInteger(hourUtc)) {
+  if (minuteUtc !== 0 && Number.isInteger(hourUtc) !== runTwice) {
     const hourJst = (hourUtc + 9) % 24;
     const inRange =
       inclusiveMinHourJst < exclusiveMaxHourJst
