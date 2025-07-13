@@ -89,7 +89,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
   }
 
-  jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config));
+  jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config, jsonObj.scripts));
 
   if ('check-for-ai' in jsonObj.scripts) {
     if ('gen-code' in jsonObj.scripts) {
@@ -443,7 +443,7 @@ async function removeDeprecatedStuff(
   delete jsonObj.devDependencies['eslint-plugin-import'];
 }
 
-export function generateScripts(config: PackageConfig): Record<string, string> {
+export function generateScripts(config: PackageConfig, oldScripts: PackageJson.Scripts): Record<string, string> {
   if (config.isBun) {
     const scripts: Record<string, string> = {
       'check-all-for-ai': 'bun run check-for-ai && bun run test --silent',
@@ -460,8 +460,9 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
     }
     return scripts;
   } else {
+    const oldTest = oldScripts.test;
     let scripts: Record<string, string> = {
-      'check-all-for-ai': 'yarn check-for-ai && yarn test --silent',
+      'check-all-for-ai': 'yarn check-for-ai && yarn test',
       'check-for-ai': 'yarn format > /dev/null 2> /dev/null || true && yarn lint-fix --quiet && yarn typecheck',
       cleanup: 'yarn format && yarn lint-fix',
       format: `sort-package-json && yarn prettify`,
@@ -471,7 +472,6 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
       typecheck: 'tsc --noEmit --Pretty',
     };
     if (config.doesContainsSubPackageJsons) {
-      const oldTest = scripts.test;
       scripts = merge(
         { ...scripts },
         {
@@ -487,12 +487,14 @@ export function generateScripts(config: PackageConfig): Record<string, string> {
           typecheck: 'yarn workspaces foreach --all --parallel --verbose run typecheck',
         }
       );
-      if (oldTest?.includes('wb test')) {
-        scripts.test = oldTest;
-      }
     } else if (config.depending.pyright) {
       scripts.typecheck = scripts.typecheck ? `${scripts.typecheck} && ` : '';
       scripts.typecheck += 'pyright';
+    }
+    if (oldTest?.includes('wb test')) {
+      scripts.test = oldTest;
+      // `wb` supports `--silent` option
+      scripts['check-all-for-ai'] += ' --silent';
     }
 
     if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {

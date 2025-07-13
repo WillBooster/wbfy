@@ -93,7 +93,7 @@ async function core(config: PackageConfig): Promise<void> {
     fs.promises.rm(dirPath, { force: true, recursive: true }),
   ]);
 
-  const { typecheck } = generateScripts(config);
+  const { typecheck } = generateScripts(config, {});
   if (typecheck) {
     const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
     fs.mkdirSync(path.join(dirPath, 'pre-push'), { recursive: true });

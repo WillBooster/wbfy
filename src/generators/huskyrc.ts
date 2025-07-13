@@ -79,7 +79,7 @@ async function core(config: PackageConfig): Promise<void> {
   await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }));
   await promisePool.run(() => fs.promises.writeFile(preCommitFilePath, scripts.preCommit + '\n'));
 
-  const { typecheck } = generateScripts(config);
+  const { typecheck } = generateScripts(config, {});
   if (typecheck) {
     let prePush = config.repository?.startsWith('github:WillBoosterLab/')
       ? config.repository?.toLocaleLowerCase().includes('exercode')
