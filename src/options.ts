@@ -1,11 +1,8 @@
 class Options {
-  isVerbose: boolean;
-  doesUploadEnvVars: boolean;
+  isVerbose: boolean = false;
+  doesUploadEnvVars: boolean = false;
 
-  constructor() {
-    this.isVerbose = false;
-    this.doesUploadEnvVars = false;
-  }
+  constructor() {}
 }
 
 export const options = new Options();
