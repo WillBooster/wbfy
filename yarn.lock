@@ -4106,16 +4106,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib-node@npm:7.0.2":
-  version: 7.0.2
-  resolution: "@willbooster/shared-lib-node@npm:7.0.2"
-  dependencies:
-    dotenv: "npm:17.2.0"
-    tree-kill: "npm:1.2.2"
-  checksum: 10c0/42ccc18c9bc239e6526b9b1b95bb4c2f7990999c16c77a82ed7be6cf7e22eda6ed2fefb7232fff4848e94276db1c08ff1e22ae6fd99f4fb23113d255de068830
-  languageName: node
-  linkType: hard
-
 "@willbooster/shared-lib-node@npm:7.0.3":
   version: 7.0.3
   resolution: "@willbooster/shared-lib-node@npm:7.0.3"
@@ -4664,9 +4654,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:15.0.14":
-  version: 15.0.14
-  resolution: "build-ts@npm:15.0.14"
+"build-ts@npm:15.0.15":
+  version: 15.0.15
+  resolution: "build-ts@npm:15.0.15"
   dependencies:
     "@babel/core": "npm:7.28.0"
     "@babel/plugin-proposal-decorators": "npm:7.28.0"
@@ -4683,7 +4673,7 @@ __metadata:
     "@rollup/plugin-replace": "npm:6.0.2"
     "@rollup/plugin-terser": "npm:0.4.4"
     "@rollup/pluginutils": "npm:5.2.0"
-    "@willbooster/shared-lib-node": "npm:7.0.2"
+    "@willbooster/shared-lib-node": "npm:7.0.3"
     babel-plugin-polyfill-corejs3: "npm:0.13.0"
     babel-plugin-transform-remove-console: "npm:6.9.4"
     chalk: "npm:5.4.1"
@@ -4704,7 +4694,7 @@ __metadata:
     yargs: "npm:18.0.0"
   bin:
     build-ts: bin/index.js
-  checksum: 10c0/b2e7717e7b7a70d20fad09a9dee022aeee06df206820db76f03603280e06f461ed45dba2690f7c8662a030516a4b7154a65e02a945bb7136e67bb6a3d3501172
+  checksum: 10c0/270484c80bddb969a852518dc3e2008fda5c36d58c388c1c396423cb553def0712c13bbad9f4d5ee6da94ca101f299299d85a14cf55e1f0c0565d1b88277c97d
   languageName: node
   linkType: hard
 
@@ -5461,13 +5451,6 @@ __metadata:
   dependencies:
     is-obj: "npm:^2.0.0"
   checksum: 10c0/93f0d343ef87fe8869320e62f2459f7e70f49c6098d948cc47e060f4a3f827d0ad61e83cb82f2bd90cd5b9571b8d334289978a43c0f98fea4f0e99ee8faa0599
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:17.2.0":
-  version: 17.2.0
-  resolution: "dotenv@npm:17.2.0"
-  checksum: 10c0/d4cb5c2a09c288c921ef47a78f51c765a763266e23e84465cde6a87b28b9f7fc5a9d1fe349ed3c880b4c7297f82dd736dba5b08fe95ce53833ce4a7258d0fc43
   languageName: node
   linkType: hard
 
@@ -11632,7 +11615,7 @@ __metadata:
     "@willbooster/shared-lib": "npm:6.0.3"
     "@willbooster/shared-lib-node": "npm:7.0.3"
     "@yarnpkg/core": "npm:4.4.2"
-    build-ts: "npm:15.0.14"
+    build-ts: "npm:15.0.15"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:17.2.1"
