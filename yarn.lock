@@ -4116,10 +4116,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:6.0.2":
-  version: 6.0.2
-  resolution: "@willbooster/shared-lib@npm:6.0.2"
-  checksum: 10c0/91e8f1f5c0bcf9f2d925e361e079050988b65c1ef7ad736d885339893ca660cdf3ae938c262a8c81647f061d54e868961b943a260854913501b8359628ba70a6
+"@willbooster/shared-lib-node@npm:7.0.3":
+  version: 7.0.3
+  resolution: "@willbooster/shared-lib-node@npm:7.0.3"
+  dependencies:
+    dotenv: "npm:17.2.1"
+    tree-kill: "npm:1.2.2"
+  checksum: 10c0/f954b09a6f0b4a219a64913119b11ffb7fdd9aebea3d877a832309934ac7110f23542713cf1faaa37d2d50576999fb978ff8e36e48bd15dda766199d01c2216d
+  languageName: node
+  linkType: hard
+
+"@willbooster/shared-lib@npm:6.0.3":
+  version: 6.0.3
+  resolution: "@willbooster/shared-lib@npm:6.0.3"
+  checksum: 10c0/1cf22f3d750446efe36cce14f48cd70694b97b1930c828f201501860c0b2379c8749ac3660d8c87155ef92899412a6c40f3e1759e4200ae6658fe8ca40fd5a42
   languageName: node
   linkType: hard
 
@@ -11619,8 +11629,8 @@ __metadata:
     "@types/yargs": "npm:17.0.33"
     "@willbooster/eslint-config-ts": "npm:11.4.1"
     "@willbooster/prettier-config": "npm:10.2.0"
-    "@willbooster/shared-lib": "npm:6.0.2"
-    "@willbooster/shared-lib-node": "npm:7.0.2"
+    "@willbooster/shared-lib": "npm:6.0.3"
+    "@willbooster/shared-lib-node": "npm:7.0.3"
     "@yarnpkg/core": "npm:4.4.2"
     build-ts: "npm:15.0.14"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
