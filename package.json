@@ -46,7 +46,7 @@
     "minimal-promise-pool": "5.0.0",
     "simple-git": "3.28.0",
     "yargs": "18.0.0",
-    "zod": "4.0.10"
+    "zod": "4.0.14"
   },
   "devDependencies": {
     "@types/eslint": "9.6.1",
@@ -78,12 +78,12 @@
     "micromatch": "4.0.8",
     "pinst": "3.0.0",
     "prettier": "3.6.2",
-    "prettier-plugin-java": "2.7.3",
+    "prettier-plugin-java": "2.7.4",
     "semantic-release": "24.2.7",
     "sort-package-json": "3.4.0",
     "ts-node": "10.9.2",
     "type-fest": "4.41.0",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "typescript-eslint": "8.38.0",
     "vitest": "3.2.4"
   },
