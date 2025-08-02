@@ -11,6 +11,10 @@ export const fsUtil = {
   },
   async generateFile(filePath: string, content: string): Promise<void> {
     await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
+    let normalizedContent = content.replaceAll('\r\n', '\n').trim();
+    if (normalizedContent) {
+      normalizedContent += '\n';
+    }
     await fs.promises.writeFile(filePath, content);
     console.log(`Generated/Updated ${filePath}`);
   },
