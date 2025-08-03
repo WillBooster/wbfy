@@ -191,13 +191,13 @@ async function main(): Promise<void> {
       spawnSync(packageManager, ['update'], rootDirPath);
     } else {
       fs.rmSync(path.join(rootDirPath, 'yarn.lock'), { force: true });
-      spawnSync(packageManager, ['install'], rootDirPath);
+      spawnSync(packageManager, ['install', '--no-immutable'], rootDirPath);
     }
     spawnSync(packageManager, ['cleanup'], rootDirPath);
     // 'yarn install' should be after `yarn cleanup` because yarn berry generates yarn.lock
     // corresponding to the contents of dependant sub-package in monorepo
     if (!rootConfig.isBun) {
-      spawnSync(packageManager, ['install'], rootDirPath);
+      spawnSync(packageManager, ['install', '--no-immutable'], rootDirPath);
     }
   }
 }
