@@ -75,6 +75,7 @@ async function main(): Promise<void> {
         alias: 'v',
       },
     })
+    .version(getVersion())
     .strict().argv;
   options.isVerbose = argv.verbose;
   options.doesUploadEnvVars = argv.env;
@@ -200,6 +201,17 @@ async function main(): Promise<void> {
       spawnSync(packageManager, ['install', '--no-immutable'], rootDirPath);
     }
   }
+}
+
+function getVersion(): string {
+  let packageJsonDir = path.dirname(new URL(import.meta.url).pathname);
+  while (!fs.existsSync(path.join(packageJsonDir, 'package.json'))) {
+    packageJsonDir = path.dirname(packageJsonDir);
+  }
+  const packageJson = JSON.parse(fs.readFileSync(path.join(packageJsonDir, 'package.json'), 'utf8')) as {
+    version: string;
+  };
+  return packageJson.version;
 }
 
 await main();
