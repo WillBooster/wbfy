@@ -213,7 +213,7 @@ const workflows = {
       },
     },
     jobs: {
-      test: {
+      'gen-pr': {
         if: "contains(github.event.label.name, 'gen-pr-all') || contains(github.event.label.name, 'gen-pr-claude')",
         uses: 'WillBooster/reusable-workflows/.github/workflows/gen-pr.yml@main',
         with: {
@@ -221,7 +221,6 @@ const workflows = {
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
         },
         secrets: {
-          GH_TOKEN: '${{ secrets.PUBLIC_GH_BOT_PAT }}',
           CLAUDE_CODE_OAUTH_TOKEN: '${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}',
         },
       },
