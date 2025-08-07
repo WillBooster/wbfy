@@ -50,6 +50,8 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await setupLabel(owner, repo, 'focused :dart:', '22C55E');
       await setupLabel(owner, repo, 'gen-pr-all :robot:', '00B4D8');
       await setupLabel(owner, repo, 'gen-pr-claude :robot:', '00B4D8');
+      await setupLabel(owner, repo, 'gen-pr-codex :robot:', '00B4D8');
+      await setupLabel(owner, repo, 'gen-pr-gemini :robot:', '00B4D8');
 
       await deleteLabel(owner, repo, 'bug');
       await deleteLabel(owner, repo, 'documentation');
