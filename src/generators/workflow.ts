@@ -54,6 +54,7 @@ interface Types {
 
 interface Job {
   uses: string;
+  if?: string;
   secrets?: Record<string, unknown>;
   with?: Record<string, unknown>;
 }
@@ -201,6 +202,31 @@ const workflows = {
       },
     },
   },
+  'gen-pr-claude': {
+    name: 'Generate PR with Claude Code',
+    on: {
+      issues: {
+        types: ['labeled'],
+      },
+      pull_request: {
+        types: ['labeled'],
+      },
+    },
+    jobs: {
+      test: {
+        if: "contains(github.event.label.name, 'gen-pr-all') || contains(github.event.label.name, 'gen-pr-claude')",
+        uses: 'WillBooster/reusable-workflows/.github/workflows/gen-pr.yml@main',
+        with: {
+          'coding-tool': 'claude-code',
+          'issue-number': '${{ github.event.issue.number || github.event.number }}',
+        },
+        secrets: {
+          GH_TOKEN: '${{ secrets.PUBLIC_GH_BOT_PAT }}',
+          CLAUDE_CODE_OAUTH_TOKEN: '${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}',
+        },
+      },
+    },
+  },
 } as const;
 
 type KnownKind = keyof typeof workflows | 'deploy';
@@ -222,6 +248,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       'semantic-pr.yml',
       'close-comment.yml',
       'add-issue-to-project.yml',
+      'gen-pr-claude.yml',
       ...entries.filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml')).map((dirent) => dirent.name),
     ]);
     if (rootConfig.depending.semanticRelease) {
@@ -344,7 +371,8 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'wbfy' ||
     kind === 'wbfy-merge' ||
     kind === 'add-issue-to-project' ||
-    kind === 'add-ready-issue-to-project'
+    kind === 'add-ready-issue-to-project' ||
+    kind === 'gen-pr-claude'
   ) {
     job.secrets['GH_TOKEN'] = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
