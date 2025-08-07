@@ -466,8 +466,8 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     job.with['deploy_command'] = job.with['deploy_command'].replace(/\s+--json/, '');
   }
   if (config.doesContainsDockerfile) {
-    if (!job.with['ci_size'] && (kind.startsWith('deploy') || kind.startsWith('test'))) {
-      job.with['ci_size'] = 'large';
+    if (!job.with['ci_label'] && (kind.startsWith('deploy') || kind.startsWith('test'))) {
+      job.with['ci_label'] = 'large';
     }
     if (kind.startsWith('deploy')) {
       job.with['cpu_arch'] = 'X64';
@@ -542,4 +542,9 @@ function migrateJob(job: Job): void {
   delete job.with['cpu_arch'];
   delete job.with['label'];
   delete job.with['labelOperator'];
+  // Added 2025-08-06
+  if (job.with['ci_size']) {
+    job.with['ci_label'] = job.with['ci_size'];
+    delete job.with['ci_size'];
+  }
 }
