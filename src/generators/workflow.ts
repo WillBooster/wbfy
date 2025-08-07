@@ -245,7 +245,7 @@ const workflows = {
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
         },
         secrets: {
-          CODEX_CLI_OAUTH_TOKEN: '${{ secrets.CODEX_CLI_OAUTH_TOKEN }}',
+          OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}',
         },
       },
     },
@@ -269,7 +269,7 @@ const workflows = {
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
         },
         secrets: {
-          GEMINI_CLI_OAUTH_TOKEN: '${{ secrets.GEMINI_CLI_OAUTH_TOKEN }}',
+          GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}',
         },
       },
     },

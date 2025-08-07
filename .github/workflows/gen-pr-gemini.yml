@@ -14,5 +14,5 @@ jobs:
       coding-tool: gemini-cli
       issue-number: ${{ github.event.issue.number || github.event.number }}
     secrets:
-      GEMINI_CLI_OAUTH_TOKEN: ${{ secrets.GEMINI_CLI_OAUTH_TOKEN }}
       GH_TOKEN: ${{ secrets.PUBLIC_GH_BOT_PAT }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
