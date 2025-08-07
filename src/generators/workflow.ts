@@ -226,6 +226,54 @@ const workflows = {
       },
     },
   },
+  'gen-pr-codex': {
+    name: 'Generate PR with Codex CLI',
+    on: {
+      issues: {
+        types: ['labeled'],
+      },
+      pull_request: {
+        types: ['labeled'],
+      },
+    },
+    jobs: {
+      'gen-pr': {
+        if: "contains(github.event.label.name, 'gen-pr-all') || contains(github.event.label.name, 'gen-pr-codex')",
+        uses: 'WillBooster/reusable-workflows/.github/workflows/gen-pr.yml@main',
+        with: {
+          'coding-tool': 'codex-cli',
+          'issue-number': '${{ github.event.issue.number || github.event.number }}',
+        },
+        secrets: {
+          CODEX_CLI_OAUTH_TOKEN: '${{ secrets.CODEX_CLI_OAUTH_TOKEN }}',
+        },
+      },
+    },
+  },
+  'gen-pr-gemini': {
+    name: 'Generate PR with Gemini CLI',
+    on: {
+      issues: {
+        types: ['labeled'],
+      },
+      pull_request: {
+        types: ['labeled'],
+      },
+    },
+    jobs: {
+      'gen-pr': {
+        if: "contains(github.event.label.name, 'gen-pr-all') || contains(github.event.label.name, 'gen-pr-gemini')",
+        uses: 'WillBooster/reusable-workflows/.github/workflows/gen-pr.yml@main',
+        with: {
+          'coding-tool': 'gemini-cli',
+          'issue-number': '${{ github.event.issue.number || github.event.number }}',
+        },
+        secrets: {
+          GEMINI_CLI_OAUTH_TOKEN: '${{ secrets.GEMINI_CLI_OAUTH_TOKEN }}',
+        },
+      },
+    },
+  },
 } as const;
 
 type KnownKind = keyof typeof workflows | 'deploy';
@@ -248,6 +296,8 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       'close-comment.yml',
       'add-issue-to-project.yml',
       'gen-pr-claude.yml',
+      'gen-pr-codex.yml',
+      'gen-pr-gemini.yml',
       ...entries.filter((dirent) => dirent.isFile() && dirent.name.endsWith('.yml')).map((dirent) => dirent.name),
     ]);
     if (rootConfig.depending.semanticRelease) {
@@ -371,7 +421,9 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'wbfy-merge' ||
     kind === 'add-issue-to-project' ||
     kind === 'add-ready-issue-to-project' ||
-    kind === 'gen-pr-claude'
+    kind === 'gen-pr-claude' ||
+    kind === 'gen-pr-codex' ||
+    kind === 'gen-pr-gemini'
   ) {
     job.secrets['GH_TOKEN'] = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
