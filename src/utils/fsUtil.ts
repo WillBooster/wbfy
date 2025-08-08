@@ -15,7 +15,7 @@ export const fsUtil = {
     if (normalizedContent) {
       normalizedContent += '\n';
     }
-    await fs.promises.writeFile(filePath, content);
+    await fs.promises.writeFile(filePath, normalizedContent);
     console.log(`Generated/Updated ${filePath}`);
   },
 };
