@@ -427,6 +427,11 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   ) {
     job.secrets['GH_TOKEN'] = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
+
+  // Set test-command for gen-pr workflows based on package manager
+  if (kind === 'gen-pr-claude' || kind === 'gen-pr-codex' || kind === 'gen-pr-gemini') {
+    job.with['test-command'] = config.isBun ? 'bun run check-all-for-ai' : 'yarn check-all-for-ai';
+  }
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
     job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
   }
