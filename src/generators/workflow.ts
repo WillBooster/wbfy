@@ -219,7 +219,6 @@ const workflows = {
         with: {
           'coding-tool': 'claude-code',
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
-          'test-command': 'yarn|bun check-all-for-ai',
         },
         secrets: {
           CLAUDE_CODE_OAUTH_TOKEN: '${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}',
@@ -244,7 +243,6 @@ const workflows = {
         with: {
           'coding-tool': 'codex-cli',
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
-          'test-command': 'yarn|bun check-all-for-ai',
         },
         secrets: {
           OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}',
@@ -269,7 +267,6 @@ const workflows = {
         with: {
           'coding-tool': 'gemini-cli',
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
-          'test-command': 'yarn|bun check-all-for-ai',
         },
         secrets: {
           GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}',
@@ -429,6 +426,11 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'gen-pr-gemini'
   ) {
     job.secrets['GH_TOKEN'] = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
+  }
+
+  // Set test-command for gen-pr workflows based on package manager
+  if (kind === 'gen-pr-claude' || kind === 'gen-pr-codex' || kind === 'gen-pr-gemini') {
+    job.with['test-command'] = config.isBun ? 'bun run check-all-for-ai' : 'yarn check-all-for-ai';
   }
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
     job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
