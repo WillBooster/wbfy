@@ -219,6 +219,7 @@ const workflows = {
         with: {
           'coding-tool': 'claude-code',
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
+          'test-command': 'yarn|bun check-all-for-ai',
         },
         secrets: {
           CLAUDE_CODE_OAUTH_TOKEN: '${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}',
@@ -243,6 +244,7 @@ const workflows = {
         with: {
           'coding-tool': 'codex-cli',
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
+          'test-command': 'yarn|bun check-all-for-ai',
         },
         secrets: {
           OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}',
@@ -267,6 +269,7 @@ const workflows = {
         with: {
           'coding-tool': 'gemini-cli',
           'issue-number': '${{ github.event.issue.number || github.event.number }}',
+          'test-command': 'yarn|bun check-all-for-ai',
         },
         secrets: {
           GEMINI_API_KEY: '${{ secrets.GEMINI_API_KEY }}',
