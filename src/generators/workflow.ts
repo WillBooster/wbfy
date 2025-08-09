@@ -17,7 +17,7 @@ interface Workflow {
   name: string;
   on: On;
   concurrency?: Concurrency;
-  jobs: { [key: string]: Job };
+  jobs: Record<string, Job>;
 }
 
 interface Concurrency {
@@ -398,7 +398,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     await fs.promises.rm(path.join(workflowsPath, 'semantic-release.yml'), { force: true });
   } else if (kind === 'sync') {
     await fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true });
-    if (!newSettings.jobs.sync || !newSettings.jobs.sync.with) return;
+    if (!newSettings.jobs.sync?.with) return;
 
     // Generate sync-force.yml based on sync.yml if it exists.
     newSettings.jobs['sync-force'] = newSettings.jobs.sync;
@@ -428,7 +428,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'gen-pr-codex' ||
     kind === 'gen-pr-gemini'
   ) {
-    job.secrets['GH_TOKEN'] = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
+    job.secrets.GH_TOKEN = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
 
   // Set test-command for gen-pr workflows based on package manager
@@ -436,17 +436,17 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     job.with['test-command'] = config.isBun ? 'bun run check-all-for-ai' : 'yarn check-all-for-ai';
   }
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
-    job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
+    job.secrets.NPM_TOKEN = '${{ secrets.NPM_TOKEN }}';
   }
-  if (job.secrets['FIREBASE_TOKEN']) {
-    job.secrets['GCP_SA_KEY_JSON_FOR_FIREBASE'] = '${{ secrets.GCP_SA_KEY_JSON_FOR_FIREBASE }}';
-    delete job.secrets['FIREBASE_TOKEN'];
+  if (job.secrets.FIREBASE_TOKEN) {
+    job.secrets.GCP_SA_KEY_JSON_FOR_FIREBASE = '${{ secrets.GCP_SA_KEY_JSON_FOR_FIREBASE }}';
+    delete job.secrets.FIREBASE_TOKEN;
   }
   if (
-    (job.secrets['DISCORD_WEBHOOK_URL'] && (kind === 'release' || kind.startsWith('deploy'))) ||
+    (job.secrets.DISCORD_WEBHOOK_URL && (kind === 'release' || kind.startsWith('deploy'))) ||
     (job.with.server_url && kind.startsWith('deploy'))
   ) {
-    job.secrets['DISCORD_WEBHOOK_URL'] = '${{ secrets.DISCORD_WEBHOOK_URL_FOR_RELEASE }}';
+    job.secrets.DISCORD_WEBHOOK_URL = '${{ secrets.DISCORD_WEBHOOK_URL_FOR_RELEASE }}';
   }
 
   if (kind === 'sync') {
@@ -463,31 +463,31 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   }
 
   // Remove redundant parameters
-  if (job.with['dot_env_path'] === '.env') {
-    delete job.with['dot_env_path'];
+  if (job.with.dot_env_path === '.env') {
+    delete job.with.dot_env_path;
   }
   // Remove deprecated parameters
   migrateJob(job);
 
   // Don't use `fly deploy --json` since it causes an error
-  if (kind.startsWith('deploy') && job.secrets['FLY_API_TOKEN'] && typeof job.with['deploy_command'] === 'string') {
-    job.with['deploy_command'] = job.with['deploy_command'].replace(/\s+--json/, '');
+  if (kind.startsWith('deploy') && job.secrets.FLY_API_TOKEN && typeof job.with.deploy_command === 'string') {
+    job.with.deploy_command = job.with.deploy_command.replace(/\s+--json/, '');
   }
   if (config.doesContainsDockerfile) {
-    if (!job.with['ci_label'] && (kind.startsWith('deploy') || kind.startsWith('test'))) {
-      job.with['ci_label'] = 'large';
+    if (!job.with.ci_label && (kind.startsWith('deploy') || kind.startsWith('test'))) {
+      job.with.ci_label = 'large';
     }
     if (kind.startsWith('deploy')) {
-      job.with['cpu_arch'] = 'X64';
+      job.with.cpu_arch = 'X64';
     }
   }
   // Because github.event.repository.private is always true if job is scheduled
   if (kind === 'release' || kind === 'test' || kind.startsWith('deploy')) {
     if (config.isPublicRepo) {
-      job.with['github_hosted_runner'] = true;
+      job.with.github_hosted_runner = true;
     }
   } else {
-    delete job.with['github_hosted_runner'];
+    delete job.with.github_hosted_runner;
   }
 
   if (Object.keys(job.with).length > 0) {
@@ -543,16 +543,16 @@ function migrateWorkflow(newSettings: Workflow): void {
 function migrateJob(job: Job): void {
   // TODO: Remove them after 2023-03-31
   if (!job.with) return;
-  delete job.with['non_self_hosted'];
-  delete job.with['notify_discord'];
-  delete job.with['require_fly'];
-  delete job.with['require_gcloud'];
-  delete job.with['cpu_arch'];
-  delete job.with['label'];
-  delete job.with['labelOperator'];
+  delete job.with.non_self_hosted;
+  delete job.with.notify_discord;
+  delete job.with.require_fly;
+  delete job.with.require_gcloud;
+  delete job.with.cpu_arch;
+  delete job.with.label;
+  delete job.with.labelOperator;
   // Added 2025-08-06
-  if (job.with['ci_size']) {
-    job.with['ci_label'] = job.with['ci_size'];
-    delete job.with['ci_size'];
+  if (job.with.ci_size) {
+    job.with.ci_label = job.with.ci_size;
+    delete job.with.ci_size;
   }
 }

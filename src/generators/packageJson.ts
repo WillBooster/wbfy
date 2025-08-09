@@ -136,8 +136,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.isRoot) {
     if (config.isBun) {
-      delete jsonObj.devDependencies['husky'];
-      delete jsonObj.devDependencies['pinst'];
+      delete jsonObj.devDependencies.husky;
+      delete jsonObj.devDependencies.pinst;
       jsonObj.scripts.prepare = 'lefthook install || true';
       devDependencies.push('lefthook');
     } else {
@@ -168,14 +168,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
     if (config.depending.playwrightTest) {
       // Since artillery requires a specific version of @playwright/test
-      const hasArtillery = jsonObj.dependencies['artillery'] || jsonObj.devDependencies['artillery'];
+      const hasArtillery = jsonObj.dependencies.artillery || jsonObj.devDependencies.artillery;
       // Since llm-toolbox requires @playwright/test in dependencies
       if (!hasArtillery && !jsonObj.dependencies['@playwright/test']) {
         devDependencies.push('@playwright/test');
         delete jsonObj.dependencies['@playwright/test'];
       }
-      delete jsonObj.dependencies['playwright'];
-      delete jsonObj.devDependencies['playwright'];
+      delete jsonObj.dependencies.playwright;
+      delete jsonObj.devDependencies.playwright;
     }
 
     if (config.doesContainsSubPackageJsons) {
@@ -219,8 +219,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   ) {
     if (config.isBun) {
       devDependencies.push('@biomejs/biome', '@willbooster/biome-config');
-      delete jsonObj.devDependencies['eslint'];
-      delete jsonObj.devDependencies['micromatch'];
+      delete jsonObj.devDependencies.eslint;
+      delete jsonObj.devDependencies.micromatch;
       delete jsonObj.devDependencies['typescript-eslint'];
     } else {
       devDependencies.push('eslint', 'micromatch');
@@ -412,21 +412,21 @@ async function removeDeprecatedStuff(
   delete jsonObj.scripts['typecheck/warn'];
   delete jsonObj.scripts['typecheck:gen-code'];
   delete jsonObj.scripts['typecheck:codegen'];
-  delete jsonObj.dependencies['tslib'];
+  delete jsonObj.dependencies.tslib;
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/renovate-config'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
   delete jsonObj.devDependencies['eslint-import-resolver-node'];
   delete jsonObj.devDependencies['eslint-plugin-prettier'];
-  delete jsonObj.devDependencies['lerna'];
+  delete jsonObj.devDependencies.lerna;
   // To install the latest pinst
-  delete jsonObj.devDependencies['pinst'];
+  delete jsonObj.devDependencies.pinst;
   delete jsonObj.scripts['flutter-format'];
   delete jsonObj.scripts['format-flutter'];
   delete jsonObj.scripts['python-format'];
   delete jsonObj.scripts['format-python'];
-  delete jsonObj.scripts['prettier'];
+  delete jsonObj.scripts.prettier;
   delete jsonObj.scripts['check-all'];
   if (!rootConfig.isWillBoosterConfigs) {
     for (const deps of Object.values(eslintDeps)) {
@@ -531,7 +531,7 @@ async function fixScriptNames(
 ): Promise<string> {
   const oldAndNewScriptNames: [string, string][] = [];
   for (const [key] of Object.keys(scripts)) {
-    if (key[0] !== ':' && key.includes(':')) {
+    if (!key.startsWith(':') && key.includes(':')) {
       oldAndNewScriptNames.push([key, key.replaceAll(':', '-')]);
     }
   }
