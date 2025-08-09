@@ -3907,16 +3907,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib-node@npm:7.0.3":
-  version: 7.0.3
-  resolution: "@willbooster/shared-lib-node@npm:7.0.3"
-  dependencies:
-    dotenv: "npm:17.2.1"
-    tree-kill: "npm:1.2.2"
-  checksum: 10c0/f954b09a6f0b4a219a64913119b11ffb7fdd9aebea3d877a832309934ac7110f23542713cf1faaa37d2d50576999fb978ff8e36e48bd15dda766199d01c2216d
-  languageName: node
-  linkType: hard
-
 "@willbooster/shared-lib-node@npm:7.0.4":
   version: 7.0.4
   resolution: "@willbooster/shared-lib-node@npm:7.0.4"
@@ -4465,9 +4455,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:15.0.18":
-  version: 15.0.18
-  resolution: "build-ts@npm:15.0.18"
+"build-ts@npm:15.0.19":
+  version: 15.0.19
+  resolution: "build-ts@npm:15.0.19"
   dependencies:
     "@babel/core": "npm:7.28.0"
     "@babel/plugin-proposal-decorators": "npm:7.28.0"
@@ -4484,7 +4474,7 @@ __metadata:
     "@rollup/plugin-replace": "npm:6.0.2"
     "@rollup/plugin-terser": "npm:0.4.4"
     "@rollup/pluginutils": "npm:5.2.0"
-    "@willbooster/shared-lib-node": "npm:7.0.3"
+    "@willbooster/shared-lib-node": "npm:7.0.4"
     babel-plugin-polyfill-corejs3: "npm:0.13.0"
     babel-plugin-transform-remove-console: "npm:6.9.4"
     chalk: "npm:5.5.0"
@@ -4505,7 +4495,7 @@ __metadata:
     yargs: "npm:18.0.0"
   bin:
     build-ts: bin/index.js
-  checksum: 10c0/67864b4b8ca50ad7733b2e4a17f70beba0a63bed50789ef377ff8580b179445ad2ed2da48beffdf244919a7e91c5247b6d4f290a5475f06fdf3fd45aa2592b4a
+  checksum: 10c0/184f9b191d66fc32e59a9b90105184d089f86dc154ce66d3456d3197ad0257531d9d5ad2247b43891bb2e9a873e22caf3cac15d5294dea9f77a27dd442ee3fd7
   languageName: node
   linkType: hard
 
@@ -11260,7 +11250,7 @@ __metadata:
     "@willbooster/shared-lib": "npm:6.0.4"
     "@willbooster/shared-lib-node": "npm:7.0.4"
     "@yarnpkg/core": "npm:4.4.2"
-    build-ts: "npm:15.0.18"
+    build-ts: "npm:15.0.19"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:17.2.1"
