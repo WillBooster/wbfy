@@ -3917,10 +3917,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:6.0.3":
-  version: 6.0.3
-  resolution: "@willbooster/shared-lib@npm:6.0.3"
-  checksum: 10c0/1cf22f3d750446efe36cce14f48cd70694b97b1930c828f201501860c0b2379c8749ac3660d8c87155ef92899412a6c40f3e1759e4200ae6658fe8ca40fd5a42
+"@willbooster/shared-lib-node@npm:7.0.4":
+  version: 7.0.4
+  resolution: "@willbooster/shared-lib-node@npm:7.0.4"
+  dependencies:
+    dotenv: "npm:17.2.1"
+    tree-kill: "npm:1.2.2"
+  checksum: 10c0/5b9a691e7f76591a74cdc6568f4c4051db23ef93e0ab95f0fe41c5f37039d61b85424063726cf306eaa6a913bbf4bd96366190b1812d6e88e9972508cb129776
+  languageName: node
+  linkType: hard
+
+"@willbooster/shared-lib@npm:6.0.4":
+  version: 6.0.4
+  resolution: "@willbooster/shared-lib@npm:6.0.4"
+  checksum: 10c0/60fc3e2b72a6db3d610bc8bc4008d29afc8d2ff7afdb33b0e14b4e36023991178197056ac427d7a42f100c9e7acceca1ba36eaf838dd2d788dfc640aa5bb82c0
   languageName: node
   linkType: hard
 
@@ -4455,9 +4465,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:15.0.17":
-  version: 15.0.17
-  resolution: "build-ts@npm:15.0.17"
+"build-ts@npm:15.0.18":
+  version: 15.0.18
+  resolution: "build-ts@npm:15.0.18"
   dependencies:
     "@babel/core": "npm:7.28.0"
     "@babel/plugin-proposal-decorators": "npm:7.28.0"
@@ -4477,9 +4487,9 @@ __metadata:
     "@willbooster/shared-lib-node": "npm:7.0.3"
     babel-plugin-polyfill-corejs3: "npm:0.13.0"
     babel-plugin-transform-remove-console: "npm:6.9.4"
-    chalk: "npm:5.4.1"
-    core-js: "npm:3.44.0"
-    core-js-pure: "npm:3.44.0"
+    chalk: "npm:5.5.0"
+    core-js: "npm:3.45.0"
+    core-js-pure: "npm:3.45.0"
     date-time: "npm:4.0.0"
     pretty-ms: "npm:9.2.0"
     rollup: "npm:4.46.2"
@@ -4495,7 +4505,7 @@ __metadata:
     yargs: "npm:18.0.0"
   bin:
     build-ts: bin/index.js
-  checksum: 10c0/7c6b5b84b76187328741be63da1fcf9052da568a18bd79a3e18406efda0de0c8760b81b2cc1373fc76fc58253fc2972a2ab1f915a1864e2b8684adcc03d593da
+  checksum: 10c0/67864b4b8ca50ad7733b2e4a17f70beba0a63bed50789ef377ff8580b179445ad2ed2da48beffdf244919a7e91c5247b6d4f290a5475f06fdf3fd45aa2592b4a
   languageName: node
   linkType: hard
 
@@ -4596,10 +4606,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:5.4.1":
-  version: 5.4.1
-  resolution: "chalk@npm:5.4.1"
-  checksum: 10c0/b23e88132c702f4855ca6d25cb5538b1114343e41472d5263ee8a37cccfccd9c4216d111e1097c6a27830407a1dc81fecdf2a56f2c63033d4dbbd88c10b0dcef
+"chalk@npm:5.5.0, chalk@npm:^5.4.1, chalk@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "chalk@npm:5.5.0"
+  checksum: 10c0/23063b544f7c2fe57d25ff814807de561f8adfff72e4f0051051eaa606f772586470507ccd38d89166300eeaadb0164acde8bb8a0716a0f2d56ccdf3761d5e4f
   languageName: node
   linkType: hard
 
@@ -4621,13 +4631,6 @@ __metadata:
     ansi-styles: "npm:^4.1.0"
     supports-color: "npm:^7.1.0"
   checksum: 10c0/4a3fef5cc34975c898ffe77141450f679721df9dde00f6c304353fa9c8b571929123b26a0e4617bde5018977eb655b31970c297b91b63ee83bb82aeb04666880
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^5.4.1, chalk@npm:^5.5.0":
-  version: 5.5.0
-  resolution: "chalk@npm:5.5.0"
-  checksum: 10c0/23063b544f7c2fe57d25ff814807de561f8adfff72e4f0051051eaa606f772586470507ccd38d89166300eeaadb0164acde8bb8a0716a0f2d56ccdf3761d5e4f
   languageName: node
   linkType: hard
 
@@ -5049,17 +5052,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-pure@npm:3.44.0":
-  version: 3.44.0
-  resolution: "core-js-pure@npm:3.44.0"
-  checksum: 10c0/543d4743edcdf2371289c202a373a81ad30f78082999b464e787760f13c5b05cf2c6c99a134b73ffe0ac3c5086df8cd9c5ab575a29a8d40b1d85f6b3cafbca37
+"core-js-pure@npm:3.45.0":
+  version: 3.45.0
+  resolution: "core-js-pure@npm:3.45.0"
+  checksum: 10c0/93f686d4f59e33701aba0762fc3742ececc36c843fb4621dfc7329b800e82782aecb0b8190b4c8bc997d7f8bf896af08707a3d1ddcb37d5544a68a0526232836
   languageName: node
   linkType: hard
 
-"core-js@npm:3.44.0":
-  version: 3.44.0
-  resolution: "core-js@npm:3.44.0"
-  checksum: 10c0/759bf3dc5f75068e9425dddf895fd5531c38794a11ea1c2b65e5ef7c527fe3652d59e8c287e574a211af9bab3c057c5c3fa6f6a773f4e142af895106efad38a4
+"core-js@npm:3.45.0":
+  version: 3.45.0
+  resolution: "core-js@npm:3.45.0"
+  checksum: 10c0/118350f9f1d81f42a1276590d6c217dca04c789fdb8074c82e53056b1a784948769a62b16b98493fd73e8a988545432f302bca798571e56ad881b9c039a5a83c
   languageName: node
   linkType: hard
 
@@ -11254,10 +11257,10 @@ __metadata:
     "@types/yargs": "npm:17.0.33"
     "@willbooster/eslint-config-ts": "npm:11.4.1"
     "@willbooster/prettier-config": "npm:10.2.0"
-    "@willbooster/shared-lib": "npm:6.0.3"
-    "@willbooster/shared-lib-node": "npm:7.0.3"
+    "@willbooster/shared-lib": "npm:6.0.4"
+    "@willbooster/shared-lib-node": "npm:7.0.4"
     "@yarnpkg/core": "npm:4.4.2"
-    build-ts: "npm:15.0.17"
+    build-ts: "npm:15.0.18"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:17.2.1"
@@ -11293,7 +11296,7 @@ __metadata:
     typescript-eslint: "npm:8.39.0"
     vitest: "npm:3.2.4"
     yargs: "npm:18.0.0"
-    zod: "npm:4.0.15"
+    zod: "npm:4.0.16"
   bin:
     wbfy: ./bin/wbfy.js
   languageName: unknown
@@ -11537,9 +11540,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:4.0.15":
-  version: 4.0.15
-  resolution: "zod@npm:4.0.15"
-  checksum: 10c0/c4d5b0c6668fe32fb6040d713d75dbf65e2e46cb68c77755b7b66426e8583d5dacf49a44f90beb6b12aa1aa2545cc0d3c186e368711021e11dd3c1f0addb9100
+"zod@npm:4.0.16":
+  version: 4.0.16
+  resolution: "zod@npm:4.0.16"
+  checksum: 10c0/b42bbad1547d57cc1e319e18bb6667836d3c653802752395618e4002e6afeb53f09971e0717aa26098703f8e47268d8331e4ec5b1e76d5b8c98d1af66c4ede42
   languageName: node
   linkType: hard
