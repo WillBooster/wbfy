@@ -20,6 +20,7 @@ const rootJsonObj = {
     jsx: 'react-jsx',
     alwaysStrict: true,
     strict: true,
+    noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
     skipLibCheck: true, // because libraries may have broken types
     allowSyntheticDefaultImports: true, // allow `import React from 'react'`
     esModuleInterop: true, // allow default import from CommonJS/AMD/UMD modules
@@ -50,6 +51,7 @@ const subJsonObj = {
     jsx: 'react-jsx',
     alwaysStrict: true,
     strict: true,
+    noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
     skipLibCheck: true, // because libraries may have broken types
     allowSyntheticDefaultImports: true, // allow `import React from 'react'`
     esModuleInterop: true, // allow default import from CommonJS/AMD/UMD modules
