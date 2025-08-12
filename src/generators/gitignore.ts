@@ -15,15 +15,16 @@ const commonContent = `
 !.keep
 .aider*
 .env.production
+*/mount/*.hash
+.devcontainer/
 .idea/AugmentWebviewStateStore.xml
 .idea/copilot/chatSessions/
-.devcontainer/
-*/mount/*.hash
+.serena/
+.tmp/
 __generated__/
 dist/
 temp/
 tmp/
-.tmp/
 `;
 
 export async function generateGitignore(config: PackageConfig, rootConfig: PackageConfig): Promise<void> {
