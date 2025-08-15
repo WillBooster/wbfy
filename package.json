@@ -34,8 +34,8 @@
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
     "@octokit/core": "7.0.3",
-    "@willbooster/shared-lib": "6.0.4",
-    "@willbooster/shared-lib-node": "7.0.4",
+    "@willbooster/shared-lib": "6.0.5",
+    "@willbooster/shared-lib-node": "7.0.5",
     "deepmerge": "4.3.1",
     "dotenv": "17.2.1",
     "fast-glob": "3.3.3",
@@ -46,7 +46,7 @@
     "minimal-promise-pool": "5.0.0",
     "simple-git": "3.28.0",
     "yargs": "18.0.0",
-    "zod": "4.0.16"
+    "zod": "4.0.17"
   },
   "devDependencies": {
     "@types/eslint": "9.6.1",
@@ -55,7 +55,7 @@
     "@types/libsodium-wrappers": "0.7.14",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/micromatch": "4.0.9",
-    "@types/node": "24.2.1",
+    "@types/node": "24.3.0",
     "@types/yargs": "17.0.33",
     "@willbooster/eslint-config-ts": "11.4.1",
     "@willbooster/prettier-config": "10.2.0",
@@ -84,7 +84,7 @@
     "ts-node": "10.9.2",
     "type-fest": "4.41.0",
     "typescript": "5.9.2",
-    "typescript-eslint": "8.39.0",
+    "typescript-eslint": "8.39.1",
     "vitest": "3.2.4"
   },
   "packageManager": "yarn@4.9.2",
