@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { gitHubUtil, octokit } from './utils/githubUtil.js';
 import { globIgnore } from './utils/globUtil.js';
 
-export interface PackageConfig {
+export type PackageConfig = {
   dirPath: string;
   dockerfile: string;
   isRoot: boolean;
@@ -192,17 +192,17 @@ export async function getPackageConfig(
       ),
       doesContainsJsxOrTsxInPackages: containsAny('packages/**/{app,src,test}/**/*.{t,j}sx', dirPath),
       depending: {
-        blitz: !!dependencies['blitz'],
+        blitz: !!dependencies.blitz,
         firebase: !!devDependencies['firebase-tools'],
         genI18nTs: !!devDependencies['gen-i18n-ts'],
         litestream: dockerfile.includes('install-litestream.sh'),
-        next: !!dependencies['next'],
+        next: !!dependencies.next,
         playwrightTest:
           !!dependencies['@playwright/test'] ||
           !!devDependencies['@playwright/test'] ||
-          !!devDependencies['playwright'],
-        prisma: !!dependencies['@prisma/client'] || !!devDependencies['prisma'],
-        pyright: !!devDependencies['pyright'],
+          !!devDependencies.playwright,
+        prisma: !!dependencies['@prisma/client'] || !!devDependencies.prisma,
+        pyright: !!devDependencies.pyright,
         reactNative: !!dependencies['react-native'],
         semanticRelease: !!(
           devDependencies['semantic-release'] ||
