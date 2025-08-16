@@ -1,6 +1,6 @@
 class Options {
-  isVerbose: boolean = false;
-  doesUploadEnvVars: boolean = false;
+  isVerbose = false;
+  doesUploadEnvVars = false;
 
   constructor() {}
 }
