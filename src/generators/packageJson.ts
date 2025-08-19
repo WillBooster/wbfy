@@ -588,12 +588,11 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'judge');
     jsonObj.dependencies['@willbooster/judge'] = `git@github.com:WillBoosterLab/judge.git#${commitHash}`;
   }
-  // TODO: After migrating from fly.io to Railway, comment-in the following code
-  // if (packageNames.has('@willbooster/llm-proxy') && !isWorkspacePackage(jsonObj, '@willbooster/llm-proxy')) {
-  //   delete jsonObj.devDependencies['@willbooster/llm-proxy'];
-  //   const commitHash = await getLatestCommitHash('WillBoosterLab', 'llm-proxy');
-  //   jsonObj.dependencies['@willbooster/llm-proxy'] = `git@github.com:WillBoosterLab/llm-proxy.git#${commitHash}`;
-  // }
+  if (packageNames.has('@willbooster/llm-proxy') && !isWorkspacePackage(jsonObj, '@willbooster/llm-proxy')) {
+    delete jsonObj.devDependencies['@willbooster/llm-proxy'];
+    const commitHash = await getLatestCommitHash('WillBoosterLab', 'llm-proxy');
+    jsonObj.dependencies['@willbooster/llm-proxy'] = `git@github.com:WillBoosterLab/llm-proxy.git#${commitHash}`;
+  }
 }
 
 function isWorkspacePackage(jsonObj: PackageJson, packageName: string): boolean {
