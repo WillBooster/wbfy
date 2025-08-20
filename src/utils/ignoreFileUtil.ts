@@ -45,7 +45,7 @@ export const ignoreFileUtil = {
     }
     return defaultHeadUserContent;
   },
-  getTailUserContent(content: string): string | undefined {
+  getTailUserContent(content: string): string {
     const lastHeaderIndex = getIndexOfTailUserContentHeader(content);
     if (lastHeaderIndex > 0) {
       return content.slice(lastHeaderIndex - 1);
