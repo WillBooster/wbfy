@@ -354,7 +354,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
 
   for (const job of Object.values(newSettings.jobs)) {
     // Ignore non-reusable workflows
-    if (!job.uses?.includes?.('/reusable-workflows/')) return;
+    if (!job.uses?.includes?.('/reusable-workflows/')) continue;
 
     normalizeJob(config, job, kind);
   }
