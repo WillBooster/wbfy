@@ -53,7 +53,7 @@ type Types = {
 };
 
 type Job = {
-  uses: string;
+  uses?: string;
   if?: string;
   secrets?: Record<string, unknown>;
   with?: Record<string, unknown>;
@@ -352,7 +352,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
 
   for (const job of Object.values(newSettings.jobs)) {
     // Ignore non-reusable workflows
-    if (!job.uses.includes('/reusable-workflows/')) continue;
+    if (!job.uses?.includes('/reusable-workflows/')) continue;
 
     normalizeJob(config, job, kind);
   }
@@ -457,9 +457,9 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   }
 
   if (config.repository?.startsWith('github:WillBooster/')) {
-    job.uses = job.uses.replace('WillBoosterLab/', 'WillBooster/');
+    job.uses = job.uses?.replace('WillBoosterLab/', 'WillBooster/');
   } else if (config.repository?.startsWith('github:WillBoosterLab/')) {
-    job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
+    job.uses = job.uses?.replace('WillBooster/', 'WillBoosterLab/');
   }
 
   // Remove redundant parameters
