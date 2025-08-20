@@ -41,7 +41,7 @@ export async function generateVscodeSettings(config: PackageConfig): Promise<voi
       if ('editor.formatOnSave' in settings) {
         delete settings['editor.formatOnSave'];
       }
-      sortKeys((settings as Record<string, unknown>) ?? {});
+      sortKeys(settings as Record<string, unknown>);
       const newContent = JSON.stringify(settings, undefined, 2);
       await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
     } catch {

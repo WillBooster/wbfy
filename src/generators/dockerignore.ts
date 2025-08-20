@@ -23,7 +23,7 @@ export async function generateDockerignore(config: PackageConfig): Promise<void>
       const headUserContent = ignoreFileUtil.getHeadUserContent(content);
       const tailUserContent = ignoreFileUtil.getTailUserContent(content);
 
-      const newContent = headUserContent + commonContent + tailUserContent;
+      const newContent = headUserContent + commonContent + (tailUserContent ?? '');
       await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
     } else {
       await fs.promises.rm(filePath, { force: true });

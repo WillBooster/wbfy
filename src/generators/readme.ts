@@ -18,7 +18,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
       newContent = insertBadge(newContent, semanticReleaseBadge);
     }
 
-    const repository = config.repository?.slice(config.repository?.indexOf(':') + 1);
+    const repository = config.repository?.slice(config.repository.indexOf(':') + 1);
     const fileNames = fs.readdirSync(`${config.dirPath}/.github/workflows`);
     for (const fileName of fileNames) {
       if (!fileName.startsWith('test') && !fileName.startsWith('deploy')) continue;

@@ -38,7 +38,8 @@ pubspec.yaml
 `;
     }
 
-    const newContent = headUserContent + commonContent + additionalContent + gitignoreContent + tailUserContent;
+    const newContent =
+      headUserContent + commonContent + additionalContent + gitignoreContent + (tailUserContent ?? '');
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
 }

@@ -71,10 +71,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   const filePath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fs.promises.readFile(filePath, 'utf8');
   const jsonObj = JSON.parse(jsonText) as PackageJson;
-  jsonObj.scripts = jsonObj.scripts || {};
-  jsonObj.dependencies = jsonObj.dependencies || {};
-  jsonObj.devDependencies = jsonObj.devDependencies || {};
-  jsonObj.peerDependencies = jsonObj.peerDependencies || {};
+  jsonObj.scripts = jsonObj.scripts ?? {};
+  jsonObj.dependencies = jsonObj.dependencies ?? {};
+  jsonObj.devDependencies = jsonObj.devDependencies ?? {};
+  jsonObj.peerDependencies = jsonObj.peerDependencies ?? {};
   const packageManager = config.isBun ? 'bun' : 'yarn';
 
   await removeDeprecatedStuff(
@@ -101,7 +101,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (config.isBun) {
     delete jsonObj.scripts.prettify;
   } else {
-    jsonObj.scripts.prettify += await generatePrettierSuffix(config.dirPath);
+    jsonObj.scripts.prettify = (jsonObj.scripts.prettify ?? '') + (await generatePrettierSuffix(config.dirPath));
   }
   // Deal with breaking changes in yarn berry 4.0.0-rc.49
   for (const [key, value] of Object.entries(jsonObj.scripts)) {
@@ -136,8 +136,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.isRoot) {
     if (config.isBun) {
-      delete jsonObj.devDependencies['husky'];
-      delete jsonObj.devDependencies['pinst'];
+      delete jsonObj.devDependencies.husky;
+      delete jsonObj.devDependencies.pinst;
       jsonObj.scripts.prepare = 'lefthook install || true';
       devDependencies.push('lefthook');
     } else {
@@ -168,14 +168,14 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
     if (config.depending.playwrightTest) {
       // Since artillery requires a specific version of @playwright/test
-      const hasArtillery = jsonObj.dependencies['artillery'] || jsonObj.devDependencies['artillery'];
+      const hasArtillery = jsonObj.dependencies.artillery || jsonObj.devDependencies.artillery;
       // Since llm-toolbox requires @playwright/test in dependencies
       if (!hasArtillery && !jsonObj.dependencies['@playwright/test']) {
         devDependencies.push('@playwright/test');
         delete jsonObj.dependencies['@playwright/test'];
       }
-      delete jsonObj.dependencies['playwright'];
-      delete jsonObj.devDependencies['playwright'];
+      delete jsonObj.dependencies.playwright;
+      delete jsonObj.devDependencies.playwright;
     }
 
     if (config.doesContainsSubPackageJsons) {
@@ -219,8 +219,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   ) {
     if (config.isBun) {
       devDependencies.push('@biomejs/biome', '@willbooster/biome-config');
-      delete jsonObj.devDependencies['eslint'];
-      delete jsonObj.devDependencies['micromatch'];
+      delete jsonObj.devDependencies.eslint;
+      delete jsonObj.devDependencies.micromatch;
       delete jsonObj.devDependencies['typescript-eslint'];
     } else {
       devDependencies.push('eslint', 'micromatch');
@@ -276,7 +276,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         delete jsonObj.scripts['lint-fix'];
         jsonObj.scripts.cleanup = jsonObj.scripts.cleanup?.replace(' && yarn lint-fix', '');
       } else {
-        jsonObj.scripts['lint-fix'] += EslintUtil.getLintFixSuffix(config);
+        jsonObj.scripts['lint-fix'] = (jsonObj.scripts['lint-fix'] ?? '') + EslintUtil.getLintFixSuffix(config);
       }
     }
 
@@ -288,7 +288,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         jsonObj.scripts['format-code'] = `flutter format $(find ${dirs.join(
           ' '
         )} -name generated -prune -o -name '*.freezed.dart' -prune -o -name '*.g.dart' -prune -o -name '*.dart' -print)`;
-        jsonObj.scripts.format += ` && yarn format-code`;
+        jsonObj.scripts.format = (jsonObj.scripts.format ?? '') + ` && yarn format-code`;
       }
     }
 
@@ -318,7 +318,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
           jsonObj.scripts.lint = `poetry run flake8 ${dirNamesStr}`;
           jsonObj.scripts['lint-fix'] = 'yarn lint';
         }
-        jsonObj.scripts.format += ` && yarn format-code`;
+        jsonObj.scripts.format = (jsonObj.scripts.format ?? '') + ` && yarn format-code`;
         poetryDevDependencies.push('black', 'isort', 'flake8');
       }
     }
@@ -350,7 +350,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj.scripts['gen-code'] = 'prisma generate';
   }
 
-  if (!jsonObj.dependencies?.prettier) {
+  if (!jsonObj.dependencies.prettier) {
     // Because @types/prettier blocks prettier execution.
     delete jsonObj.devDependencies['@types/prettier'];
   }
@@ -412,25 +412,26 @@ async function removeDeprecatedStuff(
   delete jsonObj.scripts['typecheck/warn'];
   delete jsonObj.scripts['typecheck:gen-code'];
   delete jsonObj.scripts['typecheck:codegen'];
-  delete jsonObj.dependencies['tslib'];
+  delete jsonObj.dependencies.tslib;
   delete jsonObj.devDependencies['@willbooster/eslint-config'];
   delete jsonObj.devDependencies['@willbooster/eslint-config-react'];
   delete jsonObj.devDependencies['@willbooster/renovate-config'];
   delete jsonObj.devDependencies['@willbooster/tsconfig'];
   delete jsonObj.devDependencies['eslint-import-resolver-node'];
   delete jsonObj.devDependencies['eslint-plugin-prettier'];
-  delete jsonObj.devDependencies['lerna'];
+  delete jsonObj.devDependencies.lerna;
   // To install the latest pinst
-  delete jsonObj.devDependencies['pinst'];
+  delete jsonObj.devDependencies.pinst;
   delete jsonObj.scripts['flutter-format'];
   delete jsonObj.scripts['format-flutter'];
   delete jsonObj.scripts['python-format'];
   delete jsonObj.scripts['format-python'];
-  delete jsonObj.scripts['prettier'];
+  delete jsonObj.scripts.prettier;
   delete jsonObj.scripts['check-all'];
   if (!rootConfig.isWillBoosterConfigs) {
     for (const deps of Object.values(eslintDeps)) {
       for (const dep of deps) {
+        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
         delete jsonObj.devDependencies[dep];
       }
     }
@@ -494,7 +495,7 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
     if (oldTest?.includes('wb test')) {
       scripts.test = oldTest;
       // `wb` supports `--silent` option
-      scripts['check-all-for-ai'] += ' --silent';
+      scripts['check-all-for-ai'] = (scripts['check-all-for-ai'] ?? '') + ' --silent';
     }
 
     if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
@@ -563,8 +564,8 @@ async function fixScriptNames(
 }
 
 async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
-  jsonObj.dependencies = jsonObj.dependencies || {};
-  jsonObj.devDependencies = jsonObj.devDependencies || {};
+  jsonObj.dependencies = jsonObj.dependencies ?? {};
+  jsonObj.devDependencies = jsonObj.devDependencies ?? {};
   const packageNames = new Set([...Object.keys(jsonObj.dependencies), ...Object.keys(jsonObj.devDependencies)]);
   if (packageNames.has('@willbooster/auth') && !isWorkspacePackage(jsonObj, '@willbooster/auth')) {
     delete jsonObj.devDependencies['@willbooster/auth'];
