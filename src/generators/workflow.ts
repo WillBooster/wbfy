@@ -323,9 +323,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
-  // Handle deploy workflows that don't exist in the workflows object
-  const workflowTemplate = kind.startsWith('deploy') ? {} : workflows[kind as keyof typeof workflows];
-  let newSettings = cloneDeep(workflowTemplate) as Workflow;
+  let newSettings = cloneDeep(kind in workflows ? workflows[kind as keyof typeof workflows] : {}) as Workflow;
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
