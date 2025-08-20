@@ -14,7 +14,7 @@ export function combineMerge(target: object[], source: object[], options: any): 
     if (destination[index] === undefined) {
       destination[index] = options.cloneUnlessOtherwiseSpecified(item, options);
     } else if (options.isMergeableObject(item)) {
-      destination[index] = merge(target[index], item, options);
+      destination[index] = merge(target[index] as object, item, options);
     } else if (!target.includes(item)) {
       destination.push(item);
     }
