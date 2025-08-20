@@ -528,9 +528,8 @@ function setSchedule(
   const cron = runTwice
     ? `${minJst} ${newHourUtc % 24},${(newHourUtc + 1) % 24} * * *`
     : `${minJst} ${newHourUtc % 24} * * *`;
-  if (newSettings.on) {
-    newSettings.on.schedule = [{ cron }];
-  }
+  newSettings.on ??= {};
+  newSettings.on.schedule = [{ cron }];
 }
 
 async function writeYaml(newSettings: Workflow, filePath: string): Promise<void> {
