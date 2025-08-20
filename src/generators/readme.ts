@@ -18,13 +18,13 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
       newContent = insertBadge(newContent, semanticReleaseBadge);
     }
 
-    const repository = config.repository?.slice(config.repository?.indexOf(':') + 1);
+    const repository = config.repository?.slice(config.repository.indexOf(':') + 1);
     const fileNames = fs.readdirSync(`${config.dirPath}/.github/workflows`);
     for (const fileName of fileNames) {
       if (!fileName.startsWith('test') && !fileName.startsWith('deploy')) continue;
 
       let badgeName = fileName;
-      badgeName = badgeName[0].toUpperCase() + badgeName.slice(1, badgeName.indexOf('.'));
+      badgeName = (badgeName[0] || '').toUpperCase() + badgeName.slice(1, badgeName.indexOf('.'));
       badgeName = badgeName.replace('-', ' ');
       const badge = `[![${badgeName}](https://github.com/${repository}/actions/workflows/${fileName}/badge.svg)](https://github.com/${repository}/actions/workflows/${fileName})`;
       if (fs.existsSync(path.resolve(config.dirPath, `.github/workflows/${fileName}`))) {

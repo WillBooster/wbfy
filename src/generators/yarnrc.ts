@@ -9,18 +9,18 @@ import type { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 
-interface Settings extends Partial<ConfigurationValueMap> {
+type Settings = {
   defaultSemverRangePrefix: string;
   nmMode: string;
   nodeLinker: string;
   plugins?: Plugin[];
-}
+} & Partial<ConfigurationValueMap>;
 
-interface Plugin {
+type Plugin = {
   checksum: string;
   path: string;
   spec: string;
-}
+};
 
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateYarnrcYml', async () => {

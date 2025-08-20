@@ -15,7 +15,7 @@ const jsonObj = {
   extends: ['github>WillBooster/willbooster-configs:renovate.json5'],
 };
 
-type Settings = typeof jsonObj & { packageRules: { matchPackageNames: string[]; enabled?: boolean }[] };
+type Settings = typeof jsonObj & { packageRules?: { matchPackageNames: string[]; enabled?: boolean }[] };
 
 export async function generateRenovateJson(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateRenovateJson', async () => {

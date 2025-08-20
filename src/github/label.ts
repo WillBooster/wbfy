@@ -70,7 +70,7 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await deleteLabel(owner, repo, 'llm-pr :robot:');
       await deleteLabel(owner, repo, 'ai-pr :robot:');
     } catch (error) {
-      console.warn('Skip setupLabels due to:', (error as Error)?.stack ?? error);
+      console.warn('Skip setupLabels due to:', (error as Error | undefined)?.stack ?? error);
     }
   });
 }

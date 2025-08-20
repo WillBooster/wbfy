@@ -13,51 +13,51 @@ import { combineMerge } from '../utils/mergeUtil.js';
 import { moveToBottom, sortKeys } from '../utils/objectUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-interface Workflow {
-  name: string;
-  on: On;
+type Workflow = {
+  name?: string;
+  on?: On;
   concurrency?: Concurrency;
-  jobs: { [key: string]: Job };
-}
+  jobs: Record<string, Job>;
+};
 
-interface Concurrency {
+type Concurrency = {
   group: string;
   'cancel-in-progress': boolean;
-}
+};
 
-interface On {
+type On = {
   issues?: Types;
   pull_request?: PullRequest;
   pull_request_target?: Types;
   push?: Push;
   schedule?: Schedule[];
   workflow_dispatch?: null;
-}
+};
 
-interface PullRequest {
+type PullRequest = {
   'paths-ignore'?: string[];
   types?: string[];
-}
+};
 
-interface Push {
+type Push = {
   branches: string[];
   'paths-ignore'?: string[];
-}
+};
 
-interface Schedule {
+type Schedule = {
   cron: string;
-}
+};
 
-interface Types {
+type Types = {
   types: string[];
-}
+};
 
-interface Job {
-  uses: string;
+type Job = {
+  uses?: string;
   if?: string;
   secrets?: Record<string, unknown>;
   with?: Record<string, unknown>;
-}
+};
 
 const workflows = {
   test: {
@@ -323,7 +323,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
-  let newSettings = cloneDeep(workflows[kind as keyof typeof workflows] ?? {}) as Workflow;
+  let newSettings = cloneDeep(kind in workflows ? workflows[kind as keyof typeof workflows] : {}) as Workflow;
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
@@ -342,9 +342,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
       },
     };
     // Move jobs to the bottom
-    if (newSettings.jobs) {
-      moveToBottom(newSettings, 'jobs');
-    }
+    moveToBottom(newSettings, 'jobs');
     if (newSettings.on?.push) {
       newSettings.on.push['paths-ignore'] = [
         ...new Set(['**.md', '**/docs/**', ...(newSettings.on.push['paths-ignore'] ?? [])]),
@@ -352,12 +350,15 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     }
   }
 
+  let isReusableWorkflow = false;
   for (const job of Object.values(newSettings.jobs)) {
     // Ignore non-reusable workflows
-    if (!job.uses?.includes?.('/reusable-workflows/')) continue;
+    if (!job.uses?.includes('/reusable-workflows/')) continue;
 
     normalizeJob(config, job, kind);
+    isReusableWorkflow = true;
   }
+  if (!isReusableWorkflow) return;
 
   switch (kind) {
     case 'release': {
@@ -374,15 +375,17 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     }
     case 'test': {
       // Don't use `paths-ignore` for test because GitHub's Branch Protection and Rulesets require job running.
-      delete newSettings.on?.pull_request?.['paths-ignore'];
-      delete newSettings.on?.push?.['paths-ignore'];
+      if (newSettings.on?.pull_request) {
+        delete newSettings.on.pull_request['paths-ignore'];
+      }
       if (newSettings.on?.push) {
+        delete newSettings.on.push['paths-ignore'];
         newSettings.on.push.branches = newSettings.on.push.branches.filter((branch) => branch !== 'renovate/**');
       }
       break;
     }
     case 'wbfy': {
-      if (newSettings.on) setSchedule(newSettings, 20, 24, false);
+      setSchedule(newSettings, 20, 24, false);
       break;
     }
     case 'wbfy-merge': {
@@ -398,7 +401,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     await fs.promises.rm(path.join(workflowsPath, 'semantic-release.yml'), { force: true });
   } else if (kind === 'sync') {
     await fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true });
-    if (!newSettings.jobs.sync || !newSettings.jobs.sync.with) return;
+    if (!newSettings.jobs.sync?.with) return;
 
     // Generate sync-force.yml based on sync.yml if it exists.
     newSettings.jobs['sync-force'] = newSettings.jobs.sync;
@@ -414,8 +417,8 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
 }
 
 function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
-  job.with ||= {};
-  job.secrets ||= {};
+  job.with ??= {};
+  job.secrets ??= {};
 
   if (
     kind === 'test' ||
@@ -428,7 +431,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'gen-pr-codex' ||
     kind === 'gen-pr-gemini'
   ) {
-    job.secrets['GH_TOKEN'] = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
+    job.secrets.GH_TOKEN = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
   }
 
   // Set test-command for gen-pr workflows based on package manager
@@ -436,58 +439,58 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     job.with['test-command'] = config.isBun ? 'bun run check-all-for-ai' : 'yarn check-all-for-ai';
   }
   if (config.release.npm && (kind === 'release' || kind === 'test')) {
-    job.secrets['NPM_TOKEN'] = '${{ secrets.NPM_TOKEN }}';
+    job.secrets.NPM_TOKEN = '${{ secrets.NPM_TOKEN }}';
   }
-  if (job.secrets['FIREBASE_TOKEN']) {
-    job.secrets['GCP_SA_KEY_JSON_FOR_FIREBASE'] = '${{ secrets.GCP_SA_KEY_JSON_FOR_FIREBASE }}';
-    delete job.secrets['FIREBASE_TOKEN'];
+  if (job.secrets.FIREBASE_TOKEN) {
+    job.secrets.GCP_SA_KEY_JSON_FOR_FIREBASE = '${{ secrets.GCP_SA_KEY_JSON_FOR_FIREBASE }}';
+    delete job.secrets.FIREBASE_TOKEN;
   }
   if (
-    (job.secrets['DISCORD_WEBHOOK_URL'] && (kind === 'release' || kind.startsWith('deploy'))) ||
+    (job.secrets.DISCORD_WEBHOOK_URL && (kind === 'release' || kind.startsWith('deploy'))) ||
     (job.with.server_url && kind.startsWith('deploy'))
   ) {
-    job.secrets['DISCORD_WEBHOOK_URL'] = '${{ secrets.DISCORD_WEBHOOK_URL_FOR_RELEASE }}';
+    job.secrets.DISCORD_WEBHOOK_URL = '${{ secrets.DISCORD_WEBHOOK_URL_FOR_RELEASE }}';
   }
 
   if (kind === 'sync') {
-    const params = job.with?.sync_params_without_dest;
+    const params = job.with.sync_params_without_dest;
     if (typeof params === 'string') {
       job.with.sync_params_without_dest = params.replace('sync ', '');
     }
   }
 
   if (config.repository?.startsWith('github:WillBooster/')) {
-    job.uses = job.uses.replace('WillBoosterLab/', 'WillBooster/');
+    job.uses = job.uses?.replace('WillBoosterLab/', 'WillBooster/');
   } else if (config.repository?.startsWith('github:WillBoosterLab/')) {
-    job.uses = job.uses.replace('WillBooster/', 'WillBoosterLab/');
+    job.uses = job.uses?.replace('WillBooster/', 'WillBoosterLab/');
   }
 
   // Remove redundant parameters
-  if (job.with['dot_env_path'] === '.env') {
-    delete job.with['dot_env_path'];
+  if (job.with.dot_env_path === '.env') {
+    delete job.with.dot_env_path;
   }
   // Remove deprecated parameters
   migrateJob(job);
 
   // Don't use `fly deploy --json` since it causes an error
-  if (kind.startsWith('deploy') && job.secrets['FLY_API_TOKEN'] && typeof job.with['deploy_command'] === 'string') {
-    job.with['deploy_command'] = job.with['deploy_command'].replace(/\s+--json/, '');
+  if (kind.startsWith('deploy') && job.secrets.FLY_API_TOKEN && typeof job.with.deploy_command === 'string') {
+    job.with.deploy_command = job.with.deploy_command.replace(/\s+--json/, '');
   }
   if (config.doesContainsDockerfile) {
-    if (!job.with['ci_label'] && (kind.startsWith('deploy') || kind.startsWith('test'))) {
-      job.with['ci_label'] = 'large';
+    if (!job.with.ci_label && (kind.startsWith('deploy') || kind.startsWith('test'))) {
+      job.with.ci_label = 'large';
     }
     if (kind.startsWith('deploy')) {
-      job.with['cpu_arch'] = 'X64';
+      job.with.cpu_arch = 'X64';
     }
   }
   // Because github.event.repository.private is always true if job is scheduled
   if (kind === 'release' || kind === 'test' || kind.startsWith('deploy')) {
     if (config.isPublicRepo) {
-      job.with['github_hosted_runner'] = true;
+      job.with.github_hosted_runner = true;
     }
   } else {
-    delete job.with['github_hosted_runner'];
+    delete job.with.github_hosted_runner;
   }
 
   if (Object.keys(job.with).length > 0) {
@@ -511,10 +514,10 @@ function setSchedule(
   exclusiveMaxHourJst: number,
   runTwice: boolean
 ): void {
-  const [minuteUtc, hourUtc] = ((newSettings.on.schedule?.[0]?.cron as string) || '').split(' ').map(Number);
+  const [minuteUtc, hourUtc] = ((newSettings.on?.schedule?.[0]?.cron as string) || '').split(' ').map(Number);
   if (runTwice && !Number.isInteger(hourUtc)) return;
   if (minuteUtc !== 0) {
-    const hourJst = (hourUtc + 9) % 24;
+    const hourJst = ((hourUtc ?? Number.NaN) + 9) % 24;
     const inRange =
       inclusiveMinHourJst < exclusiveMaxHourJst
         ? inclusiveMinHourJst <= hourJst && hourJst < exclusiveMaxHourJst
@@ -528,6 +531,7 @@ function setSchedule(
   const cron = runTwice
     ? `${minJst} ${newHourUtc % 24},${(newHourUtc + 1) % 24} * * *`
     : `${minJst} ${newHourUtc % 24} * * *`;
+  newSettings.on ??= {};
   newSettings.on.schedule = [{ cron }];
 }
 
@@ -544,16 +548,16 @@ function migrateWorkflow(newSettings: Workflow): void {
 function migrateJob(job: Job): void {
   // TODO: Remove them after 2023-03-31
   if (!job.with) return;
-  delete job.with['non_self_hosted'];
-  delete job.with['notify_discord'];
-  delete job.with['require_fly'];
-  delete job.with['require_gcloud'];
-  delete job.with['cpu_arch'];
-  delete job.with['label'];
-  delete job.with['labelOperator'];
+  delete job.with.non_self_hosted;
+  delete job.with.notify_discord;
+  delete job.with.require_fly;
+  delete job.with.require_gcloud;
+  delete job.with.cpu_arch;
+  delete job.with.label;
+  delete job.with.labelOperator;
   // Added 2025-08-06
-  if (job.with['ci_size']) {
-    job.with['ci_label'] = job.with['ci_size'];
-    delete job.with['ci_size'];
+  if (job.with.ci_size) {
+    job.with.ci_label = job.with.ci_size;
+    delete job.with.ci_size;
   }
 }

@@ -17,7 +17,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
     const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');
     if (!owner || !repo || owner !== 'WillBoosterLab') return;
 
-    const parsed = dotenv.config().parsed || {};
+    const parsed = dotenv.config().parsed ?? {};
     if (Object.keys(parsed).length === 0) return;
 
     try {
@@ -64,7 +64,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
         });
       }
     } catch (error) {
-      console.warn('Skip setupSecrets due to:', (error as Error)?.stack ?? error);
+      console.warn('Skip setupSecrets due to:', (error as Error | undefined)?.stack ?? error);
     }
   });
 }

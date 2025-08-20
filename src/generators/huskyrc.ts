@@ -54,13 +54,13 @@ async function core(config: PackageConfig): Promise<void> {
   const packageJsonPath = path.resolve(config.dirPath, 'package.json');
   const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
   const packageJson = JSON.parse(jsonText) as PackageJson;
-  packageJson.scripts ||= {};
-  delete packageJson.scripts['postinstall'];
-  delete packageJson.scripts['postpublish'];
-  delete packageJson.scripts['prepare'];
-  delete packageJson.scripts['prepublishOnly'];
-  delete packageJson.scripts['prepack'];
-  delete packageJson.scripts['postpack'];
+  packageJson.scripts ??= {};
+  delete packageJson.scripts.postinstall;
+  delete packageJson.scripts.postpublish;
+  delete packageJson.scripts.prepare;
+  delete packageJson.scripts.prepublishOnly;
+  delete packageJson.scripts.prepack;
+  delete packageJson.scripts.postpack;
 
   const dirPath = path.resolve(config.dirPath, '.husky');
   await Promise.all([
@@ -82,7 +82,7 @@ async function core(config: PackageConfig): Promise<void> {
   const { typecheck } = generateScripts(config, {});
   if (typecheck) {
     let prePush = config.repository?.startsWith('github:WillBoosterLab/')
-      ? config.repository?.toLocaleLowerCase().includes('exercode')
+      ? config.repository.toLocaleLowerCase().includes('exercode')
         ? scripts.prePushForLab
         : scripts.prePushForLabExceptAdmin
       : scripts.prePush;

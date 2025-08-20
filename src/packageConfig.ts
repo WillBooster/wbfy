@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { gitHubUtil, octokit } from './utils/githubUtil.js';
 import { globIgnore } from './utils/globUtil.js';
 
-export interface PackageConfig {
+export type PackageConfig = {
   dirPath: string;
   dockerfile: string;
   isRoot: boolean;
@@ -60,7 +60,7 @@ export interface PackageConfig {
   versionsText?: string;
   packageJson?: PackageJson;
   wbfyJson?: WbfyJson;
-}
+};
 
 type WbfyJson = z.infer<typeof wbfyJsonSchema>;
 
@@ -104,8 +104,8 @@ export async function getPackageConfig(
             plugins?: string[][];
           }
         | undefined;
-      releaseBranches = json?.branches || [];
-      releasePlugins = json?.plugins?.flat() || [];
+      releaseBranches = json?.branches ?? [];
+      releasePlugins = json?.plugins?.flat() ?? [];
     } catch {
       // do nothing
     }
@@ -136,7 +136,7 @@ export async function getPackageConfig(
         if (versionsText) {
           versionsText += '\n';
         }
-        versionsText += name + ' ' + nodeVersionContent.trim();
+        versionsText += `${name} ${nodeVersionContent.trim()}`;
       } catch {
         // do nothing
       }
@@ -192,17 +192,15 @@ export async function getPackageConfig(
       ),
       doesContainsJsxOrTsxInPackages: containsAny('packages/**/{app,src,test}/**/*.{t,j}sx', dirPath),
       depending: {
-        blitz: !!dependencies['blitz'],
+        blitz: !!dependencies.blitz,
         firebase: !!devDependencies['firebase-tools'],
         genI18nTs: !!devDependencies['gen-i18n-ts'],
         litestream: dockerfile.includes('install-litestream.sh'),
-        next: !!dependencies['next'],
+        next: !!dependencies.next,
         playwrightTest:
-          !!dependencies['@playwright/test'] ||
-          !!devDependencies['@playwright/test'] ||
-          !!devDependencies['playwright'],
-        prisma: !!dependencies['@prisma/client'] || !!devDependencies['prisma'],
-        pyright: !!devDependencies['pyright'],
+          !!dependencies['@playwright/test'] || !!devDependencies['@playwright/test'] || !!devDependencies.playwright,
+        prisma: !!dependencies['@prisma/client'] || !!devDependencies.prisma,
+        pyright: !!devDependencies.pyright,
         reactNative: !!dependencies['react-native'],
         semanticRelease: !!(
           devDependencies['semantic-release'] ||
@@ -269,7 +267,7 @@ async function fetchRepoInfo(dirPath: string, packageJson: PackageJson): Promise
   const git = simpleGit(dirPath);
   const remotes = await git.getRemotes(true);
   const origin = remotes.find((r) => r.name === 'origin');
-  const remoteUrl = origin?.refs?.fetch ?? origin?.refs?.push;
+  const remoteUrl = origin?.refs.fetch ?? origin?.refs.push;
   if (typeof remoteUrl === 'string') {
     const json = await requestRepoInfo(remoteUrl);
     if (json) return json;
