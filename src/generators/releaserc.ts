@@ -13,9 +13,9 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
   return logger.functionIgnoringException('generateReleaserc', async () => {
     const filePath = path.resolve(rootConfig.dirPath, '.releaserc.json');
     const settings = JSON.parse(await fs.promises.readFile(filePath, 'utf8')) as {
-      plugins: (string | [string, unknown])[];
+      plugins?: (string | [string, unknown])[];
     };
-    const plugins = settings.plugins;
+    const plugins = settings.plugins ?? [];
     for (let i = 0; i < plugins.length; i++) {
       const plugin = Array.isArray(plugins[i]) ? plugins[i]?.[0] : plugins[i];
       const oldConfig = (Array.isArray(plugins[i]) && plugins[i]?.[1]) || {};
