@@ -17,7 +17,7 @@ export async function generateAgentInstructions(config: PackageConfig, allConfig
       ['AGENTS.md', 'Codex CLI'],
       ['CLAUDE.md', 'Claude Code'],
       ['GEMINI.md', 'Gemini CLI'],
-    ]) {
+    ] as const) {
       const content = generateAgentInstruction(config, allConfigs, toolName, extraContent);
       const filePath = path.resolve(config.dirPath, fileName);
       await promisePool.run(() => fsUtil.generateFile(filePath, content));
