@@ -350,12 +350,15 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     }
   }
 
+  let isReusableWorkflow = false;
   for (const job of Object.values(newSettings.jobs)) {
     // Ignore non-reusable workflows
     if (!job.uses?.includes('/reusable-workflows/')) continue;
 
     normalizeJob(config, job, kind);
+    isReusableWorkflow = true;
   }
+  if (!isReusableWorkflow) return;
 
   switch (kind) {
     case 'release': {
