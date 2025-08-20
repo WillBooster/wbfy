@@ -27,7 +27,7 @@ async function core(config: PackageConfig): Promise<void> {
     .map((line) => {
       const [name, version] = line.trim().split(/\s+/);
       // To move the top of the sorted list, we need to add a space.
-      return `${CORE_TOOLS.has(name) ? ' ' : ''}${name} ${version}`;
+      return `${CORE_TOOLS.has(name ?? '') ? ' ' : ''}${name ?? ''} ${version ?? ''}`;
     })
     .sort()
     // Remove added spaces.
@@ -78,8 +78,8 @@ function updateVersion(lines: string[], toolName: string, newVersion: string, he
   if (index === -1) {
     lines.splice(head ? 0 : lines.length, 0, newLine);
   } else {
-    const [, version] = lines[index].split(/\s+/);
-    if (convertVersionIntoNumber(newVersion) > convertVersionIntoNumber(version)) {
+    const [, version] = (lines[index] as string).split(/\s+/);
+    if (convertVersionIntoNumber(newVersion) > convertVersionIntoNumber(version ?? '')) {
       lines[index] = newLine;
     }
   }

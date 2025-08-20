@@ -24,7 +24,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
       if (!fileName.startsWith('test') && !fileName.startsWith('deploy')) continue;
 
       let badgeName = fileName;
-      badgeName = badgeName[0].toUpperCase() + badgeName.slice(1, badgeName.indexOf('.'));
+      badgeName = (badgeName[0] || '').toUpperCase() + badgeName.slice(1, badgeName.indexOf('.'));
       badgeName = badgeName.replace('-', ' ');
       const badge = `[![${badgeName}](https://github.com/${repository}/actions/workflows/${fileName}/badge.svg)](https://github.com/${repository}/actions/workflows/${fileName})`;
       if (fs.existsSync(path.resolve(config.dirPath, `.github/workflows/${fileName}`))) {

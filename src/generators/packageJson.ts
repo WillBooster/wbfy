@@ -304,7 +304,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       const dirNameSet = new Set<string>();
       for (const pythonFile of pythonFiles) {
         const [first, second] = pythonFile.split(/[/\\]/);
-        if (second) {
+        if (first && second) {
           dirNameSet.add(first);
         }
       }
@@ -532,7 +532,7 @@ async function fixScriptNames(
 ): Promise<string> {
   const oldAndNewScriptNames: [string, string][] = [];
   for (const [key] of Object.keys(scripts)) {
-    if (key[0] !== ':' && key.includes(':')) {
+    if (key && !key.startsWith(':') && key.includes(':')) {
       oldAndNewScriptNames.push([key, key.replaceAll(':', '-')]);
     }
   }
