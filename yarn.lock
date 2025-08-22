@@ -4055,9 +4055,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/core@npm:4.4.2":
-  version: 4.4.2
-  resolution: "@yarnpkg/core@npm:4.4.2"
+"@yarnpkg/core@npm:4.4.3":
+  version: 4.4.3
+  resolution: "@yarnpkg/core@npm:4.4.3"
   dependencies:
     "@arcanis/slice-ansi": "npm:^1.1.1"
     "@types/semver": "npm:^7.1.0"
@@ -4073,10 +4073,10 @@ __metadata:
     cross-spawn: "npm:^7.0.3"
     diff: "npm:^5.1.0"
     dotenv: "npm:^16.3.1"
+    es-toolkit: "npm:^1.39.7"
     fast-glob: "npm:^3.2.2"
     got: "npm:^11.7.0"
     hpagent: "npm:^1.2.0"
-    lodash: "npm:^4.17.15"
     micromatch: "npm:^4.0.2"
     p-limit: "npm:^2.2.0"
     semver: "npm:^7.1.2"
@@ -4085,7 +4085,7 @@ __metadata:
     tinylogic: "npm:^2.0.0"
     treeify: "npm:^1.1.0"
     tslib: "npm:^2.4.0"
-  checksum: 10c0/d5a98f2071dfdf95afb8e7ce910841fa4bacc7ce1929f95c3d4e709531858d6cbdd3e6e4c10d6b999c704e552fa94d1b62ec7ec6ca2d83ce85b33149135b4855
+  checksum: 10c0/90f7c79a24bcf52040341a36cc0c03e4ed8efaf7c39e373fcc9e55ae186dc8b58b5b93bf46bd38dae800c2cad4f4de844a4371c437dda55e84e499679ba045a5
   languageName: node
   linkType: hard
 
@@ -5527,6 +5527,18 @@ __metadata:
   version: 1.7.0
   resolution: "es-module-lexer@npm:1.7.0"
   checksum: 10c0/4c935affcbfeba7fb4533e1da10fa8568043df1e3574b869385980de9e2d475ddc36769891936dbb07036edb3c3786a8b78ccf44964cd130dedc1f2c984b6c7b
+  languageName: node
+  linkType: hard
+
+"es-toolkit@npm:^1.39.7":
+  version: 1.39.10
+  resolution: "es-toolkit@npm:1.39.10"
+  dependenciesMeta:
+    "@trivago/prettier-plugin-sort-imports@4.3.0":
+      unplugged: true
+    prettier-plugin-sort-re-exports@0.0.1:
+      unplugged: true
+  checksum: 10c0/244dd6be25bc8c7af9f085f5b9aae08169eca760fc7d4735020f8f711b6a572e0bf205400326fa85a7924e20747d315756dba1b3a5f0d2887231374ec3651a98
   languageName: node
   linkType: hard
 
@@ -8047,7 +8059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.15":
+"lodash@npm:4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -11445,7 +11457,7 @@ __metadata:
     "@willbooster/prettier-config": "npm:10.2.0"
     "@willbooster/shared-lib": "npm:6.0.5"
     "@willbooster/shared-lib-node": "npm:7.0.5"
-    "@yarnpkg/core": "npm:4.4.2"
+    "@yarnpkg/core": "npm:4.4.3"
     build-ts: "npm:15.0.20"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
     deepmerge: "npm:4.3.1"
