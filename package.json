@@ -46,7 +46,7 @@
     "minimal-promise-pool": "5.0.0",
     "simple-git": "3.28.0",
     "yargs": "18.0.0",
-    "zod": "4.0.17"
+    "zod": "4.1.1"
   },
   "devDependencies": {
     "@types/eslint": "9.6.1",
@@ -60,7 +60,7 @@
     "@willbooster/eslint-config-ts": "11.4.5",
     "@willbooster/prettier-config": "10.2.0",
     "@yarnpkg/core": "4.4.3",
-    "build-ts": "15.0.21",
+    "build-ts": "15.1.0",
     "conventional-changelog-conventionalcommits": "9.1.0",
     "eslint": "9.33.0",
     "eslint-config-flat-gitignore": "2.1.0",
