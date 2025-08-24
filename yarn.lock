@@ -4446,9 +4446,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:15.0.21":
-  version: 15.0.21
-  resolution: "build-ts@npm:15.0.21"
+"build-ts@npm:15.1.0":
+  version: 15.1.0
+  resolution: "build-ts@npm:15.1.0"
   dependencies:
     "@babel/core": "npm:7.28.3"
     "@babel/plugin-proposal-decorators": "npm:7.28.0"
@@ -4486,7 +4486,7 @@ __metadata:
     yargs: "npm:18.0.0"
   bin:
     build-ts: bin/index.js
-  checksum: 10c0/2caa9f5b9bfd32a3c6e5ada5dbb18b8751135452d7738af2a0d7c52b237a0142bb33d4ad557e6f1a8b389eaf132479774ddd30f64b6922b60e34e84c538aeb95
+  checksum: 10c0/922ffa23e417e83b353fd01eda0862d3ed318c9fd2c9877a847ebda9832107a11ae46a621a1046a65ddcc85fa18a4300d3005f6a142ec99858a7e50218cfae96
   languageName: node
   linkType: hard
 
@@ -11236,7 +11236,7 @@ __metadata:
     "@willbooster/shared-lib": "npm:6.0.5"
     "@willbooster/shared-lib-node": "npm:7.0.5"
     "@yarnpkg/core": "npm:4.4.3"
-    build-ts: "npm:15.0.21"
+    build-ts: "npm:15.1.0"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:17.2.1"
@@ -11272,7 +11272,7 @@ __metadata:
     typescript-eslint: "npm:8.40.0"
     vitest: "npm:3.2.4"
     yargs: "npm:18.0.0"
-    zod: "npm:4.0.17"
+    zod: "npm:4.1.1"
   bin:
     wbfy: ./bin/wbfy.js
   languageName: unknown
@@ -11516,9 +11516,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:4.0.17":
-  version: 4.0.17
-  resolution: "zod@npm:4.0.17"
-  checksum: 10c0/c56ef4cc02f8f52be8724c5a8b338266202d68477c7606bee9b7299818b75c9adc27f16f4b6704a372f3e7578bd016f389de19bfec766564b7c39d0d327c540a
+"zod@npm:4.1.1":
+  version: 4.1.1
+  resolution: "zod@npm:4.1.1"
+  checksum: 10c0/bbc5936b313e96401d8a384531cb87dd68a45acf6b1a624a4806dc7934c4ee7e1257937ba676a3c02973bc3045b1086f2621ef683c8019ea63cc05dd9a568293
   languageName: node
   linkType: hard
