@@ -286,6 +286,7 @@ async function requestRepoInfo(urlOrFullName: string): Promise<Record<string, un
 
   const ret = { full_name: `${org}/${name}` };
   try {
+    // Metadata permission
     const response = await octokit.request('GET /repos/{owner}/{repo}', {
       owner: org,
       repo: name,

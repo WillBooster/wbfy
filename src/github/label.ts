@@ -3,6 +3,9 @@ import type { PackageConfig } from '../packageConfig.js';
 import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil.js';
 
 export async function setupLabels(config: PackageConfig): Promise<void> {
+  // Only for local execution
+  if (!process.env.GH_BOT_PAT) return;
+
   return logger.functionIgnoringException('setupLabels', async () => {
     if (!hasGitHubToken) return;
 
@@ -77,6 +80,7 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
 
 async function setupLabel(owner: string, repo: string, name: string, color: string): Promise<void> {
   try {
+    // Issues permission
     await octokit.request('POST /repos/{owner}/{repo}/labels', {
       owner,
       repo,
@@ -84,6 +88,7 @@ async function setupLabel(owner: string, repo: string, name: string, color: stri
       color,
     });
   } catch {
+    // Issues permission
     await octokit.request('PATCH /repos/{owner}/{repo}/labels/{name}', {
       owner,
       repo,
@@ -95,6 +100,7 @@ async function setupLabel(owner: string, repo: string, name: string, color: stri
 
 async function deleteLabel(owner: string, repo: string, name: string): Promise<void> {
   try {
+    // Issues permission
     await octokit.request('DELETE /repos/{owner}/{repo}/labels/{name}', {
       owner,
       repo,

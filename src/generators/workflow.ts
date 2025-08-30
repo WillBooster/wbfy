@@ -73,6 +73,10 @@ const workflows = {
       group: '${{ github.workflow }}-${{ github.ref }}',
       'cancel-in-progress': true,
     },
+    permissions: {
+      // for linter fix
+      contents: 'write',
+    },
     jobs: {
       test: {
         uses: 'WillBooster/reusable-workflows/.github/workflows/test.yml@main',
@@ -90,6 +94,10 @@ const workflows = {
       group: '${{ github.workflow }}',
       'cancel-in-progress': false,
     },
+    permissions: {
+      // for semantic-release
+      contents: 'write',
+    },
     jobs: {
       release: {
         uses: 'WillBooster/reusable-workflows/.github/workflows/release.yml@main',
@@ -101,6 +109,10 @@ const workflows = {
     on: {
       workflow_dispatch: null,
     },
+    permissions: {
+      // for commiting changes
+      contents: 'write',
+    },
     jobs: {
       wbfy: {
         uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy.yml@main',
@@ -111,6 +123,12 @@ const workflows = {
     name: 'Merge wbfy',
     on: {
       workflow_dispatch: null,
+    },
+    permissions: {
+      // for merging branches
+      contents: 'write',
+      // for creating PRs
+      'pull-requests': 'write',
     },
     jobs: {
       'wbfy-merge': {
@@ -134,6 +152,10 @@ const workflows = {
   sync: {
     name: 'Sync',
     on: {},
+    permissions: {
+      // for commiting changes
+      contents: 'write',
+    },
     jobs: {
       sync: { uses: 'WillBooster/reusable-workflows/.github/workflows/sync.yml@main' },
     },
@@ -431,7 +453,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
     kind === 'gen-pr-codex' ||
     kind === 'gen-pr-gemini'
   ) {
-    job.secrets.GH_TOKEN = config.isPublicRepo ? '${{ secrets.PUBLIC_GH_BOT_PAT }}' : '${{ secrets.GH_BOT_PAT }}';
+    job.secrets.GH_TOKEN = '${{ secrets.GITHUB_TOKEN }}';
   }
 
   // Set test-command for gen-pr workflows based on package manager

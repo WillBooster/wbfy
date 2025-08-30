@@ -1,7 +1,6 @@
 import { Octokit } from '@octokit/core';
 
-const token =
-  process.env.GH_BOT_PAT || process.env.PUBLIC_GH_BOT_PAT || process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+const token = process.env.GH_BOT_PAT || process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
 export const hasGitHubToken = !!token;
 export const octokit = new Octokit({
   auth: token,
