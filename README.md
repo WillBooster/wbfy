@@ -16,10 +16,4 @@ This tool must keep idempotency, i.e., it always yields the same result when a u
 
 ## How to Use
 
-
-
-
-
-
-
 1. `yarn dlx wbfy <project directory>`
