@@ -112,6 +112,8 @@ const workflows = {
     permissions: {
       // for commiting changes
       contents: 'write',
+      // for updating workflow files
+      actions: 'write',
     },
     jobs: {
       wbfy: {
@@ -129,6 +131,8 @@ const workflows = {
       contents: 'write',
       // for creating PRs
       'pull-requests': 'write',
+      // for updating workflow files
+      actions: 'write',
     },
     jobs: {
       'wbfy-merge': {
