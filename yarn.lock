@@ -4586,9 +4586,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:15.1.0":
-  version: 15.1.0
-  resolution: "build-ts@npm:15.1.0"
+"build-ts@npm:16.0.0":
+  version: 16.0.0
+  resolution: "build-ts@npm:16.0.0"
   dependencies:
     "@babel/core": "npm:7.28.3"
     "@babel/plugin-proposal-decorators": "npm:7.28.0"
@@ -4626,7 +4626,7 @@ __metadata:
     yargs: "npm:18.0.0"
   bin:
     build-ts: bin/index.js
-  checksum: 10c0/922ffa23e417e83b353fd01eda0862d3ed318c9fd2c9877a847ebda9832107a11ae46a621a1046a65ddcc85fa18a4300d3005f6a142ec99858a7e50218cfae96
+  checksum: 10c0/4651e47b39bc026c240b760b13d6faa676cc6703cd11fbac0b13358780e82c96a68107d99a695ac5c6ab365fccd1cf263de37fb495ab35e9bf73fdddb389cb43
   languageName: node
   linkType: hard
 
@@ -11451,7 +11451,7 @@ __metadata:
     "@willbooster/shared-lib": "npm:6.0.5"
     "@willbooster/shared-lib-node": "npm:7.0.5"
     "@yarnpkg/core": "npm:4.4.3"
-    build-ts: "npm:15.1.0"
+    build-ts: "npm:16.0.0"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:17.2.1"
