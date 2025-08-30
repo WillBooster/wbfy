@@ -83,6 +83,22 @@ const workflows = {
       },
     },
   },
+  autofix: {
+    name: 'Fix code automatically',
+    on: {
+      pull_request: null,
+    },
+    // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
+    concurrency: {
+      group: '${{ github.workflow }}-${{ github.ref }}',
+      'cancel-in-progress': true,
+    },
+    jobs: {
+      test: {
+        uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
+      },
+    },
+  },
   release: {
     name: 'Release',
     on: {
@@ -101,40 +117,6 @@ const workflows = {
     jobs: {
       release: {
         uses: 'WillBooster/reusable-workflows/.github/workflows/release.yml@main',
-      },
-    },
-  },
-  wbfy: {
-    name: 'Willboosterify',
-    on: {
-      workflow_dispatch: null,
-    },
-    permissions: {
-      // for commiting changes
-      contents: 'write',
-    },
-    jobs: {
-      wbfy: {
-        uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy.yml@main',
-      },
-    },
-  },
-  'wbfy-merge': {
-    name: 'Merge wbfy',
-    on: {
-      workflow_dispatch: null,
-    },
-    permissions: {
-      // for merging branches
-      contents: 'write',
-      // for creating PRs
-      'pull-requests': 'write',
-      // for reading action status
-      actions: 'read',
-    },
-    jobs: {
-      'wbfy-merge': {
-        uses: 'WillBooster/reusable-workflows/.github/workflows/wbfy-merge.yml@main',
       },
     },
   },
@@ -306,6 +288,8 @@ const workflows = {
 type KnownKind = keyof typeof workflows | 'deploy';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
+  const fileNamesToBeRemoved = ['add-focused-issue-to-project.yml', 'wbfy.yml', 'wbfy-merge.yml'];
+
   return logger.functionIgnoringException('generateWorkflow', async () => {
     const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
     await fs.promises.mkdir(workflowsPath, { recursive: true });
@@ -317,8 +301,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     const entries = await fs.promises.readdir(workflowsPath, { withFileTypes: true });
     const fileNameSet = new Set([
       'test.yml',
-      'wbfy.yml',
-      'wbfy-merge.yml',
+      'autofix.yml',
       'semantic-pr.yml',
       'close-comment.yml',
       'add-issue-to-project.yml',
@@ -330,6 +313,10 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     if (rootConfig.depending.semanticRelease) {
       fileNameSet.add('release.yml');
     }
+    if (rootConfig.isPublicRepo) {
+      fileNameSet.delete('autofix.yml');
+      fileNamesToBeRemoved.push('autofix.yml');
+    }
     if (rootConfig.isPublicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
       fileNameSet.add('add-ready-issue-to-project.yml');
       fileNameSet.add('notify-ready.yml');
@@ -340,9 +327,12 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       const kind = path.basename(fileName, '.yml') as KnownKind;
       await promisePool.run(() => writeWorkflowYaml(rootConfig, workflowsPath, kind));
     }
-    await promisePool.run(() =>
-      fs.promises.rm(path.join(workflowsPath, 'add-focused-issue-to-project.yml'), { force: true, recursive: true })
-    );
+
+    for (const deprecatedFileName of fileNamesToBeRemoved) {
+      await promisePool.run(() =>
+        fs.promises.rm(path.join(workflowsPath, deprecatedFileName), { force: true, recursive: true })
+      );
+    }
   });
 }
 
@@ -406,14 +396,6 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
         delete newSettings.on.push['paths-ignore'];
         newSettings.on.push.branches = newSettings.on.push.branches.filter((branch) => branch !== 'renovate/**');
       }
-      break;
-    }
-    case 'wbfy': {
-      setSchedule(newSettings, 20, 24, false);
-      break;
-    }
-    case 'wbfy-merge': {
-      setSchedule(newSettings, 1, 4, true);
       break;
     }
     // No default
@@ -528,33 +510,6 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   } else {
     delete job.secrets;
   }
-}
-
-function setSchedule(
-  newSettings: Workflow,
-  inclusiveMinHourJst: number,
-  exclusiveMaxHourJst: number,
-  runTwice: boolean
-): void {
-  const [minuteUtc, hourUtc] = ((newSettings.on?.schedule?.[0]?.cron as string) || '').split(' ').map(Number);
-  if (runTwice && !Number.isInteger(hourUtc)) return;
-  if (minuteUtc !== 0) {
-    const hourJst = ((hourUtc ?? Number.NaN) + 9) % 24;
-    const inRange =
-      inclusiveMinHourJst < exclusiveMaxHourJst
-        ? inclusiveMinHourJst <= hourJst && hourJst < exclusiveMaxHourJst
-        : inclusiveMinHourJst <= hourJst || hourJst < exclusiveMaxHourJst;
-    if (inRange) return;
-  }
-
-  const minJst = 1 + Math.floor(Math.random() * 59);
-  const hourJst = inclusiveMinHourJst + Math.floor(Math.random() * (exclusiveMaxHourJst - inclusiveMinHourJst));
-  const newHourUtc = hourJst - 9 + 24;
-  const cron = runTwice
-    ? `${minJst} ${newHourUtc % 24},${(newHourUtc + 1) % 24} * * *`
-    : `${minJst} ${newHourUtc % 24} * * *`;
-  newSettings.on ??= {};
-  newSettings.on.schedule = [{ cron }];
 }
 
 async function writeYaml(newSettings: Workflow, filePath: string): Promise<void> {
