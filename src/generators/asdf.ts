@@ -87,7 +87,7 @@ function updateVersion(lines: string[], toolName: string, newVersion: string, he
 
 async function getLatestVersionFromTagOnGitHub(organization: string, repository: string): Promise<string | undefined> {
   try {
-    // Fetch the latest release from the repository
+    // Fetch the latest release from the repository (no required permissions)
     const response = await octokit.request('GET /repos/{owner}/{repo}/releases/latest', {
       owner: organization,
       repo: repository,

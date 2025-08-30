@@ -6,6 +6,8 @@ on:
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
+permissions:
+  contents: write
 jobs:
   release:
     uses: WillBooster/reusable-workflows/.github/workflows/release.yml@main
@@ -13,5 +15,5 @@ jobs:
       github_hosted_runner: true
     secrets:
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL_FOR_RELEASE }}
-      GH_TOKEN: ${{ secrets.PUBLIC_GH_BOT_PAT }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

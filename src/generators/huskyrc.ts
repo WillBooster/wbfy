@@ -72,7 +72,7 @@ async function core(config: PackageConfig): Promise<void> {
     return;
   }
 
-  spawnSync('yarn', ['dlx', 'husky-init', '--yarn2'], config.dirPath);
+  spawnSync('yarn', ['dlx', 'husky', 'init'], config.dirPath);
 
   const preCommitFilePath = path.resolve(dirPath, 'pre-commit');
 

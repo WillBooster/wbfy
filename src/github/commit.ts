@@ -2,6 +2,7 @@ import { octokit } from '../utils/githubUtil.js';
 
 export async function getLatestCommitHash(organization: string, repo: string): Promise<string> {
   try {
+    // No required permissions
     const { data: commits } = await octokit.request('GET /repos/{owner}/{repo}/commits', {
       owner: organization,
       repo,
