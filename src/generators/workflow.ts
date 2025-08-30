@@ -129,6 +129,8 @@ const workflows = {
       contents: 'write',
       // for creating PRs
       'pull-requests': 'write',
+      // for reading action status
+      actions: 'read',
     },
     jobs: {
       'wbfy-merge': {
@@ -445,8 +447,6 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   if (
     kind === 'test' ||
     kind === 'release' ||
-    kind === 'wbfy' ||
-    kind === 'wbfy-merge' ||
     kind === 'add-issue-to-project' ||
     kind === 'add-ready-issue-to-project' ||
     kind === 'gen-pr-claude' ||
