@@ -8,7 +8,7 @@ import { options } from '../options.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { gitHubUtil, hasGitHubToken, octokit } from '../utils/githubUtil.js';
 
-const deprecatedSecretNames = ['READY_DISCORD_WEBHOOK_URL'];
+const DEPRECATED_SECRET_NAMES = ['READY_DISCORD_WEBHOOK_URL', 'GH_BOT_PAT', 'PUBLIC_GH_BOT_PAT'];
 
 export async function setupSecrets(config: PackageConfig): Promise<void> {
   // Only for local execution
@@ -24,7 +24,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
     if (Object.keys(parsed).length === 0) return;
 
     try {
-      for (const secretName of deprecatedSecretNames) {
+      for (const secretName of DEPRECATED_SECRET_NAMES) {
         try {
           // Secrets permission
           await octokit.request('DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
