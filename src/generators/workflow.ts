@@ -95,6 +95,9 @@ const workflows = {
       'cancel-in-progress': false,
     },
     permissions: {
+      // for semantic-release to avoid the error:
+      // "refusing to allow a GitHub App to create or update workflow `.github/workflows/main.yml` without `workflows` permission"
+      actions: 'write',
       // for semantic-release
       contents: 'write',
     },
@@ -112,8 +115,6 @@ const workflows = {
     permissions: {
       // for commiting changes
       contents: 'write',
-      // for updating workflow files
-      actions: 'write',
     },
     jobs: {
       wbfy: {
@@ -131,8 +132,6 @@ const workflows = {
       contents: 'write',
       // for creating PRs
       'pull-requests': 'write',
-      // for updating workflow files
-      actions: 'write',
     },
     jobs: {
       'wbfy-merge': {
