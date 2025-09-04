@@ -313,10 +313,11 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     if (rootConfig.depending.semanticRelease) {
       fileNameSet.add('release.yml');
     }
-    // if (rootConfig.isPublicRepo) {
     fileNameSet.delete('autofix.yml');
-    fileNamesToBeRemoved.push('autofix.yml');
-    // }
+    if (!rootConfig.isPublicRepo) {
+      // for autofix.ci
+      fileNamesToBeRemoved.push('autofix.yml');
+    }
     if (rootConfig.isPublicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
       fileNameSet.add('add-ready-issue-to-project.yml');
       fileNameSet.add('notify-ready.yml');
