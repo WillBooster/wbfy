@@ -40,8 +40,8 @@ export async function generateRenovateJson(config: PackageConfig): Promise<void>
     if (config.depending.blitz) {
       newSettings.packageRules ??= [];
       if (
-        !newSettings.packageRules.some((rule: { matchPackageNames: string[] }) =>
-          rule.matchPackageNames.includes('next')
+        !newSettings.packageRules.some((rule: { matchPackageNames?: string[] }) =>
+          rule.matchPackageNames?.includes('next')
         )
       ) {
         newSettings.packageRules.push({ matchPackageNames: ['next'], enabled: false });
