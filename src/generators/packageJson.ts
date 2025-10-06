@@ -22,6 +22,7 @@ const jsCommonDeps = [
   'eslint',
   'eslint-config-flat-gitignore',
   'eslint-config-prettier',
+  'eslint-plugin-import-x',
   'eslint-plugin-sort-class-members',
   'eslint-plugin-sort-destructure-keys',
   'eslint-plugin-unicorn',
@@ -34,23 +35,12 @@ const tsCommonDeps = [...jsCommonDeps, 'typescript-eslint', 'eslint-import-resol
 const reactCommonDeps = ['eslint-plugin-react', 'eslint-plugin-react-hooks', 'eslint-plugin-react-compiler'];
 
 const eslintDeps: Record<EslintExtensionBase, string[]> = {
-  '@willbooster/eslint-config-js': ['@willbooster/eslint-config-js', 'eslint-plugin-import-x', ...jsCommonDeps],
-  '@willbooster/eslint-config-js-react': [
-    '@willbooster/eslint-config-js-react',
-    'eslint-plugin-import-x',
-    ...jsCommonDeps,
-    ...reactCommonDeps,
-  ],
-  '@willbooster/eslint-config-ts': ['@willbooster/eslint-config-ts', 'eslint-plugin-import-x', ...tsCommonDeps],
-  '@willbooster/eslint-config-ts-react': [
-    '@willbooster/eslint-config-ts-react',
-    'eslint-plugin-import-x',
-    ...tsCommonDeps,
-    ...reactCommonDeps,
-  ],
+  '@willbooster/eslint-config-js': ['@willbooster/eslint-config-js', ...jsCommonDeps],
+  '@willbooster/eslint-config-js-react': ['@willbooster/eslint-config-js-react', ...jsCommonDeps, ...reactCommonDeps],
+  '@willbooster/eslint-config-ts': ['@willbooster/eslint-config-ts', ...tsCommonDeps],
+  '@willbooster/eslint-config-ts-react': ['@willbooster/eslint-config-ts-react', ...tsCommonDeps, ...reactCommonDeps],
   '@willbooster/eslint-config-next': [
     '@willbooster/eslint-config-next',
-    'eslint-plugin-import',
     'eslint-config-next',
     ...tsCommonDeps,
     ...reactCommonDeps,
