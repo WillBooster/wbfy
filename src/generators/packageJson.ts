@@ -16,7 +16,6 @@ import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
-import { BLITZ_VERSION, NEXT_VERSION } from '../utils/versionConstants.js';
 
 const jsCommonDeps = [
   'eslint',
@@ -319,15 +318,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (config.depending.blitz) {
-    dependencies.push(
-      `blitz@${BLITZ_VERSION}`,
-      `@blitzjs/auth@${BLITZ_VERSION}`,
-      `@blitzjs/next@${BLITZ_VERSION}`,
-      `@blitzjs/rpc@${BLITZ_VERSION}`,
-      `next@${NEXT_VERSION}`
-    );
-    // Prefer eslint-config-next's dependencies
-    devDependencies = devDependencies.filter((d) => d !== 'eslint-plugin-react' && d !== 'eslint-plugin-react-hooks');
     if (!jsonObj.scripts['gen-code']?.startsWith('blitz codegen')) {
       jsonObj.scripts['gen-code'] = 'blitz codegen';
     } else if (!jsonObj.scripts['gen-code'].includes('blitz prisma generate')) {
