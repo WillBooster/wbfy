@@ -3858,9 +3858,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-js@npm:11.4.3":
-  version: 11.4.3
-  resolution: "@willbooster/eslint-config-js@npm:11.4.3"
+"@willbooster/eslint-config-js@npm:11.4.4":
+  version: 11.4.4
+  resolution: "@willbooster/eslint-config-js@npm:11.4.4"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
@@ -3872,15 +3872,15 @@ __metadata:
     eslint-plugin-unicorn: ">=57"
     eslint-plugin-unused-imports: ">=4"
     globals: ">=16"
-  checksum: 10c0/51f6038003e900e153a3a79c08343e250caca26196425572ef72f3203391feee6a2e994fbcabc2ca1e641d8121ffaa96b4e6e9b3f95cf895933874d823bfbbf6
+  checksum: 10c0/4cb71f396387cf5dedad5cf664246a222bbd0cadf980540517cb7a9b6a4e2cd0ef8cde3fc8db7a5eb02ca7cf2e668b2d2ee72fd4d5d237917d46af6f372cca44
   languageName: node
   linkType: hard
 
-"@willbooster/eslint-config-ts@npm:11.4.6":
-  version: 11.4.6
-  resolution: "@willbooster/eslint-config-ts@npm:11.4.6"
+"@willbooster/eslint-config-ts@npm:11.4.8":
+  version: 11.4.8
+  resolution: "@willbooster/eslint-config-ts@npm:11.4.8"
   dependencies:
-    "@willbooster/eslint-config-js": "npm:11.4.3"
+    "@willbooster/eslint-config-js": "npm:11.4.4"
   peerDependencies:
     "@eslint/js": ">=9"
     eslint: ">=9"
@@ -3895,7 +3895,7 @@ __metadata:
     globals: ">=16"
     typescript: ">=5"
     typescript-eslint: ">=8"
-  checksum: 10c0/2491f03350908538fb65e2722055e7d20c5d3e59f5f437737766d0816442cf082c642ad34349e0fff6a149770438b6d1168e19f6eb5d0b20b60439a036ce7c2e
+  checksum: 10c0/ddb50574d9267c3f81fa0cca5c076a2afb1e895f72656b926394e837c94203a27c653d10431ecf5eec9c346629faef36900087d844b2d3f24c28097b6960c518
   languageName: node
   linkType: hard
 
@@ -11203,7 +11203,7 @@ __metadata:
     "@types/micromatch": "npm:4.0.9"
     "@types/node": "npm:24.6.2"
     "@types/yargs": "npm:17.0.33"
-    "@willbooster/eslint-config-ts": "npm:11.4.6"
+    "@willbooster/eslint-config-ts": "npm:11.4.8"
     "@willbooster/prettier-config": "npm:10.2.0"
     "@willbooster/shared-lib": "npm:6.0.7"
     "@willbooster/shared-lib-node": "npm:7.0.7"
