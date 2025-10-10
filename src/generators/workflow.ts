@@ -525,7 +525,6 @@ function migrateJob(job: Job): void {
   delete job.with.notify_discord;
   delete job.with.require_fly;
   delete job.with.require_gcloud;
-  delete job.with.cpu_arch;
   delete job.with.label;
   delete job.with.labelOperator;
   // Added 2025-08-06
