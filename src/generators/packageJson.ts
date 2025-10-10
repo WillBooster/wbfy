@@ -562,7 +562,7 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
     delete jsonObj.dependencies['@willbooster/code-analyzer'];
     const commitHash = await getLatestCommitHash('WillBoosterLab', 'code-analyzer');
     jsonObj.devDependencies['@willbooster/code-analyzer'] =
-      `git@github.com:WillBoosterLab/code-analyzer.git#workspace=@code-analyzer/client&commit=${commitHash}`;
+      `git@github.com:WillBoosterLab/code-analyzer.git#${commitHash}`;
   }
   if (packageNames.has('@willbooster/judge') && !isWorkspacePackage(jsonObj, '@willbooster/judge')) {
     delete jsonObj.devDependencies['@willbooster/judge'];
