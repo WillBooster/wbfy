@@ -52,10 +52,12 @@ ${
 }
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
   - If you are confident your changes won't break any tests, you may use \`check-for-ai\`.
-- Once you have verified your changes, commit them to the current branch using the \`--no-verify\` option. Ensure you add a new line at the end of your commit message with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`.
+- Once you have verified your changes, commit them to the current branch using the \`--no-verify\` option and push to the current branch. Ensure you add a new line at the end of your commit message with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`.
+  - Always add new commits. Avoid using \`--amend\`.
 
 ## Coding Style
 
+- Write comments that explain "why" rather than "what". Avoid explanations that can be understood from the code itself.
 - When adding new functions or classes, define them below any functions or classes that call them to maintain a clear call order.
 ${
   allConfigs.some((c) => c.depending.next)
