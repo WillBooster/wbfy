@@ -70,7 +70,7 @@ ${
     .replaceAll(/\n{3,}/g, '\n\n')
     .trim();
 
-  return extraContent ? baseContent + '\n\n' + extraContent.trim() : baseContent;
+  return extraContent ? baseContent + '\n' + extraContent.trimEnd() : baseContent;
 }
 
 function generateCursorGeneralMdcContent(
