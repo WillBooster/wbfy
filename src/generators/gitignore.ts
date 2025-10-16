@@ -87,7 +87,8 @@ packaged.yaml
 `;
     }
     if (config.depending.playwrightTest) {
-      headUserContent += `test-results/
+      headUserContent += `playwright-report/
+test-results/
 `;
     }
     if (rootConfig.depending.reactNative || config.depending.reactNative) {
