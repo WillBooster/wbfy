@@ -141,7 +141,7 @@ async function main(): Promise<void> {
 
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
-      if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
+      if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {
         promises.push(fixTypeDefinitions(config, config.isRoot ? allPackageConfigs : [config]));
       }
       if (config.depending.playwrightTest) {
@@ -152,24 +152,24 @@ async function main(): Promise<void> {
       }
       await generateGitignore(config, rootConfig);
       await promisePool.promiseAll();
-      if (!config.isRoot && !config.doesContainsPackageJson) {
+      if (!config.isRoot && !config.doesContainPackageJson) {
         continue;
       }
       await generatePrettierignore(config);
       await generatePackageJson(config, rootConfig, argv.skipDeps);
 
       promises.push(generateLintstagedrc(config));
-      if (config.doesContainsVscodeSettingsJson && config.doesContainsPackageJson) {
+      if (config.doesContainVscodeSettingsJson && config.doesContainPackageJson) {
         promises.push(generateVscodeSettings(config));
       }
-      if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
+      if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {
         promises.push(generateTsconfig(config));
       }
       if (
-        config.doesContainsJavaScript ||
-        config.doesContainsJavaScriptInPackages ||
-        config.doesContainsTypeScript ||
-        config.doesContainsTypeScriptInPackages
+        config.doesContainJavaScript ||
+        config.doesContainJavaScriptInPackages ||
+        config.doesContainTypeScript ||
+        config.doesContainTypeScriptInPackages
       ) {
         if (rootConfig.isBun) {
           promises.push(generateBiomeJsonc(config));

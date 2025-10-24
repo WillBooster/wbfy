@@ -36,7 +36,7 @@ async function core(config: PackageConfig): Promise<void> {
     .filter((line) => !line.startsWith('lefthook'));
   const lines = [...new Set(duplicatableLines)];
 
-  if (config.doesContainsPoetryLock) {
+  if (config.doesContainPoetryLock) {
     const response = await fetch('https://pypi.org/pypi/poetry/json');
     const json = (await response.json()) as { info?: { version: string } } | undefined;
     const poetryVersion = json?.info?.version;
@@ -48,7 +48,7 @@ async function core(config: PackageConfig): Promise<void> {
   if (config.depending.firebase) {
     updateVersion(lines, 'java', JAVA_VERSION, true);
   }
-  if (config.doesContainsPackageJson) {
+  if (config.doesContainPackageJson) {
     if (config.isBun) {
       const bunVersion = await getLatestVersionFromTagOnGitHub('oven-sh', 'bun');
       if (bunVersion) updateVersion(lines, 'bun', bunVersion);

@@ -20,23 +20,27 @@ export type PackageConfig = {
   isBun: boolean;
   isEsmPackage: boolean;
   isWillBoosterConfigs: boolean;
-  doesContainsSubPackageJsons: boolean;
-  doesContainsDockerfile: boolean;
-  doesContainsGemfile: boolean;
-  doesContainsGoMod: boolean;
-  doesContainsPackageJson: boolean;
-  doesContainsPoetryLock: boolean;
-  doesContainsPomXml: boolean;
-  doesContainsPubspecYaml: boolean;
-  doesContainsTemplateYaml: boolean;
-  doesContainsVscodeSettingsJson: boolean;
+  // dependency information
+  doesContainSubPackageJsons: boolean;
+  doesContainDockerfile: boolean;
+  doesContainGemfile: boolean;
+  doesContainGoMod: boolean;
+  doesContainPackageJson: boolean;
+  doesContainPoetryLock: boolean;
+  doesContainPomXml: boolean;
+  doesContainPubspecYaml: boolean;
+  doesContainTemplateYaml: boolean;
+  doesContainVscodeSettingsJson: boolean;
+  // source code files
+  doesContainJavaScript: boolean;
+  doesContainTypeScript: boolean;
+  doesContainJsxOrTsx: boolean;
+  doesContainJavaScriptInPackages: boolean;
+  doesContainTypeScriptInPackages: boolean;
+  doesContainJsxOrTsxInPackages: boolean;
 
-  doesContainsJavaScript: boolean;
-  doesContainsTypeScript: boolean;
-  doesContainsJsxOrTsx: boolean;
-  doesContainsJavaScriptInPackages: boolean;
-  doesContainsTypeScriptInPackages: boolean;
-  doesContainsJsxOrTsxInPackages: boolean;
+  hasStartTest: boolean;
+
   depending: {
     blitz: boolean;
     firebase: boolean;
@@ -81,12 +85,12 @@ export async function getPackageConfig(
 ): Promise<PackageConfig | undefined> {
   const packageJsonPath = path.resolve(dirPath, 'package.json');
   try {
-    const doesContainsPackageJson = fs.existsSync(packageJsonPath);
+    const doesContainPackageJson = fs.existsSync(packageJsonPath);
     let dependencies: PackageJson['dependencies'] = {};
     let devDependencies: PackageJson['devDependencies'] = {};
     let packageJson: PackageJson = {};
     let esmPackage = false;
-    if (doesContainsPackageJson) {
+    if (doesContainPackageJson) {
       const packageJsonText = fs.readFileSync(packageJsonPath, 'utf8');
       packageJson = JSON.parse(packageJsonText) as PackageJson;
       dependencies = packageJson.dependencies ?? {};
@@ -169,28 +173,23 @@ export async function getPackageConfig(
       isBun: rootConfig?.isBun || fs.existsSync(path.join(dirPath, 'bunfig.toml')),
       isEsmPackage: esmPackage,
       isWillBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
-      doesContainsSubPackageJsons: containsAny('packages/**/package.json', dirPath),
-      doesContainsDockerfile: !!dockerfile || fs.existsSync(path.resolve(dirPath, 'docker-compose.yml')),
-      doesContainsGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
-      doesContainsGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
-      doesContainsPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
-      doesContainsPoetryLock: fs.existsSync(path.resolve(dirPath, 'poetry.lock')),
-      doesContainsPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
-      doesContainsPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
-      doesContainsTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
-      doesContainsVscodeSettingsJson: fs.existsSync(path.resolve(dirPath, '.vscode', 'settings.json')),
-      doesContainsJavaScript: containsAny('{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx}', dirPath),
-      doesContainsTypeScript: containsAny('{app,src,test,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
-      doesContainsJsxOrTsx: containsAny('{app,src,test}/**/*.{t,j}sx', dirPath),
-      doesContainsJavaScriptInPackages: containsAny(
-        'packages/**/{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx}',
-        dirPath
-      ),
-      doesContainsTypeScriptInPackages: containsAny(
-        'packages/**/{app,src,test,scripts}/**/*.{cts,mts,ts,tsx}',
-        dirPath
-      ),
-      doesContainsJsxOrTsxInPackages: containsAny('packages/**/{app,src,test}/**/*.{t,j}sx', dirPath),
+      doesContainSubPackageJsons: containsAny('packages/**/package.json', dirPath),
+      doesContainDockerfile: !!dockerfile || fs.existsSync(path.resolve(dirPath, 'docker-compose.yml')),
+      doesContainGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
+      doesContainGoMod: fs.existsSync(path.resolve(dirPath, 'go.mod')),
+      doesContainPackageJson: fs.existsSync(path.resolve(dirPath, 'package.json')),
+      doesContainPoetryLock: fs.existsSync(path.resolve(dirPath, 'poetry.lock')),
+      doesContainPomXml: fs.existsSync(path.resolve(dirPath, 'pom.xml')),
+      doesContainPubspecYaml: fs.existsSync(path.resolve(dirPath, 'pubspec.yaml')),
+      doesContainTemplateYaml: fs.existsSync(path.resolve(dirPath, 'template.yaml')),
+      doesContainVscodeSettingsJson: fs.existsSync(path.resolve(dirPath, '.vscode', 'settings.json')),
+      doesContainJavaScript: containsAny('{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx}', dirPath),
+      doesContainTypeScript: containsAny('{app,src,test,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
+      doesContainJsxOrTsx: containsAny('{app,src,test}/**/*.{t,j}sx', dirPath),
+      doesContainJavaScriptInPackages: containsAny('packages/**/{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx}', dirPath),
+      doesContainTypeScriptInPackages: containsAny('packages/**/{app,src,test,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
+      doesContainJsxOrTsxInPackages: containsAny('packages/**/{app,src,test}/**/*.{t,j}sx', dirPath),
+      hasStartTest: !!packageJson.scripts?.['start-test'],
       depending: {
         blitz: !!dependencies.blitz,
         firebase: !!devDependencies['firebase-tools'],
@@ -223,13 +222,13 @@ export async function getPackageConfig(
       config.eslintBase = getEslintExtensionBase(config);
     }
     if (
-      config.doesContainsGemfile ||
-      config.doesContainsGoMod ||
-      config.doesContainsPackageJson ||
-      config.doesContainsPoetryLock ||
-      config.doesContainsPomXml ||
-      config.doesContainsPubspecYaml ||
-      config.doesContainsTemplateYaml
+      config.doesContainGemfile ||
+      config.doesContainGoMod ||
+      config.doesContainPackageJson ||
+      config.doesContainPoetryLock ||
+      config.doesContainPomXml ||
+      config.doesContainPubspecYaml ||
+      config.doesContainTemplateYaml
     ) {
       return config;
     }
@@ -252,12 +251,12 @@ export type EslintExtensionBase =
 function getEslintExtensionBase(config: PackageConfig): EslintExtensionBase | undefined {
   if (config.depending.next) {
     return '@willbooster/eslint-config-next';
-  } else if (config.doesContainsTypeScript) {
-    return config.doesContainsJsxOrTsx ? '@willbooster/eslint-config-ts-react' : '@willbooster/eslint-config-ts';
+  } else if (config.doesContainTypeScript) {
+    return config.doesContainJsxOrTsx ? '@willbooster/eslint-config-ts-react' : '@willbooster/eslint-config-ts';
   } else {
-    if (config.doesContainsJsxOrTsx) {
+    if (config.doesContainJsxOrTsx) {
       return '@willbooster/eslint-config-js-react';
-    } else if (config.doesContainsJavaScript) {
+    } else if (config.doesContainJavaScript) {
       return '@willbooster/eslint-config-js';
     }
   }

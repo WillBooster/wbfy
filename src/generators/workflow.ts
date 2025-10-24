@@ -481,7 +481,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   if (kind.startsWith('deploy') && job.secrets.FLY_API_TOKEN && typeof job.with.deploy_command === 'string') {
     job.with.deploy_command = job.with.deploy_command.replace(/\s+--json/, '');
   }
-  if (config.doesContainsDockerfile && !job.with.ci_label && kind.startsWith('test')) {
+  if (config.doesContainDockerfile && !job.with.ci_label && kind.startsWith('test')) {
     job.with.ci_label = 'large';
   }
   // Because github.event.repository.private is always true if job is scheduled

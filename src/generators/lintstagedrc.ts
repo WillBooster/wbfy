@@ -24,7 +24,7 @@ async function core(config: PackageConfig): Promise<void> {
 
   const packagePrefix = config.isRoot ? 'node node_modules/.bin/' : 'node ../../node_modules/.bin/';
   const lines: string[] = [];
-  if (config.doesContainsJavaScript || config.doesContainsTypeScript) {
+  if (config.doesContainJavaScript || config.doesContainTypeScript) {
     const eslint = `
   '${getEslintKey(config)}': [${JSON.stringify(
     `${packagePrefix}eslint --fix${EslintUtil.getLintFixSuffix(config)}`
@@ -54,7 +54,7 @@ async function core(config: PackageConfig): Promise<void> {
   }
   return [];
 },`);
-  if (config.doesContainsPubspecYaml) {
+  if (config.doesContainPubspecYaml) {
     lines.push(`
   './{lib,test,test_driver}/**/*.dart': files => {
     const filteredFiles = files.filter(file => !file.includes('generated'))
@@ -63,7 +63,7 @@ async function core(config: PackageConfig): Promise<void> {
     return [\`flutter format \${filteredFiles.join(' ')}\`];
   },`);
   }
-  if (config.doesContainsPoetryLock) {
+  if (config.doesContainPoetryLock) {
     lines.push(`
   './**/*.py': [
     'poetry run isort --profile black --filter-files',
@@ -74,7 +74,7 @@ async function core(config: PackageConfig): Promise<void> {
 
   const newContent = `const fs = require('fs');
 const path = require('path');
-${config.doesContainsJavaScript || config.doesContainsTypeScript ? "const micromatch = require('micromatch');\n" : ''}
+${config.doesContainJavaScript || config.doesContainTypeScript ? "const micromatch = require('micromatch');\n" : ''}
 module.exports = {${lines.join('')}
 };
 `;
@@ -90,7 +90,7 @@ function getEslintKey(config: PackageConfig): string {
 }
 
 function getEslintFilterForPrettier(config: PackageConfig): string {
-  return config.doesContainsJavaScript || config.doesContainsTypeScript
+  return config.doesContainJavaScript || config.doesContainTypeScript
     ? `\n
     filteredFiles = filteredFiles.map((file) => path.relative('', file));
     filteredFiles = micromatch.not(filteredFiles, '${getEslintKey(config)}');

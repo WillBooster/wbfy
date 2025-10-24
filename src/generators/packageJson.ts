@@ -167,7 +167,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       delete jsonObj.devDependencies.playwright;
     }
 
-    if (config.doesContainsSubPackageJsons) {
+    if (config.doesContainSubPackageJsons) {
       // We don't allow non-array workspaces in monorepo.
       jsonObj.workspaces = Array.isArray(jsonObj.workspaces)
         ? merge.all([jsonObj.workspaces, ['packages/*']], {
@@ -201,10 +201,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (
-    config.doesContainsJavaScript ||
-    config.doesContainsJavaScriptInPackages ||
-    config.doesContainsTypeScript ||
-    config.doesContainsTypeScriptInPackages
+    config.doesContainJavaScript ||
+    config.doesContainJavaScriptInPackages ||
+    config.doesContainTypeScript ||
+    config.doesContainTypeScriptInPackages
   ) {
     if (config.isBun) {
       devDependencies.push('@biomejs/biome', '@willbooster/biome-config');
@@ -216,7 +216,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
   }
 
-  if (config.doesContainsTypeScript || config.doesContainsTypeScriptInPackages) {
+  if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {
     devDependencies.push('typescript');
     if (config.isBun) {
       devDependencies.push('@types/bun');
@@ -236,7 +236,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     jsonObj.name = path.basename(config.dirPath);
   }
 
-  if (config.doesContainsSubPackageJsons) {
+  if (config.doesContainSubPackageJsons) {
     jsonObj.private = true;
   }
   if (!jsonObj.license) {
@@ -258,9 +258,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   // Because `"resolutions": { "npm/chalk": "^4.1.2" },` causes "Invalid npm token"
   delete jsonObj.resolutions?.['npm/chalk'];
 
-  if (!config.doesContainsSubPackageJsons) {
+  if (!config.doesContainSubPackageJsons) {
     if (!config.isBun) {
-      if (!config.doesContainsJavaScript && !config.doesContainsTypeScript) {
+      if (!config.doesContainJavaScript && !config.doesContainTypeScript) {
         delete jsonObj.scripts.lint;
         delete jsonObj.scripts['lint-fix'];
         jsonObj.scripts.cleanup = jsonObj.scripts.cleanup?.replace(' && yarn lint-fix', '');
@@ -269,7 +269,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
     }
 
-    if (config.doesContainsPubspecYaml) {
+    if (config.doesContainPubspecYaml) {
       jsonObj.scripts.lint = 'flutter analyze';
       jsonObj.scripts['lint-fix'] = 'yarn lint';
       const dirs = ['lib', 'test', 'test_driver'].filter((dir) => fs.existsSync(path.resolve(config.dirPath, dir)));
@@ -281,7 +281,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       }
     }
 
-    if (config.doesContainsPoetryLock) {
+    if (config.doesContainPoetryLock) {
       if (jsonObj.scripts.postinstall === 'poetry install') {
         delete jsonObj.scripts.postinstall;
       }
@@ -436,7 +436,7 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
       test: 'bun wb test',
       typecheck: 'bun --bun wb typecheck',
     };
-    if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
+    if (!config.doesContainTypeScript && !config.doesContainTypeScriptInPackages) {
       delete scripts.typecheck;
     }
     return scripts;
@@ -452,7 +452,7 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
       prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test{-,/}fixtures/**"`,
       typecheck: 'tsc --noEmit --Pretty',
     };
-    if (config.doesContainsSubPackageJsons) {
+    if (config.doesContainSubPackageJsons) {
       scripts = merge(
         { ...scripts },
         {
@@ -478,7 +478,7 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
       scripts['check-all-for-ai'] = (scripts['check-all-for-ai'] ?? '') + ' --silent';
     }
 
-    if (!config.doesContainsTypeScript && !config.doesContainsTypeScriptInPackages) {
+    if (!config.doesContainTypeScript && !config.doesContainTypeScriptInPackages) {
       delete scripts.typecheck;
     } else if (config.depending.wb) {
       scripts.typecheck = 'wb typecheck';

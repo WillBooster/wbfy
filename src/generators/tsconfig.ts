@@ -72,10 +72,10 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     if (config.depending.blitz || config.depending.next) return;
 
     let newSettings = cloneDeep(config.isRoot ? rootJsonObj : subJsonObj) as TsConfigJson;
-    if (!config.doesContainsJsxOrTsx && !config.doesContainsJsxOrTsxInPackages) {
+    if (!config.doesContainJsxOrTsx && !config.doesContainJsxOrTsxInPackages) {
       delete newSettings.compilerOptions?.jsx;
     }
-    if (config.isRoot && !config.doesContainsSubPackageJsons) {
+    if (config.isRoot && !config.doesContainSubPackageJsons) {
       newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
       newSettings.exclude = newSettings.exclude?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
     }

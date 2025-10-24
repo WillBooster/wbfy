@@ -56,6 +56,11 @@ ${
   - Follow conventional commits, i.e., your commit message should start with \`feat:\`, \`fix:\`, etc.
   - Make sure to add a new line at the end of your commit message with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`.
   - Always create new commits. Avoid using \`--amend\`.
+${
+  allConfigs.some((c) => c.hasStartTest)
+    ? `- Use \`${packageManager} run start-test\` to launch a web server for debugging / testing.`
+    : ''
+}
 
 ## Coding Style
 

@@ -52,15 +52,15 @@ export async function generateIdeaSettings(config: PackageConfig): Promise<void>
     const dirPath = path.resolve(config.dirPath, '.idea');
     if (fs.existsSync(dirPath)) {
       const filePath = path.resolve(dirPath, 'watcherTasks.xml');
-      await (config.doesContainsJavaScript ||
-      config.doesContainsJavaScriptInPackages ||
-      config.doesContainsTypeScript ||
-      config.doesContainsTypeScriptInPackages ||
-      (config.doesContainsPackageJson &&
-        !config.doesContainsPubspecYaml &&
-        !config.doesContainsGemfile &&
-        !config.doesContainsGoMod &&
-        !config.doesContainsPomXml)
+      await (config.doesContainJavaScript ||
+      config.doesContainJavaScriptInPackages ||
+      config.doesContainTypeScript ||
+      config.doesContainTypeScriptInPackages ||
+      (config.doesContainPackageJson &&
+        !config.doesContainPubspecYaml &&
+        !config.doesContainGemfile &&
+        !config.doesContainGoMod &&
+        !config.doesContainPomXml)
         ? promisePool.run(() => fsUtil.generateFile(filePath, config.isBun ? biomeContent : prettierContent))
         : promisePool.run(() => fs.promises.rm(filePath, { force: true })));
     }
