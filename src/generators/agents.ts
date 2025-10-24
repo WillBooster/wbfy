@@ -58,7 +58,7 @@ ${
   - Always create new commits. Avoid using \`--amend\`.
 ${
   allConfigs.some((c) => c.hasStartTest)
-    ? `- Use \`${packageManager} run start-test\` to launch a web server for debugging / testing.`
+    ? `- Use \`${packageManager} run start-test\` to launch a web server for debugging or testing.`
     : ''
 }
 
