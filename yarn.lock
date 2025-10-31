@@ -2655,7 +2655,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/core@npm:7.0.5, @octokit/core@npm:^7.0.0":
+"@octokit/core@npm:7.0.6":
+  version: 7.0.6
+  resolution: "@octokit/core@npm:7.0.6"
+  dependencies:
+    "@octokit/auth-token": "npm:^6.0.0"
+    "@octokit/graphql": "npm:^9.0.3"
+    "@octokit/request": "npm:^10.0.6"
+    "@octokit/request-error": "npm:^7.0.2"
+    "@octokit/types": "npm:^16.0.0"
+    before-after-hook: "npm:^4.0.0"
+    universal-user-agent: "npm:^7.0.0"
+  checksum: 10c0/95a328ff7c7223d9eb4aa778c63171828514ae0e0f588d33beb81a4dc03bbeae055382f6060ce23c979ab46272409942ff2cf3172109999e48429c47055b1fbe
+  languageName: node
+  linkType: hard
+
+"@octokit/core@npm:^7.0.0":
   version: 7.0.5
   resolution: "@octokit/core@npm:7.0.5"
   dependencies:
@@ -2680,6 +2695,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/endpoint@npm:^11.0.2":
+  version: 11.0.2
+  resolution: "@octokit/endpoint@npm:11.0.2"
+  dependencies:
+    "@octokit/types": "npm:^16.0.0"
+    universal-user-agent: "npm:^7.0.2"
+  checksum: 10c0/878ac12fbccff772968689b4744590677c5a3f12bebe31544832c84761bf1c6be521e8a3af07abffc9455a74dd4d1f350d714fc46fd7ce14a0a2b5f2d4e3a84c
+  languageName: node
+  linkType: hard
+
 "@octokit/graphql@npm:^9.0.2":
   version: 9.0.2
   resolution: "@octokit/graphql@npm:9.0.2"
@@ -2691,10 +2716,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/graphql@npm:^9.0.3":
+  version: 9.0.3
+  resolution: "@octokit/graphql@npm:9.0.3"
+  dependencies:
+    "@octokit/request": "npm:^10.0.6"
+    "@octokit/types": "npm:^16.0.0"
+    universal-user-agent: "npm:^7.0.0"
+  checksum: 10c0/58588d3fb2834f64244fa5376ca7922a30117b001b621e141fab0d52806370803ab0c046ac99b120fa5f45b770f52a815157fb6ffc147fc6c1da4047c1f1af49
+  languageName: node
+  linkType: hard
+
 "@octokit/openapi-types@npm:^26.0.0":
   version: 26.0.0
   resolution: "@octokit/openapi-types@npm:26.0.0"
   checksum: 10c0/671f12c1db70b4bc8c719ec7aa10de034925f4326db0fff22837afcc0b41fd1c015d164673ef5603c5ac787a430c514b821852bfbe6f06edc4a41ad3de342e94
+  languageName: node
+  linkType: hard
+
+"@octokit/openapi-types@npm:^27.0.0":
+  version: 27.0.0
+  resolution: "@octokit/openapi-types@npm:27.0.0"
+  checksum: 10c0/602d1de033da180a2e982cdbd3646bd5b2e16ecf36b9955a0f23e37ae9e6cb086abb48ff2ae6f2de000fce03e8ae9051794611ae4a95a8f5f6fb63276e7b8e31
   languageName: node
   linkType: hard
 
@@ -2743,6 +2786,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/request-error@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "@octokit/request-error@npm:7.0.2"
+  dependencies:
+    "@octokit/types": "npm:^16.0.0"
+  checksum: 10c0/cf8d2cc65cee5bca843591694461516bd84a1ba70bcedac652c7409f0bd1d0b0a2b87a5533ad8570d5756907ab8fbec0e234de91f55e8523d766f230d6d5cc97
+  languageName: node
+  linkType: hard
+
 "@octokit/request@npm:^10.0.4":
   version: 10.0.5
   resolution: "@octokit/request@npm:10.0.5"
@@ -2756,12 +2808,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@octokit/request@npm:^10.0.6":
+  version: 10.0.6
+  resolution: "@octokit/request@npm:10.0.6"
+  dependencies:
+    "@octokit/endpoint": "npm:^11.0.2"
+    "@octokit/request-error": "npm:^7.0.2"
+    "@octokit/types": "npm:^16.0.0"
+    fast-content-type-parse: "npm:^3.0.0"
+    universal-user-agent: "npm:^7.0.2"
+  checksum: 10c0/6db397050a1125655e230209c86cd2243db00a0c78ec394cb066889ee9e62cd830457014e382bdcc28ccdfd17a3428b8ecd8447d77c6bc18d9087a227a05166a
+  languageName: node
+  linkType: hard
+
 "@octokit/types@npm:^15.0.0, @octokit/types@npm:^15.0.1":
   version: 15.0.1
   resolution: "@octokit/types@npm:15.0.1"
   dependencies:
     "@octokit/openapi-types": "npm:^26.0.0"
   checksum: 10c0/f1f8d8a988c6295d669461082936a4e27d5a021ff870ebb93b8afa8f227f6eb0fb520f98631af31fc56dea0cb84e15df65e736f408cde321693154e4432c575d
+  languageName: node
+  linkType: hard
+
+"@octokit/types@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "@octokit/types@npm:16.0.0"
+  dependencies:
+    "@octokit/openapi-types": "npm:^27.0.0"
+  checksum: 10c0/b8d41098ba6fc194d13d641f9441347e3a3b96c0efabac0e14f57319340a2d4d1c8676e4cb37ab3062c5c323c617e790b0126916e9bf7b201b0cced0826f8ae2
   languageName: node
   linkType: hard
 
@@ -3537,12 +3611,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:24.9.1":
+"@types/node@npm:*":
   version: 24.9.1
   resolution: "@types/node@npm:24.9.1"
   dependencies:
     undici-types: "npm:~7.16.0"
   checksum: 10c0/c52f8168080ef9a7c3dc23d8ac6061fab5371aad89231a0f6f4c075869bc3de7e89b075b1f3e3171d9e5143d0dda1807c3dab8e32eac6d68f02e7480e7e78576
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:24.9.2":
+  version: 24.9.2
+  resolution: "@types/node@npm:24.9.2"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10c0/7905d43f65cee72ef475fe76316e10bbf6ac5d08a7f0f6c38f2b6285d7ca3009e8fcafc8f8a1d2bf3f55889c9c278dbb203a9081fd0cf2d6d62161703924c6fa
   languageName: node
   linkType: hard
 
@@ -10065,14 +10148,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-git@npm:3.28.0":
-  version: 3.28.0
-  resolution: "simple-git@npm:3.28.0"
+"simple-git@npm:3.29.0":
+  version: 3.29.0
+  resolution: "simple-git@npm:3.29.0"
   dependencies:
     "@kwsites/file-exists": "npm:^1.1.1"
     "@kwsites/promise-deferred": "npm:^1.1.1"
     debug: "npm:^4.4.0"
-  checksum: 10c0/d78b8f5884967513efa3d3ee419be421207367c65b680ee45f4c9571f909ba89933ffa27d6d7972fbb759bb30b00e435e35ade2b9e788661feb996da6f461932
+  checksum: 10c0/c5cba0ea6b394c5fbbb8f35406b97e6018fd9c63e1de32d10c2a7c330622eaaff652d79f9294df155ed7bf418a0e777861f8ed1bdbe02962e100435de1a010ab
   languageName: node
   linkType: hard
 
@@ -11341,14 +11424,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "wbfy@workspace:."
   dependencies:
-    "@octokit/core": "npm:7.0.5"
+    "@octokit/core": "npm:7.0.6"
     "@types/eslint": "npm:9.6.1"
     "@types/jest": "npm:30.0.0"
     "@types/js-yaml": "npm:4.0.9"
     "@types/libsodium-wrappers": "npm:0.7.14"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.10"
-    "@types/node": "npm:24.9.1"
+    "@types/node": "npm:24.9.2"
     "@types/yargs": "npm:17.0.34"
     "@willbooster/eslint-config-ts": "npm:11.4.9"
     "@willbooster/prettier-config": "npm:10.2.1"
@@ -11383,7 +11466,7 @@ __metadata:
     prettier: "npm:3.6.2"
     prettier-plugin-java: "npm:2.7.7"
     semantic-release: "npm:24.2.9"
-    simple-git: "npm:3.28.0"
+    simple-git: "npm:3.29.0"
     sort-package-json: "npm:3.4.0"
     ts-node: "npm:10.9.2"
     type-fest: "npm:4.41.0"
