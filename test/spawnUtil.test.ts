@@ -18,14 +18,14 @@ test.each`
   ${'berry-with-tool-versions'} | ${'4.9.1'}
 `(
   'spawnSync on $dirPath repo',
+  { timeout: 60 * 1000 },
   ({ dirPath, expected }: { dirPath: string; expected: string }) => {
     const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
     expect(fs.existsSync(packageDirPath)).toBe(true);
     spawnSyncWithStringResult('asdf', ['install'], packageDirPath);
     const version = spawnSyncWithStringResult('yarn', ['--version'], packageDirPath);
     expect(version).toBe(expected);
-  },
-  { timeout: 60 * 1000 }
+  }
 );
 
 test('get latest version of yarn berry', () => {
