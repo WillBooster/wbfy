@@ -111,6 +111,10 @@ async function main(): Promise<void> {
     await generateToolVersions(rootConfig);
     // Install yarn berry
     await generateYarnrcYml(rootConfig);
+    const shouldRunWorkflows =
+      rootConfig.repository?.startsWith('github:WillBooster/') ||
+      rootConfig.repository?.startsWith('github:WillBoosterLab/');
+
     await Promise.all([
       fixDockerfile(rootConfig),
       fixPrismaEnvFiles(rootConfig),
@@ -125,7 +129,7 @@ async function main(): Promise<void> {
       generateIdeaSettings(rootConfig),
       generateRenovateJson(rootConfig),
       generateReleaserc(rootConfig),
-      generateWorkflows(rootConfig),
+      ...(shouldRunWorkflows ? [generateWorkflows(rootConfig)] : []),
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
