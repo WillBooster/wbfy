@@ -89,7 +89,7 @@
   },
   "packageManager": "yarn@4.10.3",
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "publishConfig": {
     "access": "public"
