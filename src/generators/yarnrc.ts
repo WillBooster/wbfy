@@ -16,11 +16,11 @@ type Settings = {
   plugins?: Plugin[];
 } & Partial<ConfigurationValueMap>;
 
-type Plugin = {
+interface Plugin {
   checksum: string;
   path: string;
   spec: string;
-};
+}
 
 export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateYarnrcYml', async () => {

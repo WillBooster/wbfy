@@ -23,10 +23,10 @@ export const extensions = {
     'yaml',
     'yml',
     'sh',
-  ].sort(),
-  codeWith4IndentSize: ['go', 'gradle', 'java', 'py'].sort(),
-  markdownLike: ['md'].sort(),
-  eslint: ['cjs', 'mjs', 'js', 'cts', 'mts', 'ts', 'tsx', 'jsx'].sort(),
+  ].toSorted(),
+  codeWith4IndentSize: ['go', 'gradle', 'java', 'py'].toSorted(),
+  markdownLike: ['md'].toSorted(),
+  eslint: ['cjs', 'mjs', 'js', 'cts', 'mts', 'ts', 'tsx', 'jsx'].toSorted(),
   prettier: [
     'cjs',
     'mjs',
@@ -48,7 +48,7 @@ export const extensions = {
     'vue',
     'yaml',
     'yml',
-  ].sort(),
+  ].toSorted(),
   // cf. https://biomejs.dev/internals/language-support/
   biome: [
     'cjs',
@@ -71,5 +71,5 @@ export const extensions = {
     'yaml',
     'yml',
     'gql',
-  ].sort(),
+  ].toSorted(),
 };

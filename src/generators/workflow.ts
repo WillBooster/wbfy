@@ -13,51 +13,51 @@ import { combineMerge } from '../utils/mergeUtil.js';
 import { moveToBottom, sortKeys } from '../utils/objectUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-type Workflow = {
+interface Workflow {
   name?: string;
   on?: On;
   concurrency?: Concurrency;
   jobs: Record<string, Job>;
-};
+}
 
-type Concurrency = {
+interface Concurrency {
   group: string;
   'cancel-in-progress': boolean;
-};
+}
 
-type On = {
+interface On {
   issues?: Types;
   pull_request?: PullRequest;
   pull_request_target?: Types;
   push?: Push;
   schedule?: Schedule[];
   workflow_dispatch?: null;
-};
+}
 
-type PullRequest = {
+interface PullRequest {
   'paths-ignore'?: string[];
   types?: string[];
-};
+}
 
-type Push = {
+interface Push {
   branches: string[];
   'paths-ignore'?: string[];
-};
+}
 
-type Schedule = {
+interface Schedule {
   cron: string;
-};
+}
 
-type Types = {
+interface Types {
   types: string[];
-};
+}
 
-type Job = {
+interface Job {
   uses?: string;
   if?: string;
   secrets?: Record<string, unknown>;
   with?: Record<string, unknown>;
-};
+}
 
 const workflows = {
   test: {
