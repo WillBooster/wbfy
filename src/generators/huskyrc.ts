@@ -125,7 +125,7 @@ export function generatePostMergeCommands(config: PackageConfig): string[] {
   }
   const installCommand = config.isBun ? 'bun install' : 'yarn';
   const rmNextDirectory = config.depending.blitz || config.depending.next ? ' && rm -Rf .next' : '';
-  postMergeCommands.push(`run_if_changed "package\\.json" "${installCommand}${rmNextDirectory}"`);
+  postMergeCommands.push(String.raw`run_if_changed "package\.json" "${installCommand}${rmNextDirectory}"`);
   if (config.doesContainPoetryLock) {
     postMergeCommands.push(String.raw`run_if_changed "poetry\.lock" "poetry install"`);
   }

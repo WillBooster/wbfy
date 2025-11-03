@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { gitHubUtil, octokit } from './utils/githubUtil.js';
 import { globIgnore } from './utils/globUtil.js';
 
-export type PackageConfig = {
+export interface PackageConfig {
   dirPath: string;
   dockerfile: string;
   isRoot: boolean;
@@ -64,7 +64,7 @@ export type PackageConfig = {
   versionsText?: string;
   packageJson?: PackageJson;
   wbfyJson?: WbfyJson;
-};
+}
 
 type WbfyJson = z.infer<typeof wbfyJsonSchema>;
 
