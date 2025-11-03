@@ -29,7 +29,7 @@ async function core(config: PackageConfig): Promise<void> {
       // To move the top of the sorted list, we need to add a space.
       return `${CORE_TOOLS.has(name ?? '') ? ' ' : ''}${name ?? ''} ${version ?? ''}`;
     })
-    .sort()
+    .toSorted()
     // Remove added spaces.
     .map((line) => line.trim())
     // TODO: remove the following line after lefthook is installed via npm.

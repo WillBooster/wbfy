@@ -1,8 +1,8 @@
 import type { PackageConfig } from '../packageConfig.js';
 
 const srcDirectories = {
-  node: ['src', 'test', 'scripts'].sort(),
-  blitz: ['src', 'test', 'scripts', 'db', 'integrations', 'mailers'].sort(),
+  node: ['src', 'test', 'scripts'].toSorted(),
+  blitz: ['src', 'test', 'scripts', 'db', 'integrations', 'mailers'].toSorted(),
 };
 
 export function getSrcDirs(config: PackageConfig): string[] {
