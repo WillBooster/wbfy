@@ -18,6 +18,7 @@ const commonContent = `
 */mount/*.hash
 .devcontainer/
 .idea/AugmentWebviewStateStore.xml
+.idea/copilot.*
 .idea/copilot/chatSessions/
 .serena/
 .tmp/
