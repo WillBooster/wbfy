@@ -68,11 +68,17 @@ ${
 - Use stderr for logging debug messages temporarily since stdout output is sometimes omitted.
 - When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
 ${
+  allConfigs.some((c) => c.depending.react || c.depending.next)
+    ? `- Prefer \`useImmer\` for storing an array or an object to \`useState\`.`
+    : ''
+}
+${
   allConfigs.some((c) => c.depending.next)
     ? `- Since this project uses the React Compiler, you do not need to use \`useCallback\` or \`useMemo\` for performance optimization.`
     : ''
 }
 `
+    .replaceAll(/\.\n\n+-/g, '.\n-')
     .replaceAll(/\n{3,}/g, '\n\n')
     .trim();
 

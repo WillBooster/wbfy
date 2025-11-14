@@ -50,6 +50,7 @@ export interface PackageConfig {
     playwrightTest: boolean;
     prisma: boolean;
     pyright: boolean;
+    react: boolean;
     reactNative: boolean;
     semanticRelease: boolean;
     storybook: boolean;
@@ -195,6 +196,7 @@ export async function getPackageConfig(
         firebase: !!devDependencies['firebase-tools'],
         genI18nTs: !!devDependencies['gen-i18n-ts'],
         litestream: dockerfile.includes('install-litestream.sh'),
+        react: !!dependencies.react,
         next: !!dependencies.next,
         playwrightTest:
           !!dependencies['@playwright/test'] || !!devDependencies['@playwright/test'] || !!devDependencies.playwright,
