@@ -40,7 +40,7 @@
     "dotenv": "17.2.3",
     "fast-glob": "3.3.3",
     "fastest-levenshtein": "1.0.16",
-    "js-yaml": "4.1.0",
+    "js-yaml": "4.1.1",
     "libsodium-wrappers": "0.7.15",
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "5.0.0",
