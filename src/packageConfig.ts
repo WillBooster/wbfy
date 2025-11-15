@@ -17,6 +17,7 @@ export interface PackageConfig {
   isPublicRepo: boolean;
   isReferredByOtherRepo: boolean;
   repository?: string;
+  isWillBoosterRepo: boolean;
   isBun: boolean;
   isEsmPackage: boolean;
   isWillBoosterConfigs: boolean;
@@ -164,6 +165,7 @@ export async function getPackageConfig(
       // do nothing
     }
 
+    const repository = repoInfo?.full_name ? `github:${repoInfo.full_name as string}` : undefined;
     const config: PackageConfig = {
       dirPath,
       dockerfile,
@@ -171,6 +173,9 @@ export async function getPackageConfig(
       isPublicRepo: repoInfo?.private === false,
       isReferredByOtherRepo: !!packageJson.files,
       repository: repoInfo?.full_name ? `github:${repoInfo.full_name as string}` : undefined,
+      isWillBoosterRepo: Boolean(
+        repository?.startsWith('github:WillBooster/') || repository?.startsWith('github:WillBoosterLab/')
+      ),
       isBun: rootConfig?.isBun || fs.existsSync(path.join(dirPath, 'bunfig.toml')),
       isEsmPackage: esmPackage,
       isWillBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
