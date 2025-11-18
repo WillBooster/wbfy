@@ -23,6 +23,7 @@ const commonContent = `
 .serena/
 .tmp/
 __generated__/
+@willbooster/
 dist/
 temp/
 tmp/
