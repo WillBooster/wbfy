@@ -6,8 +6,8 @@ import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-export async function generateNextConfigJson(config: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('generateNextConfigJson', async () => {
+export async function fixNextConfigJson(config: PackageConfig): Promise<void> {
+  return logger.functionIgnoringException('fixNextConfigJson', async () => {
     const filePath = ['js', 'mjs', 'cjs']
       .map((ext) => path.resolve(config.dirPath, `next.config.${ext}`))
       .find((p) => fs.existsSync(p));

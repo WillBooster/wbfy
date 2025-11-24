@@ -5,7 +5,8 @@ import { ignoreErrorAsync } from '@willbooster/shared-lib';
 import yargs from 'yargs';
 
 import { fixDockerfile } from './fixers/dockerfile.js';
-import { fixPlaywrightConfig } from './fixers/playwrightConfig.js';
+import { fixNextConfigJson } from './fixers/nextConfig.js';
+import { fixPlaywrightConfigJson } from './fixers/playwrightConfig.js';
 import { fixPrismaEnvFiles } from './fixers/prisma.js';
 import { fixTestDirectoriesUpdatingPackageJson } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
@@ -25,10 +26,9 @@ import { generateHuskyrcUpdatingPackageJson } from './generators/huskyrc.js';
 import { generateIdeaSettings } from './generators/idea.js';
 import { generateLefthookUpdatingPackageJson } from './generators/lefthook.js';
 import { generateLintstagedrc } from './generators/lintstagedrc.js';
-import { generateNextConfigJson } from './generators/nextconfig.js';
 import { generatePackageJson } from './generators/packageJson.js';
 import { generatePrettierignore } from './generators/prettierignore.js';
-import { generatePyrightConfigJson } from './generators/pyrightconfig.js';
+import { generatePyrightConfigJson } from './generators/pyrightConfig.js';
 import { generateReadme } from './generators/readme.js';
 import { generateReleaserc } from './generators/releaserc.js';
 import { generateRenovateJson } from './generators/renovateJson.js';
@@ -149,10 +149,10 @@ async function main(): Promise<void> {
         promises.push(fixTypeDefinitions(config, config.isRoot ? allPackageConfigs : [config]));
       }
       if (config.depending.playwrightTest) {
-        promises.push(fixPlaywrightConfig(config));
+        promises.push(fixPlaywrightConfigJson(config));
       }
       if (config.depending.next) {
-        promises.push(generateNextConfigJson(config));
+        promises.push(fixNextConfigJson(config));
       }
       await generateGitignore(config, rootConfig);
       await promisePool.promiseAll();
