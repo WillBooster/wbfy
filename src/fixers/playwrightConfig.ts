@@ -48,8 +48,8 @@ const defaultConfig: ParsedObject = {
   }),
 };
 
-export async function fixPlaywrightConfigJson(config: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('fixPlaywrightConfigJson', async () => {
+export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> {
+  return logger.functionIgnoringException('fixPlaywrightConfig', async () => {
     const filePath = path.resolve(config.dirPath, `playwright.config.ts`);
     if (!fs.existsSync(filePath)) return;
 

@@ -6,7 +6,7 @@ import yargs from 'yargs';
 
 import { fixDockerfile } from './fixers/dockerfile.js';
 import { fixNextConfigJson } from './fixers/nextConfig.js';
-import { fixPlaywrightConfigJson } from './fixers/playwrightConfig.js';
+import { fixPlaywrightConfig } from './fixers/playwrightConfig.js';
 import { fixPrismaEnvFiles } from './fixers/prisma.js';
 import { fixTestDirectoriesUpdatingPackageJson } from './fixers/testDirectory.js';
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
@@ -149,7 +149,7 @@ async function main(): Promise<void> {
         promises.push(fixTypeDefinitions(config, config.isRoot ? allPackageConfigs : [config]));
       }
       if (config.depending.playwrightTest) {
-        promises.push(fixPlaywrightConfigJson(config));
+        promises.push(fixPlaywrightConfig(config));
       }
       if (config.depending.next) {
         promises.push(fixNextConfigJson(config));
