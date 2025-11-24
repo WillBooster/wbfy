@@ -6,7 +6,8 @@ import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-const newContentWithExactTrue = `telemetry = false
+const newContentWithExactTrue = `env = false
+telemetry = false
 
 [install]
 exact = true
@@ -15,7 +16,8 @@ exact = true
 bun = true
 `;
 
-const newContentWithExactFalse = `telemetry = false
+const newContentWithExactFalse = `env = false
+telemetry = false
 
 [install]
 exact = false
