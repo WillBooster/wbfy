@@ -31,7 +31,7 @@ const defaultConfig: ParsedObject = {
   }),
   workers: literal('process.env.PWDEBUG ? 1 : undefined'),
   webServer: asObject({
-    command: literal("'yarn start-test'"),
+    command: literal("'yarn start-test-server'"),
     url: literal('process.env.NEXT_PUBLIC_BASE_URL'),
     reuseExistingServer: literal('!!process.env.CI'),
     timeout: literal('300_000'),
