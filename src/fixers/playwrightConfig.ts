@@ -20,6 +20,7 @@ const asArray = (value: ParsedValue[]): ParsedValue => ({ kind: 'array', value }
 const asObject = (value: ParsedObject): ParsedValue => ({ kind: 'object', value });
 
 const defaultConfig: ParsedObject = {
+  forbidOnly: literal('!!process.env.CI'),
   retries: literal('process.env.PWDEBUG ? 0 : process.env.CI ? 5 : 1'),
   timeout: literal('120_000'),
   use: asObject({
