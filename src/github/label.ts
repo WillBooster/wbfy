@@ -73,12 +73,6 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       await deleteLabel(octokit, owner, repo, 'llm-pr :robot:');
       await deleteLabel(octokit, owner, repo, 'ai-pr :robot:');
     } catch (error) {
-      if (error instanceof Error && error.message.includes('Resource not accessible by personal access token')) {
-        console.info(
-          `Skip setupLabels: GitHub token does not have access to manage labels in ${owner}/${repo} (${error.message})`
-        );
-        return;
-      }
       console.warn('Skip setupLabels due to:', (error as Error | undefined)?.stack ?? error);
     }
   });
