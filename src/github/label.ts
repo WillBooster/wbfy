@@ -13,11 +13,6 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
 
     const octokit = getOctokit(owner);
 
-    if (!(await canManageLabels(octokit, owner, repo))) {
-      console.info(`Skip setupLabels: GitHub token cannot manage labels in ${owner}/${repo}`);
-      return;
-    }
-
     try {
       await setupLabel(octokit, owner, repo, 'd1: x-easy :hedgehog:', 'EDE9FE');
       await setupLabel(octokit, owner, repo, 'd2: easy :rabbit2:', 'DDD6FE');
@@ -87,22 +82,6 @@ export async function setupLabels(config: PackageConfig): Promise<void> {
       console.warn('Skip setupLabels due to:', (error as Error | undefined)?.stack ?? error);
     }
   });
-}
-
-async function canManageLabels(octokit: Octokit, owner: string, repo: string): Promise<boolean> {
-  try {
-    // Issues permission is required for label operations, which is available only when the token has write-level access.
-    const response = await octokit.request('GET /repos/{owner}/{repo}', {
-      owner,
-      repo,
-    });
-    const permissions = response.data.permissions;
-    return Boolean(permissions?.admin || permissions?.maintain || permissions?.push || permissions?.triage);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    console.info(`Skip setupLabels: failed to verify GitHub permission for ${owner}/${repo}: ${message}`);
-    return false;
-  }
 }
 
 async function setupLabel(octokit: Octokit, owner: string, repo: string, name: string, color: string): Promise<void> {
