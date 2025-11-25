@@ -16,7 +16,9 @@ export function spawnSyncWithStringResult(command: string, args: string[], cwd: 
   const proc = child_process.spawnSync(newCmd, newArgs, options);
   const error = proc.stderr.toString().trim();
   if (error) {
-    console.error(`${newCmd} [${newArgs.map((s) => `"${s}"`).join(', ')}] caused the following error:\n ${error}`);
+    console.error(
+      `${newCmd} [${newArgs.map((s) => `"${s}"`).join(', ')}] outputs the following content to stderr:\n${error}`
+    );
   }
   return proc.stdout.toString().trim();
 }

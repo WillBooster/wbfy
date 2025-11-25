@@ -28,7 +28,7 @@ test.each`
   }
 );
 
-test('get latest version of yarn berry', () => {
+test('get latest version of yarn berry', { timeout: 120 * 1000 }, () => {
   const version = getLatestVersion('@yarnpkg/cli', process.cwd());
   expect(version).toMatch(/^[4-9]./);
 });
