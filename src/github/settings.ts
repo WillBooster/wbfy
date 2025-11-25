@@ -1,15 +1,15 @@
 import { withRetry } from '@willbooster/shared-lib';
 
 import type { PackageConfig } from '../packageConfig.js';
-import { gitHubUtil, octokit } from '../utils/githubUtil.js';
+import { getOctokit, gitHubUtil, hasGitHubToken } from '../utils/githubUtil.js';
 
 export async function setupGitHubSettings(config: PackageConfig): Promise<void> {
-  // Only for local execution
-  if (!process.env.GH_BOT_PAT) return;
-
   const [owner, repo] = gitHubUtil.getOrgAndName(config.repository ?? '');
   if (!owner || !repo) return;
   if (owner !== 'WillBooster' && owner !== 'WillBoosterLab') return;
+  if (!hasGitHubToken(owner)) return;
+
+  const octokit = getOctokit(owner);
 
   // Administration permission
   await withRetry(() =>

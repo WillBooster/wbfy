@@ -114,10 +114,10 @@ async function main(): Promise<void> {
     if (rootConfig.isBun) {
       await generateBunfigToml(rootConfig);
     }
+
     const shouldRunWorkflows =
       rootConfig.repository?.startsWith('github:WillBooster/') ||
       rootConfig.repository?.startsWith('github:WillBoosterLab/');
-
     await Promise.all([
       fixDockerfile(rootConfig),
       fixPrismaEnvFiles(rootConfig),
