@@ -24,7 +24,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
     try {
       for (const secretName of DEPRECATED_SECRET_NAMES) {
         try {
-          // Secrets permission
+          // Requires Secrets permission
           await octokit.request('DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
             owner,
             repo,
@@ -35,7 +35,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
         }
       }
 
-      // Secrets permission
+      // Requires Secrets permission
       const response = await octokit.request('GET /repos/{owner}/{repo}/actions/secrets/public-key', {
         owner,
         repo,
@@ -63,7 +63,7 @@ export async function setupSecrets(config: PackageConfig): Promise<void> {
         // Convert encrypted Uint8Array to Base64
         const encBase64 = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL);
 
-        // Secrets permission
+        // Requires Secrets permission
         await octokit.request('PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}', {
           owner,
           repo,
