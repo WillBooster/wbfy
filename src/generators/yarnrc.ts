@@ -13,6 +13,7 @@ type Settings = {
   defaultSemverRangePrefix: string;
   nmMode: string;
   nodeLinker: string;
+  npmMinimalAgeGate?: string;
   plugins?: Plugin[];
 } & Partial<ConfigurationValueMap>;
 
@@ -58,6 +59,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.defaultSemverRangePrefix = '';
     settings.nodeLinker = 'node-modules';
     settings.nmMode = 'hardlinks-global';
+    settings.npmMinimalAgeGate = '5d';
     delete settings.compressionLevel;
     if (settings.injectEnvironmentFiles?.length === 0) {
       delete settings.injectEnvironmentFiles;
