@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
-import { octokit } from '../utils/githubUtil.js';
+import { getOctokit } from '../utils/githubUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 import { convertVersionIntoNumber } from '../utils/version.js';
@@ -88,7 +88,7 @@ function updateVersion(lines: string[], toolName: string, newVersion: string, he
 async function getLatestVersionFromTagOnGitHub(organization: string, repository: string): Promise<string | undefined> {
   try {
     // Fetch the latest release from the repository (no required permissions)
-    const response = await octokit.request('GET /repos/{owner}/{repo}/releases/latest', {
+    const response = await getOctokit().request('GET /repos/{owner}/{repo}/releases/latest', {
       owner: organization,
       repo: repository,
     });

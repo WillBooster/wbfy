@@ -7,7 +7,7 @@ import { simpleGit } from 'simple-git';
 import type { PackageJson } from 'type-fest';
 import { z } from 'zod';
 
-import { gitHubUtil, octokit } from './utils/githubUtil.js';
+import { getOctokit, gitHubUtil } from './utils/githubUtil.js';
 import { globIgnore } from './utils/globUtil.js';
 
 export interface PackageConfig {
@@ -293,7 +293,7 @@ async function requestRepoInfo(urlOrFullName: string): Promise<Record<string, un
   const ret = { full_name: `${org}/${name}` };
   try {
     // Metadata permission
-    const response = await octokit.request('GET /repos/{owner}/{repo}', {
+    const response = await getOctokit().request('GET /repos/{owner}/{repo}', {
       owner: org,
       repo: name,
     });
