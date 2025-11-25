@@ -1,18 +1,15 @@
-import { getOctokit } from '../utils/githubUtil.js';
+import { spawnSyncWithStringResult } from '../utils/spawnUtil.js';
 
-export async function getLatestCommitHash(organization: string, repo: string): Promise<string> {
+export function getLatestCommitHash(organization: string, repo: string): Promise<string> {
   try {
-    // No required permissions
-    const { data: commits } = await getOctokit().request('GET /repos/{owner}/{repo}/commits', {
-      owner: organization,
-      repo,
-      per_page: 1,
-    });
-    if (!commits[0]) {
+    const repoUrl = `git@github.com:${organization}/${repo}.git`;
+    const output = spawnSyncWithStringResult('git', ['ls-remote', repoUrl, 'HEAD'], process.cwd());
+    const commitHash = output.split(/\s+/)[0];
+    if (!commitHash) {
       throw new Error(`No commits found for ${organization}/${repo}`);
     }
-    return commits[0].sha;
+    return Promise.resolve(commitHash);
   } catch (error) {
-    throw new Error(`Failed to fetch commits for ${organization}/${repo}: ${String(error)}`);
+    return Promise.reject(new Error(`Failed to fetch commits for ${organization}/${repo}: ${String(error)}`));
   }
 }
