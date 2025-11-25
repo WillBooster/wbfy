@@ -111,6 +111,9 @@ async function main(): Promise<void> {
     await generateToolVersions(rootConfig);
     // Install yarn berry
     await generateYarnrcYml(rootConfig);
+    if (rootConfig.isBun) {
+      await generateBunfigToml(rootConfig);
+    }
     const shouldRunWorkflows =
       rootConfig.repository?.startsWith('github:WillBooster/') ||
       rootConfig.repository?.startsWith('github:WillBoosterLab/');
@@ -133,12 +136,9 @@ async function main(): Promise<void> {
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
-      ...(rootConfig.isBun
-        ? [
-            generateBunfigToml(rootConfig),
-            generateHuskyrcUpdatingPackageJson(rootConfig).then(() => generateLefthookUpdatingPackageJson(rootConfig)),
-          ]
-        : [generateHuskyrcUpdatingPackageJson(rootConfig)]),
+      rootConfig.isBun
+        ? generateHuskyrcUpdatingPackageJson(rootConfig).then(() => generateLefthookUpdatingPackageJson(rootConfig))
+        : generateHuskyrcUpdatingPackageJson(rootConfig),
       generateLintstagedrc(rootConfig),
     ]);
     await promisePool.promiseAll();
