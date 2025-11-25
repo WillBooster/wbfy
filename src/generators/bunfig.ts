@@ -11,6 +11,7 @@ telemetry = false
 
 [install]
 exact = true
+minimumReleaseAge = 432000 # 5 days
 
 [run]
 bun = true
@@ -21,6 +22,7 @@ telemetry = false
 
 [install]
 exact = false
+minimumReleaseAge = 432000 # 5 days
 
 [run]
 bun = true
