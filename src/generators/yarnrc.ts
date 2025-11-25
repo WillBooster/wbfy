@@ -14,7 +14,7 @@ type Settings = {
   nmMode: string;
   nodeLinker: string;
   npmMinimalAgeGate?: string;
-  npmPreapprovedPackages?: string;
+  npmPreapprovedPackages?: string[];
   plugins?: Plugin[];
 } & Partial<ConfigurationValueMap>;
 
