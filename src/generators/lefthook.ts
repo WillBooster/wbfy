@@ -79,10 +79,15 @@ export async function generateLefthookUpdatingPackageJson(config: PackageConfig)
 
 async function core(config: PackageConfig): Promise<void> {
   const dirPath = path.resolve(config.dirPath, '.lefthook');
+  const { typecheck } = generateScripts(config, {});
+  const settings: Partial<typeof newSettings> = { ...newSettings };
+  if (!typecheck) {
+    delete settings['pre-push'];
+  }
   await Promise.all([
     fs.promises.writeFile(
       path.join(config.dirPath, 'lefthook.yml'),
-      yaml.dump(newSettings, {
+      yaml.dump(settings, {
         lineWidth: -1,
         noCompatMode: true,
         styles: {
@@ -93,7 +98,6 @@ async function core(config: PackageConfig): Promise<void> {
     fs.promises.rm(dirPath, { force: true, recursive: true }),
   ]);
 
-  const { typecheck } = generateScripts(config, {});
   if (typecheck) {
     const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
     fs.mkdirSync(path.join(dirPath, 'pre-push'), { recursive: true });
