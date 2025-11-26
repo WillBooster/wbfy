@@ -225,7 +225,11 @@ function removeNodeModulesDirectories(dirPath: string): void {
     nodeModulesPaths.add(path.resolve(dirPath, nodeModulesPath));
   }
   for (const nodeModulesPath of nodeModulesPaths) {
-    fs.rmSync(nodeModulesPath, { recursive: true, force: true });
+    try {
+      fs.rmSync(nodeModulesPath, { recursive: true, force: true });
+    } catch (error) {
+      console.warn(error);
+    }
   }
 }
 
