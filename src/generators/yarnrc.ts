@@ -61,7 +61,17 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.nodeLinker = 'node-modules';
     settings.nmMode = 'hardlinks-global';
     settings.npmMinimalAgeGate = '5d';
-    settings.npmPreapprovedPackages = ['@willbooster/wb'];
+    settings.npmPreapprovedPackages = [
+      '@willbooster/babel-configs',
+      '@willbooster/biome-config',
+      '@willbooster/eslint-config-js',
+      '@willbooster/eslint-config-js-react',
+      '@willbooster/eslint-config-next',
+      '@willbooster/eslint-config-ts',
+      '@willbooster/eslint-config-ts-react',
+      '@willbooster/prettier-config',
+      '@willbooster/wb',
+    ];
     delete settings.compressionLevel;
     if (settings.injectEnvironmentFiles?.length === 0) {
       delete settings.injectEnvironmentFiles;

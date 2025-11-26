@@ -13,7 +13,17 @@ telemetry = false
 exact = true
 linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
-minimumReleaseAgeExcludes = ["@willbooster/wb"]
+minimumReleaseAgeExcludes = [
+    "@willbooster/babel-configs",
+    "@willbooster/biome-config",
+    "@willbooster/eslint-config-js",
+    "@willbooster/eslint-config-js-react",
+    "@willbooster/eslint-config-next",
+    "@willbooster/eslint-config-ts",
+    "@willbooster/eslint-config-ts-react",
+    "@willbooster/prettier-config",
+    "@willbooster/wb"
+]
 
 [run]
 bun = true
@@ -26,7 +36,17 @@ telemetry = false
 exact = false
 linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
-minimumReleaseAgeExcludes = ["@willbooster/wb"]
+minimumReleaseAgeExcludes = [
+    "@willbooster/babel-configs",
+    "@willbooster/biome-config",
+    "@willbooster/eslint-config-js",
+    "@willbooster/eslint-config-js-react",
+    "@willbooster/eslint-config-next",
+    "@willbooster/eslint-config-ts",
+    "@willbooster/eslint-config-ts-react",
+    "@willbooster/prettier-config",
+    "@willbooster/wb"
+]
 
 [run]
 bun = true
