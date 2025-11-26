@@ -474,7 +474,7 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
       scripts['check-all-for-ai'] = (scripts['check-all-for-ai'] ?? '') + ' --silent';
     }
 
-    if (!config.doesContainTypeScript && !config.doesContainTypeScriptInPackages) {
+    if (!hasTypecheck) {
       delete scripts.typecheck;
     } else if (config.depending.wb) {
       scripts.typecheck = 'wb typecheck';
