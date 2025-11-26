@@ -66,14 +66,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   jsonObj.peerDependencies = jsonObj.peerDependencies ?? {};
   const packageManager = config.isBun ? 'bun' : 'yarn';
 
-  const eslintConfigVersion = config.eslintBase ? jsonObj.devDependencies[config.eslintBase] : undefined;
-  await removeDeprecatedStuff(
-    rootConfig,
-    jsonObj as SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>
-  );
-  if (config.eslintBase && eslintConfigVersion) {
-    jsonObj.devDependencies[config.eslintBase] = eslintConfigVersion;
-  }
+  await removeDeprecatedStuff(jsonObj as SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>);
 
   for (const [key, value] of Object.entries(jsonObj.scripts as Record<string, string>)) {
     // Fresh repo still requires 'yarn install'
@@ -389,7 +382,6 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
 // TODO: remove the following migration code in future
 async function removeDeprecatedStuff(
-  rootConfig: PackageConfig,
   jsonObj: SetRequired<PackageJson, 'scripts' | 'dependencies' | 'devDependencies'>
 ): Promise<void> {
   if (jsonObj.author === 'WillBooster LLC') {
@@ -416,14 +408,6 @@ async function removeDeprecatedStuff(
   delete jsonObj.scripts['format-python'];
   delete jsonObj.scripts.prettier;
   delete jsonObj.scripts['check-all'];
-  if (!rootConfig.isWillBoosterConfigs) {
-    for (const deps of Object.values(eslintDeps)) {
-      for (const dep of deps) {
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-        delete jsonObj.devDependencies[dep];
-      }
-    }
-  }
   await promisePool.run(() => fs.promises.rm('lerna.json', { force: true }));
 
   // Migrate from ESLint legacy configs to flat configs,
