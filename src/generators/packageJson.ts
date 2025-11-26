@@ -275,7 +275,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       jsonObj.scripts['lint-fix'] = 'yarn lint';
       const dirs = ['lib', 'test', 'test_driver'].filter((dir) => fs.existsSync(path.resolve(config.dirPath, dir)));
       if (dirs.length > 0) {
-        jsonObj.scripts['format-code'] = `flutter format $(find ${dirs.join(
+        jsonObj.scripts['format-code'] = `dart format $(find ${dirs.join(
           ' '
         )} -name generated -prune -o -name '*.freezed.dart' -prune -o -name '*.g.dart' -prune -o -name '*.dart' -print)`;
         jsonObj.scripts.format = (jsonObj.scripts.format ?? '') + ` && yarn format-code`;

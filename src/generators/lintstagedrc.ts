@@ -60,7 +60,7 @@ async function core(config: PackageConfig): Promise<void> {
     const filteredFiles = files.filter(file => !file.includes('generated'))
       .filter(file => !file.endsWith('.freezed.dart') && !file.endsWith('.g.dart'));
     if (filteredFiles.length === 0) return [];
-    return [\`flutter format \${filteredFiles.join(' ')}\`];
+    return [\`dart format \${filteredFiles.join(' ')}\`];
   },`);
   }
   if (config.doesContainPoetryLock) {
