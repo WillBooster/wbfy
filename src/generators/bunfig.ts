@@ -11,6 +11,7 @@ telemetry = false
 
 [install]
 exact = true
+linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
 minimumReleaseAgeExcludes = ["@willbooster/wb"]
 
@@ -23,6 +24,7 @@ telemetry = false
 
 [install]
 exact = false
+linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
 minimumReleaseAgeExcludes = ["@willbooster/wb"]
 
