@@ -418,9 +418,10 @@ async function removeDeprecatedStuff(
 
 export function generateScripts(config: PackageConfig, oldScripts: PackageJson.Scripts): Record<string, string> {
   if (config.isBun) {
+    const hasTypecheck = config.doesContainTypeScript || config.doesContainTypeScriptInPackages;
     const scripts: Record<string, string> = {
       'check-all-for-ai': 'bun run check-for-ai && bun run test --silent',
-      'check-for-ai': 'bun run cleanup && bun run typecheck',
+      'check-for-ai': `bun run cleanup${hasTypecheck ? ' && bun run typecheck' : ''}`,
       cleanup: 'bun --bun wb lint --fix --format',
       format: `bun --bun wb lint --format`,
       lint: `bun --bun wb lint`,
@@ -428,15 +429,18 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
       test: 'bun wb test',
       typecheck: 'bun --bun wb typecheck',
     };
-    if (!config.doesContainTypeScript && !config.doesContainTypeScriptInPackages) {
+    if (!hasTypecheck) {
       delete scripts.typecheck;
     }
     return scripts;
   } else {
+    const hasTypecheck = config.doesContainTypeScript || config.doesContainTypeScriptInPackages;
     const oldTest = oldScripts.test;
     let scripts: Record<string, string> = {
       'check-all-for-ai': 'yarn check-for-ai && yarn test',
-      'check-for-ai': 'yarn format > /dev/null 2> /dev/null || true && yarn lint-fix --quiet && yarn typecheck',
+      'check-for-ai': `yarn format > /dev/null 2> /dev/null || true && yarn lint-fix --quiet${
+        hasTypecheck ? ' && yarn typecheck' : ''
+      }`,
       cleanup: 'yarn format && yarn lint-fix',
       format: `sort-package-json && yarn prettify`,
       lint: `eslint --color`,
