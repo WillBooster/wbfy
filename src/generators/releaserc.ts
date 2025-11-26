@@ -12,6 +12,8 @@ import { promisePool } from '../utils/promisePool.js';
 export async function generateReleaserc(rootConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateReleaserc', async () => {
     const filePath = path.resolve(rootConfig.dirPath, '.releaserc.json');
+    if (!fs.existsSync(filePath)) return;
+
     const settings = JSON.parse(await fs.promises.readFile(filePath, 'utf8')) as {
       plugins?: (string | [string, unknown])[];
     };
