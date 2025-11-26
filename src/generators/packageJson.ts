@@ -264,7 +264,11 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
       if (!config.doesContainJavaScript && !config.doesContainTypeScript) {
         delete jsonObj.scripts.lint;
         delete jsonObj.scripts['lint-fix'];
-        jsonObj.scripts.cleanup = jsonObj.scripts.cleanup?.replace(' && yarn lint-fix', '');
+        for (const scriptName of ['cleanup', 'check-for-ai']) {
+          const script = jsonObj.scripts[scriptName];
+          if (!script) continue;
+          jsonObj.scripts[scriptName] = script.replace(/ ?&& ?yarn lint-fix(?: --quiet)?/, '');
+        }
       } else {
         jsonObj.scripts['lint-fix'] = (jsonObj.scripts['lint-fix'] ?? '') + EslintUtil.getLintFixSuffix(config);
       }
