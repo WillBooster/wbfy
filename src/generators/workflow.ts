@@ -339,6 +339,9 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
   let newSettings = cloneDeep(kind in workflows ? workflows[kind as keyof typeof workflows] : {}) as Workflow;
+  // Skip a broken workflow
+  if (!('jobs' in newSettings)) return;
+
   const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
