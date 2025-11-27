@@ -63,18 +63,9 @@ async function core(config: PackageConfig): Promise<void> {
   delete packageJson.scripts.postpack;
 
   const dirPath = path.resolve(config.dirPath, '.husky');
-  const prePushFilePath = path.resolve(dirPath, 'pre-push');
-  let oldPrePush: string | undefined;
-  try {
-    oldPrePush = await fs.promises.readFile(prePushFilePath, 'utf8');
-  } catch {
-    // Keep undefined if pre-push doesn't exist
-  }
-  await Promise.all([
-    fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
-    fs.promises.rm(dirPath, { force: true, recursive: true }),
-  ]);
+  await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
   if (config.isBun) {
+    await fs.promises.rm(dirPath, { force: true, recursive: true });
     spawnSync('git', ['config', '--unset', 'core.hooksPath'], config.dirPath);
     return;
   }
@@ -102,14 +93,7 @@ async function core(config: PackageConfig): Promise<void> {
         .replace('pyright', 'node node_modules/.bin/pyright')
     );
     await promisePool.run(() =>
-      fs.promises.writeFile(prePushFilePath, prePush + '\n', {
-        mode: 0o755,
-      })
-    );
-  } else if (oldPrePush) {
-    const prePush = oldPrePush.endsWith('\n') ? oldPrePush : `${oldPrePush}\n`;
-    await promisePool.run(() =>
-      fs.promises.writeFile(prePushFilePath, prePush, {
+      fs.promises.writeFile(path.resolve(dirPath, 'pre-push'), prePush + '\n', {
         mode: 0o755,
       })
     );
