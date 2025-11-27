@@ -291,6 +291,11 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
   const fileNamesToBeRemoved = ['add-focused-issue-to-project.yml', 'wbfy.yml', 'wbfy-merge.yml'];
 
   return logger.functionIgnoringException('generateWorkflow', async () => {
+    if (isReusableWorkflowsRepo(rootConfig.repository)) {
+      // Don't touch reusable-workflows repo because it hosts upstream workflow definitions.
+      return;
+    }
+
     const workflowsPath = path.resolve(rootConfig.dirPath, '.github', 'workflows');
     await fs.promises.mkdir(workflowsPath, { recursive: true });
 
@@ -335,6 +340,10 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       );
     }
   });
+}
+
+function isReusableWorkflowsRepo(repository?: string): boolean {
+  return repository?.endsWith('/reusable-workflows') ?? false;
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
