@@ -19,7 +19,7 @@ export function getOctokit(owner?: string): Octokit {
   if (cached) return cached;
 
   const octokit = new Octokit({
-    auth: getGitHubToken(owner),
+    auth: getGitHubToken(owner) || undefined,
   });
   octokitCache.set(key, octokit);
   return octokit;
