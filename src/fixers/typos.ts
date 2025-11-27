@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import fg from 'fast-glob';
 
+import { isReusableWorkflowsRepo } from '../generators/workflow.js';
 import { logger } from '../logger.js';
 import { options } from '../options.js';
 import type { PackageConfig } from '../packageConfig.js';
@@ -12,6 +13,8 @@ import { promisePool } from '../utils/promisePool.js';
 
 export async function fixTypos(packageConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('fixTypos', async () => {
+    if (isReusableWorkflowsRepo(packageConfig.repository)) return;
+
     const dirPath = packageConfig.dirPath;
     const docFiles = await fg.glob('**/*.md', { dot: true, cwd: dirPath, ignore: globIgnore });
     if (options.isVerbose) {

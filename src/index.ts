@@ -35,7 +35,7 @@ import { generateReleaserc } from './generators/releaserc.js';
 import { generateRenovateJson } from './generators/renovateJson.js';
 import { generateTsconfig } from './generators/tsconfig.js';
 import { generateVscodeSettings } from './generators/vscodeSettings.js';
-import { generateWorkflows } from './generators/workflow.js';
+import { generateWorkflows, isReusableWorkflowsRepo } from './generators/workflow.js';
 import { generateYarnrcYml } from './generators/yarnrc.js';
 import { setupLabels } from './github/label.js';
 import { setupSecrets } from './github/secret.js';
@@ -122,8 +122,9 @@ async function main(): Promise<void> {
     }
 
     const shouldRunWorkflows =
-      rootConfig.repository?.startsWith('github:WillBooster/') ||
-      rootConfig.repository?.startsWith('github:WillBoosterLab/');
+      !isReusableWorkflowsRepo(rootConfig.repository) &&
+      (rootConfig.repository?.startsWith('github:WillBooster/') ||
+        rootConfig.repository?.startsWith('github:WillBoosterLab/'));
     await Promise.all([
       fixDockerfile(rootConfig),
       fixPrismaEnvFiles(rootConfig),

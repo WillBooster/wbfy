@@ -342,7 +342,7 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
   });
 }
 
-function isReusableWorkflowsRepo(repository?: string): boolean {
+export function isReusableWorkflowsRepo(repository?: string): boolean {
   return repository?.endsWith('/reusable-workflows') ?? false;
 }
 
