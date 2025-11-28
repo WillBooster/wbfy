@@ -144,22 +144,6 @@ const workflows = {
       sync: { uses: 'WillBooster/reusable-workflows/.github/workflows/sync.yml@main' },
     },
   },
-  'notify-ready': {
-    name: 'Notify ready',
-    on: {
-      issues: {
-        types: ['labeled'],
-      },
-    },
-    jobs: {
-      'notify-ready': {
-        uses: 'WillBooster/reusable-workflows/.github/workflows/notify-ready.yml@main',
-        secrets: {
-          DISCORD_WEBHOOK_URL: '${{ secrets.DISCORD_WEBHOOK_URL_FOR_READY }}',
-        },
-      },
-    },
-  },
   'close-comment': {
     name: 'Add close comment',
     on: {
@@ -170,41 +154,6 @@ const workflows = {
     jobs: {
       'close-comment': {
         uses: 'WillBooster/reusable-workflows/.github/workflows/close-comment.yml@main',
-      },
-    },
-  },
-  'add-issue-to-project': {
-    name: 'Add issue to GitHub project',
-    on: {
-      issues: {
-        types: ['labeled'],
-      },
-    },
-    jobs: {
-      'add-issue-to-project': {
-        uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
-        secrets: {
-          GH_PROJECT_URL: '${{ secrets.GH_PROJECT_URL }}',
-        },
-      },
-    },
-  },
-  'add-ready-issue-to-project': {
-    name: 'Add ready issue to GitHub project',
-    on: {
-      issues: {
-        types: ['labeled'],
-      },
-    },
-    jobs: {
-      'add-ready-issue-to-project': {
-        uses: 'WillBooster/reusable-workflows/.github/workflows/add-issue-to-project.yml@main',
-        with: {
-          labeled: 'ready :rocket:',
-        },
-        secrets: {
-          GH_PROJECT_URL: 'https://github.com/orgs/WillBoosterLab/projects/5',
-        },
       },
     },
   },
@@ -288,7 +237,14 @@ const workflows = {
 type KnownKind = keyof typeof workflows | 'deploy';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
-  const fileNamesToBeRemoved = ['add-focused-issue-to-project.yml', 'wbfy.yml', 'wbfy-merge.yml'];
+  const fileNamesToBeRemoved = [
+    'add-focused-issue-to-project.yml',
+    'add-issue-to-project.yml',
+    'add-ready-issue-to-project.yml',
+    'notify-ready.yml',
+    'wbfy.yml',
+    'wbfy-merge.yml',
+  ];
 
   return logger.functionIgnoringException('generateWorkflow', async () => {
     if (isReusableWorkflowsRepo(rootConfig.repository)) {
@@ -309,7 +265,6 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       'autofix.yml',
       'semantic-pr.yml',
       'close-comment.yml',
-      'add-issue-to-project.yml',
       'gen-pr-claude.yml',
       'gen-pr-codex.yml',
       'gen-pr-gemini.yml',
@@ -323,10 +278,9 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
       // for autofix.ci
       fileNamesToBeRemoved.push('autofix.yml');
     }
-    if (rootConfig.isPublicRepo || rootConfig.repository?.startsWith('github:WillBoosterLab/')) {
-      fileNameSet.add('add-ready-issue-to-project.yml');
-      fileNameSet.add('notify-ready.yml');
-    }
+    fileNameSet.delete('add-issue-to-project.yml');
+    fileNameSet.delete('add-ready-issue-to-project.yml');
+    fileNameSet.delete('notify-ready.yml');
 
     for (const fileName of fileNameSet) {
       // 実際はKnownKind以外の値も代入されることに注意
@@ -442,8 +396,6 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   if (
     kind === 'test' ||
     kind === 'release' ||
-    kind === 'add-issue-to-project' ||
-    kind === 'add-ready-issue-to-project' ||
     kind === 'gen-pr-claude' ||
     kind === 'gen-pr-codex' ||
     kind === 'gen-pr-gemini'
