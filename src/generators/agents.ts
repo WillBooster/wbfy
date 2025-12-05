@@ -50,7 +50,7 @@ ${
     ? `- When introducing new string literals in React components, update the language resource files in the \`i18n\` directory (e.g., \`i18n/ja-JP.json\`). Reference these strings using the \`i18n\` utility. For example, use \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
     : ''
 }
-- Write tests only when explicitly requested.
+- Do not write tests unless explicitly requested.
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
 - Once you have verified your changes, commit them to the current branch using the \`--no-verify\` option and push to the current branch.
