@@ -50,6 +50,7 @@ ${
     ? `- When introducing new string literals in React components, update the language resource files in the \`i18n\` directory (e.g., \`i18n/ja-JP.json\`). Reference these strings using the \`i18n\` utility. For example, use \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
     : ''
 }
+- Write tests only when explicitly requested.
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
 - Once you have verified your changes, commit them to the current branch using the \`--no-verify\` option and push to the current branch.
@@ -67,6 +68,8 @@ ${
 - Write comments that explain "why" rather than "what". Avoid explanations that can be understood from the code itself.
 - Use stderr for logging debug messages temporarily since stdout output is sometimes omitted.
 - When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
+- Prefer \`undefined\` over \`null\` unless explicitly dealing with APIs or libraries that require \`null\`.
+- Always perform existence checks on array due to \`noUncheckedIndexedAccess: true\`.
 ${
   allConfigs.some((c) => c.depending.react || c.depending.next)
     ? `- Prefer \`useImmer\` for storing an array or an object to \`useState\`.`
