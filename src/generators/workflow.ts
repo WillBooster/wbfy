@@ -139,7 +139,6 @@ const workflows = {
       },
     },
   },
-  autofix: publicRepoAutofixWorkflow,
   release: {
     name: 'Release',
     on: {
@@ -277,7 +276,7 @@ const workflows = {
   },
 } as const;
 
-type KnownKind = keyof typeof workflows | 'deploy';
+type KnownKind = keyof typeof workflows | 'deploy' | 'autofix';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
   const fileNamesToBeRemoved = [
