@@ -316,11 +316,6 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     if (rootConfig.depending.semanticRelease) {
       fileNameSet.add('release.yml');
     }
-    if (!rootConfig.isPublicRepo) {
-      // for autofix.ci
-      fileNameSet.delete('autofix.yml');
-      fileNamesToBeRemoved.push('autofix.yml');
-    }
     fileNameSet.delete('add-issue-to-project.yml');
     fileNameSet.delete('add-ready-issue-to-project.yml');
     fileNameSet.delete('notify-ready.yml');
