@@ -85,17 +85,7 @@ const publicRepoAutofixWorkflow: Workflow = {
     'cancel-in-progress': true,
   },
   jobs: {
-    autofix: {
-      'runs-on': 'ubuntu-latest',
-      steps: [
-        { uses: 'actions/checkout@v6' },
-        { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
-        { run: 'yarn install' },
-        { run: 'yarn cleanup' },
-        { run: 'yarn build' },
-        { uses: 'autofix-ci/action@v1' },
-      ],
-    },
+    autofix: { 'runs-on': 'ubuntu-latest' },
   },
 };
 
@@ -522,26 +512,21 @@ function generateAutofixWorkflow(config: PackageConfig): Workflow {
   }
 
   const packageManager = config.isBun ? 'bun' : 'yarn';
-  const scriptRunner = config.isBun ? 'bun run' : 'yarn';
   const steps: Step[] = [
     { uses: 'actions/checkout@v6' },
     { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
     ...(config.isBun ? [{ uses: 'oven-sh/setup-bun@v1', with: { 'bun-version': 'latest' } }] : []),
     { run: `${packageManager} install` },
-    { run: `${scriptRunner} cleanup` },
+    { run: `${packageManager} run cleanup` },
   ];
   if (config.packageJson?.scripts?.build) {
-    steps.push({ run: `${scriptRunner} build` });
+    steps.push({ run: `${packageManager} run build` });
   }
   steps.push({ uses: 'autofix-ci/action@v1' });
 
   const autofixWorkflow = cloneDeep(publicRepoAutofixWorkflow);
-  autofixWorkflow.jobs = {
-    autofix: {
-      'runs-on': 'ubuntu-latest',
-      steps,
-    },
-  };
+  const autofixJob = autofixWorkflow.jobs.autofix ?? { 'runs-on': 'ubuntu-latest' };
+  autofixWorkflow.jobs.autofix = { ...autofixJob, steps };
   return autofixWorkflow;
 }
 
