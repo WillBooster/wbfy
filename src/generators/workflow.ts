@@ -99,6 +99,22 @@ const publicRepoAutofixWorkflow: Workflow = {
   },
 };
 
+const privateRepoAutofixWorkflow: Workflow = {
+  name: 'Fix code automatically',
+  on: {
+    pull_request: null,
+  },
+  concurrency: {
+    group: '${{ github.workflow }}-${{ github.ref }}',
+    'cancel-in-progress': true,
+  },
+  jobs: {
+    test: {
+      uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
+    },
+  },
+};
+
 const workflows = {
   test: {
     name: 'Test',
@@ -260,22 +276,6 @@ const workflows = {
     },
   },
 } as const;
-
-const privateRepoAutofixWorkflow: Workflow = {
-  name: 'Fix code automatically',
-  on: {
-    pull_request: null,
-  },
-  concurrency: {
-    group: '${{ github.workflow }}-${{ github.ref }}',
-    'cancel-in-progress': true,
-  },
-  jobs: {
-    test: {
-      uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
-    },
-  },
-};
 
 type KnownKind = keyof typeof workflows | 'deploy';
 
