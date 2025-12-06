@@ -3988,6 +3988,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@willbooster/shared-lib-node@npm:8.0.1":
+  version: 8.0.1
+  resolution: "@willbooster/shared-lib-node@npm:8.0.1"
+  dependencies:
+    dotenv: "npm:17.2.3"
+    dotenv-expand: "npm:12.0.3"
+    tree-kill: "npm:1.2.2"
+  checksum: 10c0/a93ec8a29fb03754570bdda7979581344cdae5a98adc15c7ff6e4f2ac61162de524ce426489068d12e2a6934a23530e0952492cf1243da2f43743d87f62d7e65
+  languageName: node
+  linkType: hard
+
 "@willbooster/shared-lib@npm:6.1.3":
   version: 6.1.3
   resolution: "@willbooster/shared-lib@npm:6.1.3"
@@ -5320,6 +5331,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv-expand@npm:12.0.3":
+  version: 12.0.3
+  resolution: "dotenv-expand@npm:12.0.3"
+  dependencies:
+    dotenv: "npm:^16.4.5"
+  checksum: 10c0/0824bdc74fc816a28b0744b7853a23e046602e9616c82121dfdae21ebc13c6e89afeb773e794e97c35d48be2be0a990fbca721ee3869a49c04210a58a3cf296f
+  languageName: node
+  linkType: hard
+
 "dotenv@npm:17.2.3":
   version: 17.2.3
   resolution: "dotenv@npm:17.2.3"
@@ -5327,7 +5347,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^16.3.1":
+"dotenv@npm:^16.3.1, dotenv@npm:^16.4.5":
   version: 16.6.1
   resolution: "dotenv@npm:16.6.1"
   checksum: 10c0/15ce56608326ea0d1d9414a5c8ee6dcf0fffc79d2c16422b4ac2268e7e2d76ff5a572d37ffe747c377de12005f14b3cc22361e79fc7f1061cce81f77d2c973dc
@@ -11339,7 +11359,7 @@ __metadata:
     "@willbooster/eslint-config-ts": "npm:11.4.11"
     "@willbooster/prettier-config": "npm:10.2.2"
     "@willbooster/shared-lib": "npm:6.1.3"
-    "@willbooster/shared-lib-node": "npm:7.0.10"
+    "@willbooster/shared-lib-node": "npm:8.0.1"
     "@yarnpkg/core": "npm:4.5.0"
     build-ts: "npm:17.0.5"
     conventional-changelog-conventionalcommits: "npm:9.1.0"
