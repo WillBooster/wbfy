@@ -17,6 +17,7 @@ interface Workflow {
   name?: string;
   on?: On;
   concurrency?: Concurrency;
+  permissions?: Record<string, string>;
   jobs: Record<string, Job>;
 }
 
@@ -26,9 +27,9 @@ interface Concurrency {
 }
 
 interface On {
-  issues?: Types;
-  pull_request?: PullRequest;
-  pull_request_target?: Types;
+  issues?: Types | null;
+  pull_request?: PullRequest | null;
+  pull_request_target?: Types | null;
   push?: Push;
   schedule?: Schedule[];
   workflow_dispatch?: null;
@@ -53,11 +54,66 @@ interface Types {
 }
 
 interface Job {
+  'runs-on'?: string;
+  permissions?: Record<string, string>;
+  steps?: Step[];
   uses?: string;
   if?: string;
   secrets?: Record<string, unknown>;
   with?: Record<string, unknown>;
 }
+
+interface Step {
+  uses?: string;
+  with?: Record<string, unknown>;
+  run?: string;
+}
+
+const publicRepoAutofixWorkflow: Workflow = {
+  name: 'autofix.ci',
+  on: {
+    pull_request: null,
+    push: {
+      branches: ['main'],
+    },
+  },
+  permissions: {
+    contents: 'read',
+  },
+  concurrency: {
+    group: 'autofix-${{ github.head_ref }}',
+    'cancel-in-progress': true,
+  },
+  jobs: {
+    autofix: {
+      'runs-on': 'ubuntu-latest',
+      steps: [
+        { uses: 'actions/checkout@v6' },
+        { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
+        { run: 'yarn install' },
+        { run: 'yarn cleanup' },
+        { run: 'yarn build' },
+        { uses: 'autofix-ci/action@v1' },
+      ],
+    },
+  },
+};
+
+const privateRepoAutofixWorkflow: Workflow = {
+  name: 'Fix code automatically',
+  on: {
+    pull_request: null,
+  },
+  concurrency: {
+    group: '${{ github.workflow }}-${{ github.ref }}',
+    'cancel-in-progress': true,
+  },
+  jobs: {
+    test: {
+      uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
+    },
+  },
+};
 
 const workflows = {
   test: {
@@ -80,22 +136,6 @@ const workflows = {
     jobs: {
       test: {
         uses: 'WillBooster/reusable-workflows/.github/workflows/test.yml@main',
-      },
-    },
-  },
-  autofix: {
-    name: 'Fix code automatically',
-    on: {
-      pull_request: null,
-    },
-    // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
-    concurrency: {
-      group: '${{ github.workflow }}-${{ github.ref }}',
-      'cancel-in-progress': true,
-    },
-    jobs: {
-      test: {
-        uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
       },
     },
   },
@@ -236,7 +276,7 @@ const workflows = {
   },
 } as const;
 
-type KnownKind = keyof typeof workflows | 'deploy';
+type KnownKind = keyof typeof workflows | 'deploy' | 'autofix';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
   const fileNamesToBeRemoved = [
@@ -275,11 +315,6 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     if (rootConfig.depending.semanticRelease) {
       fileNameSet.add('release.yml');
     }
-    fileNameSet.delete('autofix.yml');
-    if (!rootConfig.isPublicRepo) {
-      // for autofix.ci
-      fileNamesToBeRemoved.push('autofix.yml');
-    }
     fileNameSet.delete('add-issue-to-project.yml');
     fileNameSet.delete('add-ready-issue-to-project.yml');
     fileNameSet.delete('notify-ready.yml');
@@ -303,11 +338,19 @@ export function isReusableWorkflowsRepo(repository?: string): boolean {
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
+  const filePath = path.join(workflowsPath, `${kind}.yml`);
+
+  if (kind === 'autofix') {
+    const newSettings = generateAutofixWorkflow(config);
+    migrateWorkflow(newSettings);
+    await writeYaml(newSettings, filePath);
+    return;
+  }
+
   let newSettings = cloneDeep(kind in workflows ? workflows[kind as keyof typeof workflows] : {}) as Workflow;
   // Skip a broken workflow
   if (!('jobs' in newSettings)) return;
 
-  const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const oldSettings = yaml.load(oldContent) as Workflow;
@@ -471,6 +514,35 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   } else {
     delete job.secrets;
   }
+}
+
+function generateAutofixWorkflow(config: PackageConfig): Workflow {
+  if (!config.isPublicRepo) {
+    return cloneDeep(privateRepoAutofixWorkflow);
+  }
+
+  const packageManager = config.isBun ? 'bun' : 'yarn';
+  const scriptRunner = config.isBun ? 'bun run' : 'yarn';
+  const steps: Step[] = [
+    { uses: 'actions/checkout@v6' },
+    { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
+    ...(config.isBun ? [{ uses: 'oven-sh/setup-bun@v1', with: { 'bun-version': 'latest' } }] : []),
+    { run: `${packageManager} install` },
+    { run: `${scriptRunner} cleanup` },
+  ];
+  if (config.packageJson?.scripts?.build) {
+    steps.push({ run: `${scriptRunner} build` });
+  }
+  steps.push({ uses: 'autofix-ci/action@v1' });
+
+  const autofixWorkflow = cloneDeep(publicRepoAutofixWorkflow);
+  autofixWorkflow.jobs = {
+    autofix: {
+      'runs-on': 'ubuntu-latest',
+      steps,
+    },
+  };
+  return autofixWorkflow;
 }
 
 async function writeYaml(newSettings: Workflow, filePath: string): Promise<void> {
