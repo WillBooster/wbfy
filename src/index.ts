@@ -43,6 +43,7 @@ import { setupGitHubSettings } from './github/settings.js';
 import { generateGitHubTemplates } from './github/template.js';
 import { options } from './options.js';
 import { getPackageConfig } from './packageConfig.js';
+import { shouldSkipPackage } from './utils/packageSkipUtil.js';
 import { promisePool } from './utils/promisePool.js';
 import { spawnSync } from './utils/spawnUtil.js';
 
@@ -152,6 +153,9 @@ async function main(): Promise<void> {
 
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
+      if (shouldSkipPackage(config, rootConfig)) {
+        continue;
+      }
       if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {
         promises.push(fixTypeDefinitions(config, config.isRoot ? allPackageConfigs : [config]));
       }
