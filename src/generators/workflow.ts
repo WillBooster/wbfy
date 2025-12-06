@@ -259,7 +259,7 @@ const workflows = {
   },
 } as const;
 
-const legacyAutofixWorkflow: Workflow = {
+const privateRepoAutofixWorkflow: Workflow = {
   name: 'Fix code automatically',
   on: {
     pull_request: null,
@@ -522,7 +522,7 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
 
 function generateAutofixWorkflow(config: PackageConfig): Workflow {
   if (!config.isPublicRepo) {
-    return cloneDeep(legacyAutofixWorkflow);
+    return cloneDeep(privateRepoAutofixWorkflow);
   }
 
   const packageManager = config.isBun ? 'bun' : 'yarn';
