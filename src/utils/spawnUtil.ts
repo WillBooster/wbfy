@@ -1,5 +1,6 @@
 import type { SpawnSyncOptions } from 'node:child_process';
 import child_process from 'node:child_process';
+import fs from 'node:fs';
 import os from 'node:os';
 
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
@@ -32,7 +33,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   }
   // Ensure asdf shims/bin are on PATH even when parent shell doesn't load them
   const asdfDir = env.ASDF_DIR ?? `${os.homedir()}/.asdf`;
-  if (asdfDir && child_process.spawnSync('test', ['-d', asdfDir]).status === 0) {
+  if (asdfDir && fs.existsSync(asdfDir)) {
     const asdfPaths = [`${asdfDir}/shims`, `${asdfDir}/bin`];
     const currentPaths = env.PATH ? env.PATH.split(':') : [];
     env.PATH = [...asdfPaths, ...currentPaths.filter((p) => !asdfPaths.includes(p))].join(':');
