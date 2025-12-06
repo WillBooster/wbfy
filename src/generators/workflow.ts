@@ -527,6 +527,7 @@ function generateAutofixWorkflow(config: PackageConfig): Workflow {
   const steps: Step[] = [
     { uses: 'actions/checkout@v6' },
     { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
+    ...(config.isBun ? [{ uses: 'oven-sh/setup-bun@v1', with: { 'bun-version': 'latest' } }] : []),
     { run: `${packageManager} install` },
     { run: `${scriptRunner} cleanup` },
   ];
