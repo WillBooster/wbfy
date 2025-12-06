@@ -329,6 +329,10 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   const filePath = path.join(workflowsPath, `${kind}.yml`);
 
   if (kind === 'autofix') {
+    if (!config.isPublicRepo) {
+      await fs.promises.rm(filePath, { force: true });
+      return;
+    }
     const newSettings = generateAutofixWorkflow(config);
     migrateWorkflow(newSettings);
     await writeYaml(newSettings, filePath);
