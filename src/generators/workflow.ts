@@ -17,6 +17,7 @@ interface Workflow {
   name?: string;
   on?: On;
   concurrency?: Concurrency;
+  permissions?: Record<string, string>;
   jobs: Record<string, Job>;
 }
 
@@ -26,9 +27,9 @@ interface Concurrency {
 }
 
 interface On {
-  issues?: Types;
-  pull_request?: PullRequest;
-  pull_request_target?: Types;
+  issues?: Types | null;
+  pull_request?: PullRequest | null;
+  pull_request_target?: Types | null;
   push?: Push;
   schedule?: Schedule[];
   workflow_dispatch?: null;
@@ -53,10 +54,19 @@ interface Types {
 }
 
 interface Job {
+  'runs-on'?: string;
+  permissions?: Record<string, string>;
+  steps?: Step[];
   uses?: string;
   if?: string;
   secrets?: Record<string, unknown>;
   with?: Record<string, unknown>;
+}
+
+interface Step {
+  uses?: string;
+  with?: Record<string, unknown>;
+  run?: string;
 }
 
 const workflows = {
@@ -84,18 +94,31 @@ const workflows = {
     },
   },
   autofix: {
-    name: 'Fix code automatically',
+    name: 'autofix.ci',
     on: {
       pull_request: null,
+      push: {
+        branches: ['main'],
+      },
     },
-    // cf. https://docs.github.com/en/actions/using-jobs/using-concurrency#example-only-cancel-in-progress-jobs-or-runs-for-the-current-workflow
+    permissions: {
+      contents: 'read',
+    },
     concurrency: {
-      group: '${{ github.workflow }}-${{ github.ref }}',
+      group: 'autofix-${{ github.head_ref }}',
       'cancel-in-progress': true,
     },
     jobs: {
-      test: {
-        uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
+      autofix: {
+        'runs-on': 'ubuntu-latest',
+        steps: [
+          { uses: 'actions/checkout@v6' },
+          { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
+          { run: 'yarn install' },
+          { run: 'yarn cleanup' },
+          { run: 'yarn build' },
+          { uses: 'autofix-ci/action@v1' },
+        ],
       },
     },
   },
@@ -275,9 +298,9 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     if (rootConfig.depending.semanticRelease) {
       fileNameSet.add('release.yml');
     }
-    fileNameSet.delete('autofix.yml');
     if (!rootConfig.isPublicRepo) {
       // for autofix.ci
+      fileNameSet.delete('autofix.yml');
       fileNamesToBeRemoved.push('autofix.yml');
     }
     fileNameSet.delete('add-issue-to-project.yml');
@@ -303,11 +326,19 @@ export function isReusableWorkflowsRepo(repository?: string): boolean {
 }
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
+  const filePath = path.join(workflowsPath, `${kind}.yml`);
+
+  if (kind === 'autofix') {
+    const newSettings = generateAutofixWorkflow(config);
+    migrateWorkflow(newSettings);
+    await writeYaml(newSettings, filePath);
+    return;
+  }
+
   let newSettings = cloneDeep(kind in workflows ? workflows[kind as keyof typeof workflows] : {}) as Workflow;
   // Skip a broken workflow
   if (!('jobs' in newSettings)) return;
 
-  const filePath = path.join(workflowsPath, `${kind}.yml`);
   try {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const oldSettings = yaml.load(oldContent) as Workflow;
@@ -471,6 +502,30 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   } else {
     delete job.secrets;
   }
+}
+
+function generateAutofixWorkflow(config: PackageConfig): Workflow {
+  const packageManager = config.isBun ? 'bun' : 'yarn';
+  const scriptRunner = config.isBun ? 'bun run' : 'yarn';
+  const steps: Step[] = [
+    { uses: 'actions/checkout@v6' },
+    { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
+    { run: `${packageManager} install` },
+    { run: `${scriptRunner} cleanup` },
+  ];
+  if (config.packageJson?.scripts?.build) {
+    steps.push({ run: `${scriptRunner} build` });
+  }
+  steps.push({ uses: 'autofix-ci/action@v1' });
+
+  const autofixWorkflow = cloneDeep(workflows.autofix) as unknown as Workflow;
+  autofixWorkflow.jobs = {
+    autofix: {
+      'runs-on': 'ubuntu-latest',
+      steps,
+    },
+  };
+  return autofixWorkflow;
 }
 
 async function writeYaml(newSettings: Workflow, filePath: string): Promise<void> {
