@@ -394,6 +394,8 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
 function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   job.with ??= {};
   job.secrets ??= {};
+  // Use trusted publishing instead of NPM_TOKEN
+  delete job.secrets.NPM_TOKEN;
 
   if (
     kind === 'test' ||
@@ -408,9 +410,6 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   // Set test-command for gen-pr workflows based on package manager
   if (kind === 'gen-pr-claude' || kind === 'gen-pr-codex' || kind === 'gen-pr-gemini') {
     job.with['test-command'] = config.isBun ? 'bun run check-all-for-ai' : 'yarn check-all-for-ai';
-  }
-  if (config.release.npm && (kind === 'release' || kind === 'test')) {
-    job.secrets.NPM_TOKEN = '${{ secrets.NPM_TOKEN }}';
   }
   if (job.secrets.FIREBASE_TOKEN) {
     job.secrets.GCP_SA_KEY_JSON_FOR_FIREBASE = '${{ secrets.GCP_SA_KEY_JSON_FOR_FIREBASE }}';
