@@ -69,6 +69,36 @@ interface Step {
   run?: string;
 }
 
+const publicRepoAutofixWorkflow: Workflow = {
+  name: 'autofix.ci',
+  on: {
+    pull_request: null,
+    push: {
+      branches: ['main'],
+    },
+  },
+  permissions: {
+    contents: 'read',
+  },
+  concurrency: {
+    group: 'autofix-${{ github.head_ref }}',
+    'cancel-in-progress': true,
+  },
+  jobs: {
+    autofix: {
+      'runs-on': 'ubuntu-latest',
+      steps: [
+        { uses: 'actions/checkout@v6' },
+        { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
+        { run: 'yarn install' },
+        { run: 'yarn cleanup' },
+        { run: 'yarn build' },
+        { uses: 'autofix-ci/action@v1' },
+      ],
+    },
+  },
+};
+
 const workflows = {
   test: {
     name: 'Test',
@@ -93,35 +123,7 @@ const workflows = {
       },
     },
   },
-  autofix: {
-    name: 'autofix.ci',
-    on: {
-      pull_request: null,
-      push: {
-        branches: ['main'],
-      },
-    },
-    permissions: {
-      contents: 'read',
-    },
-    concurrency: {
-      group: 'autofix-${{ github.head_ref }}',
-      'cancel-in-progress': true,
-    },
-    jobs: {
-      autofix: {
-        'runs-on': 'ubuntu-latest',
-        steps: [
-          { uses: 'actions/checkout@v6' },
-          { uses: 'actions/setup-node@v6', with: { 'check-latest': true } },
-          { run: 'yarn install' },
-          { run: 'yarn cleanup' },
-          { run: 'yarn build' },
-          { uses: 'autofix-ci/action@v1' },
-        ],
-      },
-    },
-  },
+  autofix: publicRepoAutofixWorkflow,
   release: {
     name: 'Release',
     on: {
@@ -538,7 +540,7 @@ function generateAutofixWorkflow(config: PackageConfig): Workflow {
   }
   steps.push({ uses: 'autofix-ci/action@v1' });
 
-  const autofixWorkflow = cloneDeep(workflows.autofix) as unknown as Workflow;
+  const autofixWorkflow = cloneDeep(publicRepoAutofixWorkflow);
   autofixWorkflow.jobs = {
     autofix: {
       'runs-on': 'ubuntu-latest',
