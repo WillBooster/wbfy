@@ -111,6 +111,8 @@ const workflows = {
       'cancel-in-progress': false,
     },
     permissions: {
+      // https://docs.npmjs.com/trusted-publishers#step-2-configure-your-cicd-workflow
+      'id-token': 'write',
       // for semantic-release
       contents: 'write',
     },
