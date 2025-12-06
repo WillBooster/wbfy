@@ -63,6 +63,7 @@ export interface PackageConfig {
     npm: boolean;
   };
   eslintBase?: EslintExtensionBase;
+  shouldSkipApplying: boolean;
   versionsText?: string;
   packageJson?: PackageJson;
   wbfyJson?: WbfyJson;
@@ -166,6 +167,8 @@ export async function getPackageConfig(
     }
 
     const repository = repoInfo?.full_name ? `github:${repoInfo.full_name as string}` : undefined;
+    const isWillBoosterConfigs = packageJsonPath.includes(`${path.sep}willbooster-configs`);
+    const packageName = typeof packageJson.name === 'string' ? packageJson.name : undefined;
     const config: PackageConfig = {
       dirPath,
       dockerfile,
@@ -178,7 +181,7 @@ export async function getPackageConfig(
       ),
       isBun: rootConfig?.isBun || fs.existsSync(path.join(dirPath, 'bunfig.toml')),
       isEsmPackage: esmPackage,
-      isWillBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
+      isWillBoosterConfigs,
       doesContainSubPackageJsons: containsAny('packages/**/package.json', dirPath),
       doesContainDockerfile: !!dockerfile || fs.existsSync(path.resolve(dirPath, 'docker-compose.yml')),
       doesContainGemfile: fs.existsSync(path.resolve(dirPath, 'Gemfile')),
@@ -221,6 +224,7 @@ export async function getPackageConfig(
         github: releasePlugins.includes('@semantic-release/github'),
         npm: releasePlugins.includes('@semantic-release/npm'),
       },
+      shouldSkipApplying: isWillBoosterConfigs && packageName?.startsWith('@willbooster/eslint-config-') === true,
       versionsText,
       packageJson,
       wbfyJson,
