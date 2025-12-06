@@ -45,6 +45,7 @@ import { options } from './options.js';
 import { getPackageConfig } from './packageConfig.js';
 import { promisePool } from './utils/promisePool.js';
 import { spawnSync } from './utils/spawnUtil.js';
+import { shouldSkipWillboosterConfigsEslintPackage } from './utils/willboosterConfigsUtil.js';
 
 async function main(): Promise<void> {
   const argv = await yargs(process.argv.slice(2))
@@ -152,7 +153,7 @@ async function main(): Promise<void> {
 
     const promises: Promise<void>[] = [];
     for (const config of allPackageConfigs) {
-      if (config.shouldSkipApplying) {
+      if (shouldSkipWillboosterConfigsEslintPackage(config)) {
         continue;
       }
       if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {
