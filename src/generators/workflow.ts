@@ -259,6 +259,22 @@ const workflows = {
   },
 } as const;
 
+const legacyAutofixWorkflow: Workflow = {
+  name: 'Fix code automatically',
+  on: {
+    pull_request: null,
+  },
+  concurrency: {
+    group: '${{ github.workflow }}-${{ github.ref }}',
+    'cancel-in-progress': true,
+  },
+  jobs: {
+    test: {
+      uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
+    },
+  },
+};
+
 type KnownKind = keyof typeof workflows | 'deploy';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
@@ -329,10 +345,6 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   const filePath = path.join(workflowsPath, `${kind}.yml`);
 
   if (kind === 'autofix') {
-    if (!config.isPublicRepo) {
-      await fs.promises.rm(filePath, { force: true });
-      return;
-    }
     const newSettings = generateAutofixWorkflow(config);
     migrateWorkflow(newSettings);
     await writeYaml(newSettings, filePath);
@@ -509,6 +521,10 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
 }
 
 function generateAutofixWorkflow(config: PackageConfig): Workflow {
+  if (!config.isPublicRepo) {
+    return cloneDeep(legacyAutofixWorkflow);
+  }
+
   const packageManager = config.isBun ? 'bun' : 'yarn';
   const scriptRunner = config.isBun ? 'bun run' : 'yarn';
   const steps: Step[] = [
