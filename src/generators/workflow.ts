@@ -331,9 +331,7 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
   const filePath = path.join(workflowsPath, `${kind}.yml`);
 
   if (kind === 'autofix') {
-    const newSettings = generateAutofixWorkflow(config);
-    migrateWorkflow(newSettings);
-    await writeYaml(newSettings, filePath);
+    await writeYaml(generateAutofixWorkflow(config), filePath);
     return;
   }
 
