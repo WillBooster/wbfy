@@ -76,12 +76,23 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
 
 function getToolVersionsContent(cwd: string): string | undefined {
   if (toolVersionsCache.has(cwd)) return toolVersionsCache.get(cwd);
-  const toolVersionsPath = path.join(cwd, '.tool-versions');
-  if (!fs.existsSync(toolVersionsPath)) {
+  const toolVersionsPath = findToolVersionsPath(cwd);
+  if (!toolVersionsPath) {
     toolVersionsCache.set(cwd, undefined);
     return undefined;
   }
   const content = fs.readFileSync(toolVersionsPath, 'utf8');
   toolVersionsCache.set(cwd, content);
   return content;
+}
+
+function findToolVersionsPath(cwd: string): string | undefined {
+  let current = path.resolve(cwd);
+  for (;;) {
+    const candidate = path.join(current, '.tool-versions');
+    if (fs.existsSync(candidate)) return candidate;
+    const parent = path.dirname(current);
+    if (parent === current) return undefined;
+    current = parent;
+  }
 }
