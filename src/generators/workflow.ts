@@ -99,7 +99,7 @@ const privateRepoAutofixWorkflow: Workflow = {
     'cancel-in-progress': true,
   },
   jobs: {
-    test: {
+    autofix: {
       uses: 'WillBooster/reusable-workflows/.github/workflows/autofix.yml@main',
     },
   },
