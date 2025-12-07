@@ -6,6 +6,7 @@ import path from 'node:path';
 
 // Avoid repeating the same install when multiple commands run in a row.
 let installedLtsNodejs = false;
+const toolVersionsCache = new Map<string, string | undefined>();
 
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {
@@ -43,13 +44,8 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     env.PATH = [...asdfPaths, ...currentPaths.filter((p) => !asdfPaths.includes(p))].join(':');
     env.ASDF_DIR ||= asdfDir;
 
-    const toolVersionsPath = path.join(cwd, '.tool-versions');
-    const hasNodeEntry =
-      fs.existsSync(toolVersionsPath) &&
-      fs
-        .readFileSync(toolVersionsPath, 'utf8')
-        .split(/\r?\n/)
-        .some((line) => line.trim().startsWith('nodejs '));
+    const toolVersions = getToolVersionsContent(cwd);
+    const hasNodeEntry = toolVersions?.split(/\r?\n/).some((line) => line.trim().startsWith('nodejs '));
     if (!hasNodeEntry) {
       env.ASDF_NODEJS_VERSION = 'lts';
       if (!installedLtsNodejs) {
@@ -76,4 +72,16 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
       stdio: 'inherit',
     },
   ];
+}
+
+function getToolVersionsContent(cwd: string): string | undefined {
+  if (toolVersionsCache.has(cwd)) return toolVersionsCache.get(cwd);
+  const toolVersionsPath = path.join(cwd, '.tool-versions');
+  if (!fs.existsSync(toolVersionsPath)) {
+    toolVersionsCache.set(cwd, undefined);
+    return undefined;
+  }
+  const content = fs.readFileSync(toolVersionsPath, 'utf8');
+  toolVersionsCache.set(cwd, content);
+  return content;
 }
