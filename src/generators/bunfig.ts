@@ -28,9 +28,6 @@ minimumReleaseAgeExcludes = [
     "react",
     "react-dom"
 ]
-
-[run]
-bun = true
 `;
 
 const newContentWithExactFalse = newContentWithExactTrue.replace('exact = true', 'exact = false');
