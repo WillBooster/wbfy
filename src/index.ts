@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { ignoreErrorAsync } from '@willbooster/shared-lib';
-import fg from 'fast-glob';
 import yargs from 'yargs';
 
 import { fixDockerfile } from './fixers/dockerfile.js';
@@ -83,11 +82,6 @@ async function main(): Promise<void> {
   options.doesUploadEnvVars = argv.env;
 
   for (const rootDirPath of argv.paths as string[]) {
-    // Clean up lock files and node_modules directories
-    fs.rmSync(path.join(rootDirPath, 'bun.lock'), { force: true });
-    fs.rmSync(path.join(rootDirPath, 'yarn.lock'), { force: true });
-    removeNodeModulesDirectories(rootDirPath);
-
     const packagesDirPath = path.join(rootDirPath, 'packages');
     const dirents = (await ignoreErrorAsync(() => fs.promises.readdir(packagesDirPath, { withFileTypes: true }))) ?? [];
     const subDirPaths = dirents.filter((d) => d.isDirectory()).map((d) => path.join(packagesDirPath, d.name));
@@ -214,26 +208,6 @@ async function main(): Promise<void> {
     // corresponding to the contents of dependant sub-package in monorepo
     if (!rootConfig.isBun) {
       spawnSync(packageManager, ['install', '--no-immutable'], rootDirPath);
-    }
-  }
-}
-
-function removeNodeModulesDirectories(dirPath: string): void {
-  const nodeModulesPaths = new Set([path.join(dirPath, 'node_modules')]);
-  const globbedPaths = fg.globSync('**/node_modules', {
-    cwd: dirPath,
-    dot: true,
-    onlyDirectories: true,
-    followSymbolicLinks: false,
-  });
-  for (const nodeModulesPath of globbedPaths) {
-    nodeModulesPaths.add(path.resolve(dirPath, nodeModulesPath));
-  }
-  for (const nodeModulesPath of nodeModulesPaths) {
-    try {
-      fs.rmSync(nodeModulesPath, { recursive: true, force: true });
-    } catch (error) {
-      console.warn(error);
     }
   }
 }

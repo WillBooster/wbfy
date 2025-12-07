@@ -9,6 +9,7 @@ import { z } from 'zod';
 
 import { getOctokit, gitHubUtil } from './utils/githubUtil.js';
 import { globIgnore } from './utils/globUtil.js';
+import { getToolVersionsContent } from './utils/spawnUtil.js';
 
 export interface PackageConfig {
   dirPath: string;
@@ -125,13 +126,7 @@ export async function getPackageConfig(
       repoInfo = await fetchRepoInfo(dirPath, packageJson);
     }
 
-    let versionsText = '';
-    try {
-      const content = await fsp.readFile(path.resolve(dirPath, '.tool-versions'), 'utf8');
-      versionsText += content.trim();
-    } catch {
-      // do nothing
-    }
+    let versionsText = getToolVersionsContent(dirPath)?.trim() ?? '';
     for (const [prefix, name] of [
       ['java', 'java'],
       ['node', 'nodejs'],

@@ -4,6 +4,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+// Avoid repeating the same install when multiple commands run in a row.
+let installedLtsNodejs = false;
+const toolVersionsCache = new Map<string, string | undefined>();
+
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {
     const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
@@ -13,7 +17,7 @@ export function spawnSync(command: string, args: string[], cwd: string, retry = 
   } while (--retry >= 0);
 }
 
-export function spawnSyncWithStringResult(command: string, args: string[], cwd: string): string {
+export function spawnSyncAndReturnStdout(command: string, args: string[], cwd: string): string {
   const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
   options.stdio = 'pipe';
   const proc = child_process.spawnSync(newCmd, newArgs, options);
@@ -39,7 +43,22 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     const currentPaths = env.PATH?.split(':') ?? [];
     env.PATH = [...asdfPaths, ...currentPaths.filter((p) => !asdfPaths.includes(p))].join(':');
     env.ASDF_DIR ||= asdfDir;
-    env.ASDF_NODEJS_VERSION ||= 'system';
+
+    const toolVersions = getToolVersionsContent(cwd);
+    const hasNodeEntry = toolVersions?.split(/\r?\n/).some((line) => line.trim().startsWith('nodejs '));
+    if (!hasNodeEntry) {
+      env.ASDF_NODEJS_VERSION = 'lts';
+      if (!installedLtsNodejs) {
+        child_process.spawnSync('asdf', ['install', 'nodejs', 'lts'], {
+          cwd,
+          env,
+          encoding: 'utf8',
+          shell: false,
+          stdio: 'inherit',
+        });
+        installedLtsNodejs = true;
+      }
+    }
   }
 
   return [
@@ -48,8 +67,32 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     {
       cwd,
       env,
+      encoding: 'utf8',
       shell: false,
       stdio: 'inherit',
     },
   ];
+}
+
+export function getToolVersionsContent(cwd: string): string | undefined {
+  if (toolVersionsCache.has(cwd)) return toolVersionsCache.get(cwd);
+  const toolVersionsPath = findToolVersionsPath(cwd);
+  if (!toolVersionsPath) {
+    toolVersionsCache.set(cwd, undefined);
+    return undefined;
+  }
+  const content = fs.readFileSync(toolVersionsPath, 'utf8');
+  toolVersionsCache.set(cwd, content);
+  return content;
+}
+
+function findToolVersionsPath(cwd: string): string | undefined {
+  let current = path.resolve(cwd);
+  for (;;) {
+    const candidate = path.join(current, '.tool-versions');
+    if (fs.existsSync(candidate)) return candidate;
+    const parent = path.dirname(current);
+    if (parent === current) return undefined;
+    current = parent;
+  }
 }

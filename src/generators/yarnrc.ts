@@ -7,7 +7,7 @@ import yaml from 'js-yaml';
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
-import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
+import { spawnSync, spawnSyncAndReturnStdout } from '../utils/spawnUtil.js';
 
 type Settings = {
   defaultSemverRangePrefix: string;
@@ -38,7 +38,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       return;
     }
 
-    const currentVersion = spawnSyncWithStringResult('yarn', ['--version'], config.dirPath);
+    const currentVersion = spawnSyncAndReturnStdout('yarn', ['--version'], config.dirPath);
     const latestVersion = getLatestVersion('@yarnpkg/cli', config.dirPath);
     if (getMajorNumber(currentVersion) <= getMajorNumber(latestVersion) && currentVersion !== latestVersion) {
       spawnSync('yarn', ['set', 'version', latestVersion], config.dirPath, 1);
@@ -99,7 +99,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
 }
 
 export function getLatestVersion(packageName: string, dirPath: string): string {
-  const versionsJson = spawnSyncWithStringResult('npm', ['show', packageName, 'versions', '--json'], dirPath);
+  const versionsJson = spawnSyncAndReturnStdout('npm', ['show', packageName, 'versions', '--json'], dirPath);
   const versions = JSON.parse(versionsJson) as string[];
   return versions.at(-1) as string;
 }
