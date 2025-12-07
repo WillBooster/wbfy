@@ -4,6 +4,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+// Avoid repeating the same install when multiple commands run in a row.
+let installedLtsNodejs = false;
+
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {
     const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
@@ -39,6 +42,27 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     const currentPaths = env.PATH?.split(':') ?? [];
     env.PATH = [...asdfPaths, ...currentPaths.filter((p) => !asdfPaths.includes(p))].join(':');
     env.ASDF_DIR ||= asdfDir;
+
+    const toolVersionsPath = path.join(cwd, '.tool-versions');
+    const hasNodeEntry =
+      fs.existsSync(toolVersionsPath) &&
+      fs
+        .readFileSync(toolVersionsPath, 'utf8')
+        .split(/\r?\n/)
+        .some((line) => line.trim().startsWith('nodejs '));
+    if (!hasNodeEntry) {
+      env.ASDF_NODEJS_VERSION = 'lts';
+      if (!installedLtsNodejs) {
+        const asdfBin = path.join(asdfDir, 'bin', 'asdf');
+        child_process.spawnSync(asdfBin, ['install', 'nodejs', 'lts'], {
+          cwd,
+          env,
+          shell: false,
+          stdio: 'inherit',
+        });
+        installedLtsNodejs = true;
+      }
+    }
   }
 
   return [
