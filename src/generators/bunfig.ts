@@ -24,6 +24,7 @@ minimumReleaseAgeExcludes = [
     "@willbooster/prettier-config",
     "@willbooster/wb",
     "next",
+    "@next/*",
     "react",
     "react-dom"
 ]
