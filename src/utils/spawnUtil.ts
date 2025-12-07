@@ -2,6 +2,7 @@ import type { SpawnSyncOptions } from 'node:child_process';
 import child_process from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
+import path from 'node:path';
 
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
   do {
@@ -32,19 +33,15 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     env.PATH = env.PATH.replace(`${env.BERRY_BIN_FOLDER}:`, '');
   }
   // Ensure asdf shims/bin are on PATH even when parent shell doesn't load them
-  const asdfDir = env.ASDF_DIR ?? `${os.homedir()}/.asdf`;
-  if (asdfDir && fs.existsSync(asdfDir)) {
-    const asdfPaths = [`${asdfDir}/shims`, `${asdfDir}/bin`];
-    const currentPaths = env.PATH ? env.PATH.split(':') : [];
+  const asdfDir = env.ASDF_DIR ?? path.join(os.homedir(), '.asdf');
+  if (fs.existsSync(asdfDir)) {
+    const asdfPaths = [path.join(asdfDir, 'shims'), path.join(asdfDir, 'bin')];
+    const currentPaths = env.PATH?.split(':') ?? [];
     env.PATH = [...asdfPaths, ...currentPaths.filter((p) => !asdfPaths.includes(p))].join(':');
-    env.ASDF_DIR ??= asdfDir;
-    env.ASDF_NODEJS_VERSION ??= 'system';
+    env.ASDF_DIR ||= asdfDir;
+    env.ASDF_NODEJS_VERSION ||= 'system';
   }
 
-  if (env.ASDF_DIR) {
-    args = ['-l', '-c', `${command} ${args.join(' ')}`];
-    command = 'bash';
-  }
   return [
     command,
     args,
