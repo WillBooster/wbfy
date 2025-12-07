@@ -22,35 +22,17 @@ minimumReleaseAgeExcludes = [
     "@willbooster/eslint-config-ts",
     "@willbooster/eslint-config-ts-react",
     "@willbooster/prettier-config",
-    "@willbooster/wb"
+    "@willbooster/wb",
+    "next",
+    "react",
+    "react-dom"
 ]
 
 [run]
 bun = true
 `;
 
-const newContentWithExactFalse = `env = false
-telemetry = false
-
-[install]
-exact = false
-linker = "hoisted"
-minimumReleaseAge = 432000 # 5 days
-minimumReleaseAgeExcludes = [
-    "@willbooster/babel-configs",
-    "@willbooster/biome-config",
-    "@willbooster/eslint-config-js",
-    "@willbooster/eslint-config-js-react",
-    "@willbooster/eslint-config-next",
-    "@willbooster/eslint-config-ts",
-    "@willbooster/eslint-config-ts-react",
-    "@willbooster/prettier-config",
-    "@willbooster/wb"
-]
-
-[run]
-bun = true
-`;
+const newContentWithExactFalse = newContentWithExactTrue.replace('exact = true', 'exact = false');
 
 export async function generateBunfigToml(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateBunfigToml', async () => {

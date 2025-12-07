@@ -71,6 +71,10 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       '@willbooster/eslint-config-ts-react',
       '@willbooster/prettier-config',
       '@willbooster/wb',
+      // To deal with CVE like https://nextjs.org/blog/CVE-2025-66478
+      'next',
+      'react',
+      'react-dom',
     ];
     delete settings.compressionLevel;
     if (settings.injectEnvironmentFiles?.length === 0) {
