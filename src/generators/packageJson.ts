@@ -188,13 +188,9 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
 
   if (config.depending.wb || config.isBun) {
     if (jsonObj.dependencies['@willbooster/wb']) {
-      dependencies.push(
-        jsonObj.dependencies['@willbooster/wb'].startsWith('10.') ? '@willbooster/wb@10.7.1' : '@willbooster/wb'
-      );
+      dependencies.push('@willbooster/wb');
     } else {
-      devDependencies.push(
-        jsonObj.devDependencies['@willbooster/wb']?.startsWith('10.') ? '@willbooster/wb@10.7.1' : '@willbooster/wb'
-      );
+      devDependencies.push('@willbooster/wb');
     }
     for (const [key, value] of Object.entries(jsonObj.scripts as Record<string, string>)) {
       jsonObj.scripts[key] = value.replace(/wb\s+db/, 'wb prisma');
