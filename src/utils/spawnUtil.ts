@@ -39,7 +39,6 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     const currentPaths = env.PATH?.split(':') ?? [];
     env.PATH = [...asdfPaths, ...currentPaths.filter((p) => !asdfPaths.includes(p))].join(':');
     env.ASDF_DIR ||= asdfDir;
-    env.ASDF_NODEJS_VERSION ||= 'system';
   }
 
   return [
