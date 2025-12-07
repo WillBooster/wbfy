@@ -4,7 +4,7 @@ import path from 'node:path';
 import { test, expect } from 'vitest';
 
 import { getLatestVersion } from '../src/generators/yarnrc.js';
-import { spawnSyncWithStringResult } from '../src/utils/spawnUtil.js';
+import { spawnSyncAndReturnStdout } from '../src/utils/spawnUtil.js';
 
 const testFixturePackageRoot = path.resolve('..', 'test-fixtures-for-wbfy', 'packages');
 
@@ -22,8 +22,8 @@ test.each`
   ({ dirPath, expected }: { dirPath: string; expected: string }) => {
     const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
     expect(fs.existsSync(packageDirPath)).toBe(true);
-    spawnSyncWithStringResult('asdf', ['install'], packageDirPath);
-    const version = spawnSyncWithStringResult('yarn', ['--version'], packageDirPath);
+    spawnSyncAndReturnStdout('asdf', ['install'], packageDirPath);
+    const version = spawnSyncAndReturnStdout('yarn', ['--version'], packageDirPath);
     expect(version).toBe(expected);
   }
 );

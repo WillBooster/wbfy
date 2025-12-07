@@ -5,7 +5,7 @@ import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { getOctokit } from '../utils/githubUtil.js';
 import { promisePool } from '../utils/promisePool.js';
-import { spawnSync, spawnSyncWithStringResult } from '../utils/spawnUtil.js';
+import { spawnSync, spawnSyncAndReturnStdout } from '../utils/spawnUtil.js';
 import { convertVersionIntoNumber } from '../utils/version.js';
 import { JAVA_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
 
@@ -53,7 +53,7 @@ async function core(config: PackageConfig): Promise<void> {
       const bunVersion = await getLatestVersionFromTagOnGitHub('oven-sh', 'bun');
       if (bunVersion) updateVersion(lines, 'bun', bunVersion);
     } else {
-      const version = spawnSyncWithStringResult('npm', ['show', 'yarn', 'version'], config.dirPath);
+      const version = spawnSyncAndReturnStdout('npm', ['show', 'yarn', 'version'], config.dirPath);
       updateVersion(lines, 'yarn', version);
     }
   }

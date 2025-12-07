@@ -1,9 +1,9 @@
-import { spawnSyncWithStringResult } from '../utils/spawnUtil.js';
+import { spawnSyncAndReturnStdout } from '../utils/spawnUtil.js';
 
 export function getLatestCommitHash(organization: string, repo: string): Promise<string> {
   try {
     const repoUrl = `git@github.com:${organization}/${repo}.git`;
-    const output = spawnSyncWithStringResult('git', ['ls-remote', repoUrl, 'HEAD'], process.cwd());
+    const output = spawnSyncAndReturnStdout('git', ['ls-remote', repoUrl, 'HEAD'], process.cwd());
     const commitHash = output.split(/\s+/)[0];
     if (!commitHash) {
       throw new Error(`No commits found for ${organization}/${repo}`);

@@ -16,7 +16,7 @@ export function spawnSync(command: string, args: string[], cwd: string, retry = 
   } while (--retry >= 0);
 }
 
-export function spawnSyncWithStringResult(command: string, args: string[], cwd: string): string {
+export function spawnSyncAndReturnStdout(command: string, args: string[], cwd: string): string {
   const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
   options.stdio = 'pipe';
   const proc = child_process.spawnSync(newCmd, newArgs, options);
@@ -53,10 +53,10 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     if (!hasNodeEntry) {
       env.ASDF_NODEJS_VERSION = 'lts';
       if (!installedLtsNodejs) {
-        const asdfBin = path.join(asdfDir, 'bin', 'asdf');
-        child_process.spawnSync(asdfBin, ['install', 'nodejs', 'lts'], {
+        child_process.spawnSync('asdf', ['install', 'nodejs', 'lts'], {
           cwd,
           env,
+          encoding: 'utf8',
           shell: false,
           stdio: 'inherit',
         });
@@ -71,6 +71,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
     {
       cwd,
       env,
+      encoding: 'utf8',
       shell: false,
       stdio: 'inherit',
     },
