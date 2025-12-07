@@ -74,7 +74,7 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   ];
 }
 
-function getToolVersionsContent(cwd: string): string | undefined {
+export function getToolVersionsContent(cwd: string): string | undefined {
   if (toolVersionsCache.has(cwd)) return toolVersionsCache.get(cwd);
   const toolVersionsPath = findToolVersionsPath(cwd);
   if (!toolVersionsPath) {
