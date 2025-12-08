@@ -22,9 +22,8 @@ const asObject = (value: ParsedObject): ParsedValue => ({ kind: 'object', value 
 const defaultConfig: ParsedObject = {
   forbidOnly: literal('!!process.env.CI'),
   retries: literal('process.env.PWDEBUG ? 0 : process.env.CI ? 5 : 1'),
-  timeout: literal('120_000'),
   use: asObject({
-    actionTimeout: literal('10_000'),
+    baseURL: literal('process.env.NEXT_PUBLIC_BASE_URL'),
     trace: literal("process.env.CI ? 'on-first-retry' : 'retain-on-failure'"),
     screenshot: literal("process.env.CI ? 'only-on-failure' : 'only-on-failure'"),
     video: literal("process.env.CI ? 'retain-on-failure' : 'retain-on-failure'"),
