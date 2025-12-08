@@ -385,6 +385,12 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
         await fs.promises.rm(path.join(workflowsPath, 'release.yml'), { force: true });
         return;
       }
+      if (config.isPublicRepo) {
+        newSettings.permissions ??= {};
+        newSettings.permissions['id-token'] = 'write';
+      } else {
+        delete newSettings.permissions?.['id-token'];
+      }
       break;
     }
     case 'test': {
