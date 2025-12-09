@@ -28,7 +28,6 @@ const defaultConfig: ParsedObject = {
     screenshot: literal("process.env.CI ? 'only-on-failure' : 'only-on-failure'"),
     video: literal("process.env.CI ? 'retain-on-failure' : 'retain-on-failure'"),
   }),
-  workers: literal('process.env.PWDEBUG ? 1 : undefined'),
   webServer: asObject({
     command: literal("'yarn start-test-server'"),
     url: literal('process.env.NEXT_PUBLIC_BASE_URL'),
