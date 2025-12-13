@@ -22,6 +22,7 @@ minimumReleaseAgeExcludes = [
     "@willbooster/eslint-config-ts",
     "@willbooster/eslint-config-ts-react",
     "@willbooster/prettier-config",
+    "@willbooster/shared-lib",
     "@willbooster/wb",
     "next",
     "@next/*",
