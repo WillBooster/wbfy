@@ -70,6 +70,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       '@willbooster/eslint-config-ts',
       '@willbooster/eslint-config-ts-react',
       '@willbooster/prettier-config',
+      '@willbooster/shared-lib',
       '@willbooster/wb',
       // To deal with CVE like https://nextjs.org/blog/CVE-2025-66478
       'next',
