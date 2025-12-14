@@ -329,6 +329,7 @@ export function isReusableWorkflowsRepo(repository?: string): boolean {
 
 async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, kind: KnownKind): Promise<void> {
   const filePath = path.join(workflowsPath, `${kind}.yml`);
+  const deployProductionWorkflowExists = fs.existsSync(path.join(workflowsPath, 'deploy-production.yml'));
 
   if (kind === 'autofix') {
     await writeYaml(generateAutofixWorkflow(config), filePath);
@@ -362,6 +363,13 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
         ...new Set(['**.md', '**/docs/**', ...(newSettings.on.push['paths-ignore'] ?? [])]),
       ];
     }
+  }
+
+  if (kind === 'release' && newSettings.jobs.release && deployProductionWorkflowExists) {
+    newSettings.permissions ??= {};
+    newSettings.permissions.actions = 'write';
+    newSettings.jobs.release.with ??= {};
+    newSettings.jobs.release.with.trigger_deploy_workflow = 'deploy-production.yml';
   }
 
   let isReusableWorkflow = false;
