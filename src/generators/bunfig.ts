@@ -14,6 +14,7 @@ exact = true
 linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
 minimumReleaseAgeExcludes = [
+    "@exercode/problem-utils",
     "@willbooster/babel-configs",
     "@willbooster/biome-config",
     "@willbooster/eslint-config-js",
