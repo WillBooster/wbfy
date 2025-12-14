@@ -103,7 +103,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   let dependencies: string[] = [];
-  let devDependencies = ['prettier', 'sort-package-json'];
+  // TODO: Unpin sort-package-json version after https://github.com/keithamus/sort-package-json/issues/388 is fixed.
+  let devDependencies = ['prettier', 'sort-package-json@3.5.0'];
   const poetryDevDependencies: string[] = [];
 
   if (
