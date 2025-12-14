@@ -62,6 +62,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.nmMode = 'hardlinks-global';
     settings.npmMinimalAgeGate = '5d';
     settings.npmPreapprovedPackages = [
+      '@exercode/problem-utils',
       '@willbooster/babel-configs',
       '@willbooster/biome-config',
       '@willbooster/eslint-config-js',
