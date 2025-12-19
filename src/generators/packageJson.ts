@@ -439,9 +439,9 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
     const oldTest = oldScripts.test;
     let scripts: Record<string, string> = {
       'check-all-for-ai': 'yarn check-for-ai && yarn test',
-      'check-for-ai': `yarn format > /dev/null 2> /dev/null || true && yarn lint-fix --quiet${
+      'check-for-ai': `yarn format > /dev/null 2> /dev/null || true${
         hasTypecheck ? ' && yarn typecheck' : ''
-      }`,
+      } && yarn lint-fix --quiet`,
       cleanup: 'yarn format && yarn lint-fix',
       format: `sort-package-json && yarn prettify`,
       lint: `eslint --color`,
