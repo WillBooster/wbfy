@@ -45,7 +45,7 @@ function generateAgentInstruction(
 
 ## Development Workflow
 
-When you change code, complete these steps before interacting with users.
+When changing code, complete these steps before responding to the user.
 
 1. If the current branch is \`main\`, create a new branch.
    - Include unexpected changes since they are mine.
