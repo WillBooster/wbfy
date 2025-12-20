@@ -46,6 +46,7 @@ function generateAgentInstruction(
 ## Development Workflow
 
 1. If the current branch is \`main\`, create a new branch.
+   - Include unexpected changes since they are mine.
 2. Make code changes as needed.
 3. If possible, write e2e tests for your changes.
 4. Run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
@@ -53,13 +54,14 @@ function generateAgentInstruction(
 5. Commit your changes to the current branch and push.
    - Follow conventional commits, i.e., your commit message should start with \`feat:\`, \`fix:\`, \`test:\`, etc.
    - Make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
-   - When pre-commit hooks prevent your changes, fix your code then re-commit and re-push.
+   - When pre-commit hooks prevent your changes, fix your code, then re-commit and re-push.
 6. Create a pull request using \`gh\`.
-   - The title of the pull request should match your commit message.
+   - The pull request title should match your commit message.
 7. Repeat the following steps until all tests pass:
-   1. Wait for the CI to run all tests.
+   1. Wait for CI to run all tests.
    2. If tests fail, identify the root causes by gathering debug information through logging and screenshots, then fix the code and/or tests.
-   3. Fetch unresolved review comments from the pull request and address them.
+   3. Fetch unresolved review comments from the pull request using \`gh\` and address them.
+      - e.g., \`gh api graphql -f query='{ repository(owner: "${rootConfig.repoAuthor || 'WillBooster'}", name: "${rootConfig.repoName || 'wbfy'}") { pullRequest(number: 24) { reviewThreads(first: 100) { nodes { isResolved comments(first: 100) { nodes { body author { login } path line } } } } } } }' | jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false)'\`
    4. Commit your changes and push.
    5. Write \`/gemini review\` in the pull request.
 
