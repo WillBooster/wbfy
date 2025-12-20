@@ -18,6 +18,8 @@ export interface PackageConfig {
   isPublicRepo: boolean;
   isReferredByOtherRepo: boolean;
   repository?: string;
+  repoAuthor?: string;
+  repoName?: string;
   isWillBoosterRepo: boolean;
   isBun: boolean;
   isEsmPackage: boolean;
@@ -160,14 +162,26 @@ export async function getPackageConfig(
       // do nothing
     }
 
-    const repository = repoInfo?.full_name ? `github:${repoInfo.full_name as string}` : undefined;
+    const repoFullName = typeof repoInfo?.full_name === 'string' ? repoInfo.full_name : undefined;
+    let repoAuthor: string | undefined;
+    let repoName: string | undefined;
+    if (repoFullName) {
+      const repoParts = repoFullName.split('/');
+      if (repoParts.length >= 2) {
+        repoAuthor = repoParts[0];
+        repoName = repoParts[1];
+      }
+    }
+    const repository = repoFullName ? `github:${repoFullName}` : undefined;
     const config: PackageConfig = {
       dirPath,
       dockerfile,
       isRoot,
       isPublicRepo: repoInfo?.private === false,
       isReferredByOtherRepo: !!packageJson.files,
-      repository: repoInfo?.full_name ? `github:${repoInfo.full_name as string}` : undefined,
+      repository,
+      repoAuthor,
+      repoName,
       isWillBoosterRepo: Boolean(
         repository?.startsWith('github:WillBooster/') || repository?.startsWith('github:WillBoosterLab/')
       ),
