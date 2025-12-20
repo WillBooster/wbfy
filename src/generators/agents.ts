@@ -43,26 +43,25 @@ function generateAgentInstruction(
 - Description: ${rootConfig.packageJson?.description}
 - Package Manager: ${packageManager}
 
-## General Instructions
+## Development Workflow
 
-${
-  allConfigs.some((c) => c.depending.genI18nTs)
-    ? `- When introducing new string literals in React components, update the language resource files in the \`i18n\` directory (e.g., \`i18n/ja-JP.json\`). Reference these strings using the \`i18n\` utility. For example, use \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
-    : ''
-}
-- Do not write tests unless explicitly requested.
-- When fixing tests, gather debug information through logging and screenshots before modifying the code.
-- After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
-  - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
-- Once you have verified your changes, commit them to the non-main branch using the \`--no-verify\` option and push to the current branch.
-  - Follow conventional commits, i.e., your commit message should start with \`feat:\`, \`fix:\`, etc.
-  - Make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
-  - Always create new commits. Avoid using \`--amend\`.
-${
-  allConfigs.some((c) => c.hasStartTest)
-    ? `- Use \`${packageManager} run start-test\` to launch a web server for debugging or testing.`
-    : ''
-}
+1. If the current branch is \`main\`, create a new branch.
+2. Make code changes as needed.
+3. If possible, write e2e tests for your changes.
+4. Run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
+   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
+5. Commit your changes to the current branch and push.
+   - Follow conventional commits, i.e., your commit message should start with \`feat:\`, \`fix:\`, \`test:\`, etc.
+   - Make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
+   - When pre-commit hooks prevent your changes, fix your code then re-commit and re-push.
+6. Create a pull request using \`gh\`.
+   - The title of the pull request should match your commit message.
+7. Repeat the following steps until all tests pass:
+   1. Wait for the CI to run all tests.
+   2. If tests fail, identify the root causes by gathering debug information through logging and screenshots, then fix the code and/or tests.
+   3. Fetch unresolved review comments from the pull request and address them.
+   4. Commit your changes and push.
+   5. Write \`/gemini review\` in the pull request.
 
 ## Coding Style
 
@@ -71,6 +70,11 @@ ${
 - When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
 - Prefer \`undefined\` over \`null\` unless explicitly dealing with APIs or libraries that require \`null\`.
 - Always perform existence checks on array due to \`noUncheckedIndexedAccess: true\`.
+${
+  allConfigs.some((c) => c.depending.genI18nTs)
+    ? `- When introducing new string literals in React components, update the language resource files in the \`i18n\` directory (e.g., \`i18n/ja-JP.json\`). Reference these strings using the \`i18n\` utility. For example, use \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
+    : ''
+}
 ${
   allConfigs.some((c) => c.depending.react || c.depending.next)
     ? `- Prefer \`useImmer\` for storing an array or an object to \`useState\`.`
