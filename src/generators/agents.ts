@@ -60,7 +60,7 @@ When changing code, complete these steps before responding to the user.
 6. Create a pull request using \`gh\`.
    - The pull request title should match your commit message.
 7. Repeat the following steps until the test workflow passes:
-   1. Wait and check the CI results using \`gh\` until the test workflow completes.
+   1. Wait and check the CI results using \`sleep 5m\` and \`gh\` until the test workflow completes.
    2. If tests fail, identify the root causes by gathering debug information through logging and screenshots, then fix the code and/or tests.
    3. Fetch unresolved review comments from the pull request using \`gh\` and address them.
       - e.g., \`gh api graphql -f query='{ repository(owner: "${rootConfig.repoAuthor || 'WillBooster'}", name: "${rootConfig.repoName || 'wbfy'}") { pullRequest(number: 24) { reviewThreads(first: 100) { nodes { isResolved comments(first: 100) { nodes { body author { login } path line } } } } } } }' | jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false)'\`
