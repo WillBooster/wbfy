@@ -61,10 +61,10 @@ When changing code, complete these steps before responding to the user.
    - The pull request title should match your commit message.
 7. Repeat the following steps until the test workflow passes:
    1. Monitor the CI results using \`gh\` until the test workflow completes.
-      - e.g., \`while :; do gh run list -b $(git branch --show-current) --json status,conclusion | jq -e '.[] | select(.conclusion=="failure")' && exit 1; gh run list -b $(git branch --show-current) --json status | jq -e '.[] | select(.status=="completed" | not)' || exit 0; sleep 1m; done\`
+      - e.g., \`while :; do gh run list -b "$(git branch --show-current)" --json status,conclusion | jq -e '.[] | select(.conclusion=="failure")' && exit 1; gh run list -b "$(git branch --show-current)" --json status | jq -e '.[] | select(.status=="completed" | not)' || exit 0; sleep 1m; done\`
    2. If tests fail, identify the root causes by gathering debug information through logging and screenshots, then fix the code and/or tests.
    3. Fetch unresolved review comments from the pull request using \`gh\`. Address them and then mark them as resolved.
-      - e.g., \`gh api graphql -f query='{ repository(owner: "${rootConfig.repoAuthor || 'WillBooster'}", name: "${rootConfig.repoName || 'wbfy'}") { pullRequest(number: 24) { reviewThreads(first: 100) { nodes { isResolved comments(first: 100) { nodes { body author { login } path line } } } } } } }' | jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false)'\`
+      - e.g., \`gh api graphql -f query='{ repository(owner: "${rootConfig.repoAuthor || 'WillBooster'}", name: "${rootConfig.repoName || 'wbfy'}") { pullRequest(number: 24) { reviewThreads(first: 100) { nodes { isResolved comments(first: 100) { nodes { body author { login } path line } } } } } } }' | jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved | not)'\`
    4. Commit your changes and push.
    5. Write \`/gemini review\` in the pull request.
 
