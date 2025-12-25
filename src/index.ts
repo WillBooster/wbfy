@@ -127,7 +127,7 @@ async function main(): Promise<void> {
       generateAgentInstructions(rootConfig, allPackageConfigs),
       generateDockerignore(rootConfig),
       generateEditorconfig(rootConfig),
-      generateGeminiConfig(rootConfig),
+      generateGeminiConfig(rootConfig, allPackageConfigs),
       removeGeminiSettings(rootConfig),
       generateGitattributes(rootConfig),
       generateGitHubTemplates(rootConfig),

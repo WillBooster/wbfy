@@ -60,13 +60,25 @@ When changing code, complete these steps before responding to the user.
 6. Create a pull request using \`gh\`.
    - The pull request title should match your commit message.
 7. Repeat the following steps until the test workflow passes:
-   1. Wait and check the CI results using \`sleep 5m\` and \`gh\` until the test workflow completes.
+   1. Monitor the CI results using \`gh\` until the test workflow completes.
+      - e.g., \`while :; do gh run list -b $(git branch --show-current) --json status,conclusion | jq -e '.[] | select(.conclusion=="failure")' && exit 1; gh run list -b $(git branch --show-current) --json status | jq -e '.[] | select(.status=="completed" | not)' || exit 0; sleep 1m; done\`
    2. If tests fail, identify the root causes by gathering debug information through logging and screenshots, then fix the code and/or tests.
    3. Fetch unresolved review comments from the pull request using \`gh\`. Address them and then mark them as resolved.
       - e.g., \`gh api graphql -f query='{ repository(owner: "${rootConfig.repoAuthor || 'WillBooster'}", name: "${rootConfig.repoName || 'wbfy'}") { pullRequest(number: 24) { reviewThreads(first: 100) { nodes { isResolved comments(first: 100) { nodes { body author { login } path line } } } } } } }' | jq '.data.repository.pullRequest.reviewThreads.nodes[] | select(.isResolved == false)'\`
    4. Commit your changes and push.
    5. Write \`/gemini review\` in the pull request.
 
+${generateAgentCodingStyle(allConfigs)}
+`
+    .replaceAll(/\.\n\n+-/g, '.\n-')
+    .replaceAll(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return extraContent ? baseContent + '\n' + extraContent.trimEnd() : baseContent;
+}
+
+export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
+  return `
 ## Coding Style
 
 - Write comments that explain "why" rather than "what". Avoid explanations that can be understood from the code itself.
@@ -86,15 +98,16 @@ ${
 }
 ${
   allConfigs.some((c) => c.depending.next)
-    ? `- Since this project uses the React Compiler, you do not need to use \`useCallback\` or \`useMemo\` for performance optimization.`
+    ? `
+- Since this project uses the React Compiler, you do not need to use \`useCallback\` or \`useMemo\` for performance optimization.
+- Assume there is only a single server instance.
+`
     : ''
 }
 `
     .replaceAll(/\.\n\n+-/g, '.\n-')
     .replaceAll(/\n{3,}/g, '\n\n')
     .trim();
-
-  return extraContent ? baseContent + '\n' + extraContent.trimEnd() : baseContent;
 }
 
 function generateCursorGeneralMdcContent(
