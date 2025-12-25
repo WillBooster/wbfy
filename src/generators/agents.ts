@@ -41,7 +41,7 @@ function generateAgentInstruction(
 
 - Name: ${rootConfig.packageJson?.name}
 - Description: ${rootConfig.packageJson?.description}
-- Package Manager: ${packageManager}
+- Package Manager: ${packageManager} on zsh
 
 ## Development Workflow
 
