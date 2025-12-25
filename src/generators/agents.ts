@@ -67,8 +67,20 @@ When changing code, complete these steps before responding to the user.
    4. Commit your changes and push.
    5. Write \`/gemini review\` in the pull request.
 
+${generateAgentCodingStyle(allConfigs)}
+`
+    .replaceAll(/\.\n\n+-/g, '.\n-')
+    .replaceAll(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return extraContent ? baseContent + '\n' + extraContent.trimEnd() : baseContent;
+}
+
+export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
+  return `
 ## Coding Style
 
+- Assume the server instance is only single.
 - Write comments that explain "why" rather than "what". Avoid explanations that can be understood from the code itself.
 - Use stderr for logging debug messages temporarily since stdout output is sometimes omitted.
 - When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
@@ -93,8 +105,6 @@ ${
     .replaceAll(/\.\n\n+-/g, '.\n-')
     .replaceAll(/\n{3,}/g, '\n\n')
     .trim();
-
-  return extraContent ? baseContent + '\n' + extraContent.trimEnd() : baseContent;
 }
 
 function generateCursorGeneralMdcContent(
