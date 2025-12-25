@@ -55,7 +55,7 @@ export async function generateGeminiConfig(config: PackageConfig, allConfigs: Pa
     });
 
     const extraContent = await fsUtil.readFileIgnoringError(agentsExtraPath);
-    const styleguideContent = `日本語でレビューしてください。\n\n${generateAgentCodingStyle(allConfigs)}${
+    const styleguideContent = `以下のコーディング規約を踏まえて、日本語でレビューしてください。\n\n${generateAgentCodingStyle(allConfigs)}${
       extraContent ? `\n\n${extraContent.trimEnd()}` : ''
     }`;
 
