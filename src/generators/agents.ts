@@ -53,7 +53,7 @@ When changing code, complete these steps before responding to the user.
 3. If possible, write e2e tests for your changes.
 4. Fix your changes until \`${packageManager} check-all-for-ai\` (running all tests, taking 30 mins) or \`${packageManager} check-for-ai\` (only type checking and linting) passes.
    - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
-5. Commit your changes to the current branch and push.xd
+5. Commit your changes to the current branch and push.
    - Follow conventional commits, i.e., your commit message should start with \`feat:\`, \`fix:\`, \`test:\`, etc.
    - Make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
    - When pre-commit hooks prevent your changes, fix your code, then re-commit and re-push.
