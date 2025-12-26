@@ -307,8 +307,30 @@ async function requestRepoInfo(urlOrFullName: string): Promise<Record<string, un
       repo: name,
     });
     Object.assign(ret, response.data);
-  } catch {
-    // do nothing
+  } catch (error) {
+    const redirectedFullName = getRedirectedRepoFullName(error);
+    if (redirectedFullName) {
+      ret.full_name = redirectedFullName;
+    }
   }
   return ret;
+}
+
+function getRedirectedRepoFullName(error: unknown): string | undefined {
+  if (!error || typeof error !== 'object') return;
+
+  const response =
+    'response' in error
+      ? (error as { response?: { status?: number; headers?: Record<string, string | undefined> } }).response
+      : undefined;
+  const status = response?.status ?? (error as { status?: number }).status;
+  if (status !== 301 && status !== 302) return;
+
+  const location = response?.headers?.location;
+  if (typeof location !== 'string') return;
+
+  const [org, name] = gitHubUtil.getOrgAndName(location);
+  if (!org || !name) return;
+
+  return `${org}/${name}`;
 }

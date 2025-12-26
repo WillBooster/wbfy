@@ -4,6 +4,7 @@ import path from 'node:path';
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
+import { gitHubUtil } from '../utils/githubUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 const semanticReleaseBadge =
@@ -18,7 +19,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
       newContent = insertBadge(newContent, semanticReleaseBadge);
     }
 
-    const repository = config.repository?.slice(config.repository.indexOf(':') + 1);
+    const repository = getRepositoryFullName(config);
     const fileNames = fs.readdirSync(`${config.dirPath}/.github/workflows`);
     for (const fileName of fileNames) {
       if (!fileName.startsWith('test') && !fileName.startsWith('deploy')) continue;
@@ -26,6 +27,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
       let badgeName = fileName;
       badgeName = (badgeName[0] || '').toUpperCase() + badgeName.slice(1, badgeName.indexOf('.'));
       badgeName = badgeName.replace('-', ' ');
+      if (!repository) continue;
       const badge = `[![${badgeName}](https://github.com/${repository}/actions/workflows/${fileName}/badge.svg)](https://github.com/${repository}/actions/workflows/${fileName})`;
       if (fs.existsSync(path.resolve(config.dirPath, `.github/workflows/${fileName}`))) {
         newContent = insertBadge(newContent, badge);
@@ -51,4 +53,15 @@ export function insertBadge(readme: string, badge: string): string {
     }
   }
   return `${readme}\n${badge}\n`;
+}
+
+function getRepositoryFullName(config: PackageConfig): string | undefined {
+  if (config.repoAuthor && config.repoName) {
+    return `${config.repoAuthor}/${config.repoName}`;
+  }
+  if (!config.repository) return;
+
+  const [owner, repo] = gitHubUtil.getOrgAndName(config.repository);
+  if (!owner || !repo) return;
+  return `${owner}/${repo}`;
 }
