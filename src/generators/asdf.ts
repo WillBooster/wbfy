@@ -33,7 +33,9 @@ async function core(config: PackageConfig): Promise<void> {
     // Remove added spaces.
     .map((line) => line.trim())
     // TODO: remove the following line after lefthook is installed via npm.
-    .filter((line) => !line.startsWith('lefthook'));
+    .filter((line) => !line.startsWith('lefthook'))
+    // asdf-vm/actions only supports plugins from asdf-plugins; use default npm packages for ni.
+    .filter((line) => !line.startsWith('ni '));
   const lines = [...new Set(duplicatableLines)];
 
   if (config.doesContainPoetryLock) {
@@ -57,7 +59,7 @@ async function core(config: PackageConfig): Promise<void> {
       updateVersion(lines, 'yarn', version);
     }
     const niVersion = spawnSyncAndReturnStdout('npm', ['show', '@antfu/ni', 'version'], config.dirPath);
-    updateVersion(lines, 'ni', niVersion);
+    await updateDefaultNpmPackages(config.dirPath, `@antfu/ni@${niVersion}`);
   }
 
   for (const prefix of DEPRECATED_VERSION_PREFIXES) {
@@ -103,4 +105,20 @@ async function getLatestVersionFromTagOnGitHub(organization: string, repository:
     console.error('Failed to fetch Bun tags due to:', error);
     return;
   }
+}
+
+async function updateDefaultNpmPackages(dirPath: string, packageSpec: string): Promise<void> {
+  const filePath = path.resolve(dirPath, '.default-npm-packages');
+  let currentLines: string[] = [];
+  try {
+    const fileContent = await fs.promises.readFile(filePath, 'utf8');
+    currentLines = fileContent.split(/\r?\n/);
+  } catch {
+    // do nothing
+  }
+
+  const lines = currentLines.map((line) => line.trim()).filter((line) => line !== '' && !line.startsWith('@antfu/ni'));
+  lines.push(packageSpec);
+  await promisePool.run(() => fs.promises.writeFile(filePath, `${lines.join('\n')}\n`));
+  await promisePool.promiseAll();
 }
