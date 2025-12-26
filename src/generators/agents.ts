@@ -60,7 +60,7 @@ When changing code, complete these steps before responding to the user.
 6. Create a pull request using \`gh\`.
    - The pull request title should match your commit message.
 7. Repeat the following steps until the test workflow passes:
-   1. Monitor the CI results using \`gh\` until the test workflow completes (taking 30 mins).
+   1. Monitor the CI results using \`gh\` until the test workflow completes (timeout should be 30 mins).
       - e.g., \`while :; do gh run list -b "$(git branch --show-current)" --json status,conclusion | jq -e '.[] | select(.conclusion=="failure")' && exit 1; gh run list -b "$(git branch --show-current)" --json status | jq -e '.[] | select(.status=="completed" | not)' || exit 0; sleep 1m; done\`
    2. If tests fail, identify the root causes by gathering debug information through logging and screenshots, then fix the code and/or tests.
    3. Fetch unresolved review comments from the pull request using \`gh\`. Address them and then mark them as resolved.
@@ -85,7 +85,6 @@ export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
 - Use stderr for logging debug messages temporarily since stdout output is sometimes omitted.
 - When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
 - Prefer \`undefined\` over \`null\` unless explicitly dealing with APIs or libraries that require \`null\`.
-- Always perform existence checks on array due to \`noUncheckedIndexedAccess: true\`.
 ${
   allConfigs.some((c) => c.depending.genI18nTs)
     ? `- When introducing new string literals in React components, update the language resource files in the \`i18n\` directory (e.g., \`i18n/ja-JP.json\`). Reference these strings using the \`i18n\` utility. For example, use \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
