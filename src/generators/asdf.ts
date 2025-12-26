@@ -56,7 +56,8 @@ async function core(config: PackageConfig): Promise<void> {
       const version = spawnSyncAndReturnStdout('npm', ['show', 'yarn', 'version'], config.dirPath);
       updateVersion(lines, 'yarn', version);
     }
-    spawnSync('npm', ['install', '-g', '@antfu/ni'], config.dirPath);
+    const niVersion = spawnSyncAndReturnStdout('npm', ['show', '@antfu/ni', 'version'], config.dirPath);
+    updateVersion(lines, 'ni', niVersion);
   }
 
   for (const prefix of DEPRECATED_VERSION_PREFIXES) {
