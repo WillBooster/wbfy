@@ -60,11 +60,34 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     if (!parsed) return;
 
     const merged = merge.all<ParsedObject>([defaultConfig, parsed, defaultConfig]);
+    const hasStartTestServer = Boolean(config.packageJson?.scripts?.['start-test-server']);
+    if (!hasStartTestServer) {
+      delete merged.webServer;
+    }
+
+    const hasBaseUrl = await hasNextPublicBaseUrl(config.dirPath);
+    if (!hasBaseUrl) {
+      const useConfig = merged.use;
+      if (useConfig?.kind === 'object') {
+        delete useConfig.value.baseURL;
+      }
+    }
+
     const newObjectLiteral = stringifyObject(merged, 0);
     const newContent = oldContent.replace(objectLiteral, newObjectLiteral);
 
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
+}
+
+async function hasNextPublicBaseUrl(dirPath: string): Promise<boolean> {
+  const envFilePath = path.resolve(dirPath, '.env');
+  try {
+    const content = await fs.promises.readFile(envFilePath, 'utf8');
+    return /^(?:export\s+)?NEXT_PUBLIC_BASE_URL\s*=/m.test(content);
+  } catch {
+    return false;
+  }
 }
 
 function parseObjectLiteral(objectLiteral: string): ParsedObject | undefined {
