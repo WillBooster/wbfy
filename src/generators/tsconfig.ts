@@ -95,9 +95,8 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
         delete oldSettings.extends;
       }
       // Preserve Bundler resolution so tooling stays aligned with package settings.
-      const shouldPreserveBundlerResolution = ['Bundler', 'bundler'].includes(
-        oldSettings.compilerOptions?.moduleResolution ?? ''
-      );
+      const shouldPreserveBundlerResolution =
+        (oldSettings.compilerOptions?.moduleResolution ?? '').toLowerCase() === 'bundler';
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
       if (!config.isEsmPackage || shouldPreserveBundlerResolution) {
