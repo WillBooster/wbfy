@@ -4,7 +4,6 @@ import path from 'node:path';
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
-import { gitHubUtil } from '../utils/githubUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
 const semanticReleaseBadge =
@@ -19,7 +18,7 @@ export async function generateReadme(config: PackageConfig): Promise<void> {
       newContent = insertBadge(newContent, semanticReleaseBadge);
     }
 
-    const repository = getRepositoryFullName(config);
+    const repository = config.repository?.slice(config.repository.indexOf(':') + 1);
     const fileNames = fs.readdirSync(`${config.dirPath}/.github/workflows`);
     for (const fileName of fileNames) {
       if (!fileName.startsWith('test') && !fileName.startsWith('deploy')) continue;
@@ -53,15 +52,4 @@ export function insertBadge(readme: string, badge: string): string {
     }
   }
   return `${readme}\n${badge}\n`;
-}
-
-function getRepositoryFullName(config: PackageConfig): string | undefined {
-  if (config.repoAuthor && config.repoName) {
-    return `${config.repoAuthor}/${config.repoName}`;
-  }
-  if (!config.repository) return;
-
-  const [owner, repo] = gitHubUtil.getOrgAndName(config.repository);
-  if (!owner || !repo) return;
-  return `${owner}/${repo}`;
 }
