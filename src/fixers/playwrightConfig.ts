@@ -81,13 +81,18 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
 }
 
 async function hasNextPublicBaseUrl(dirPath: string): Promise<boolean> {
-  const envFilePath = path.resolve(dirPath, '.env');
-  try {
-    const content = await fs.promises.readFile(envFilePath, 'utf8');
-    return /^(?:export\s+)?NEXT_PUBLIC_BASE_URL\s*=/m.test(content);
-  } catch {
-    return false;
+  const envFilePaths = [path.resolve(dirPath, '.env'), path.resolve(dirPath, 'mise.toml')];
+  for (const envFilePath of envFilePaths) {
+    try {
+      const content = await fs.promises.readFile(envFilePath, 'utf8');
+      if (/NEXT_PUBLIC_BASE_URL\s*=/m.test(content)) {
+        return true;
+      }
+    } catch {
+      // Missing env files are expected in some repos.
+    }
   }
+  return false;
 }
 
 function parseObjectLiteral(objectLiteral: string): ParsedObject | undefined {
