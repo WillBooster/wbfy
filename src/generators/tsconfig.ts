@@ -94,9 +94,13 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       if (oldSettings.extends === './node_modules/@willbooster/tsconfig/tsconfig.json') {
         delete oldSettings.extends;
       }
+      // Preserve Bundler resolution so tooling stays aligned with package settings.
+      const shouldPreserveBundlerResolution = ['Bundler', 'bundler'].includes(
+        oldSettings.compilerOptions?.moduleResolution ?? ''
+      );
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
-      if (!config.isEsmPackage) {
+      if (!config.isEsmPackage || shouldPreserveBundlerResolution) {
         delete newSettings.compilerOptions?.module;
         delete newSettings.compilerOptions?.moduleResolution;
       }
