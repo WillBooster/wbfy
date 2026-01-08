@@ -121,25 +121,13 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (config.isRoot) {
-    if (config.isBun) {
-      delete jsonObj.devDependencies.husky;
-      delete jsonObj.devDependencies.pinst;
-      jsonObj.scripts.prepare = 'lefthook install || true';
-      devDependencies.push('lefthook');
-    } else {
-      // To install the latest husky
-      devDependencies.push('husky');
-      // '|| true' avoids errors when husky is not installed.
-      jsonObj.scripts.prepare = 'husky || true'; // for non-yarn package managers.
-      jsonObj.scripts.postinstall = 'husky || true'; // for yarn.
-      if (config.isPublicRepo || config.isReferredByOtherRepo) {
-        // To install the latest pinst
-        // https://typicode.github.io/husky/#/?id=install-1
-        devDependencies.push('pinst');
-        jsonObj.scripts.prepack = 'pinst --disable';
-        jsonObj.scripts.postpack = 'pinst --enable';
-      }
-    }
+    delete jsonObj.devDependencies.husky;
+    delete jsonObj.devDependencies.pinst;
+    delete jsonObj.scripts.postinstall;
+    delete jsonObj.scripts.prepack;
+    delete jsonObj.scripts.postpack;
+    jsonObj.scripts.prepare = 'lefthook install || true';
+    devDependencies.push('lefthook');
 
     if (config.depending.semanticRelease) {
       if (
