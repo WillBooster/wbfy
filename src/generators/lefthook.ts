@@ -2,10 +2,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import yaml from 'js-yaml';
+import type { PackageJson } from 'type-fest';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
+import { spawnSync } from '../utils/spawnUtil.js';
 
 import { generatePostMergeCommands } from './huskyrc.js';
 import { generateScripts } from './packageJson.js';
@@ -79,6 +81,16 @@ export async function generateLefthookUpdatingPackageJson(config: PackageConfig)
 
 async function core(config: PackageConfig): Promise<void> {
   const dirPath = path.resolve(config.dirPath, '.lefthook');
+  const packageJsonPath = path.resolve(config.dirPath, 'package.json');
+  const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
+  const packageJson = JSON.parse(jsonText) as PackageJson;
+  packageJson.scripts ??= {};
+  delete packageJson.scripts.postinstall;
+  delete packageJson.scripts.postpublish;
+  delete packageJson.scripts.prepare;
+  delete packageJson.scripts.prepublishOnly;
+  delete packageJson.scripts.prepack;
+  delete packageJson.scripts.postpack;
   const { typecheck } = generateScripts(config, {});
   const settings: Partial<typeof newSettings> = { ...newSettings };
   if (!typecheck) {
@@ -95,8 +107,12 @@ async function core(config: PackageConfig): Promise<void> {
         },
       })
     ),
+    fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
+    fs.promises.rm(path.resolve(config.dirPath, '.husky'), { force: true, recursive: true }),
+    fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }),
     fs.promises.rm(dirPath, { force: true, recursive: true }),
   ]);
+  spawnSync('git', ['config', '--unset', 'core.hooksPath'], config.dirPath);
 
   if (typecheck) {
     const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
