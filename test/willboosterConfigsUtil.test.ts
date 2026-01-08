@@ -81,6 +81,7 @@ function createConfig(overrides: Partial<PackageConfig> = {}): PackageConfig {
       github: false,
       npm: false,
     },
+    hasVersionSettings: false,
     ...overrides,
   };
 }

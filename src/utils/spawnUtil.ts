@@ -1,11 +1,10 @@
 import type { SpawnSyncOptions } from 'node:child_process';
 import child_process from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 
 // Avoid repeating the same install when multiple commands run in a row.
-let installedLtsNodejs = false;
+const installedLtsNodejs = false;
 const toolVersionsCache = new Map<string, string | undefined>();
 
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
@@ -41,30 +40,6 @@ export function getSpawnSyncArgs(command: string, args: string[], cwd: string): 
   // Remove berry from PATH
   if (env.PATH && env.BERRY_BIN_FOLDER) {
     env.PATH = env.PATH.replace(`${env.BERRY_BIN_FOLDER}:`, '');
-  }
-  // Ensure mise shims/bin are on PATH even when parent shell doesn't load them
-  const miseDataDir = env.MISE_DATA_DIR ?? path.join(os.homedir(), '.local', 'share', 'mise');
-  const miseShimsDir = env.MISE_SHIMS_DIR ?? path.join(miseDataDir, 'shims');
-  const miseBinDir = env.MISE_BIN_DIR ?? path.join(miseDataDir, 'bin');
-  if (fs.existsSync(miseShimsDir) || fs.existsSync(miseBinDir)) {
-    const misePaths = [miseShimsDir, miseBinDir].filter((p) => fs.existsSync(p));
-    const currentPaths = env.PATH?.split(':') ?? [];
-    env.PATH = [...misePaths, ...currentPaths.filter((p) => !misePaths.includes(p))].join(':');
-
-    const toolVersions = getToolVersionsContent(cwd);
-    const hasNodeEntry = toolVersions
-      ?.split(/\r?\n/)
-      .some((line) => line.trim().startsWith('node ') || line.trim().startsWith('nodejs '));
-    if (!hasNodeEntry && !installedLtsNodejs) {
-      child_process.spawnSync('mise', ['install', 'node@lts'], {
-        cwd,
-        env,
-        encoding: 'utf8',
-        shell: false,
-        stdio: 'inherit',
-      });
-      installedLtsNodejs = true;
-    }
   }
 
   return [

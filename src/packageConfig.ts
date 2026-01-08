@@ -66,7 +66,7 @@ export interface PackageConfig {
     npm: boolean;
   };
   eslintBase?: EslintExtensionBase;
-  versionsText?: string;
+  hasVersionSettings: boolean;
   packageJson?: PackageJson;
   wbfyJson?: WbfyJson;
 }
@@ -128,20 +128,12 @@ export async function getPackageConfig(
       repoInfo = await fetchRepoInfo(dirPath, packageJson);
     }
 
-    let versionsText = getToolVersionsContent(dirPath)?.trim() ?? '';
-    for (const [prefix, name] of [
-      ['java', 'java'],
-      ['node', 'node'],
-      ['python', 'python'],
-    ]) {
-      try {
-        const nodeVersionContent = await fsp.readFile(path.resolve(dirPath, `.${prefix}-version`), 'utf8');
-        if (versionsText) {
-          versionsText += '\n';
-        }
-        versionsText += `${name} ${nodeVersionContent.trim()}`;
-      } catch {
-        // do nothing
+    const toolVersionsContent = getToolVersionsContent(dirPath);
+    let hasVersionSettings = Boolean(toolVersionsContent?.trim());
+    for (const prefix of ['java', 'node', 'python']) {
+      if (fs.existsSync(path.resolve(dirPath, `.${prefix}-version`))) {
+        hasVersionSettings = true;
+        break;
       }
     }
 
@@ -230,7 +222,7 @@ export async function getPackageConfig(
         github: releasePlugins.includes('@semantic-release/github'),
         npm: releasePlugins.includes('@semantic-release/npm'),
       },
-      versionsText,
+      hasVersionSettings,
       packageJson,
       wbfyJson,
     };
