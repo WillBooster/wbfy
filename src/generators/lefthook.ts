@@ -118,14 +118,11 @@ async function core(config: PackageConfig): Promise<void> {
     delete packageJson.devDependencies.husky;
     delete packageJson.dependencies.pinst;
     delete packageJson.devDependencies.pinst;
-    cleanupPromises.push(
+    await Promise.all([
       fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
       fs.promises.rm(huskyDirPath, { force: true, recursive: true }),
-      fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true })
-    );
-  }
-  await Promise.all(cleanupPromises);
-  if (hasHuskyDir) {
+      fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }),
+    ]);
     spawnSync('git', ['config', '--unset', 'core.hooksPath'], config.dirPath);
   }
 
