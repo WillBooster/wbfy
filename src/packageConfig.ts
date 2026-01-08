@@ -244,19 +244,12 @@ export async function getPackageConfig(
 }
 
 function hasVersionSettingsFile(dirPath: string): boolean {
-  let current = path.resolve(dirPath);
-  for (;;) {
-    if (
-      fs.existsSync(path.join(current, 'mise.toml')) ||
-      fs.existsSync(path.join(current, '.mise.toml')) ||
-      fs.existsSync(path.join(current, '.tool-versions'))
-    ) {
-      return true;
-    }
-    const parent = path.dirname(current);
-    if (parent === current) return false;
-    current = parent;
-  }
+  const current = path.resolve(dirPath);
+  return (
+    fs.existsSync(path.join(current, 'mise.toml')) ||
+    fs.existsSync(path.join(current, '.mise.toml')) ||
+    fs.existsSync(path.join(current, '.tool-versions'))
+  );
 }
 
 function containsAny(pattern: string, dirPath: string): boolean {
