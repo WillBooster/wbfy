@@ -1,3 +1,4 @@
+import child_process from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -22,7 +23,14 @@ test.each`
   ({ dirPath, expected }: { dirPath: string; expected: string }) => {
     const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
     expect(fs.existsSync(packageDirPath)).toBe(true);
-    spawnSyncAndReturnStdout('mise', ['install'], packageDirPath);
+    const hasMise =
+      child_process.spawnSync('mise', ['--version'], {
+        cwd: packageDirPath,
+        stdio: 'ignore',
+      }).status === 0;
+    if (hasMise) {
+      spawnSyncAndReturnStdout('mise', ['install'], packageDirPath);
+    }
     const version = spawnSyncAndReturnStdout('yarn', ['--version'], packageDirPath);
     expect(version).toBe(expected);
   }

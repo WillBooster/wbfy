@@ -21,13 +21,19 @@ export function spawnSyncAndReturnStdout(command: string, args: string[], cwd: s
   const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
   options.stdio = 'pipe';
   const proc = child_process.spawnSync(newCmd, newArgs, options);
-  const error = proc.stderr.toString().trim();
-  if (error) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- spawnSync returns null stderr on ENOENT.
+  const stderr = proc.stderr ?? '';
+  const error = typeof stderr === 'string' ? stderr.trim() : stderr.toString().trim();
+  if (proc.error) {
+    console.error(`${newCmd} [${newArgs.map((s) => `"${s}"`).join(', ')}] failed with: ${proc.error.message}`);
+  } else if (error) {
     console.error(
       `${newCmd} [${newArgs.map((s) => `"${s}"`).join(', ')}] outputs the following content to stderr:\n${error}`
     );
   }
-  return proc.stdout.toString().trim();
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- spawnSync returns null stdout on ENOENT.
+  const stdout = proc.stdout ?? '';
+  return typeof stdout === 'string' ? stdout.trim() : stdout.toString().trim();
 }
 
 export function getSpawnSyncArgs(command: string, args: string[], cwd: string): [string, string[], SpawnSyncOptions] {
