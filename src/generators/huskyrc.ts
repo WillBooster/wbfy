@@ -109,17 +109,12 @@ async function core(config: PackageConfig): Promise<void> {
 export function generatePostMergeCommands(config: PackageConfig): string[] {
   const postMergeCommands: string[] = [];
   if (config.versionsText) {
-    postMergeCommands.push(
-      String.raw`run_if_changed "\..+-version" "awk '{print \$1}' .tool-versions | xargs -I{} asdf plugin add {}"`,
-      String.raw`run_if_changed "\..+-version" "asdf plugin update --all"`
-    );
-  }
-  // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
-  if (config.versionsText?.includes('python ')) {
-    postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf install python"`);
-  }
-  if (config.versionsText) {
-    postMergeCommands.push(String.raw`run_if_changed "\..+-version" "asdf install"`);
+    const toolsChangedPattern = String.raw`(mise\.toml|\.mise\.toml|\.tool-versions|\..+-version)`;
+    // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
+    if (config.versionsText.includes('python ')) {
+      postMergeCommands.push(String.raw`run_if_changed "${toolsChangedPattern}" "mise install python"`);
+    }
+    postMergeCommands.push(String.raw`run_if_changed "${toolsChangedPattern}" "mise install"`);
   }
   const installCommand = config.isBun ? 'bun install' : 'yarn';
   const rmNextDirectory = config.depending.blitz || config.depending.next ? ' && rm -Rf .next' : '';

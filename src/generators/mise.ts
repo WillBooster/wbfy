@@ -9,14 +9,17 @@ import { spawnSync, spawnSyncAndReturnStdout } from '../utils/spawnUtil.js';
 import { convertVersionIntoNumber } from '../utils/version.js';
 import { JAVA_VERSION, PYTHON_VERSION } from '../utils/versionConstants.js';
 
-export async function generateToolVersions(config: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('generateToolVersions', async () => {
+export async function generateMiseToml(config: PackageConfig): Promise<void> {
+  return logger.functionIgnoringException('generateMiseToml', async () => {
     await core(config);
   });
 }
 
-const CORE_TOOLS = new Set(['java', 'nodejs', 'bun', 'python']);
+const CORE_TOOLS = new Set(['java', 'node', 'bun', 'python']);
 const DEPRECATED_VERSION_PREFIXES = ['java', 'node', 'python'];
+const TOOL_RENAMES: Record<string, string> = {
+  nodejs: 'node',
+};
 
 async function core(config: PackageConfig): Promise<void> {
   if (!config.versionsText) return;
@@ -25,9 +28,10 @@ async function core(config: PackageConfig): Promise<void> {
     .trim()
     .split('\n')
     .map((line) => {
-      const [name, version] = line.trim().split(/\s+/);
+      const [rawName, version] = line.trim().split(/\s+/);
+      const name = normalizeToolName(rawName ?? '');
       // To move the top of the sorted list, we need to add a space.
-      return `${CORE_TOOLS.has(name ?? '') ? ' ' : ''}${name ?? ''} ${version ?? ''}`;
+      return `${CORE_TOOLS.has(name) ? ' ' : ''}${name} ${version ?? ''}`;
     })
     .toSorted()
     // Remove added spaces.
@@ -63,18 +67,36 @@ async function core(config: PackageConfig): Promise<void> {
     void fs.promises.rm(versionPath, { force: true });
   }
 
-  const toolVersionsPath = path.resolve(config.dirPath, '.tool-versions');
+  const miseTomlPath = path.resolve(config.dirPath, 'mise.toml');
   await (lines.length > 0
-    ? promisePool.run(() => fs.promises.writeFile(toolVersionsPath, lines.join('\n') + '\n'))
-    : promisePool.run(() => fs.promises.rm(toolVersionsPath, { force: true })));
+    ? promisePool.run(() => fs.promises.writeFile(miseTomlPath, buildMiseToml(lines)))
+    : promisePool.run(() => fs.promises.rm(miseTomlPath, { force: true })));
+  await promisePool.run(() => fs.promises.rm(path.resolve(config.dirPath, '.tool-versions'), { force: true }));
   await promisePool.promiseAll();
-  spawnSync('asdf', ['plugin', 'update', '--all'], config.dirPath);
-  spawnSync('asdf', ['install'], config.dirPath);
+  spawnSync('mise', ['install'], config.dirPath);
+}
+
+function normalizeToolName(name: string): string {
+  return TOOL_RENAMES[name] ?? name;
+}
+
+function buildMiseToml(lines: string[]): string {
+  const tools = lines
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [name, ...rest] = line.split(/\s+/);
+      return { name, version: rest.join(' ') };
+    })
+    .filter(({ name, version }) => name && version);
+  const content = ['[tools]', ...tools.map(({ name, version }) => `${name} = "${version}"`)].join('\n');
+  return `${content}\n`;
 }
 
 function updateVersion(lines: string[], toolName: string, newVersion: string, head = false): void {
-  const index = lines.findIndex((l) => l.split(/\s+/)[0] === toolName);
-  const newLine = `${toolName} ${newVersion}`;
+  const normalizedName = normalizeToolName(toolName);
+  const index = lines.findIndex((l) => l.split(/\s+/)[0] === normalizedName);
+  const newLine = `${normalizedName} ${newVersion}`;
   if (index === -1) {
     lines.splice(head ? 0 : lines.length, 0, newLine);
   } else {

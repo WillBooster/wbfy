@@ -131,7 +131,7 @@ export async function getPackageConfig(
     let versionsText = getToolVersionsContent(dirPath)?.trim() ?? '';
     for (const [prefix, name] of [
       ['java', 'java'],
-      ['node', 'nodejs'],
+      ['node', 'node'],
       ['python', 'python'],
     ]) {
       try {

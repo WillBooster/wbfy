@@ -22,7 +22,7 @@ test.each`
   ({ dirPath, expected }: { dirPath: string; expected: string }) => {
     const packageDirPath = path.resolve(testFixturePackageRoot, dirPath);
     expect(fs.existsSync(packageDirPath)).toBe(true);
-    spawnSyncAndReturnStdout('asdf', ['install'], packageDirPath);
+    spawnSyncAndReturnStdout('mise', ['install'], packageDirPath);
     const version = spawnSyncAndReturnStdout('yarn', ['--version'], packageDirPath);
     expect(version).toBe(expected);
   }
