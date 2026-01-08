@@ -12,7 +12,6 @@ import { fixTestDirectoriesUpdatingPackageJson } from './fixers/testDirectory.js
 import { fixTypeDefinitions } from './fixers/typeDefinition.js';
 import { fixTypos } from './fixers/typos.js';
 import { generateAgentInstructions } from './generators/agents.js';
-import { generateToolVersions } from './generators/asdf.js';
 import { generateBiomeJsonc } from './generators/biome.js';
 import { generateBunfigToml } from './generators/bunfig.js';
 import { generateDockerignore } from './generators/dockerignore.js';
@@ -108,8 +107,6 @@ async function main(): Promise<void> {
       }
     }
 
-    // Install tools via asdf at first
-    await generateToolVersions(rootConfig);
     // Install yarn berry
     await generateYarnrcYml(rootConfig);
     if (rootConfig.isBun) {
