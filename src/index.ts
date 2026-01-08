@@ -25,7 +25,6 @@ import { generateHuskyrcUpdatingPackageJson } from './generators/huskyrc.js';
 import { generateIdeaSettings } from './generators/idea.js';
 import { generateLefthookUpdatingPackageJson } from './generators/lefthook.js';
 import { generateLintstagedrc } from './generators/lintstagedrc.js';
-import { generateMiseToml } from './generators/mise.js';
 import { generatePackageJson } from './generators/packageJson.js';
 import { generatePrettierignore } from './generators/prettierignore.js';
 import { generatePyrightConfigJson } from './generators/pyrightConfig.js';
@@ -108,8 +107,6 @@ async function main(): Promise<void> {
       }
     }
 
-    // Install tools via mise at first
-    await generateMiseToml(rootConfig);
     // Install yarn berry
     await generateYarnrcYml(rootConfig);
     if (rootConfig.isBun) {
