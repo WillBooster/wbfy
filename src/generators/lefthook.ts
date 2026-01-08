@@ -81,28 +81,14 @@ export async function generateLefthookUpdatingPackageJson(config: PackageConfig)
 
 async function core(config: PackageConfig): Promise<void> {
   const dirPath = path.resolve(config.dirPath, '.lefthook');
-  const packageJsonPath = path.resolve(config.dirPath, 'package.json');
-  const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
-  const packageJson = JSON.parse(jsonText) as PackageJson;
-  packageJson.scripts ??= {};
-  packageJson.dependencies ??= {};
-  packageJson.devDependencies ??= {};
-  delete packageJson.scripts.postinstall;
-  delete packageJson.scripts.postpublish;
-  delete packageJson.scripts.prepare;
-  delete packageJson.scripts.prepublishOnly;
-  delete packageJson.scripts.prepack;
-  delete packageJson.scripts.postpack;
-  delete packageJson.dependencies.husky;
-  delete packageJson.devDependencies.husky;
-  delete packageJson.dependencies.pinst;
-  delete packageJson.devDependencies.pinst;
+  const huskyDirPath = path.resolve(config.dirPath, '.husky');
+  const hasHuskyDir = fs.existsSync(huskyDirPath);
   const { typecheck } = generateScripts(config, {});
   const settings: Partial<typeof newSettings> = { ...newSettings };
   if (!typecheck) {
     delete settings['pre-push'];
   }
-  await Promise.all([
+  const cleanupPromises: Promise<unknown>[] = [
     fs.promises.writeFile(
       path.join(config.dirPath, 'lefthook.yml'),
       yaml.dump(settings, {
@@ -113,12 +99,35 @@ async function core(config: PackageConfig): Promise<void> {
         },
       })
     ),
-    fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
-    fs.promises.rm(path.resolve(config.dirPath, '.husky'), { force: true, recursive: true }),
-    fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }),
     fs.promises.rm(dirPath, { force: true, recursive: true }),
-  ]);
-  spawnSync('git', ['config', '--unset', 'core.hooksPath'], config.dirPath);
+  ];
+  if (hasHuskyDir) {
+    const packageJsonPath = path.resolve(config.dirPath, 'package.json');
+    const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
+    const packageJson = JSON.parse(jsonText) as PackageJson;
+    packageJson.scripts ??= {};
+    packageJson.dependencies ??= {};
+    packageJson.devDependencies ??= {};
+    delete packageJson.scripts.postinstall;
+    delete packageJson.scripts.postpublish;
+    delete packageJson.scripts.prepare;
+    delete packageJson.scripts.prepublishOnly;
+    delete packageJson.scripts.prepack;
+    delete packageJson.scripts.postpack;
+    delete packageJson.dependencies.husky;
+    delete packageJson.devDependencies.husky;
+    delete packageJson.dependencies.pinst;
+    delete packageJson.devDependencies.pinst;
+    cleanupPromises.push(
+      fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
+      fs.promises.rm(huskyDirPath, { force: true, recursive: true }),
+      fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true })
+    );
+  }
+  await Promise.all(cleanupPromises);
+  if (hasHuskyDir) {
+    spawnSync('git', ['config', '--unset', 'core.hooksPath'], config.dirPath);
+  }
 
   if (typecheck) {
     const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
