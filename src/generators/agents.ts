@@ -83,9 +83,8 @@ export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
 
 - Design each module with high cohesion, ensuring related functionality is grouped together.
 - Create understandable directory structures with low coupling and high cohesion.
-- When adding new functions or classes, define them below any functions or classes that call them to maintain clear call order.
+- When adding new functions or classes, define them below any functions or classes that call them to maintain a clear call order.
 - Write comments that explain "why" rather than "what". Avoid explanations that can be understood from the code itself.
-- Use stderr for logging debug messages temporarily since stdout output is sometimes omitted.
 - Prefer \`undefined\` over \`null\` unless explicitly dealing with APIs or libraries that require \`null\`.
 ${
   allConfigs.some((c) => c.depending.genI18nTs)
