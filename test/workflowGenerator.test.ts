@@ -80,7 +80,7 @@ test('skips generating workflows for reusable-workflows repository', async () =>
       github: false,
       npm: false,
     },
-    versionsText: '',
+    hasVersionSettings: false,
     packageJson: {},
     wbfyJson: undefined,
   };

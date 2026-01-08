@@ -9,7 +9,6 @@ import { z } from 'zod';
 
 import { getOctokit, gitHubUtil } from './utils/githubUtil.js';
 import { globIgnore } from './utils/globUtil.js';
-import { getToolVersionsContent } from './utils/spawnUtil.js';
 
 export interface PackageConfig {
   dirPath: string;
@@ -66,7 +65,7 @@ export interface PackageConfig {
     npm: boolean;
   };
   eslintBase?: EslintExtensionBase;
-  versionsText?: string;
+  hasVersionSettings: boolean;
   packageJson?: PackageJson;
   wbfyJson?: WbfyJson;
 }
@@ -128,20 +127,11 @@ export async function getPackageConfig(
       repoInfo = await fetchRepoInfo(dirPath, packageJson);
     }
 
-    let versionsText = getToolVersionsContent(dirPath)?.trim() ?? '';
-    for (const [prefix, name] of [
-      ['java', 'java'],
-      ['node', 'node'],
-      ['python', 'python'],
-    ]) {
-      try {
-        const nodeVersionContent = await fsp.readFile(path.resolve(dirPath, `.${prefix}-version`), 'utf8');
-        if (versionsText) {
-          versionsText += '\n';
-        }
-        versionsText += `${name} ${nodeVersionContent.trim()}`;
-      } catch {
-        // do nothing
+    let hasVersionSettings = hasVersionSettingsFile(dirPath);
+    for (const prefix of ['java', 'node', 'python']) {
+      if (fs.existsSync(path.resolve(dirPath, `.${prefix}-version`))) {
+        hasVersionSettings = true;
+        break;
       }
     }
 
@@ -230,7 +220,7 @@ export async function getPackageConfig(
         github: releasePlugins.includes('@semantic-release/github'),
         npm: releasePlugins.includes('@semantic-release/npm'),
       },
-      versionsText,
+      hasVersionSettings,
       packageJson,
       wbfyJson,
     };
@@ -251,6 +241,15 @@ export async function getPackageConfig(
   } catch {
     // do nothing
   }
+}
+
+function hasVersionSettingsFile(dirPath: string): boolean {
+  const current = path.resolve(dirPath);
+  return (
+    fs.existsSync(path.join(current, 'mise.toml')) ||
+    fs.existsSync(path.join(current, '.mise.toml')) ||
+    fs.existsSync(path.join(current, '.tool-versions'))
+  );
 }
 
 function containsAny(pattern: string, dirPath: string): boolean {
