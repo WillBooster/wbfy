@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import yaml from 'js-yaml';
-import type { PackageJson } from 'type-fest';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
@@ -101,24 +100,7 @@ async function core(config: PackageConfig): Promise<void> {
     fs.promises.rm(dirPath, { force: true, recursive: true }),
   ]);
   if (hasHuskyDir) {
-    const packageJsonPath = path.resolve(config.dirPath, 'package.json');
-    const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
-    const packageJson = JSON.parse(jsonText) as PackageJson;
-    packageJson.scripts ??= {};
-    packageJson.dependencies ??= {};
-    packageJson.devDependencies ??= {};
-    delete packageJson.scripts.postinstall;
-    delete packageJson.scripts.postpublish;
-    delete packageJson.scripts.prepare;
-    delete packageJson.scripts.prepublishOnly;
-    delete packageJson.scripts.prepack;
-    delete packageJson.scripts.postpack;
-    delete packageJson.dependencies.husky;
-    delete packageJson.devDependencies.husky;
-    delete packageJson.dependencies.pinst;
-    delete packageJson.devDependencies.pinst;
     await Promise.all([
-      fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, undefined, 2)),
       fs.promises.rm(huskyDirPath, { force: true, recursive: true }),
       fs.promises.rm(path.resolve(config.dirPath, '.huskyrc.json'), { force: true }),
     ]);

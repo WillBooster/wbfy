@@ -124,6 +124,8 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     delete jsonObj.devDependencies.husky;
     delete jsonObj.devDependencies.pinst;
     delete jsonObj.scripts.postinstall;
+    delete jsonObj.scripts.postpublish;
+    delete jsonObj.scripts.prepublishOnly;
     delete jsonObj.scripts.prepack;
     delete jsonObj.scripts.postpack;
     jsonObj.scripts.prepare = 'lefthook install || true';
