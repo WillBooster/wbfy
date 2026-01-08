@@ -85,12 +85,18 @@ async function core(config: PackageConfig): Promise<void> {
   const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
   const packageJson = JSON.parse(jsonText) as PackageJson;
   packageJson.scripts ??= {};
+  packageJson.dependencies ??= {};
+  packageJson.devDependencies ??= {};
   delete packageJson.scripts.postinstall;
   delete packageJson.scripts.postpublish;
   delete packageJson.scripts.prepare;
   delete packageJson.scripts.prepublishOnly;
   delete packageJson.scripts.prepack;
   delete packageJson.scripts.postpack;
+  delete packageJson.dependencies.husky;
+  delete packageJson.devDependencies.husky;
+  delete packageJson.dependencies.pinst;
+  delete packageJson.devDependencies.pinst;
   const { typecheck } = generateScripts(config, {});
   const settings: Partial<typeof newSettings> = { ...newSettings };
   if (!typecheck) {
