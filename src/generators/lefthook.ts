@@ -9,7 +9,6 @@ import type { PackageConfig } from '../packageConfig.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 
-import { generatePostMergeCommands } from './huskyrc.js';
 import { generateScripts } from './packageJson.js';
 
 const newSettings = {
@@ -88,7 +87,7 @@ async function core(config: PackageConfig): Promise<void> {
   if (!typecheck) {
     delete settings['pre-push'];
   }
-  const cleanupPromises: Promise<unknown>[] = [
+  await Promise.all([
     fs.promises.writeFile(
       path.join(config.dirPath, 'lefthook.yml'),
       yaml.dump(settings, {
@@ -100,7 +99,7 @@ async function core(config: PackageConfig): Promise<void> {
       })
     ),
     fs.promises.rm(dirPath, { force: true, recursive: true }),
-  ];
+  ]);
   if (hasHuskyDir) {
     const packageJsonPath = path.resolve(config.dirPath, 'package.json');
     const jsonText = await fs.promises.readFile(packageJsonPath, 'utf8');
@@ -142,4 +141,35 @@ async function core(config: PackageConfig): Promise<void> {
       mode: 0o755,
     })
   );
+}
+
+function generatePostMergeCommands(config: PackageConfig): string[] {
+  const postMergeCommands: string[] = [];
+  if (config.versionsText) {
+    const toolsChangedPattern = String.raw`(mise\.toml|\.mise\.toml|\.tool-versions|\..+-version)`;
+    // Pythonがないとインストールできない処理系が存在するため、強制的に最初にインストールする。
+    if (config.versionsText.includes('python ')) {
+      postMergeCommands.push(String.raw`run_if_changed "${toolsChangedPattern}" "mise install python"`);
+    }
+    postMergeCommands.push(String.raw`run_if_changed "${toolsChangedPattern}" "mise install"`);
+  }
+  const installCommand = config.isBun ? 'bun install' : 'yarn';
+  const rmNextDirectory = config.depending.blitz || config.depending.next ? ' && rm -Rf .next' : '';
+  postMergeCommands.push(String.raw`run_if_changed "package\.json" "${installCommand}${rmNextDirectory}"`);
+  if (config.doesContainPoetryLock) {
+    postMergeCommands.push(String.raw`run_if_changed "poetry\.lock" "poetry install"`);
+  }
+  if (config.depending.blitz) {
+    postMergeCommands.push(
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/blitz prisma migrate deploy"`,
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/blitz prisma generate"`,
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/blitz codegen"`
+    );
+  } else if (config.depending.prisma) {
+    postMergeCommands.push(
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma migrate deploy"`,
+      String.raw`run_if_changed ".*\.prisma" "node node_modules/.bin/dotenv -c development -- node node_modules/.bin/prisma generate"`
+    );
+  }
+  return postMergeCommands;
 }

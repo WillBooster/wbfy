@@ -21,7 +21,6 @@ import { generateGeminiConfig } from './generators/geminiConfig.js';
 import { removeGeminiSettings } from './generators/geminiSettings.js';
 import { generateGitattributes } from './generators/gitattributes.js';
 import { generateGitignore } from './generators/gitignore.js';
-import { generateHuskyrcUpdatingPackageJson } from './generators/huskyrc.js';
 import { generateIdeaSettings } from './generators/idea.js';
 import { generateLefthookUpdatingPackageJson } from './generators/lefthook.js';
 import { generateLintstagedrc } from './generators/lintstagedrc.js';
@@ -135,9 +134,7 @@ async function main(): Promise<void> {
       setupLabels(rootConfig),
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
-      rootConfig.isBun
-        ? generateHuskyrcUpdatingPackageJson(rootConfig).then(() => generateLefthookUpdatingPackageJson(rootConfig))
-        : generateHuskyrcUpdatingPackageJson(rootConfig),
+      generateLefthookUpdatingPackageJson(rootConfig),
       generateLintstagedrc(rootConfig),
     ]);
     await promisePool.promiseAll();
