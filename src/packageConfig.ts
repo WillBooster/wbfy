@@ -9,7 +9,6 @@ import { z } from 'zod';
 
 import { getOctokit, gitHubUtil } from './utils/githubUtil.js';
 import { globIgnore } from './utils/globUtil.js';
-import { getToolVersionsContent } from './utils/spawnUtil.js';
 
 export interface PackageConfig {
   dirPath: string;
@@ -128,8 +127,7 @@ export async function getPackageConfig(
       repoInfo = await fetchRepoInfo(dirPath, packageJson);
     }
 
-    const toolVersionsContent = getToolVersionsContent(dirPath);
-    let hasVersionSettings = Boolean(toolVersionsContent?.trim());
+    let hasVersionSettings = hasVersionSettingsFile(dirPath);
     for (const prefix of ['java', 'node', 'python']) {
       if (fs.existsSync(path.resolve(dirPath, `.${prefix}-version`))) {
         hasVersionSettings = true;
@@ -242,6 +240,22 @@ export async function getPackageConfig(
     }
   } catch {
     // do nothing
+  }
+}
+
+function hasVersionSettingsFile(dirPath: string): boolean {
+  let current = path.resolve(dirPath);
+  for (;;) {
+    if (
+      fs.existsSync(path.join(current, 'mise.toml')) ||
+      fs.existsSync(path.join(current, '.mise.toml')) ||
+      fs.existsSync(path.join(current, '.tool-versions'))
+    ) {
+      return true;
+    }
+    const parent = path.dirname(current);
+    if (parent === current) return false;
+    current = parent;
   }
 }
 
