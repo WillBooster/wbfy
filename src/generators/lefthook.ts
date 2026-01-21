@@ -10,28 +10,40 @@ import { spawnSync } from '../utils/spawnUtil.js';
 
 import { generateScripts } from './packageJson.js';
 
-const newSettings = {
+interface LefthookSettings {
+  'post-merge': {
+    scripts: {
+      'prepare.sh': {
+        runner: 'bash';
+      };
+    };
+  };
+  'pre-commit': {
+    commands: {
+      cleanup: {
+        glob: string;
+        run: string;
+      };
+      'check-migrations': {
+        glob: string;
+        run: string;
+      };
+    };
+  };
+  'pre-push': {
+    scripts: {
+      'check.sh': {
+        runner: 'bash';
+      };
+    };
+  };
+}
+
+const baseSettings: Omit<LefthookSettings, 'pre-commit'> = {
   'post-merge': {
     scripts: {
       'prepare.sh': {
         runner: 'bash',
-      },
-    },
-  },
-  'pre-commit': {
-    commands: {
-      cleanup: {
-        glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
-        run: 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}',
-      },
-      'check-migrations': {
-        glob: '**/migration.sql',
-        run: `
-if grep -q 'Warnings:' {staged_files}; then
-  echo "Migration SQL files ({staged_files}) contain warnings! Please solve the warnings and commit again."
-  exit 1
-fi
-`.trim(),
       },
     },
   },
@@ -44,9 +56,28 @@ fi
   },
 };
 
+const preCommitSettings = {
+  commands: {
+    cleanup: {
+      glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
+      run: '',
+    },
+    'check-migrations': {
+      glob: '**/migration.sql',
+      run: `
+if grep -q 'Warnings:' {staged_files}; then
+  echo "Migration SQL files ({staged_files}) contain warnings! Please solve the warnings and commit again."
+  exit 1
+fi
+`.trim(),
+    },
+  },
+};
+
 const scripts = {
-  prePush: `bun --bun node_modules/.bin/wb typecheck`,
-  prePushForLab: `
+  prePush: (config: PackageConfig) => getTypecheckCommand(config),
+  prePushForLab: (config: PackageConfig) =>
+    `
 #!/bin/bash
 
 if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
@@ -56,7 +87,7 @@ if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "e
   exit 1
 fi
 
-bun --bun node_modules/.bin/wb typecheck
+${getTypecheckCommand(config)}
 `.trim(),
   postMerge: `
 #!/bin/bash
@@ -82,7 +113,19 @@ async function core(config: PackageConfig): Promise<void> {
   const huskyDirPath = path.resolve(config.dirPath, '.husky');
   const hasHuskyDir = fs.existsSync(huskyDirPath);
   const { typecheck } = generateScripts(config, {});
-  const settings: Partial<typeof newSettings> = { ...newSettings };
+  const settings: Partial<LefthookSettings> = {
+    ...baseSettings,
+    'pre-commit': {
+      ...preCommitSettings,
+      commands: {
+        ...preCommitSettings.commands,
+        cleanup: {
+          ...preCommitSettings.commands.cleanup,
+          run: getPreCommitCommand(config),
+        },
+      },
+    },
+  };
   if (!typecheck) {
     delete settings['pre-push'];
   }
@@ -108,7 +151,9 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   if (typecheck) {
-    const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
+    const prePush = config.repository?.startsWith('github:WillBoosterLab/')
+      ? scripts.prePushForLab(config)
+      : scripts.prePush(config);
     fs.mkdirSync(path.join(dirPath, 'pre-push'), { recursive: true });
     await promisePool.run(() =>
       fs.promises.writeFile(path.join(dirPath, 'pre-push', 'check.sh'), prePush + '\n', {
@@ -150,4 +195,15 @@ function generatePostMergeCommands(config: PackageConfig): string[] {
     );
   }
   return postMergeCommands;
+}
+
+function getPreCommitCommand(config: PackageConfig): string {
+  if (config.isBun) {
+    return 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}';
+  }
+  return 'yarn lint-staged';
+}
+
+function getTypecheckCommand(config: PackageConfig): string {
+  return config.isBun ? 'bun --bun node_modules/.bin/wb typecheck' : 'yarn typecheck';
 }
