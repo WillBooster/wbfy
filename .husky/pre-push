@@ -1,1 +1,1 @@
-node node_modules/.bin/tsc --noEmit --Pretty
+node node_modules/.bin/tsc --noEmit
