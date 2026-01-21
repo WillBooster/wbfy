@@ -43,6 +43,22 @@ function generateAgentInstruction(
 - Description: ${rootConfig.packageJson?.description}
 - Package Manager: ${packageManager} on zsh
 
+## General Instructions
+
+- Do not write tests unless explicitly requested.
+- When fixing tests, gather debug information through logging and screenshots before modifying the code.
+- After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
+  - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
+- Once you have verified your changes, commit them to a non-main branch using the \`--no-verify\` option and push to the current branch.
+  - Follow conventional commits, i.e., your commit message should start with \`feat:\`, \`fix:\`, etc.
+  - If not specified, make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
+  - Always create new commits. Avoid using \`--amend\`.
+${
+  allConfigs.some((c) => c.hasStartTest)
+    ? `- Use \`${packageManager} run start-test\` to launch a web server for debugging or testing.`
+    : ''
+}
+
 ${generateAgentCodingStyle(allConfigs)}
 `
     .replaceAll(/\.\n\n+-/g, '.\n-')
