@@ -60,7 +60,7 @@ const preCommitSettings = {
   commands: {
     cleanup: {
       glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
-      run: '',
+      run: '{{PRE_COMMIT_COMMAND}}',
     },
     'check-migrations': {
       glob: '**/migration.sql',
@@ -74,10 +74,9 @@ fi
   },
 };
 
-const scripts = {
-  prePush: (config: PackageConfig) => getTypecheckCommand(config),
-  prePushForLab: (config: PackageConfig) =>
-    `
+const scriptTemplates = {
+  prePush: '{{TYPECHECK_COMMAND}}',
+  prePushForLab: `
 #!/bin/bash
 
 if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
@@ -87,7 +86,7 @@ if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "e
   exit 1
 fi
 
-${getTypecheckCommand(config)}
+{{TYPECHECK_COMMAND}}
 `.trim(),
   postMerge: `
 #!/bin/bash
@@ -113,6 +112,7 @@ async function core(config: PackageConfig): Promise<void> {
   const huskyDirPath = path.resolve(config.dirPath, '.husky');
   const hasHuskyDir = fs.existsSync(huskyDirPath);
   const { typecheck } = generateScripts(config, {});
+  const placeholders = getPlaceholders(config);
   const settings: Partial<LefthookSettings> = {
     ...baseSettings,
     'pre-commit': {
@@ -121,7 +121,7 @@ async function core(config: PackageConfig): Promise<void> {
         ...preCommitSettings.commands,
         cleanup: {
           ...preCommitSettings.commands.cleanup,
-          run: getPreCommitCommand(config),
+          run: applyPlaceholders(preCommitSettings.commands.cleanup.run, placeholders),
         },
       },
     },
@@ -151,9 +151,10 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   if (typecheck) {
-    const prePush = config.repository?.startsWith('github:WillBoosterLab/')
-      ? scripts.prePushForLab(config)
-      : scripts.prePush(config);
+    const prePushTemplate = config.repository?.startsWith('github:WillBoosterLab/')
+      ? scriptTemplates.prePushForLab
+      : scriptTemplates.prePush;
+    const prePush = applyPlaceholders(prePushTemplate, placeholders);
     fs.mkdirSync(path.join(dirPath, 'pre-push'), { recursive: true });
     await promisePool.run(() =>
       fs.promises.writeFile(path.join(dirPath, 'pre-push', 'check.sh'), prePush + '\n', {
@@ -161,7 +162,7 @@ async function core(config: PackageConfig): Promise<void> {
       })
     );
   }
-  const postMergeCommand = `${scripts.postMerge}\n\n${generatePostMergeCommands(config).join('\n')}\n`;
+  const postMergeCommand = `${scriptTemplates.postMerge}\n\n${generatePostMergeCommands(config).join('\n')}\n`;
   fs.mkdirSync(path.join(dirPath, 'post-merge'), { recursive: true });
   await promisePool.run(() =>
     fs.promises.writeFile(path.resolve(dirPath, 'post-merge', 'prepare.sh'), postMergeCommand, {
@@ -206,4 +207,21 @@ function getPreCommitCommand(config: PackageConfig): string {
 
 function getTypecheckCommand(config: PackageConfig): string {
   return config.isBun ? 'bun --bun node_modules/.bin/wb typecheck' : 'yarn typecheck';
+}
+
+type PlaceholderKey = 'PRE_COMMIT_COMMAND' | 'TYPECHECK_COMMAND';
+type Placeholders = Record<PlaceholderKey, string>;
+
+function getPlaceholders(config: PackageConfig): Placeholders {
+  return {
+    PRE_COMMIT_COMMAND: getPreCommitCommand(config),
+    TYPECHECK_COMMAND: getTypecheckCommand(config),
+  };
+}
+
+function applyPlaceholders(template: string, values: Placeholders): string {
+  return template.replaceAll(
+    /\{\{(PRE_COMMIT_COMMAND|TYPECHECK_COMMAND)\}\}/g,
+    (_, key: PlaceholderKey) => values[key]
+  );
 }
