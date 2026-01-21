@@ -60,7 +60,7 @@ const preCommitSettings = {
   commands: {
     cleanup: {
       glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
-      run: '{{PRE_COMMIT_COMMAND}}',
+      run: '__PM__ lint-staged',
     },
     'check-migrations': {
       glob: '**/migration.sql',
@@ -74,8 +74,10 @@ fi
   },
 };
 
+const packageManagerPlaceholder = '__PM__';
+const typecheckPlaceholder = '__TYPECHECK__';
+
 const scriptTemplates = {
-  prePush: '{{TYPECHECK_COMMAND}}',
   prePushForLab: `
 #!/bin/bash
 
@@ -86,7 +88,7 @@ if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "e
   exit 1
 fi
 
-{{TYPECHECK_COMMAND}}
+${typecheckPlaceholder}
 `.trim(),
   postMerge: `
 #!/bin/bash
@@ -112,7 +114,9 @@ async function core(config: PackageConfig): Promise<void> {
   const huskyDirPath = path.resolve(config.dirPath, '.husky');
   const hasHuskyDir = fs.existsSync(huskyDirPath);
   const { typecheck } = generateScripts(config, {});
-  const placeholders = getPlaceholders(config);
+  const packageManagerCommand = getPackageManagerCommand(config);
+  const preCommitTemplate = getPreCommitTemplate(config);
+  const prePushTemplate = getPrePushTemplate(config);
   const settings: Partial<LefthookSettings> = {
     ...baseSettings,
     'pre-commit': {
@@ -121,7 +125,7 @@ async function core(config: PackageConfig): Promise<void> {
         ...preCommitSettings.commands,
         cleanup: {
           ...preCommitSettings.commands.cleanup,
-          run: applyPlaceholders(preCommitSettings.commands.cleanup.run, placeholders),
+          run: applyPackageManager(preCommitTemplate, packageManagerCommand),
         },
       },
     },
@@ -151,10 +155,10 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   if (typecheck) {
-    const prePushTemplate = config.repository?.startsWith('github:WillBoosterLab/')
-      ? scriptTemplates.prePushForLab
-      : scriptTemplates.prePush;
-    const prePush = applyPlaceholders(prePushTemplate, placeholders);
+    const prePushContent = config.repository?.startsWith('github:WillBoosterLab/')
+      ? scriptTemplates.prePushForLab.replace(typecheckPlaceholder, prePushTemplate)
+      : prePushTemplate;
+    const prePush = applyPackageManager(prePushContent, packageManagerCommand);
     fs.mkdirSync(path.join(dirPath, 'pre-push'), { recursive: true });
     await promisePool.run(() =>
       fs.promises.writeFile(path.join(dirPath, 'pre-push', 'check.sh'), prePush + '\n', {
@@ -198,30 +202,22 @@ function generatePostMergeCommands(config: PackageConfig): string[] {
   return postMergeCommands;
 }
 
-function getPreCommitCommand(config: PackageConfig): string {
-  if (config.isBun) {
-    return 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}';
-  }
-  return 'yarn lint-staged';
+function getPackageManagerCommand(config: PackageConfig): string {
+  return config.isBun ? 'bun --bun' : 'yarn';
 }
 
-function getTypecheckCommand(config: PackageConfig): string {
-  return config.isBun ? 'bun --bun node_modules/.bin/wb typecheck' : 'yarn typecheck';
+function getPreCommitTemplate(config: PackageConfig): string {
+  return config.isBun
+    ? `${packageManagerPlaceholder} wb lint --fix --format {staged_files} && git add {staged_files}`
+    : preCommitSettings.commands.cleanup.run;
 }
 
-type PlaceholderKey = 'PRE_COMMIT_COMMAND' | 'TYPECHECK_COMMAND';
-type Placeholders = Record<PlaceholderKey, string>;
-
-function getPlaceholders(config: PackageConfig): Placeholders {
-  return {
-    PRE_COMMIT_COMMAND: getPreCommitCommand(config),
-    TYPECHECK_COMMAND: getTypecheckCommand(config),
-  };
+function getPrePushTemplate(config: PackageConfig): string {
+  return config.isBun
+    ? `${packageManagerPlaceholder} node_modules/.bin/wb typecheck`
+    : `${packageManagerPlaceholder} typecheck`;
 }
 
-function applyPlaceholders(template: string, values: Placeholders): string {
-  return template.replaceAll(
-    /\{\{(PRE_COMMIT_COMMAND|TYPECHECK_COMMAND)\}\}/g,
-    (_, key: PlaceholderKey) => values[key]
-  );
+function applyPackageManager(template: string, packageManagerCommand: string): string {
+  return template.replaceAll(packageManagerPlaceholder, packageManagerCommand);
 }
