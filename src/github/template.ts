@@ -8,6 +8,8 @@ import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
+const packageManagerRunPlaceholder = '__PM_RUN__';
+
 const templates = {
   'pull_request_template.md': `
 Close #<IssueNumber>
@@ -17,8 +19,8 @@ Close #<IssueNumber>
 - [ ] I've confirmed \`All checks have passed\` on this page.
   - PR title follows [Angular's commit message format](https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format).
   - PR title doesn't have \`WIP:\`.
-  - The test command (e.g., \`yarn test\`) passed.
-  - The lint command (e.g., \`yarn lint\`) passed.
+  - The test command (e.g., \`${packageManagerRunPlaceholder} test\`) passed.
+  - The lint command (e.g., \`${packageManagerRunPlaceholder} lint\`) passed.
   - You may leave this box unchecked due to long workflows.
 - [ ] I've reviewed my changes on the GitHub diff view.
 - [ ] I've written the steps to test my changes.
@@ -57,16 +59,22 @@ Close #<IssueNumber>
 export async function generateGitHubTemplates(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateGitHubTemplates', async () => {
     for (const [fileName, newContent] of Object.entries(templates)) {
+      const content = applyPackageManagerTemplate(newContent, config);
       const filePath = path.resolve(config.dirPath, '.github', fileName);
       if (fs.existsSync(filePath)) {
         const oldContent = await fs.promises.readFile(filePath, 'utf8');
-        if (distance(oldContent, newContent) > newContent.length / 2) {
+        if (distance(oldContent, content) > content.length / 2) {
           continue;
         }
       }
 
       await fs.promises.mkdir(path.resolve(config.dirPath, '.github'), { recursive: true });
-      await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
+      await promisePool.run(() => fsUtil.generateFile(filePath, content));
     }
   });
+}
+
+function applyPackageManagerTemplate(template: string, config: PackageConfig): string {
+  const packageManagerCommand = config.isBun ? 'bun run' : 'yarn';
+  return template.replaceAll(packageManagerRunPlaceholder, packageManagerCommand);
 }
