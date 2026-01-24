@@ -45,12 +45,13 @@ function generateAgentInstruction(
 
 ## General Instructions
 
+- Create a new branch if the current branch is \`main\`.
 - Do not write tests unless explicitly requested.
 - When fixing tests, gather debug information through logging and screenshots before modifying the code.
-- After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (note: this may take up to 30 minutes), or run \`${packageManager} check-for-ai\` for type checking and linting only.
+- After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour), or run \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
 - Once you have verified your changes, commit them to a non-main branch using the \`--no-verify\` option and push to the current branch.
-  - Follow conventional commits, i.e., your commit message should start with \`feat:\`, \`fix:\`, etc.
+  - Follow conventional commits; your commit message should start with \`feat:\`, \`fix:\`, etc.
   - If not specified, make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
   - Always create new commits. Avoid using \`--amend\`.
 ${
@@ -72,11 +73,13 @@ export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
   return `
 ## Coding Style
 
-- Design each module with high cohesion, ensuring related functionality is grouped together.
-- Create understandable directory structures with low coupling and high cohesion.
-- When adding new functions or classes, define them below any functions or classes that call them to maintain a clear call order.
-- Write comments that explain "why" rather than "what". Avoid explanations that can be understood from the code itself.
-- Prefer \`undefined\` over \`null\` unless explicitly dealing with APIs or libraries that require \`null\`.
+- Simplify code as much as possible to eliminate redundancy.
+- Design each module with high cohesion, grouping related functionality together.
+  - Refactor existing large modules into smaller, focused modules when necessary.
+  - Create well-organized directory structures with low coupling and high cohesion.
+- When adding new functions or classes, define them below any functions or classes that call them to maintain a clear top-down call order.
+- Write comments that explain "why" rather than "what". Avoid stating what can be understood from the code itself.
+- Prefer \`undefined\` over \`null\` unless explicitly required by APIs or libraries.
 ${
   allConfigs.some((c) => c.depending.genI18nTs)
     ? `- When introducing new string literals in React components, update the language resource files in the \`i18n\` directory (e.g., \`i18n/ja-JP.json\`). Reference these strings using the \`i18n\` utility. For example, use \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
