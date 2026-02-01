@@ -1,1 +1,1 @@
-bun --bun node_modules/.bin/wb typecheck
+yarn run typecheck
