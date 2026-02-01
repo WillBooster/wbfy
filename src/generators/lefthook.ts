@@ -49,7 +49,7 @@ function getPrePushScript(config: PackageConfig): string {
   if (config.isBun) {
     typecheckCommand = config.depending.wb ? 'bun --bun node_modules/.bin/wb typecheck' : 'bun run typecheck';
   } else {
-    typecheckCommand = config.depending.wb ? 'node node_modules/.bin/wb typecheck' : 'yarn run typecheck';
+    typecheckCommand = config.depending.wb ? 'yarn wb typecheck' : 'yarn run typecheck';
   }
   if (config.repository?.startsWith('github:WillBoosterLab/')) {
     return `
