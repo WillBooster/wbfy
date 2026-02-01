@@ -10,28 +10,40 @@ import { spawnSync } from '../utils/spawnUtil.js';
 
 import { generateScripts } from './packageJson.js';
 
-const newSettings = {
+interface LefthookSettings {
+  'post-merge': {
+    scripts: {
+      'prepare.sh': {
+        runner: 'bash';
+      };
+    };
+  };
+  'pre-commit': {
+    commands: {
+      cleanup: {
+        glob: string;
+        run: string;
+      };
+      'check-migrations': {
+        glob: string;
+        run: string;
+      };
+    };
+  };
+  'pre-push': {
+    scripts: {
+      'check.sh': {
+        runner: 'bash';
+      };
+    };
+  };
+}
+
+const baseSettings: Omit<LefthookSettings, 'pre-commit'> = {
   'post-merge': {
     scripts: {
       'prepare.sh': {
         runner: 'bash',
-      },
-    },
-  },
-  'pre-commit': {
-    commands: {
-      cleanup: {
-        glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
-        run: 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}',
-      },
-      'check-migrations': {
-        glob: '**/migration.sql',
-        run: `
-if grep -q 'Warnings:' {staged_files}; then
-  echo "Migration SQL files ({staged_files}) contain warnings! Please solve the warnings and commit again."
-  exit 1
-fi
-`.trim(),
       },
     },
   },
@@ -44,29 +56,23 @@ fi
   },
 };
 
-function getPrePushScript(config: PackageConfig): string {
-  let typecheckCommand: string;
-  if (config.isBun) {
-    typecheckCommand = config.depending.wb ? 'bun --bun node_modules/.bin/wb typecheck' : 'bun run typecheck';
-  } else {
-    typecheckCommand = config.depending.wb ? 'yarn wb typecheck' : 'yarn run typecheck';
-  }
-  if (config.repository?.startsWith('github:WillBoosterLab/')) {
-    return `
-#!/bin/bash
-
-if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
-  echo "************************************************"
-  echo "*** Don't push main branch directly. Use PR! ***"
-  echo "************************************************"
+const preCommitSettings: LefthookSettings['pre-commit'] = {
+  commands: {
+    cleanup: {
+      glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
+      run: '',
+    },
+    'check-migrations': {
+      glob: '**/migration.sql',
+      run: `
+if grep -q 'Warnings:' {staged_files}; then
+  echo "Migration SQL files ({staged_files}) contain warnings! Please solve the warnings and commit again."
   exit 1
 fi
-
-${typecheckCommand}
-`.trim();
-  }
-  return typecheckCommand;
-}
+`.trim(),
+    },
+  },
+};
 
 const scripts = {
   postMerge: `
@@ -93,20 +99,21 @@ async function core(config: PackageConfig): Promise<void> {
   const huskyDirPath = path.resolve(config.dirPath, '.husky');
   const hasHuskyDir = fs.existsSync(huskyDirPath);
   const { typecheck } = generateScripts(config, {});
-  const settings: Partial<typeof newSettings> = { ...newSettings };
+  const settings: Partial<LefthookSettings> = {
+    ...baseSettings,
+    'pre-commit': {
+      ...preCommitSettings,
+      commands: {
+        ...preCommitSettings.commands,
+        cleanup: {
+          ...preCommitSettings.commands.cleanup,
+          run: getCleanupCommand(config),
+        },
+      },
+    },
+  };
   if (!typecheck) {
     delete settings['pre-push'];
-  }
-  if (settings['pre-commit']) {
-    let cleanupCommand: string;
-    if (config.isBun && config.depending.wb) {
-      cleanupCommand = 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}';
-    } else if (config.isBun) {
-      cleanupCommand = 'bun run cleanup && git add {staged_files}';
-    } else {
-      cleanupCommand = 'yarn run cleanup && git add {staged_files}';
-    }
-    (settings['pre-commit'].commands.cleanup as { run: string }).run = cleanupCommand;
   }
   await Promise.all([
     fs.promises.writeFile(
@@ -145,6 +152,40 @@ async function core(config: PackageConfig): Promise<void> {
       mode: 0o755,
     })
   );
+}
+
+function getPrePushScript(config: PackageConfig): string {
+  let typecheckCommand: string;
+  if (config.isBun) {
+    typecheckCommand = config.depending.wb ? 'bun --bun node_modules/.bin/wb typecheck' : 'bun run typecheck';
+  } else {
+    typecheckCommand = config.depending.wb ? 'yarn wb typecheck' : 'yarn run typecheck';
+  }
+  if (config.repository?.startsWith('github:WillBoosterLab/')) {
+    return `
+#!/bin/bash
+
+if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
+  echo "************************************************"
+  echo "*** Don't push main branch directly. Use PR! ***"
+  echo "************************************************"
+  exit 1
+fi
+
+${typecheckCommand}
+`.trim();
+  }
+  return typecheckCommand;
+}
+
+function getCleanupCommand(config: PackageConfig): string {
+  if (config.isBun && config.depending.wb) {
+    return 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}';
+  }
+  if (config.isBun) {
+    return 'bun run cleanup && git add {staged_files}';
+  }
+  return 'yarn run cleanup && git add {staged_files}';
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {

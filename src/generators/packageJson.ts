@@ -436,7 +436,7 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
       lint: `eslint --color`,
       'lint-fix': 'yarn lint --fix',
       prettify: `prettier --cache --color --write "**/{.*/,}*.{${extensions.prettier.join(',')}}" "!**/test{-,/}fixtures/**"`,
-      typecheck: 'tsc --noEmit --Pretty',
+      typecheck: 'tsc --noEmit',
     };
     if (config.doesContainSubPackageJsons) {
       scripts = merge(
