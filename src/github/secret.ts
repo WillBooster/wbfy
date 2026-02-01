@@ -1,15 +1,10 @@
-import { createRequire } from 'node:module';
-
 import dotenv from 'dotenv';
-import type * as Sodium from 'libsodium-wrappers';
+import sodium from 'libsodium-wrappers';
 
 import { logger } from '../logger.js';
 import { options } from '../options.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { getOctokit, gitHubUtil, hasGitHubToken } from '../utils/githubUtil.js';
-
-const require = createRequire(import.meta.url);
-const sodium = require('libsodium-wrappers') as typeof Sodium;
 
 const DEPRECATED_SECRET_NAMES = ['READY_DISCORD_WEBHOOK_URL', 'GH_BOT_PAT', 'PUBLIC_GH_BOT_PAT'];
 
