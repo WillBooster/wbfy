@@ -44,9 +44,15 @@ fi
   },
 };
 
-const scripts = {
-  prePush: `bun --bun node_modules/.bin/wb typecheck`,
-  prePushForLab: `
+function getPrePushScript(config: PackageConfig): string {
+  let typecheckCommand: string;
+  if (config.isBun) {
+    typecheckCommand = config.depending.wb ? 'bun --bun node_modules/.bin/wb typecheck' : 'bun run typecheck';
+  } else {
+    typecheckCommand = config.depending.wb ? 'node node_modules/.bin/wb typecheck' : 'yarn run typecheck';
+  }
+  if (config.repository?.startsWith('github:WillBoosterLab/')) {
+    return `
 #!/bin/bash
 
 if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
@@ -56,8 +62,13 @@ if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "e
   exit 1
 fi
 
-bun --bun node_modules/.bin/wb typecheck
-`.trim(),
+${typecheckCommand}
+`.trim();
+  }
+  return typecheckCommand;
+}
+
+const scripts = {
   postMerge: `
 #!/bin/bash
 
@@ -86,6 +97,17 @@ async function core(config: PackageConfig): Promise<void> {
   if (!typecheck) {
     delete settings['pre-push'];
   }
+  if (settings['pre-commit']) {
+    let cleanupCommand: string;
+    if (config.isBun && config.depending.wb) {
+      cleanupCommand = 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}';
+    } else if (config.isBun) {
+      cleanupCommand = 'bun run cleanup && git add {staged_files}';
+    } else {
+      cleanupCommand = 'yarn run cleanup && git add {staged_files}';
+    }
+    (settings['pre-commit'].commands.cleanup as { run: string }).run = cleanupCommand;
+  }
   await Promise.all([
     fs.promises.writeFile(
       path.join(config.dirPath, 'lefthook.yml'),
@@ -108,7 +130,7 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   if (typecheck) {
-    const prePush = config.repository?.startsWith('github:WillBoosterLab/') ? scripts.prePushForLab : scripts.prePush;
+    const prePush = getPrePushScript(config);
     fs.mkdirSync(path.join(dirPath, 'pre-push'), { recursive: true });
     await promisePool.run(() =>
       fs.promises.writeFile(path.join(dirPath, 'pre-push', 'check.sh'), prePush + '\n', {

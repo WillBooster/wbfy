@@ -1537,21 +1537,21 @@ __metadata:
   linkType: hard
 
 "@emnapi/core@npm:^1.4.3":
-  version: 1.7.1
-  resolution: "@emnapi/core@npm:1.7.1"
+  version: 1.8.0
+  resolution: "@emnapi/core@npm:1.8.0"
   dependencies:
     "@emnapi/wasi-threads": "npm:1.1.0"
     tslib: "npm:^2.4.0"
-  checksum: 10c0/f3740be23440b439333e3ae3832163f60c96c4e35337f3220ceba88f36ee89a57a871d27c94eb7a9ff98a09911ed9a2089e477ab549f4d30029f8b907f84a351
+  checksum: 10c0/4bb07df0a6ba6478bd4bee2a3609df1f9ef835588227261e9d8ef40f25a9e7596d837f663a4b2c2193d7e8a130370cab5a8063255d81c30903a8c167435d2687
   languageName: node
   linkType: hard
 
 "@emnapi/runtime@npm:^1.4.3":
-  version: 1.7.1
-  resolution: "@emnapi/runtime@npm:1.7.1"
+  version: 1.8.0
+  resolution: "@emnapi/runtime@npm:1.8.0"
   dependencies:
     tslib: "npm:^2.4.0"
-  checksum: 10c0/26b851cd3e93877d8732a985a2ebf5152325bbacc6204ef5336a47359dedcc23faeb08cdfcb8bb389b5401b3e894b882bc1a1e55b4b7c1ed1e67c991a760ddd5
+  checksum: 10c0/25330ade92c48d19f4dc896ecfe906a45c95bd2d3d4155fcf4934e796703f90f23c8f2e7466be44ec734b68ea3e50f64831647d75e1bd44aebbbe1ca870f932a
   languageName: node
   linkType: hard
 
@@ -6392,10 +6392,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:16.5.0, globals@npm:^16.4.0":
-  version: 16.5.0
-  resolution: "globals@npm:16.5.0"
-  checksum: 10c0/615241dae7851c8012f5aa0223005b1ed6607713d6813de0741768bd4ddc39353117648f1a7086b4b0fa45eae733f1c0a0fe369aa4e543bb63f8de8990178ea9
+"globals@npm:17.0.0":
+  version: 17.0.0
+  resolution: "globals@npm:17.0.0"
+  checksum: 10c0/e3c169fdcb0fc6755707b697afb367bea483eb29992cfc0de1637382eb893146e17f8f96db6d7453e3696b478a7863ae2000e6c71cd2f4061410285106d3847a
   languageName: node
   linkType: hard
 
@@ -6403,6 +6403,13 @@ __metadata:
   version: 14.0.0
   resolution: "globals@npm:14.0.0"
   checksum: 10c0/b96ff42620c9231ad468d4c58ff42afee7777ee1c963013ff8aabe095a451d0ceeb8dcd8ef4cbd64d2538cef45f787a78ba3a9574f4a634438963e334471302d
+  languageName: node
+  linkType: hard
+
+"globals@npm:^16.4.0":
+  version: 16.5.0
+  resolution: "globals@npm:16.5.0"
+  checksum: 10c0/615241dae7851c8012f5aa0223005b1ed6607713d6813de0741768bd4ddc39353117648f1a7086b4b0fa45eae733f1c0a0fe369aa4e543bb63f8de8990178ea9
   languageName: node
   linkType: hard
 
@@ -6595,15 +6602,6 @@ __metadata:
   version: 8.0.1
   resolution: "human-signals@npm:8.0.1"
   checksum: 10c0/195ac607108c56253757717242e17cd2e21b29f06c5d2dad362e86c672bf2d096e8a3bbb2601841c376c2301c4ae7cff129e87f740aa4ebff1390c163114c7c4
-  languageName: node
-  linkType: hard
-
-"husky@npm:9.1.7":
-  version: 9.1.7
-  resolution: "husky@npm:9.1.7"
-  bin:
-    husky: bin.js
-  checksum: 10c0/35bb110a71086c48906aa7cd3ed4913fb913823715359d65e32e0b964cb1e255593b0ae8014a5005c66a68e6fa66c38dcfa8056dbbdfb8b0187c0ffe7ee3a58f
   languageName: node
   linkType: hard
 
@@ -7615,6 +7613,117 @@ __metadata:
   dependencies:
     json-buffer: "npm:3.0.1"
   checksum: 10c0/aa52f3c5e18e16bb6324876bb8b59dd02acf782a4b789c7b2ae21107fab95fab3890ed448d4f8dba80ce05391eeac4bfabb4f02a20221342982f806fa2cf271e
+  languageName: node
+  linkType: hard
+
+"lefthook-darwin-arm64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-darwin-arm64@npm:2.0.13"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-darwin-x64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-darwin-x64@npm:2.0.13"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook-freebsd-arm64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-freebsd-arm64@npm:2.0.13"
+  conditions: os=freebsd & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-freebsd-x64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-freebsd-x64@npm:2.0.13"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook-linux-arm64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-linux-arm64@npm:2.0.13"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-linux-x64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-linux-x64@npm:2.0.13"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook-openbsd-arm64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-openbsd-arm64@npm:2.0.13"
+  conditions: os=openbsd & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-openbsd-x64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-openbsd-x64@npm:2.0.13"
+  conditions: os=openbsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook-windows-arm64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-windows-arm64@npm:2.0.13"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lefthook-windows-x64@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook-windows-x64@npm:2.0.13"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lefthook@npm:2.0.13":
+  version: 2.0.13
+  resolution: "lefthook@npm:2.0.13"
+  dependencies:
+    lefthook-darwin-arm64: "npm:2.0.13"
+    lefthook-darwin-x64: "npm:2.0.13"
+    lefthook-freebsd-arm64: "npm:2.0.13"
+    lefthook-freebsd-x64: "npm:2.0.13"
+    lefthook-linux-arm64: "npm:2.0.13"
+    lefthook-linux-x64: "npm:2.0.13"
+    lefthook-openbsd-arm64: "npm:2.0.13"
+    lefthook-openbsd-x64: "npm:2.0.13"
+    lefthook-windows-arm64: "npm:2.0.13"
+    lefthook-windows-x64: "npm:2.0.13"
+  dependenciesMeta:
+    lefthook-darwin-arm64:
+      optional: true
+    lefthook-darwin-x64:
+      optional: true
+    lefthook-freebsd-arm64:
+      optional: true
+    lefthook-freebsd-x64:
+      optional: true
+    lefthook-linux-arm64:
+      optional: true
+    lefthook-linux-x64:
+      optional: true
+    lefthook-openbsd-arm64:
+      optional: true
+    lefthook-openbsd-x64:
+      optional: true
+    lefthook-windows-arm64:
+      optional: true
+    lefthook-windows-x64:
+      optional: true
+  bin:
+    lefthook: bin/index.js
+  checksum: 10c0/11dc5a952c24325b19803c261331f1e12ea8eaf31c0ab131815955a6e7210323828995c2b9cc73b79c23de960beda27ab71de88afdf00e40f367c6b13cee1ce3
   languageName: node
   linkType: hard
 
@@ -9097,15 +9206,6 @@ __metadata:
   version: 3.0.0
   resolution: "pify@npm:3.0.0"
   checksum: 10c0/fead19ed9d801f1b1fcd0638a1ac53eabbb0945bf615f2f8806a8b646565a04a1b0e7ef115c951d225f042cca388fdc1cd3add46d10d1ed6951c20bd2998af10
-  languageName: node
-  linkType: hard
-
-"pinst@npm:3.0.0":
-  version: 3.0.0
-  resolution: "pinst@npm:3.0.0"
-  bin:
-    pinst: bin.js
-  checksum: 10c0/abb1ed62ea2acb2207a7a860715bdb26ecbde74ede8fad5f6200194f3e22db25e2b7a49af05e5cc7fc05384709c651e0000323f0077d7239060c4b68c8acd428
   languageName: node
   linkType: hard
 
@@ -11264,16 +11364,15 @@ __metadata:
     eslint-plugin-unused-imports: "npm:4.3.0"
     fast-glob: "npm:3.3.3"
     fastest-levenshtein: "npm:1.0.16"
-    globals: "npm:16.5.0"
-    husky: "npm:9.1.7"
+    globals: "npm:17.0.0"
     jest: "npm:30.2.0"
     js-yaml: "npm:4.1.1"
+    lefthook: "npm:2.0.13"
     libsodium-wrappers: "npm:0.7.16"
     lint-staged: "npm:16.2.7"
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.8"
     minimal-promise-pool: "npm:6.0.1"
-    pinst: "npm:3.0.0"
     prettier: "npm:3.7.4"
     prettier-plugin-java: "npm:2.7.7"
     semantic-release: "npm:25.0.2"
