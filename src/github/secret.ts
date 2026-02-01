@@ -1,5 +1,3 @@
-/* eslint-disable import-x/no-named-as-default-member */
-
 import dotenv from 'dotenv';
 import sodium from 'libsodium-wrappers';
 

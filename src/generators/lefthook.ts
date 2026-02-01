@@ -56,11 +56,11 @@ const baseSettings: Omit<LefthookSettings, 'pre-commit'> = {
   },
 };
 
-const preCommitSettings = {
+const preCommitSettings: LefthookSettings['pre-commit'] = {
   commands: {
     cleanup: {
       glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
-      run: '__PM__ lint-staged',
+      run: '',
     },
     'check-migrations': {
       glob: '**/migration.sql',
@@ -74,22 +74,7 @@ fi
   },
 };
 
-const packageManagerPlaceholder = '__PM__';
-const typecheckPlaceholder = '__TYPECHECK__';
-
-const scriptTemplates = {
-  prePushForLab: `
-#!/bin/bash
-
-if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
-  echo "************************************************"
-  echo "*** Don't push main branch directly. Use PR! ***"
-  echo "************************************************"
-  exit 1
-fi
-
-${typecheckPlaceholder}
-`.trim(),
+const scripts = {
   postMerge: `
 #!/bin/bash
 
@@ -114,9 +99,6 @@ async function core(config: PackageConfig): Promise<void> {
   const huskyDirPath = path.resolve(config.dirPath, '.husky');
   const hasHuskyDir = fs.existsSync(huskyDirPath);
   const { typecheck } = generateScripts(config, {});
-  const packageManagerCommand = getPackageManagerCommand(config);
-  const preCommitTemplate = getPreCommitTemplate(config);
-  const prePushTemplate = getPrePushTemplate(config);
   const settings: Partial<LefthookSettings> = {
     ...baseSettings,
     'pre-commit': {
@@ -125,7 +107,7 @@ async function core(config: PackageConfig): Promise<void> {
         ...preCommitSettings.commands,
         cleanup: {
           ...preCommitSettings.commands.cleanup,
-          run: applyPackageManager(preCommitTemplate, packageManagerCommand),
+          run: getCleanupCommand(config),
         },
       },
     },
@@ -155,10 +137,7 @@ async function core(config: PackageConfig): Promise<void> {
   }
 
   if (typecheck) {
-    const prePushContent = config.repository?.startsWith('github:WillBoosterLab/')
-      ? scriptTemplates.prePushForLab.replace(typecheckPlaceholder, prePushTemplate)
-      : prePushTemplate;
-    const prePush = applyPackageManager(prePushContent, packageManagerCommand);
+    const prePush = getPrePushScript(config);
     fs.mkdirSync(path.join(dirPath, 'pre-push'), { recursive: true });
     await promisePool.run(() =>
       fs.promises.writeFile(path.join(dirPath, 'pre-push', 'check.sh'), prePush + '\n', {
@@ -166,13 +145,47 @@ async function core(config: PackageConfig): Promise<void> {
       })
     );
   }
-  const postMergeCommand = `${scriptTemplates.postMerge}\n\n${generatePostMergeCommands(config).join('\n')}\n`;
+  const postMergeCommand = `${scripts.postMerge}\n\n${generatePostMergeCommands(config).join('\n')}\n`;
   fs.mkdirSync(path.join(dirPath, 'post-merge'), { recursive: true });
   await promisePool.run(() =>
     fs.promises.writeFile(path.resolve(dirPath, 'post-merge', 'prepare.sh'), postMergeCommand, {
       mode: 0o755,
     })
   );
+}
+
+function getPrePushScript(config: PackageConfig): string {
+  let typecheckCommand: string;
+  if (config.isBun) {
+    typecheckCommand = config.depending.wb ? 'bun --bun node_modules/.bin/wb typecheck' : 'bun run typecheck';
+  } else {
+    typecheckCommand = config.depending.wb ? 'yarn wb typecheck' : 'yarn run typecheck';
+  }
+  if (config.repository?.startsWith('github:WillBoosterLab/')) {
+    return `
+#!/bin/bash
+
+if [ $(git branch --show-current) = "main" ] && [ $(git config user.email) != "exkazuu@gmail.com" ]; then
+  echo "************************************************"
+  echo "*** Don't push main branch directly. Use PR! ***"
+  echo "************************************************"
+  exit 1
+fi
+
+${typecheckCommand}
+`.trim();
+  }
+  return typecheckCommand;
+}
+
+function getCleanupCommand(config: PackageConfig): string {
+  if (config.isBun && config.depending.wb) {
+    return 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}';
+  }
+  if (config.isBun) {
+    return 'bun run cleanup && git add {staged_files}';
+  }
+  return 'yarn run cleanup && git add {staged_files}';
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {
@@ -200,24 +213,4 @@ function generatePostMergeCommands(config: PackageConfig): string[] {
     );
   }
   return postMergeCommands;
-}
-
-function getPackageManagerCommand(config: PackageConfig): string {
-  return config.isBun ? 'bun --bun' : 'yarn';
-}
-
-function getPreCommitTemplate(config: PackageConfig): string {
-  return config.isBun
-    ? `${packageManagerPlaceholder} wb lint --fix --format {staged_files} && git add {staged_files}`
-    : preCommitSettings.commands.cleanup.run;
-}
-
-function getPrePushTemplate(config: PackageConfig): string {
-  return config.isBun
-    ? `${packageManagerPlaceholder} node_modules/.bin/wb typecheck`
-    : `${packageManagerPlaceholder} typecheck`;
-}
-
-function applyPackageManager(template: string, packageManagerCommand: string): string {
-  return template.replaceAll(packageManagerPlaceholder, packageManagerCommand);
 }
