@@ -2,6 +2,10 @@ post-merge:
   scripts:
     prepare.sh:
       runner: bash
+pre-push:
+  scripts:
+    check.sh:
+      runner: bash
 pre-commit:
   commands:
     cleanup:
@@ -14,7 +18,3 @@ pre-commit:
           echo "Migration SQL files ({staged_files}) contain warnings! Please solve the warnings and commit again."
           exit 1
         fi
-pre-push:
-  scripts:
-    check.sh:
-      runner: bash
