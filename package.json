@@ -50,7 +50,6 @@
     "@types/eslint": "9.6.1",
     "@types/jest": "30.0.0",
     "@types/js-yaml": "4.0.9",
-    "@types/libsodium-wrappers": "0.8.2",
     "@types/lodash.clonedeep": "4.5.9",
     "@types/micromatch": "4.0.10",
     "@types/node": "24.10.13",

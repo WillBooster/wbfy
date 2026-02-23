@@ -1893,13 +1893,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@isaacs/cliui@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "@isaacs/cliui@npm:9.0.0"
-  checksum: 10c0/971063b7296419f85053dacd0a0285dcadaa3dfc139228b23e016c1a9848121ad4aa5e7fcca7522062014e1eb6239a7424188b9f2cba893a79c90aae5710319c
-  languageName: node
-  linkType: hard
-
 "@isaacs/fs-minipass@npm:^4.0.0":
   version: 4.0.1
   resolution: "@isaacs/fs-minipass@npm:4.0.1"
@@ -3417,15 +3410,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/libsodium-wrappers@npm:0.8.2":
-  version: 0.8.2
-  resolution: "@types/libsodium-wrappers@npm:0.8.2"
-  dependencies:
-    libsodium-wrappers: "npm:*"
-  checksum: 10c0/c19cffdad50b49e9c8e9a5c036803e6dbd345f5b81aadd875360487fc06f4f58c3f02b0e6c991e809c56d3fddb290d27c5a555fe69148e655e4c053b747417e9
-  languageName: node
-  linkType: hard
-
 "@types/lodash.clonedeep@npm:4.5.9":
   version: 4.5.9
   resolution: "@types/lodash.clonedeep@npm:4.5.9"
@@ -4426,11 +4410,9 @@ __metadata:
   linkType: hard
 
 "balanced-match@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "balanced-match@npm:4.0.2"
-  dependencies:
-    jackspeak: "npm:^4.2.3"
-  checksum: 10c0/493eee4bece3f8b270cea8d3d6d1122ce008dd6b0d5aca8a3f1e623be6897be18c926018eadc454bd719bb7cc46d939c39fa2a05fff86b30f65382f020f6926d
+  version: 4.0.3
+  resolution: "balanced-match@npm:4.0.3"
+  checksum: 10c0/4d96945d0815849934145b2cdc0ccb80fb869d909060820fde5f95da0a32040f2142560ef931584fbb6a1607d39d399707e7d2364030a720ac1dc6f78ddaf9dc
   languageName: node
   linkType: hard
 
@@ -7078,15 +7060,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jackspeak@npm:^4.2.3":
-  version: 4.2.3
-  resolution: "jackspeak@npm:4.2.3"
-  dependencies:
-    "@isaacs/cliui": "npm:^9.0.0"
-  checksum: 10c0/b5c0c414f1607c2aa0597f4bf2c03b8443897fccd5fd3c2b3e4f77d556b2bc7c3d3413828ba91e0789f6fb40ad90242f7f89fb20aee9e9d705bc1681f7564f67
-  languageName: node
-  linkType: hard
-
 "java-parser@npm:3.0.1":
   version: 3.0.1
   resolution: "java-parser@npm:3.0.1"
@@ -7936,7 +7909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libsodium-wrappers@npm:*, libsodium-wrappers@npm:0.8.2":
+"libsodium-wrappers@npm:0.8.2":
   version: 0.8.2
   resolution: "libsodium-wrappers@npm:0.8.2"
   dependencies:
@@ -11410,7 +11383,6 @@ __metadata:
     "@types/eslint": "npm:9.6.1"
     "@types/jest": "npm:30.0.0"
     "@types/js-yaml": "npm:4.0.9"
-    "@types/libsodium-wrappers": "npm:0.8.2"
     "@types/lodash.clonedeep": "npm:4.5.9"
     "@types/micromatch": "npm:4.0.10"
     "@types/node": "npm:24.10.13"
