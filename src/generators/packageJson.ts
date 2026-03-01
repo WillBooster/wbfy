@@ -351,6 +351,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         spawnSync(packageManager, ['remove', ...new Set(dependencies)], config.dirPath);
         spawnSync(packageManager, ['add', '--exact', ...new Set(dependencies)], config.dirPath);
       } else {
+        // Intentionally omit versions to update dependencies to the latest versions with Yarn.
         spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
       }
     }
@@ -361,6 +362,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         spawnSync(packageManager, ['remove', ...new Set(devDependencies)], config.dirPath);
         spawnSync(packageManager, ['add', '-D', '--exact', ...new Set(devDependencies)], config.dirPath);
       } else {
+        // Intentionally omit versions to update dependencies to the latest versions with Yarn.
         spawnSync(packageManager, ['add', '-D', ...new Set(devDependencies)], config.dirPath);
       }
     }
