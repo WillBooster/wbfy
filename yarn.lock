@@ -8247,13 +8247,13 @@ __metadata:
   linkType: hard
 
 "make-asynchronous@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "make-asynchronous@npm:1.0.1"
+  version: 1.1.0
+  resolution: "make-asynchronous@npm:1.1.0"
   dependencies:
     p-event: "npm:^6.0.0"
     type-fest: "npm:^4.6.0"
-    web-worker: "npm:1.2.0"
-  checksum: 10c0/fbf6a04c89b4e6eca4ee458d33eb51474a97da19e197825dd15becbc191bd2cbc8a0c9eee3f116d52954af421e42d922deeb53ac4be9ac349307677fd149e66a
+    web-worker: "npm:^1.5.0"
+  checksum: 10c0/794c4876839f00bc6e287a1f07177dc3bb5c177d06d4ebe9e3a055758d9740b9b296a957c9015bed8d0d92d70035c70108e4c7d7bc2880fb16b94d0bd4b75a37
   languageName: node
   linkType: hard
 
@@ -11644,10 +11644,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"web-worker@npm:1.2.0":
-  version: 1.2.0
-  resolution: "web-worker@npm:1.2.0"
-  checksum: 10c0/2bec036cd4784148e2f135207c62facf4457a0f2b205d6728013b9f0d7c62404dced95fcd849478387e10c8ae636d665600bd0d99d80b18c3bb2a7f045aa20d8
+"web-worker@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "web-worker@npm:1.5.0"
+  checksum: 10c0/d42744757422803c73ca64fa51e1ce994354ace4b8438b3f740425a05afeb8df12dd5dadbf6b0839a08dbda56c470d7943c0383854c4fb1ae40ab874eb10427a
   languageName: node
   linkType: hard
 
