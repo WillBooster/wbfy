@@ -26,7 +26,7 @@
     "start-prod": "yarn build && yarn wbfy",
     "test": "vitest test",
     "test/ci-setup": "cd .. && pwd && rm -Rf test-fixtures-for-wbfy && git clone https://github.com/WillBooster/test-fixtures-for-wbfy.git",
-    "typecheck": "tsc --noEmit --Pretty"
+    "typecheck": "tsc --noEmit"
   },
   "prettier": "@willbooster/prettier-config",
   "dependencies": {
@@ -60,7 +60,7 @@
     "@yarnpkg/core": "4.5.0",
     "build-ts": "17.0.19",
     "conventional-changelog-conventionalcommits": "9.1.0",
-    "eslint": "9.39.2",
+    "eslint": "10.0.2",
     "eslint-config-flat-gitignore": "2.2.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.4",
