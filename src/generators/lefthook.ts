@@ -157,7 +157,7 @@ async function core(config: PackageConfig): Promise<void> {
 function getPrePushScript(config: PackageConfig): string {
   let typecheckCommand: string;
   if (config.isBun) {
-    typecheckCommand = config.depending.wb ? 'bun --bun node_modules/.bin/wb typecheck' : 'bun run typecheck';
+    typecheckCommand = config.depending.wb ? 'bun --bun wb typecheck' : 'bun run typecheck';
   } else {
     typecheckCommand = config.depending.wb ? 'yarn wb typecheck' : 'yarn run typecheck';
   }
