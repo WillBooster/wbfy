@@ -33,7 +33,7 @@ const defaultConfig: ParsedObject = {
     url: literal('process.env.NEXT_PUBLIC_BASE_URL'),
     reuseExistingServer: literal('!!process.env.CI'),
     timeout: literal('300_000'),
-    stdout: literal("'ignore'"),
+    stdout: literal("'pipe'"),
     stderr: literal("'pipe'"),
     env: literal(`{
   ...process.env,
@@ -59,7 +59,8 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     const parsed = parseObjectLiteral(objectLiteral);
     if (!parsed) return;
 
-    const merged = merge.all<ParsedObject>([defaultConfig, parsed, defaultConfig]);
+    // Keep filling missing defaults, but don't overwrite local adjustments on every regeneration.
+    const merged = merge.all<ParsedObject>([defaultConfig, parsed]);
     const hasStartTestServer = Boolean(config.packageJson?.scripts?.['start-test-server']);
     if (!hasStartTestServer) {
       delete merged.webServer;
