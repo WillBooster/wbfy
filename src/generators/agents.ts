@@ -46,7 +46,8 @@ function generateAgentInstruction(
 ## General Instructions
 
 - Create a new branch if the current branch is \`main\`.
-- Do not write tests unless explicitly requested.
+- Write tests ONLY if explicitly requested.
+  - Make sure to continue to modify the tests and code until the tests pass.
 - When fixing tests, gather debug information through logging and screenshots before modifying the code.
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour), or run \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
