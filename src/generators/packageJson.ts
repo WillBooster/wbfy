@@ -347,23 +347,25 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
     if (dependencies.length > 0) {
+      const dependencySpecifiers = [...new Set(dependencies)].map(getDependencySpecifier);
       if (config.isBun) {
         spawnSync(packageManager, ['remove', ...new Set(dependencies)], config.dirPath);
-        spawnSync(packageManager, ['add', '--exact', ...new Set(dependencies)], config.dirPath);
+        spawnSync(packageManager, ['add', '--exact', ...dependencySpecifiers], config.dirPath);
       } else {
         // Intentionally omit versions to update dependencies to the latest versions with Yarn.
-        spawnSync(packageManager, ['add', ...new Set(dependencies)], config.dirPath);
+        spawnSync(packageManager, ['add', ...dependencySpecifiers], config.dirPath);
       }
     }
     // We cannot add devDependencies which are already included in dependencies.
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
+      const devDependencySpecifiers = [...new Set(devDependencies)].map(getDependencySpecifier);
       if (config.isBun) {
         spawnSync(packageManager, ['remove', ...new Set(devDependencies)], config.dirPath);
-        spawnSync(packageManager, ['add', '-D', '--exact', ...new Set(devDependencies)], config.dirPath);
+        spawnSync(packageManager, ['add', '-D', '--exact', ...devDependencySpecifiers], config.dirPath);
       } else {
         // Intentionally omit versions to update dependencies to the latest versions with Yarn.
-        spawnSync(packageManager, ['add', '-D', ...new Set(devDependencies)], config.dirPath);
+        spawnSync(packageManager, ['add', '-D', ...devDependencySpecifiers], config.dirPath);
       }
     }
     if (poetryDevDependencies.length > 0) {
@@ -406,6 +408,12 @@ async function removeDeprecatedStuff(
   delete jsonObj.devDependencies['@typescript-eslint/eslint-plugin'];
   delete jsonObj.devDependencies['@typescript-eslint/parser'];
   delete jsonObj.devDependencies['eslint-plugin-import'];
+}
+
+function getDependencySpecifier(dependency: string): string {
+  // eslint v10 is not supported by the WillBooster ESLint config stack yet.
+  if (dependency === 'eslint') return 'eslint@^9';
+  return dependency;
 }
 
 export function generateScripts(config: PackageConfig, oldScripts: PackageJson.Scripts): Record<string, string> {
