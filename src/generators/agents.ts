@@ -50,7 +50,7 @@ function generateAgentInstruction(
 - When fixing tests, gather debug information through logging and screenshots before modifying the code.
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour), or run \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
-- Once you have verified your changes, commit them to a non-main branch using the \`--no-verify\` option and push to the current branch.
+- Once you have verified your changes, commit & push them to the current non-main branch then create a PR via \`gh\`.
   - Follow conventional commits; your commit message should start with \`feat:\`, \`fix:\`, etc.
   - If not specified, make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
   - Always create new commits. Avoid using \`--amend\`.
