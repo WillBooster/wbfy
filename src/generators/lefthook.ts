@@ -39,6 +39,9 @@ interface LefthookSettings {
   };
 }
 
+const wbLintCleanupGlob =
+  '{package.json,**/package.json,*.{cjs,cts,htm,html,js,json,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}}';
+
 const baseSettings: Omit<LefthookSettings, 'pre-commit'> = {
   'post-merge': {
     scripts: {
@@ -107,6 +110,7 @@ async function core(config: PackageConfig): Promise<void> {
         ...preCommitSettings.commands,
         cleanup: {
           ...preCommitSettings.commands.cleanup,
+          glob: config.isBun && config.depending.wb ? wbLintCleanupGlob : preCommitSettings.commands.cleanup.glob,
           run: getCleanupCommand(config),
         },
       },
