@@ -59,7 +59,7 @@ const baseSettings: Omit<LefthookSettings, 'pre-commit'> = {
 const preCommitSettings: LefthookSettings['pre-commit'] = {
   commands: {
     cleanup: {
-      glob: '*.{cjs,css,cts,htm,html,js,json,json5,jsonc,jsx,md,mjs,mts,scss,ts,tsx,vue,yaml,yml}',
+      glob: '*.{astro,cjs,css,cts,gql,htm,html,java,js,json,json5,jsonc,jsx,md,mjs,mts,scss,svelte,ts,tsx,vue,yaml,yml}',
       run: '',
     },
     'check-migrations': {
