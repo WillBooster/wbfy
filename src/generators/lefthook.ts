@@ -187,9 +187,14 @@ function getCleanupCommand(config: PackageConfig): string {
     return 'bun --bun wb lint --fix --format -- {staged_files} && git add -- {staged_files}';
   }
   if (config.isBun) {
-    return 'bun run cleanup && git add -- {staged_files}';
+    return `${getFormatAndLintFixCommand(config)} && git add -- {staged_files}`;
   }
-  return 'yarn run cleanup && git add -- {staged_files}';
+  return `${getFormatAndLintFixCommand(config)} && git add -- {staged_files}`;
+}
+
+function getFormatAndLintFixCommand(config: PackageConfig): string {
+  const packageManager = config.isBun ? 'bun' : 'yarn';
+  return `${packageManager} run format && ${packageManager} run lint-fix`;
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {
