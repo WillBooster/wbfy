@@ -21,7 +21,7 @@ interface LefthookSettings {
   'pre-commit': {
     commands: {
       cleanup: {
-        glob?: string;
+        glob: string;
         run: string;
       };
       'check-migrations': {
@@ -107,7 +107,6 @@ async function core(config: PackageConfig): Promise<void> {
         ...preCommitSettings.commands,
         cleanup: {
           ...preCommitSettings.commands.cleanup,
-          ...(config.depending.wb ? { glob: undefined } : {}),
           run: getCleanupCommand(config),
         },
       },
