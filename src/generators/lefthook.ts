@@ -180,15 +180,11 @@ ${typecheckCommand}
 }
 
 function getCleanupCommand(config: PackageConfig): string {
-  if (config.depending.wb) {
-    const wbCommand = config.isBun ? 'bun --bun wb' : 'yarn wb';
-    return `${wbCommand} lint --fix --format -- {staged_files} && git add -- {staged_files}`;
-  }
   const packageManager = config.isBun ? 'bun' : 'yarn';
-  if (config.isBun) {
-    return `${packageManager} run format && ${packageManager} run lint-fix && git add -- {staged_files}`;
-  }
-  return `${packageManager} run format && ${packageManager} run lint-fix && git add -- {staged_files}`;
+  const command = config.depending.wb
+    ? `${config.isBun ? 'bun --bun wb' : 'yarn wb'} lint --fix --format -- {staged_files}`
+    : `${packageManager} run format && ${packageManager} run lint-fix`;
+  return `${command} && git add -- {staged_files}`;
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {
