@@ -183,8 +183,9 @@ ${typecheckCommand}
 }
 
 function getCleanupCommand(config: PackageConfig): string {
-  if (config.isBun && config.depending.wb) {
-    return 'bun --bun wb lint --fix --format -- {staged_files} && git add -- {staged_files}';
+  if (config.depending.wb) {
+    const wbCommand = config.isBun ? 'bun --bun wb' : 'yarn wb';
+    return `${wbCommand} lint --fix --format -- {staged_files} && git add -- {staged_files}`;
   }
   if (config.isBun) {
     return `${getFormatAndLintFixCommand(config)} && git add -- {staged_files}`;
