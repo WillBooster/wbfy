@@ -184,12 +184,12 @@ ${typecheckCommand}
 
 function getCleanupCommand(config: PackageConfig): string {
   if (config.isBun && config.depending.wb) {
-    return 'bun --bun wb lint --fix --format {staged_files} && git add {staged_files}';
+    return 'bun --bun wb lint --fix --format -- {staged_files} && git add -- {staged_files}';
   }
   if (config.isBun) {
-    return 'bun run cleanup && git add {staged_files}';
+    return 'bun run cleanup && git add -- {staged_files}';
   }
-  return 'yarn run cleanup && git add {staged_files}';
+  return 'yarn run cleanup && git add -- {staged_files}';
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {
