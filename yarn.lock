@@ -3986,17 +3986,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib-node@npm:8.1.6":
-  version: 8.1.6
-  resolution: "@willbooster/shared-lib-node@npm:8.1.6"
-  dependencies:
-    dotenv: "npm:17.3.1"
-    dotenv-expand: "npm:12.0.3"
-    tree-kill: "npm:1.2.2"
-  checksum: 10c0/c36cf953dcf0237c874b02a77b018b2779e0bc5e0cfdcc203873d5332092679374d4ced313314008a53c528fed10909406c8eb5944e8e15f06e16128c8235a0d
-  languageName: node
-  linkType: hard
-
 "@willbooster/shared-lib-node@npm:8.2.0":
   version: 8.2.0
   resolution: "@willbooster/shared-lib-node@npm:8.2.0"
@@ -4007,10 +3996,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:7.1.6":
-  version: 7.1.6
-  resolution: "@willbooster/shared-lib@npm:7.1.6"
-  checksum: 10c0/9367382500b601e46327931839781365fb6894bb7e0a6a3a0a155eeed7c70c38495445a29795d57fc225508576c2001331f18b164cec49bafe3b5180b1573541
+"@willbooster/shared-lib-node@npm:8.2.2":
+  version: 8.2.2
+  resolution: "@willbooster/shared-lib-node@npm:8.2.2"
+  dependencies:
+    dotenv: "npm:17.3.1"
+    dotenv-expand: "npm:12.0.3"
+  checksum: 10c0/006fb84947f1d19f5a6b74623c0617c91b99d59a5a84c6721be5aedf0caca70f4a0d030e510c816fab4c345c02e9650ba3f09e2df93ec80570cfb918af6d1d02
+  languageName: node
+  linkType: hard
+
+"@willbooster/shared-lib@npm:7.1.7":
+  version: 7.1.7
+  resolution: "@willbooster/shared-lib@npm:7.1.7"
+  checksum: 10c0/459d46b9e63c6e68fc5233284e4c6906f72f47ffb0527cc8e40333b2b62cf254e32110188cf1b95d3ea133337f985ae13676a27d5ca94b7d5d60085f4bd75504
   languageName: node
   linkType: hard
 
@@ -4581,9 +4580,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"build-ts@npm:17.0.20":
-  version: 17.0.20
-  resolution: "build-ts@npm:17.0.20"
+"build-ts@npm:17.0.21":
+  version: 17.0.21
+  resolution: "build-ts@npm:17.0.21"
   dependencies:
     "@babel/core": "npm:7.29.0"
     "@babel/plugin-proposal-decorators": "npm:7.29.0"
@@ -4600,7 +4599,7 @@ __metadata:
     "@rollup/plugin-replace": "npm:6.0.3"
     "@rollup/plugin-terser": "npm:0.4.4"
     "@rollup/pluginutils": "npm:5.3.0"
-    "@willbooster/shared-lib-node": "npm:8.1.6"
+    "@willbooster/shared-lib-node": "npm:8.2.0"
     babel-plugin-polyfill-corejs3: "npm:0.14.0"
     babel-plugin-transform-remove-console: "npm:6.9.4"
     chalk: "npm:5.6.2"
@@ -4621,7 +4620,7 @@ __metadata:
     yargs: "npm:18.0.0"
   bin:
     build-ts: bin/index.js
-  checksum: 10c0/b39e781560238fa9032e2639c1ef59a01a828ad5a13bf45364f7fb9765a9c1ca08c800cd53666be87fffdf192112edd1543931c07b59f1418bef3ef7d6ce555d
+  checksum: 10c0/1bc74a5421c03fdb83e688960c97a7e963dd46fc17ecd4791ab85ce23e60db01804363ec8bb7c5906419efa76e6447ab24c6c168bdf18ed5cba26383d9d5974a
   languageName: node
   linkType: hard
 
@@ -7667,90 +7666,90 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lefthook-darwin-arm64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-darwin-arm64@npm:2.1.2"
+"lefthook-darwin-arm64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-darwin-arm64@npm:2.1.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"lefthook-darwin-x64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-darwin-x64@npm:2.1.2"
+"lefthook-darwin-x64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-darwin-x64@npm:2.1.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"lefthook-freebsd-arm64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-freebsd-arm64@npm:2.1.2"
+"lefthook-freebsd-arm64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-freebsd-arm64@npm:2.1.3"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"lefthook-freebsd-x64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-freebsd-x64@npm:2.1.2"
+"lefthook-freebsd-x64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-freebsd-x64@npm:2.1.3"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"lefthook-linux-arm64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-linux-arm64@npm:2.1.2"
+"lefthook-linux-arm64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-linux-arm64@npm:2.1.3"
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
-"lefthook-linux-x64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-linux-x64@npm:2.1.2"
+"lefthook-linux-x64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-linux-x64@npm:2.1.3"
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
-"lefthook-openbsd-arm64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-openbsd-arm64@npm:2.1.2"
+"lefthook-openbsd-arm64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-openbsd-arm64@npm:2.1.3"
   conditions: os=openbsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"lefthook-openbsd-x64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-openbsd-x64@npm:2.1.2"
+"lefthook-openbsd-x64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-openbsd-x64@npm:2.1.3"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"lefthook-windows-arm64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-windows-arm64@npm:2.1.2"
+"lefthook-windows-arm64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-windows-arm64@npm:2.1.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"lefthook-windows-x64@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook-windows-x64@npm:2.1.2"
+"lefthook-windows-x64@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook-windows-x64@npm:2.1.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"lefthook@npm:2.1.2":
-  version: 2.1.2
-  resolution: "lefthook@npm:2.1.2"
+"lefthook@npm:2.1.3":
+  version: 2.1.3
+  resolution: "lefthook@npm:2.1.3"
   dependencies:
-    lefthook-darwin-arm64: "npm:2.1.2"
-    lefthook-darwin-x64: "npm:2.1.2"
-    lefthook-freebsd-arm64: "npm:2.1.2"
-    lefthook-freebsd-x64: "npm:2.1.2"
-    lefthook-linux-arm64: "npm:2.1.2"
-    lefthook-linux-x64: "npm:2.1.2"
-    lefthook-openbsd-arm64: "npm:2.1.2"
-    lefthook-openbsd-x64: "npm:2.1.2"
-    lefthook-windows-arm64: "npm:2.1.2"
-    lefthook-windows-x64: "npm:2.1.2"
+    lefthook-darwin-arm64: "npm:2.1.3"
+    lefthook-darwin-x64: "npm:2.1.3"
+    lefthook-freebsd-arm64: "npm:2.1.3"
+    lefthook-freebsd-x64: "npm:2.1.3"
+    lefthook-linux-arm64: "npm:2.1.3"
+    lefthook-linux-x64: "npm:2.1.3"
+    lefthook-openbsd-arm64: "npm:2.1.3"
+    lefthook-openbsd-x64: "npm:2.1.3"
+    lefthook-windows-arm64: "npm:2.1.3"
+    lefthook-windows-x64: "npm:2.1.3"
   dependenciesMeta:
     lefthook-darwin-arm64:
       optional: true
@@ -7774,7 +7773,7 @@ __metadata:
       optional: true
   bin:
     lefthook: bin/index.js
-  checksum: 10c0/1ebfba3a9b743be23538e331bb4da44ee1e3b442c412fc4e62fb4b854a9a7f52ae487f55739d6ba7812eb6aa86f69e910255046749404c8e161e7676e01b0364
+  checksum: 10c0/39962fc49b93393f1faa0603dee187bf24482e3cbad22a826825636e25c6913e178c77b9a18ef1375a5c5dfbce97a43998f056bc2d32b0edd2dd1264b04b8b11
   languageName: node
   linkType: hard
 
@@ -7943,9 +7942,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:16.3.1":
-  version: 16.3.1
-  resolution: "lint-staged@npm:16.3.1"
+"lint-staged@npm:16.3.2":
+  version: 16.3.2
+  resolution: "lint-staged@npm:16.3.2"
   dependencies:
     commander: "npm:^14.0.3"
     listr2: "npm:^9.0.5"
@@ -7955,7 +7954,7 @@ __metadata:
     yaml: "npm:^2.8.2"
   bin:
     lint-staged: bin/lint-staged.js
-  checksum: 10c0/9aed98ab759c7acdcfb969c3c09b24597bd6717771ab1f1eec571038713bd0d0ad80304d0a737e5b7b7c64141e4ff9489022448492353f5d1b476223c43f40bc
+  checksum: 10c0/4cbaa85904a912215660ac3c69400b71beabe3fe7e82969cd32c726dbfb04b0f651d0660906215f955c1446ac6b520319e1c7a03c707353a5f038c3d0441a8c3
   languageName: node
   linkType: hard
 
@@ -10760,15 +10759,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tree-kill@npm:1.2.2":
-  version: 1.2.2
-  resolution: "tree-kill@npm:1.2.2"
-  bin:
-    tree-kill: cli.js
-  checksum: 10c0/7b1b7c7f17608a8f8d20a162e7957ac1ef6cd1636db1aba92f4e072dc31818c2ff0efac1e3d91064ede67ed5dc57c565420531a8134090a12ac10cf792ab14d2
-  languageName: node
-  linkType: hard
-
 "treeify@npm:^1.1.0":
   version: 1.1.0
   resolution: "treeify@npm:1.1.0"
@@ -11407,10 +11397,10 @@ __metadata:
     "@types/yargs": "npm:17.0.35"
     "@willbooster/eslint-config-ts": "npm:11.4.12"
     "@willbooster/prettier-config": "npm:10.2.4"
-    "@willbooster/shared-lib": "npm:7.1.6"
-    "@willbooster/shared-lib-node": "npm:8.2.0"
+    "@willbooster/shared-lib": "npm:7.1.7"
+    "@willbooster/shared-lib-node": "npm:8.2.2"
     "@yarnpkg/core": "npm:4.5.0"
-    build-ts: "npm:17.0.20"
+    build-ts: "npm:17.0.21"
     conventional-changelog-conventionalcommits: "npm:9.2.0"
     deepmerge: "npm:4.3.1"
     dotenv: "npm:17.3.1"
@@ -11428,9 +11418,9 @@ __metadata:
     globals: "npm:17.4.0"
     jest: "npm:30.2.0"
     js-yaml: "npm:4.1.1"
-    lefthook: "npm:2.1.2"
+    lefthook: "npm:2.1.3"
     libsodium-wrappers: "npm:0.8.2"
-    lint-staged: "npm:16.3.1"
+    lint-staged: "npm:16.3.2"
     lodash.clonedeep: "npm:4.5.0"
     micromatch: "npm:4.0.8"
     minimal-promise-pool: "npm:6.0.1"
