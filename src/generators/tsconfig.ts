@@ -16,9 +16,7 @@ import { getTsconfigExtends } from '../utils/tsconfigBase.js';
 const rootJsonObj = {
   extends: ['@tsconfig/node-lts/tsconfig.json', '@tsconfig/node-ts/tsconfig.json'],
   compilerOptions: {
-    jsx: 'react-jsx',
     alwaysStrict: true,
-    strict: true,
     noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
     allowSyntheticDefaultImports: true, // allow `import React from 'react'`
     esModuleInterop: true, // allow default import from CommonJS/AMD/UMD modules
@@ -44,9 +42,7 @@ const rootJsonObj = {
 const subJsonObj = {
   extends: ['@tsconfig/node-lts/tsconfig.json', '@tsconfig/node-ts/tsconfig.json'],
   compilerOptions: {
-    jsx: 'react-jsx',
     alwaysStrict: true,
-    strict: true,
     noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
     allowSyntheticDefaultImports: true, // allow `import React from 'react'`
     esModuleInterop: true, // allow default import from CommonJS/AMD/UMD modules
@@ -70,6 +66,8 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     newSettings.extends = getTsconfigExtends(config);
     if (!config.doesContainJsxOrTsx && !config.doesContainJsxOrTsxInPackages) {
       delete newSettings.compilerOptions?.jsx;
+    } else if (!config.isBun && !config.depending.reactNative) {
+      newSettings.compilerOptions = { ...newSettings.compilerOptions, jsx: 'react-jsx' };
     }
     if (config.isRoot && !config.doesContainSubPackageJsons) {
       newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
@@ -84,6 +82,13 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       // Preserve Bundler resolution so tooling stays aligned with package settings.
       const shouldPreserveBundlerResolution =
         (oldSettings.compilerOptions?.moduleResolution ?? '').toLowerCase() === 'bundler';
+      delete oldSettings.compilerOptions?.target;
+      delete oldSettings.compilerOptions?.strict;
+      delete oldSettings.compilerOptions?.skipLibCheck;
+      if (!shouldPreserveBundlerResolution) {
+        delete oldSettings.compilerOptions?.module;
+        delete oldSettings.compilerOptions?.moduleResolution;
+      }
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
       if (shouldPreserveBundlerResolution) {
