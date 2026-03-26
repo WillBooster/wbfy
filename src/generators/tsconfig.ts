@@ -95,21 +95,21 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       } else {
         oldSettings.extends = preservedExtends;
       }
-      // Preserve Bundler resolution so tooling stays aligned with package settings.
       const shouldPreserveBundlerResolution =
         (oldSettings.compilerOptions?.moduleResolution ?? '').toLowerCase() === 'bundler';
-      delete oldSettings.compilerOptions?.target;
-      delete oldSettings.compilerOptions?.strict;
-      delete oldSettings.compilerOptions?.skipLibCheck;
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
-      if (
-        shouldPreserveBundlerResolution ||
-        oldSettings.compilerOptions?.module !== undefined ||
-        oldSettings.compilerOptions?.moduleResolution !== undefined
-      ) {
+      if (oldSettings.compilerOptions?.module !== undefined) {
         delete newSettings.compilerOptions?.module;
+      }
+      if (oldSettings.compilerOptions?.moduleResolution !== undefined) {
         delete newSettings.compilerOptions?.moduleResolution;
+      }
+      if (shouldPreserveBundlerResolution && oldSettings.compilerOptions?.module === undefined) {
+        newSettings.compilerOptions = {
+          ...newSettings.compilerOptions,
+          module: 'ESNext',
+        };
       }
       if (oldSettings.compilerOptions?.jsx) {
         delete newSettings.compilerOptions?.jsx;
