@@ -99,10 +99,11 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
         (oldSettings.compilerOptions?.moduleResolution ?? '').toLowerCase() === 'bundler';
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
-      if (oldSettings.compilerOptions?.module !== undefined) {
+      if (
+        oldSettings.compilerOptions?.module !== undefined ||
+        oldSettings.compilerOptions?.moduleResolution !== undefined
+      ) {
         delete newSettings.compilerOptions?.module;
-      }
-      if (oldSettings.compilerOptions?.moduleResolution !== undefined) {
         delete newSettings.compilerOptions?.moduleResolution;
       }
       if (shouldPreserveBundlerResolution && oldSettings.compilerOptions?.module === undefined) {
@@ -115,7 +116,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
         delete newSettings.compilerOptions?.jsx;
       }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-      newSettings.extends = preservedExtends ?? newSettings.extends;
+      newSettings.extends = mergeTsconfigExtends(getTsconfigExtends(config), preservedExtends);
       newSettings.include = newSettings.include?.filter(
         (dirPath: string) =>
           !dirPath.includes('@types') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
@@ -157,4 +158,20 @@ function isLegacyGeneratedExtends(extendsValue: string[], config: PackageConfig)
     extendsValue.length === expectedExtends.length &&
     extendsValue.every((entry, index) => entry === expectedExtends[index])
   );
+}
+
+function mergeTsconfigExtends(
+  generatedExtends: TsConfigJson['extends'],
+  preservedExtends: TsConfigJson['extends']
+): TsConfigJson['extends'] {
+  if (preservedExtends === undefined) return generatedExtends;
+
+  const mergedExtends = [...normalizeTsconfigExtends(generatedExtends), ...normalizeTsconfigExtends(preservedExtends)];
+  const dedupedExtends = [...new Set(mergedExtends)];
+  return dedupedExtends.length === 1 ? dedupedExtends[0] : dedupedExtends;
+}
+
+function normalizeTsconfigExtends(extendsValue: TsConfigJson['extends']): string[] {
+  if (extendsValue === undefined) return [];
+  return Array.isArray(extendsValue) ? extendsValue : [extendsValue];
 }
