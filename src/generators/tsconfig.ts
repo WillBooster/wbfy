@@ -14,7 +14,7 @@ import { promisePool } from '../utils/promisePool.js';
 import { getTsconfigExtends } from '../utils/tsconfigBase.js';
 
 const rootJsonObj = {
-  extends: ['@tsconfig/node-lts/tsconfig.json', '@tsconfig/node-ts/tsconfig.json'],
+  extends: '@tsconfig/node-lts/tsconfig.json',
   compilerOptions: {
     alwaysStrict: true,
     noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
@@ -25,8 +25,10 @@ const rootJsonObj = {
     sourceMap: true,
     importHelpers: false,
     erasableSyntaxOnly: true,
+    rewriteRelativeImportExtensions: true,
     outDir: 'dist',
     typeRoots: ['./node_modules/@types', './@types'],
+    verbatimModuleSyntax: true,
   },
   exclude: ['packages/*/test/fixtures', 'test/fixtures'],
   include: [
@@ -40,7 +42,7 @@ const rootJsonObj = {
 };
 
 const subJsonObj = {
-  extends: ['@tsconfig/node-lts/tsconfig.json', '@tsconfig/node-ts/tsconfig.json'],
+  extends: '@tsconfig/node-lts/tsconfig.json',
   compilerOptions: {
     alwaysStrict: true,
     noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
@@ -51,8 +53,10 @@ const subJsonObj = {
     sourceMap: true,
     importHelpers: false,
     erasableSyntaxOnly: true,
+    rewriteRelativeImportExtensions: true,
     outDir: 'dist',
     typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
+    verbatimModuleSyntax: true,
   },
   exclude: ['test/fixtures'],
   include: ['scripts/**/*', 'src/**/*', 'test/**/*'],
@@ -78,7 +82,12 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     try {
       const existingContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(existingContent) as TsConfigJson;
-      sanitizeDeprecatedExtends(oldSettings);
+      const preservedExtends = resolveTsconfigExtends(oldSettings.extends, config);
+      if (preservedExtends === undefined) {
+        delete oldSettings.extends;
+      } else {
+        oldSettings.extends = preservedExtends;
+      }
       // Preserve Bundler resolution so tooling stays aligned with package settings.
       const shouldPreserveBundlerResolution =
         (oldSettings.compilerOptions?.moduleResolution ?? '').toLowerCase() === 'bundler';
@@ -99,6 +108,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
         delete newSettings.compilerOptions?.jsx;
       }
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
+      newSettings.extends = preservedExtends ?? newSettings.extends;
       newSettings.include = newSettings.include?.filter(
         (dirPath: string) =>
           !dirPath.includes('@types') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
@@ -115,16 +125,29 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
   });
 }
 
-function sanitizeDeprecatedExtends(settings: TsConfigJson): void {
+function resolveTsconfigExtends(
+  extendsValue: TsConfigJson['extends'],
+  config: PackageConfig
+): TsConfigJson['extends'] | undefined {
   const deprecatedExtends = './node_modules/@willbooster/tsconfig/tsconfig.json';
-  if (settings.extends === deprecatedExtends) {
-    delete settings.extends;
-    return;
+  if (extendsValue === deprecatedExtends) {
+    return undefined;
   }
-  if (!Array.isArray(settings.extends)) return;
+  if (!Array.isArray(extendsValue)) return extendsValue;
 
-  settings.extends = settings.extends.filter((entry) => entry !== deprecatedExtends);
-  if (settings.extends.length === 0) {
-    delete settings.extends;
+  const sanitizedExtends = extendsValue.filter((entry) => entry !== deprecatedExtends);
+  if (sanitizedExtends.length === 0 || isLegacyGeneratedExtends(sanitizedExtends, config)) {
+    return undefined;
   }
+  return sanitizedExtends;
+}
+
+function isLegacyGeneratedExtends(extendsValue: string[], config: PackageConfig): boolean {
+  if (config.isBun || config.depending.reactNative) return false;
+
+  const expectedExtends = ['@tsconfig/node-lts/tsconfig.json', '@tsconfig/node-ts/tsconfig.json'];
+  return (
+    extendsValue.length === expectedExtends.length &&
+    extendsValue.every((entry, index) => entry === expectedExtends[index])
+  );
 }
