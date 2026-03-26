@@ -204,8 +204,17 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
   }
 
+  if (
+    config.doesContainJavaScript ||
+    config.doesContainJavaScriptInPackages ||
+    config.doesContainTypeScript ||
+    config.doesContainTypeScriptInPackages
+  ) {
+    devDependencies.push(...getTsconfigBaseDependencies(config));
+  }
+
   if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {
-    devDependencies.push('typescript', ...getTsconfigBaseDependencies(config));
+    devDependencies.push('typescript');
     if (config.isBun) {
       devDependencies.push('@types/bun');
     }

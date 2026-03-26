@@ -68,6 +68,9 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
 
     let newSettings = cloneDeep(config.isRoot ? rootJsonObj : subJsonObj) as TsConfigJson;
     newSettings.extends = getTsconfigExtends(config);
+    if (config.depending.reactNative) {
+      delete newSettings.compilerOptions?.verbatimModuleSyntax;
+    }
     if (!config.doesContainJsxOrTsx && !config.doesContainJsxOrTsxInPackages) {
       delete newSettings.compilerOptions?.jsx;
     } else if (!config.isBun && !config.depending.reactNative) {
@@ -97,12 +100,9 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       }
       const shouldPreserveBundlerResolution =
         (oldSettings.compilerOptions?.moduleResolution ?? '').toLowerCase() === 'bundler';
-      // Don't modify "target", "module" and "moduleResolution".
+      // Don't modify "target". Preserve module settings only when they appear user-authored.
       delete newSettings.compilerOptions?.target;
-      if (
-        oldSettings.compilerOptions?.module !== undefined ||
-        oldSettings.compilerOptions?.moduleResolution !== undefined
-      ) {
+      if (shouldPreserveModuleSettings(oldSettings, config)) {
         delete newSettings.compilerOptions?.module;
         delete newSettings.compilerOptions?.moduleResolution;
       }
@@ -174,4 +174,28 @@ function mergeTsconfigExtends(
 function normalizeTsconfigExtends(extendsValue: TsConfigJson['extends']): string[] {
   if (extendsValue === undefined) return [];
   return Array.isArray(extendsValue) ? extendsValue : [extendsValue];
+}
+
+function shouldPreserveModuleSettings(oldSettings: TsConfigJson, config: PackageConfig): boolean {
+  const oldModule = normalizeCompilerOption(oldSettings.compilerOptions?.module);
+  const oldModuleResolution = normalizeCompilerOption(oldSettings.compilerOptions?.moduleResolution);
+  if (oldModuleResolution === 'bundler') return true;
+  if (oldModule === undefined && oldModuleResolution === undefined) return false;
+  return !isLegacyGeneratedModuleSettings(oldModule, oldModuleResolution, config);
+}
+
+function isLegacyGeneratedModuleSettings(
+  module: string | undefined,
+  moduleResolution: string | undefined,
+  config: PackageConfig
+): boolean {
+  if (config.isBun || config.depending.reactNative) return false;
+
+  return (
+    (module === 'esnext' && moduleResolution === 'node') || (module === 'nodenext' && moduleResolution === 'nodenext')
+  );
+}
+
+function normalizeCompilerOption(value: string | undefined): string | undefined {
+  return value?.toLowerCase();
 }
