@@ -92,31 +92,12 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     try {
       const existingContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(existingContent) as TsConfigJson;
-      const preservedExtends = resolveTsconfigExtends(oldSettings.extends, config);
-      if (preservedExtends === undefined) {
-        delete oldSettings.extends;
-      } else {
-        oldSettings.extends = preservedExtends;
-      }
-      const shouldPreserveBundlerResolution =
-        (oldSettings.compilerOptions?.moduleResolution ?? '').toLowerCase() === 'bundler';
-      // Don't modify "target". Preserve module settings only when they appear user-authored.
-      delete newSettings.compilerOptions?.target;
-      if (shouldPreserveModuleSettings(oldSettings, config)) {
-        delete newSettings.compilerOptions?.module;
-        delete newSettings.compilerOptions?.moduleResolution;
-      }
-      if (shouldPreserveBundlerResolution && oldSettings.compilerOptions?.module === undefined) {
-        newSettings.compilerOptions = {
-          ...newSettings.compilerOptions,
-          module: 'ESNext',
-        };
-      }
-      if (oldSettings.compilerOptions?.jsx) {
-        delete newSettings.compilerOptions?.jsx;
-      }
+      delete oldSettings.extends;
+      delete oldSettings.compilerOptions?.jsx;
+      delete oldSettings.compilerOptions?.module;
+      delete oldSettings.compilerOptions?.moduleResolution;
+      delete oldSettings.compilerOptions?.verbatimModuleSyntax;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
-      newSettings.extends = mergeTsconfigExtends(getTsconfigExtends(config), preservedExtends);
       newSettings.include = newSettings.include?.filter(
         (dirPath: string) =>
           !dirPath.includes('@types') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
@@ -131,71 +112,4 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     delete newSettings.compilerOptions?.experimentalDecorators;
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
-}
-
-function resolveTsconfigExtends(
-  extendsValue: TsConfigJson['extends'],
-  config: PackageConfig
-): TsConfigJson['extends'] | undefined {
-  const deprecatedExtends = './node_modules/@willbooster/tsconfig/tsconfig.json';
-  if (extendsValue === deprecatedExtends) {
-    return undefined;
-  }
-  if (!Array.isArray(extendsValue)) return extendsValue;
-
-  const sanitizedExtends = extendsValue.filter((entry) => entry !== deprecatedExtends);
-  if (sanitizedExtends.length === 0 || isLegacyGeneratedExtends(sanitizedExtends, config)) {
-    return undefined;
-  }
-  return sanitizedExtends;
-}
-
-function isLegacyGeneratedExtends(extendsValue: string[], config: PackageConfig): boolean {
-  if (config.isBun || config.depending.reactNative) return false;
-
-  const expectedExtends = ['@tsconfig/node-lts/tsconfig.json', '@tsconfig/node-ts/tsconfig.json'];
-  return (
-    extendsValue.length === expectedExtends.length &&
-    extendsValue.every((entry, index) => entry === expectedExtends[index])
-  );
-}
-
-function mergeTsconfigExtends(
-  generatedExtends: TsConfigJson['extends'],
-  preservedExtends: TsConfigJson['extends']
-): TsConfigJson['extends'] {
-  if (preservedExtends === undefined) return generatedExtends;
-
-  const mergedExtends = [...normalizeTsconfigExtends(generatedExtends), ...normalizeTsconfigExtends(preservedExtends)];
-  const dedupedExtends = [...new Set(mergedExtends)];
-  return dedupedExtends.length === 1 ? dedupedExtends[0] : dedupedExtends;
-}
-
-function normalizeTsconfigExtends(extendsValue: TsConfigJson['extends']): string[] {
-  if (extendsValue === undefined) return [];
-  return Array.isArray(extendsValue) ? extendsValue : [extendsValue];
-}
-
-function shouldPreserveModuleSettings(oldSettings: TsConfigJson, config: PackageConfig): boolean {
-  const oldModule = normalizeCompilerOption(oldSettings.compilerOptions?.module);
-  const oldModuleResolution = normalizeCompilerOption(oldSettings.compilerOptions?.moduleResolution);
-  if (oldModuleResolution === 'bundler') return true;
-  if (oldModule === undefined && oldModuleResolution === undefined) return false;
-  return !isLegacyGeneratedModuleSettings(oldModule, oldModuleResolution, config);
-}
-
-function isLegacyGeneratedModuleSettings(
-  module: string | undefined,
-  moduleResolution: string | undefined,
-  config: PackageConfig
-): boolean {
-  if (config.isBun || config.depending.reactNative) return false;
-
-  return (
-    (module === 'esnext' && moduleResolution === 'node') || (module === 'nodenext' && moduleResolution === 'nodenext')
-  );
-}
-
-function normalizeCompilerOption(value: string | undefined): string | undefined {
-  return value?.toLowerCase();
 }
