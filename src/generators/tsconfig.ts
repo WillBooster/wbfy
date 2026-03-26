@@ -73,6 +73,13 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     } else if (!config.isBun && !config.depending.reactNative) {
       newSettings.compilerOptions = { ...newSettings.compilerOptions, jsx: 'react-jsx' };
     }
+    if (!config.isBun && !config.depending.reactNative) {
+      newSettings.compilerOptions = {
+        ...newSettings.compilerOptions,
+        module: config.isEsmPackage ? 'NodeNext' : 'ESNext',
+        moduleResolution: config.isEsmPackage ? 'NodeNext' : 'Node',
+      };
+    }
     if (config.isRoot && !config.doesContainSubPackageJsons) {
       newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
       newSettings.exclude = newSettings.exclude?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
@@ -94,13 +101,13 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       delete oldSettings.compilerOptions?.target;
       delete oldSettings.compilerOptions?.strict;
       delete oldSettings.compilerOptions?.skipLibCheck;
-      if (!shouldPreserveBundlerResolution) {
-        delete oldSettings.compilerOptions?.module;
-        delete oldSettings.compilerOptions?.moduleResolution;
-      }
       // Don't modify "target", "module" and "moduleResolution".
       delete newSettings.compilerOptions?.target;
-      if (shouldPreserveBundlerResolution) {
+      if (
+        shouldPreserveBundlerResolution ||
+        oldSettings.compilerOptions?.module !== undefined ||
+        oldSettings.compilerOptions?.moduleResolution !== undefined
+      ) {
         delete newSettings.compilerOptions?.module;
         delete newSettings.compilerOptions?.moduleResolution;
       }
