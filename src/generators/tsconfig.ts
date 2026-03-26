@@ -14,7 +14,6 @@ import { promisePool } from '../utils/promisePool.js';
 import { getTsconfigExtends } from '../utils/tsconfigBase.js';
 
 const rootJsonObj = {
-  extends: '@tsconfig/node-lts/tsconfig.json',
   compilerOptions: {
     alwaysStrict: true,
     noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
@@ -24,11 +23,8 @@ const rootJsonObj = {
     declaration: true,
     sourceMap: true,
     importHelpers: false,
-    erasableSyntaxOnly: true,
-    rewriteRelativeImportExtensions: true,
     outDir: 'dist',
     typeRoots: ['./node_modules/@types', './@types'],
-    verbatimModuleSyntax: true,
   },
   exclude: ['packages/*/test/fixtures', 'test/fixtures'],
   include: [
@@ -42,7 +38,6 @@ const rootJsonObj = {
 };
 
 const subJsonObj = {
-  extends: '@tsconfig/node-lts/tsconfig.json',
   compilerOptions: {
     alwaysStrict: true,
     noUncheckedIndexedAccess: true, // for @typescript-eslint/prefer-nullish-coalescing
@@ -52,11 +47,8 @@ const subJsonObj = {
     declaration: true,
     sourceMap: true,
     importHelpers: false,
-    erasableSyntaxOnly: true,
-    rewriteRelativeImportExtensions: true,
     outDir: 'dist',
     typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
-    verbatimModuleSyntax: true,
   },
   exclude: ['test/fixtures'],
   include: ['scripts/**/*', 'src/**/*', 'test/**/*'],
@@ -68,20 +60,10 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
 
     let newSettings = cloneDeep(config.isRoot ? rootJsonObj : subJsonObj) as TsConfigJson;
     newSettings.extends = getTsconfigExtends(config);
-    if (config.depending.reactNative) {
-      delete newSettings.compilerOptions?.verbatimModuleSyntax;
-    }
     if (!config.doesContainJsxOrTsx && !config.doesContainJsxOrTsxInPackages) {
       delete newSettings.compilerOptions?.jsx;
     } else if (!config.isBun && !config.depending.reactNative) {
       newSettings.compilerOptions = { ...newSettings.compilerOptions, jsx: 'react-jsx' };
-    }
-    if (!config.isBun && !config.depending.reactNative) {
-      newSettings.compilerOptions = {
-        ...newSettings.compilerOptions,
-        module: config.isEsmPackage ? 'NodeNext' : 'ESNext',
-        moduleResolution: config.isEsmPackage ? 'NodeNext' : 'Node',
-      };
     }
     if (config.isRoot && !config.doesContainSubPackageJsons) {
       newSettings.include = newSettings.include?.filter((dirPath: string) => !dirPath.startsWith('packages/*/'));
@@ -92,11 +74,9 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     try {
       const existingContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(existingContent) as TsConfigJson;
+      newSettings.extends = mergeTsconfigExtends(newSettings.extends, oldSettings.extends);
       delete oldSettings.extends;
       delete oldSettings.compilerOptions?.jsx;
-      delete oldSettings.compilerOptions?.module;
-      delete oldSettings.compilerOptions?.moduleResolution;
-      delete oldSettings.compilerOptions?.verbatimModuleSyntax;
       newSettings = merge.all([newSettings, oldSettings, newSettings], { arrayMerge: combineMerge });
       newSettings.include = newSettings.include?.filter(
         (dirPath: string) =>
@@ -107,9 +87,28 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     }
     sortKeys(newSettings);
     newSettings.include?.sort();
-    const newContent = JSON.stringify(newSettings);
     // Don't use old decorator
     delete newSettings.compilerOptions?.experimentalDecorators;
+    if (config.depending.reactNative) {
+      delete newSettings.compilerOptions?.verbatimModuleSyntax;
+    }
+    const newContent = JSON.stringify(newSettings);
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
+}
+
+function mergeTsconfigExtends(
+  generatedExtends: TsConfigJson['extends'],
+  existingExtends: TsConfigJson['extends']
+): TsConfigJson['extends'] {
+  const mergedExtends = [...normalizeExtends(generatedExtends), ...normalizeExtends(existingExtends)];
+  const uniqueExtends = [...new Set(mergedExtends)];
+  if (uniqueExtends.length === 0) return undefined;
+  if (uniqueExtends.length === 1) return uniqueExtends[0];
+  return uniqueExtends;
+}
+
+function normalizeExtends(value: TsConfigJson['extends']): string[] {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
 }
