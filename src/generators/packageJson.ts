@@ -16,6 +16,7 @@ import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
+import { getTsconfigBaseDependencies } from '../utils/tsconfigBase.js';
 
 const jsCommonDeps = [
   'eslint',
@@ -204,7 +205,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {
-    devDependencies.push('typescript');
+    devDependencies.push('typescript', ...getTsconfigBaseDependencies(config));
     if (config.isBun) {
       devDependencies.push('@types/bun');
     }
