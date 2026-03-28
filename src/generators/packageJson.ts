@@ -423,6 +423,8 @@ async function removeDeprecatedStuff(
 function getDependencySpecifier(dependency: string): string {
   // eslint v10 is not supported by the WillBooster ESLint config stack yet.
   if (dependency === 'eslint') return 'eslint@^9';
+  // The current ESLint stack in generated repos does not support TypeScript 6 yet.
+  if (dependency === 'typescript') return 'typescript@^5';
   return dependency;
 }
 
