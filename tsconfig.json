@@ -17,6 +17,6 @@
     "verbatimModuleSyntax": true
   },
   "exclude": ["test/fixtures", "packages/*/test/fixtures"],
-  "extends": "@tsconfig/node-lts/tsconfig.json",
+  "extends": ["@tsconfig/node-lts/tsconfig.json", "@tsconfig/node-ts/tsconfig.json"],
   "include": ["scripts/**/*", "src/**/*", "test/**/*"]
 }
