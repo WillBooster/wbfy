@@ -67,7 +67,13 @@ ${generateAgentCodingStyle(allConfigs)}
     .replaceAll(/\n{3,}/g, '\n\n')
     .trim();
 
-  return extraContent ? baseContent + '\n' + extraContent.trimEnd() : baseContent;
+  const hasNewSection = extraContent?.trim().startsWith('#');
+  const normalizedExtraContent = extraContent
+    ? hasNewSection
+      ? '\n\n' + extraContent.trim()
+      : '\n' + extraContent
+    : '';
+  return baseContent + normalizedExtraContent;
 }
 
 export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
