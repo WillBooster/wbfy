@@ -16,6 +16,7 @@ import { ignoreFileUtil } from '../utils/ignoreFileUtil.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
+import { getTsconfigBaseDependencies } from '../utils/tsconfigBase.js';
 
 const jsCommonDeps = [
   'eslint',
@@ -201,6 +202,15 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     } else {
       devDependencies.push('eslint', 'micromatch');
     }
+  }
+
+  if (
+    config.doesContainJavaScript ||
+    config.doesContainJavaScriptInPackages ||
+    config.doesContainTypeScript ||
+    config.doesContainTypeScriptInPackages
+  ) {
+    devDependencies.push(...getTsconfigBaseDependencies(config));
   }
 
   if (config.doesContainTypeScript || config.doesContainTypeScriptInPackages) {

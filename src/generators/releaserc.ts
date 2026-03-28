@@ -35,13 +35,11 @@ export async function generateReleaserc(rootConfig: PackageConfig): Promise<void
           ),
         ];
       } else if (plugin === '@semantic-release/github') {
-        // Remove deprecated successComment and failComment properties from oldConfig
-        const { failComment: _1, successComment: _2, ...cleanOldConfig } = oldConfig as Record<string, unknown>;
         plugins[i] = [
           '@semantic-release/github',
           merge.all(
             [
-              cleanOldConfig,
+              oldConfig,
               {
                 // cf. https://github.com/semantic-release/semantic-release/issues/2204#issuecomment-1508417704
                 successCommentCondition: false,

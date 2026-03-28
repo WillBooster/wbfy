@@ -32,3 +32,7 @@ alwaysApply: true
 - When adding new functions or classes, define them below any functions or classes that call them to maintain a clear top-down call order.
 - Write comments that explain "why" rather than "what". Avoid stating what can be understood from the code itself.
 - Prefer `undefined` over `null` unless explicitly required by APIs or libraries.
+
+## How to Run
+
+Use `yarn start` to run `wbfy` on this repository.

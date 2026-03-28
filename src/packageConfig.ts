@@ -175,7 +175,7 @@ export async function getPackageConfig(
       isWillBoosterRepo: Boolean(
         repository?.startsWith('github:WillBooster/') || repository?.startsWith('github:WillBoosterLab/')
       ),
-      isBun: rootConfig?.isBun || fs.existsSync(path.join(dirPath, 'bunfig.toml')),
+      isBun: rootConfig?.isBun || fs.existsSync(path.join(dirPath, 'bun.lock')),
       isEsmPackage: esmPackage,
       isWillBoosterConfigs: packageJsonPath.includes(`${path.sep}willbooster-configs`),
       doesContainSubPackageJsons: containsAny('packages/**/package.json', dirPath),
