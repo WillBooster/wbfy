@@ -269,15 +269,6 @@ const workflows = {
 type KnownKind = keyof typeof workflows | 'deploy' | 'autofix';
 
 export async function generateWorkflows(rootConfig: PackageConfig): Promise<void> {
-  const fileNamesToBeRemoved = [
-    'add-focused-issue-to-project.yml',
-    'add-issue-to-project.yml',
-    'add-ready-issue-to-project.yml',
-    'notify-ready.yml',
-    'wbfy.yml',
-    'wbfy-merge.yml',
-  ];
-
   return logger.functionIgnoringException('generateWorkflow', async () => {
     if (isReusableWorkflowsRepo(rootConfig.repository)) {
       // Don't touch reusable-workflows repo because it hosts upstream workflow definitions.
@@ -305,20 +296,11 @@ export async function generateWorkflows(rootConfig: PackageConfig): Promise<void
     if (rootConfig.depending.semanticRelease) {
       fileNameSet.add('release.yml');
     }
-    fileNameSet.delete('add-issue-to-project.yml');
-    fileNameSet.delete('add-ready-issue-to-project.yml');
-    fileNameSet.delete('notify-ready.yml');
 
     for (const fileName of fileNameSet) {
       // 実際はKnownKind以外の値も代入されることに注意
       const kind = path.basename(fileName, '.yml') as KnownKind;
       await promisePool.run(() => writeWorkflowYaml(rootConfig, workflowsPath, kind));
-    }
-
-    for (const deprecatedFileName of fileNamesToBeRemoved) {
-      await promisePool.run(() =>
-        fs.promises.rm(path.join(workflowsPath, deprecatedFileName), { force: true, recursive: true })
-      );
     }
   });
 }
@@ -414,12 +396,9 @@ async function writeWorkflowYaml(config: PackageConfig, workflowsPath: string, k
     }
     // No default
   }
-  migrateWorkflow(newSettings);
   await writeYaml(newSettings, filePath);
 
-  if (kind === 'release') {
-    await fs.promises.rm(path.join(workflowsPath, 'semantic-release.yml'), { force: true });
-  } else if (kind === 'sync') {
+  if (kind === 'sync') {
     await fs.promises.rm(path.join(workflowsPath, 'sync-init.yml'), { force: true });
     if (!newSettings.jobs.sync?.with) return;
 
@@ -484,8 +463,6 @@ function normalizeJob(config: PackageConfig, job: Job, kind: KnownKind): void {
   if (job.with.dot_env_path === '.env') {
     delete job.with.dot_env_path;
   }
-  // Remove deprecated parameters
-  migrateJob(job);
 
   // Don't use `fly deploy --json` since it causes an error
   if (kind.startsWith('deploy') && job.secrets.FLY_API_TOKEN && typeof job.with.deploy_command === 'string') {
@@ -545,25 +522,4 @@ function generateAutofixWorkflow(config: PackageConfig): Workflow {
 async function writeYaml(newSettings: Workflow, filePath: string): Promise<void> {
   const yamlText = yaml.dump(newSettings, { lineWidth: -1, noCompatMode: true, styles: { '!!null': 'empty' } });
   await fs.promises.writeFile(filePath, yamlText);
-}
-
-function migrateWorkflow(newSettings: Workflow): void {
-  // TODO: Remove them after 2023-03-31
-  delete newSettings.jobs['add-to-project'];
-}
-
-function migrateJob(job: Job): void {
-  // TODO: Remove them after 2023-03-31
-  if (!job.with) return;
-  delete job.with.non_self_hosted;
-  delete job.with.notify_discord;
-  delete job.with.require_fly;
-  delete job.with.require_gcloud;
-  delete job.with.label;
-  delete job.with.labelOperator;
-  // Added 2025-08-06
-  if (job.with.ci_size) {
-    job.with.ci_label = job.with.ci_size;
-    delete job.with.ci_size;
-  }
 }
