@@ -2,7 +2,10 @@
   "name": "wbfy",
   "version": "0.0.0-semantically-released",
   "description": "A tool for applying WillBooster's conventional configures to npm packages",
-  "repository": "github:WillBooster/wbfy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WillBooster/wbfy.git"
+  },
   "license": "Apache-2.0",
   "author": "WillBooster Inc.",
   "type": "module",
@@ -82,7 +85,7 @@
     "sort-package-json": "3.6.1",
     "ts-node": "10.9.2",
     "type-fest": "5.5.0",
-    "typescript-eslint": "8.57.1",
+    "typescript-eslint": "8.57.2",
     "vitest": "4.1.0"
   },
   "packageManager": "yarn@4.13.0",

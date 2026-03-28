@@ -314,7 +314,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     }
 
     if (config.repository) {
-      jsonObj.repository = config.repository;
+      jsonObj.repository = formatRepositoryForPackageJson(config.repository);
     }
   }
 
@@ -424,6 +424,22 @@ function getDependencySpecifier(dependency: string): string {
   // eslint v10 is not supported by the WillBooster ESLint config stack yet.
   if (dependency === 'eslint') return 'eslint@^9';
   return dependency;
+}
+
+function formatRepositoryForPackageJson(repository: string): PackageJson['repository'] {
+  if (!repository.startsWith('github:')) {
+    return repository;
+  }
+
+  const [owner, repo] = gitHubUtil.getOrgAndName(repository);
+  if (!owner || !repo) {
+    return repository;
+  }
+
+  return {
+    type: 'git',
+    url: `git+https://github.com/${owner}/${repo}.git`,
+  };
 }
 
 export function generateScripts(config: PackageConfig, oldScripts: PackageJson.Scripts): Record<string, string> {
