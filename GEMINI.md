@@ -1,6 +1,6 @@
 ## Project Information
 
-- Name: wbfy
+- Name: `wbfy`
 - Description: A tool for applying WillBooster's conventional configures to npm packages
 - Package Manager: yarn
 
@@ -27,6 +27,7 @@
 - When adding new functions or classes, define them below any functions or classes that call them to maintain a clear top-down call order.
 - Write comments that explain "why" rather than "what". Avoid stating what can be understood from the code itself.
 - Prefer `undefined` over `null` unless explicitly required by APIs or libraries.
+- Prefer using a single template literal for prompts instead of `join()` with an array of strings.
 
 ## How to Run
 
