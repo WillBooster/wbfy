@@ -39,7 +39,7 @@ function generateAgentInstruction(
   const baseContent = `
 ## Project Information
 
-- Name: ${rootConfig.packageJson?.name}
+- Name: \`${rootConfig.packageJson?.name}\`
 - Description: ${rootConfig.packageJson?.description}
 - Package Manager: ${packageManager}
 
