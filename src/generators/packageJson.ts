@@ -19,6 +19,7 @@ import { spawnSync } from '../utils/spawnUtil.js';
 import { getTsconfigBaseDependencies } from '../utils/tsconfigBase.js';
 
 const jsCommonDeps = [
+  '@eslint/js',
   'eslint',
   'eslint-config-flat-gitignore',
   'eslint-config-prettier',
@@ -41,7 +42,7 @@ const eslintDeps: Record<EslintExtensionBase, string[]> = {
   '@willbooster/eslint-config-ts-react': ['@willbooster/eslint-config-ts-react', ...tsCommonDeps, ...reactCommonDeps],
   '@willbooster/eslint-config-next': [
     '@willbooster/eslint-config-next',
-    'eslint-config-next',
+    '@next/eslint-plugin-next',
     ...tsCommonDeps,
     ...reactCommonDeps,
   ],
@@ -421,8 +422,6 @@ async function removeDeprecatedStuff(
 }
 
 function getDependencySpecifier(dependency: string): string {
-  // eslint v10 is not supported by the WillBooster ESLint config stack yet.
-  if (dependency === 'eslint') return 'eslint@^9';
   // The current ESLint stack in generated repos does not support TypeScript 6 yet.
   if (dependency === 'typescript') return 'typescript@^5';
   return dependency;
