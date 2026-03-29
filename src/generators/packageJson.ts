@@ -19,6 +19,7 @@ import { spawnSync } from '../utils/spawnUtil.js';
 import { getTsconfigBaseDependencies } from '../utils/tsconfigBase.js';
 
 const jsCommonDeps = [
+  '@eslint/js',
   'eslint',
   'eslint-config-flat-gitignore',
   'eslint-config-prettier',
@@ -41,7 +42,7 @@ const eslintDeps: Record<EslintExtensionBase, string[]> = {
   '@willbooster/eslint-config-ts-react': ['@willbooster/eslint-config-ts-react', ...tsCommonDeps, ...reactCommonDeps],
   '@willbooster/eslint-config-next': [
     '@willbooster/eslint-config-next',
-    'eslint-config-next',
+    '@next/eslint-plugin-next',
     ...tsCommonDeps,
     ...reactCommonDeps,
   ],
