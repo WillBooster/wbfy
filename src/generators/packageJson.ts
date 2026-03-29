@@ -428,8 +428,8 @@ function getDependencySpecifier(dependency: string): string {
   return dependency;
 }
 
-function formatRepositoryForPackageJson(repository: string): PackageJson['repository'] {
-  if (!repository.startsWith('github:')) {
+function formatRepositoryForPackageJson(repository: PackageJson['repository']): PackageJson['repository'] {
+  if (typeof repository !== 'string' || !repository.startsWith('github:')) {
     return repository;
   }
 
