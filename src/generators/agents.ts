@@ -39,7 +39,7 @@ function generateAgentInstruction(
   const baseContent = `
 ## Project Information
 
-- Name: ${rootConfig.packageJson?.name}
+- Name: \`${rootConfig.packageJson?.name || 'unknown'}\`
 - Description: ${rootConfig.packageJson?.description}
 - Package Manager: ${packageManager}
 
@@ -88,7 +88,7 @@ export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
 - When adding new functions or classes, define them below any functions or classes that call them to maintain a clear top-down call order.
 - Write comments that explain "why" rather than "what". Avoid stating what can be understood from the code itself.
 - Prefer \`undefined\` over \`null\` unless explicitly required by APIs or libraries.
-- Prefer using a single template literal for prompts instead of concatenating an array of strings.
+- Prefer using a single template literal for prompts instead of \`join()\` with an array of strings.
 ${
   allConfigs.some((c) => c.depending.genI18nTs)
     ? `- When introducing new string literals in React components, update the language resource files in the \`i18n\` directory (e.g., \`i18n/ja-JP.json\`). Reference these strings using the \`i18n\` utility. For example, use \`i18n.pages.home.title()\` for \`{ "pages": { "home": { "title": "My App" } } }\`.`
