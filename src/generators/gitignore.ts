@@ -91,6 +91,7 @@ packaged.yaml
     if (config.depending.playwrightTest) {
       headUserContent += `playwright-report/
 test-results/
+.playwright-cli/
 `;
     }
     if (rootConfig.depending.reactNative || config.depending.reactNative) {
