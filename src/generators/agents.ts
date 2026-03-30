@@ -57,8 +57,8 @@ function generateAgentInstruction(
   - If not specified, make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
   - Always create new commits. Avoid using \`--amend\`.
 ${
-  allConfigs.some((c) => c.hasStartTest)
-    ? `- Use \`${packageManager} run start-test\` to launch a web server for debugging or testing.`
+  allConfigs.some((c) => c.hasStartTestServer)
+    ? `- Use \`${packageManager} run start-test-server\` to launch a web server for debugging or testing.`
     : ''
 }
 
