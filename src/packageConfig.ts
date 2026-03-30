@@ -42,7 +42,7 @@ export interface PackageConfig {
   doesContainTypeScriptInPackages: boolean;
   doesContainJsxOrTsxInPackages: boolean;
 
-  hasStartTest: boolean;
+  hasStartTestServer: boolean;
 
   depending: {
     blitz: boolean;
@@ -194,7 +194,7 @@ export async function getPackageConfig(
       doesContainJavaScriptInPackages: containsAny('packages/**/{app,src,test,scripts}/**/*.{cjs,mjs,js,jsx}', dirPath),
       doesContainTypeScriptInPackages: containsAny('packages/**/{app,src,test,scripts}/**/*.{cts,mts,ts,tsx}', dirPath),
       doesContainJsxOrTsxInPackages: containsAny('packages/**/{app,src,test}/**/*.{t,j}sx', dirPath),
-      hasStartTest: !!packageJson.scripts?.['start-test'],
+      hasStartTestServer: !!packageJson.scripts?.['start-test-server'],
       depending: {
         blitz: !!dependencies.blitz,
         firebase: !!devDependencies['firebase-tools'],
