@@ -447,7 +447,7 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
   if (config.isBun) {
     const hasTypecheck = config.doesContainTypeScript || config.doesContainTypeScriptInPackages;
     const scripts: Record<string, string> = {
-      'check-all-for-ai': 'bun run check-for-ai && bun run test --silent',
+      'check-all-for-ai': 'bun run check-for-ai && bun run test',
       'check-for-ai': `bun run cleanup${hasTypecheck ? ' && bun run typecheck' : ''}`,
       cleanup: 'bun --bun wb lint --fix --format',
       format: `bun --bun wb lint --format`,
