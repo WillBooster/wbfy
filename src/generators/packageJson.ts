@@ -424,6 +424,8 @@ async function removeDeprecatedStuff(
 function getDependencySpecifier(dependency: string): string {
   // The current ESLint stack in generated repos does not support TypeScript 6 yet.
   if (dependency === 'typescript') return 'typescript@^5';
+  // The current React ESLint stack in generated repos is not compatible with ESLint 10 yet.
+  if (dependency === '@eslint/js' || dependency === 'eslint') return `${dependency}@^9`;
   return dependency;
 }
 
