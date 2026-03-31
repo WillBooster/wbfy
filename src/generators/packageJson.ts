@@ -313,10 +313,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         poetryDevDependencies.push('black', 'isort', 'flake8');
       }
     }
+  }
 
-    if (config.repository) {
-      jsonObj.repository = formatRepositoryForPackageJson(config.repository);
-    }
+  if (config.repository || jsonObj.repository) {
+    jsonObj.repository = formatRepositoryForPackageJson(config.repository ?? jsonObj.repository, jsonObj.repository);
   }
 
   if (config.depending.blitz) {
@@ -429,20 +429,47 @@ function getDependencySpecifier(dependency: string): string {
   return dependency;
 }
 
-function formatRepositoryForPackageJson(repository: PackageJson['repository']): PackageJson['repository'] {
-  if (typeof repository !== 'string' || !repository.startsWith('github:')) {
+function formatRepositoryForPackageJson(
+  repository: PackageJson['repository'],
+  existingRepository?: PackageJson['repository']
+): PackageJson['repository'] {
+  const normalizedUrl =
+    normalizeRepositoryUrlForPackageJson(repository) ?? normalizeRepositoryUrlForPackageJson(existingRepository);
+  if (!normalizedUrl) {
     return repository;
   }
 
-  const [owner, repo] = gitHubUtil.getOrgAndName(repository);
-  if (!owner || !repo) {
-    return repository;
-  }
+  const repositoryObj =
+    typeof repository === 'object'
+      ? repository
+      : typeof existingRepository === 'object'
+        ? existingRepository
+        : undefined;
 
   return {
-    type: 'git',
-    url: `git+https://github.com/${owner}/${repo}.git`,
+    ...repositoryObj,
+    type: repositoryObj?.type ?? 'git',
+    url: normalizedUrl,
   };
+}
+
+function normalizeRepositoryUrlForPackageJson(repository: PackageJson['repository']): string | undefined {
+  if (typeof repository === 'string') {
+    if (!repository.startsWith('github:')) return;
+
+    const [owner, repo] = gitHubUtil.getOrgAndName(repository);
+    if (!owner || !repo) return;
+    return `git+https://github.com/${owner}/${repo}.git`;
+  }
+
+  const repositoryUrl = repository?.url;
+  if (typeof repositoryUrl !== 'string') return;
+
+  const matched = /^(?:git\+)?https:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/u.exec(repositoryUrl);
+  if (!matched) return repositoryUrl;
+
+  const [, owner, repo] = matched;
+  return `git+https://github.com/${owner}/${repo}.git`;
 }
 
 export function generateScripts(config: PackageConfig, oldScripts: PackageJson.Scripts): Record<string, string> {
