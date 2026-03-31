@@ -497,8 +497,6 @@ export function generateScripts(config: PackageConfig, oldScripts: PackageJson.S
     }
     if (oldTest?.includes('wb test')) {
       scripts.test = oldTest;
-      // `wb` supports `--silent` option
-      scripts['check-all-for-ai'] = (scripts['check-all-for-ai'] ?? '') + ' --silent';
     }
 
     if (!hasTypecheck) {
