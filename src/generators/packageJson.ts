@@ -313,10 +313,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
         poetryDevDependencies.push('black', 'isort', 'flake8');
       }
     }
+  }
 
-    if (config.repository) {
-      jsonObj.repository = formatRepositoryForPackageJson(config.repository);
-    }
+  if (config.repository || jsonObj.repository) {
+    jsonObj.repository = formatRepositoryForPackageJson(config.repository ?? jsonObj.repository, jsonObj.repository);
   }
 
   if (config.depending.blitz) {
@@ -424,22 +424,63 @@ async function removeDeprecatedStuff(
 function getDependencySpecifier(dependency: string): string {
   // The current ESLint stack in generated repos does not support TypeScript 6 yet.
   if (dependency === 'typescript') return 'typescript@^5';
+  // The current React ESLint stack in generated repos is not compatible with ESLint 10 yet.
+  if (dependency === '@eslint/js' || dependency === 'eslint') return `${dependency}@^9`;
   return dependency;
 }
 
-function formatRepositoryForPackageJson(repository: PackageJson['repository']): PackageJson['repository'] {
-  if (typeof repository !== 'string' || !repository.startsWith('github:')) {
-    return repository;
+function formatRepositoryForPackageJson(
+  repository: PackageJson['repository'],
+  existingRepository?: PackageJson['repository']
+): PackageJson['repository'] {
+  const normalizedRepository = normalizeRepositoryUrlForPackageJson(repository);
+  if (normalizedRepository) {
+    return buildNormalizedRepositoryForPackageJson(normalizedRepository, repository, existingRepository);
   }
 
-  const [owner, repo] = gitHubUtil.getOrgAndName(repository);
-  if (!owner || !repo) {
-    return repository;
+  const normalizedExistingRepository = normalizeRepositoryUrlForPackageJson(existingRepository);
+  if (normalizedExistingRepository) {
+    return buildNormalizedRepositoryForPackageJson(normalizedExistingRepository, existingRepository);
   }
+
+  return repository;
+}
+
+function normalizeRepositoryUrlForPackageJson(repository: PackageJson['repository']): string | undefined {
+  if (typeof repository === 'string') {
+    if (!repository.startsWith('github:')) return;
+
+    const [owner, repo] = gitHubUtil.getOrgAndName(repository);
+    if (!owner || !repo) return;
+    return `git+https://github.com/${owner}/${repo}.git`;
+  }
+
+  const repositoryUrl = repository?.url;
+  if (typeof repositoryUrl !== 'string') return;
+
+  const matched = /^(?:git\+)?https:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/u.exec(repositoryUrl);
+  if (!matched) return;
+
+  const [, owner, repo] = matched;
+  return `git+https://github.com/${owner}/${repo}.git`;
+}
+
+function buildNormalizedRepositoryForPackageJson(
+  normalizedUrl: string,
+  repository: PackageJson['repository'],
+  existingRepository?: PackageJson['repository']
+): PackageJson['repository'] {
+  const repositoryObj =
+    typeof repository === 'object'
+      ? repository
+      : typeof existingRepository === 'object'
+        ? existingRepository
+        : undefined;
 
   return {
+    ...repositoryObj,
     type: 'git',
-    url: `git+https://github.com/${owner}/${repo}.git`,
+    url: normalizedUrl,
   };
 }
 
