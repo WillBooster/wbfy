@@ -9,7 +9,7 @@ const targetAgents = ['claude-code', 'codex', 'cursor', 'gemini-cli'];
 const installTargetAgentArgs = targetAgents.flatMap((agent) => ['--agent', agent]);
 const skillsRepo = 'WillBooster/agent-skills';
 const playwrightSkillName = 'playwright-cli';
-const nonWebRemovalAgentArgs = ['--agent', 'universal', '--agent', 'claude-code'];
+const nonWebRemovalAgentArgs = ['--agent', 'universal', ...installTargetAgentArgs];
 
 export async function installAgentSkills(rootConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('installAgentSkills', async () => {
@@ -63,13 +63,22 @@ async function removeSkillLockEntry(rootDirPath: string): Promise<void> {
   const filePath = path.resolve(rootDirPath, 'skills-lock.json');
   try {
     const jsonText = await fs.readFile(filePath, 'utf8');
-    const json = JSON.parse(jsonText) as {
-      skills?: Record<string, unknown>;
-    };
-    if (!json.skills?.[playwrightSkillName]) return;
+    const json: unknown = JSON.parse(jsonText);
+    if (!isSkillLockJson(json) || !json.skills[playwrightSkillName]) return;
     json.skills = Object.fromEntries(Object.entries(json.skills).filter(([name]) => name !== playwrightSkillName));
     await fs.writeFile(filePath, JSON.stringify(json, undefined, 2) + '\n');
   } catch {
     // Ignore if the skill lock does not exist yet or is unreadable.
   }
+}
+
+function isSkillLockJson(json: unknown): json is { skills: Record<string, unknown> } {
+  return (
+    typeof json === 'object' &&
+    json !== null &&
+    'skills' in json &&
+    typeof json.skills === 'object' &&
+    json.skills !== null &&
+    !Array.isArray(json.skills)
+  );
 }
