@@ -42,6 +42,8 @@ async function runInstallAgentSkills(rootConfig: PackageConfig): Promise<void> {
     rootConfig.dirPath
   );
   await Promise.all([
+    // The Vercel CLI leaves the shared universal install behind in this flow,
+    // so non-web repos need an explicit cleanup pass to enforce the final state.
     removeSkillDirectory(rootConfig.dirPath, '.agents/skills'),
     removeSkillDirectory(rootConfig.dirPath, '.claude/skills'),
     removeSkillDirectory(rootConfig.dirPath, '.codex/skills'),
