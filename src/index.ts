@@ -30,6 +30,7 @@ import { generatePyrightConfigJson } from './generators/pyrightConfig.js';
 import { generateReadme } from './generators/readme.js';
 import { generateReleaserc } from './generators/releaserc.js';
 import { generateRenovateJson } from './generators/renovateJson.js';
+import { installAgentSkills } from './generators/skills.js';
 import { generateTsconfig } from './generators/tsconfig.js';
 import { generateVscodeSettings } from './generators/vscodeSettings.js';
 import { generateWorkflows, isReusableWorkflowsRepo } from './generators/workflow.js';
@@ -203,6 +204,8 @@ async function main(): Promise<void> {
     if (!rootConfig.isBun) {
       spawnSync(packageManager, ['install', '--no-immutable'], rootDirPath);
     }
+
+    await installAgentSkills(rootConfig);
   }
 }
 
