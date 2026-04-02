@@ -1,14 +1,17 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 
 const targetAgents = ['claude-code', 'codex', 'cursor', 'gemini-cli'];
 const skillsRepo = 'WillBooster/agent-skills';
+const playwrightSkillName = 'playwright-cli';
 
 export async function installAgentSkills(rootConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('installAgentSkills', async () => {
-    runInstallAgentSkills(rootConfig);
-    await Promise.resolve();
+    await runInstallAgentSkills(rootConfig);
   });
 }
 
@@ -23,7 +26,7 @@ function isWebAppRelated(config: PackageConfig): boolean {
   );
 }
 
-function runInstallAgentSkills(rootConfig: PackageConfig): void {
+async function runInstallAgentSkills(rootConfig: PackageConfig): Promise<void> {
   if (!rootConfig.isRoot) return;
 
   const commonArgs = [
@@ -41,7 +44,38 @@ function runInstallAgentSkills(rootConfig: PackageConfig): void {
 
   spawnSync(
     'npx',
-    ['skills@latest', 'remove', 'playwright-cli', ...targetAgents.flatMap((agent) => ['--agent', agent]), '--yes'],
+    ['skills@latest', 'remove', playwrightSkillName, '--agent', 'universal', '--agent', 'claude-code', '--yes'],
     rootConfig.dirPath
   );
+  await Promise.all([
+    removeSkillDirectory(rootConfig.dirPath, '.agents/skills'),
+    removeSkillDirectory(rootConfig.dirPath, '.claude/skills'),
+    removeSkillDirectory(rootConfig.dirPath, '.codex/skills'),
+    removeSkillDirectory(rootConfig.dirPath, '.cursor/skills'),
+    removeSkillDirectory(rootConfig.dirPath, '.gemini/skills'),
+    removeSkillDirectory(rootConfig.dirPath, '.gemini/commands'),
+    removeSkillLockEntry(rootConfig.dirPath),
+  ]);
+}
+
+async function removeSkillDirectory(rootDirPath: string, relativeParentDirPath: string): Promise<void> {
+  await fs.rm(path.resolve(rootDirPath, relativeParentDirPath, playwrightSkillName), {
+    force: true,
+    recursive: true,
+  });
+}
+
+async function removeSkillLockEntry(rootDirPath: string): Promise<void> {
+  const filePath = path.resolve(rootDirPath, 'skills-lock.json');
+  try {
+    const jsonText = await fs.readFile(filePath, 'utf8');
+    const json = JSON.parse(jsonText) as {
+      skills?: Record<string, unknown>;
+    };
+    if (!json.skills?.[playwrightSkillName]) return;
+    json.skills = Object.fromEntries(Object.entries(json.skills).filter(([name]) => name !== playwrightSkillName));
+    await fs.writeFile(filePath, JSON.stringify(json, undefined, 2) + '\n');
+  } catch {
+    // Ignore if the skill lock does not exist yet or is unreadable.
+  }
 }
