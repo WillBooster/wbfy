@@ -459,7 +459,7 @@ function normalizeRepositoryUrlForPackageJson(repository: PackageJson['repositor
   if (typeof repositoryUrl !== 'string') return;
 
   const matched = /^(?:git\+)?https:\/\/github\.com\/([^/]+)\/([^/]+?)(?:\.git)?$/u.exec(repositoryUrl);
-  if (!matched) return repositoryUrl;
+  if (!matched) return;
 
   const [, owner, repo] = matched;
   return `git+https://github.com/${owner}/${repo}.git`;
