@@ -6,8 +6,10 @@ import type { PackageConfig } from '../packageConfig.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 
 const targetAgents = ['claude-code', 'codex', 'cursor', 'gemini-cli'];
+const installTargetAgentArgs = targetAgents.flatMap((agent) => ['--agent', agent]);
 const skillsRepo = 'WillBooster/agent-skills';
 const playwrightSkillName = 'playwright-cli';
+const nonWebRemovalAgentArgs = ['--agent', 'universal', '--agent', 'claude-code'];
 
 export async function installAgentSkills(rootConfig: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('installAgentSkills', async () => {
@@ -29,22 +31,14 @@ function isWebAppRelated(config: PackageConfig): boolean {
 async function runInstallAgentSkills(rootConfig: PackageConfig): Promise<void> {
   if (!rootConfig.isRoot) return;
 
-  const commonArgs = [
-    'skills@latest',
-    'add',
-    skillsRepo,
-    ...targetAgents.flatMap((agent) => ['--agent', agent]),
-    '--skill',
-    '*',
-    '--yes',
-  ];
+  const commonArgs = ['skills@latest', 'add', skillsRepo, ...installTargetAgentArgs, '--skill', '*', '--yes'];
   spawnSync('npx', commonArgs, rootConfig.dirPath);
 
   if (isWebAppRelated(rootConfig)) return;
 
   spawnSync(
     'npx',
-    ['skills@latest', 'remove', playwrightSkillName, '--agent', 'universal', '--agent', 'claude-code', '--yes'],
+    ['skills@latest', 'remove', playwrightSkillName, ...nonWebRemovalAgentArgs, '--yes'],
     rootConfig.dirPath
   );
   await Promise.all([
