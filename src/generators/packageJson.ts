@@ -433,24 +433,17 @@ function formatRepositoryForPackageJson(
   repository: PackageJson['repository'],
   existingRepository?: PackageJson['repository']
 ): PackageJson['repository'] {
-  const normalizedUrl =
-    normalizeRepositoryUrlForPackageJson(repository) ?? normalizeRepositoryUrlForPackageJson(existingRepository);
-  if (!normalizedUrl) {
-    return repository;
+  const normalizedRepository = normalizeRepositoryUrlForPackageJson(repository);
+  if (normalizedRepository) {
+    return buildNormalizedRepositoryForPackageJson(normalizedRepository, repository, existingRepository);
   }
 
-  const repositoryObj =
-    typeof repository === 'object'
-      ? repository
-      : typeof existingRepository === 'object'
-        ? existingRepository
-        : undefined;
+  const normalizedExistingRepository = normalizeRepositoryUrlForPackageJson(existingRepository);
+  if (normalizedExistingRepository) {
+    return buildNormalizedRepositoryForPackageJson(normalizedExistingRepository, existingRepository);
+  }
 
-  return {
-    ...repositoryObj,
-    type: repositoryObj?.type ?? 'git',
-    url: normalizedUrl,
-  };
+  return repository;
 }
 
 function normalizeRepositoryUrlForPackageJson(repository: PackageJson['repository']): string | undefined {
@@ -470,6 +463,25 @@ function normalizeRepositoryUrlForPackageJson(repository: PackageJson['repositor
 
   const [, owner, repo] = matched;
   return `git+https://github.com/${owner}/${repo}.git`;
+}
+
+function buildNormalizedRepositoryForPackageJson(
+  normalizedUrl: string,
+  repository: PackageJson['repository'],
+  existingRepository?: PackageJson['repository']
+): PackageJson['repository'] {
+  const repositoryObj =
+    typeof repository === 'object'
+      ? repository
+      : typeof existingRepository === 'object'
+        ? existingRepository
+        : undefined;
+
+  return {
+    ...repositoryObj,
+    type: 'git',
+    url: normalizedUrl,
+  };
 }
 
 export function generateScripts(config: PackageConfig, oldScripts: PackageJson.Scripts): Record<string, string> {
