@@ -63,8 +63,8 @@
     "@willbooster/eslint-config-ts": "11.5.0",
     "@willbooster/prettier-config": "10.3.0",
     "@yarnpkg/core": "4.6.0",
-    "build-ts": "17.0.22",
-    "conventional-changelog-conventionalcommits": "9.3.0",
+    "build-ts": "17.0.24",
+    "conventional-changelog-conventionalcommits": "9.3.1",
     "eslint": "10.1.0",
     "eslint-config-flat-gitignore": "2.3.0",
     "eslint-config-prettier": "10.1.8",
@@ -86,7 +86,7 @@
     "ts-node": "10.9.2",
     "type-fest": "5.5.0",
     "typescript-eslint": "8.57.2",
-    "vitest": "4.1.0"
+    "vitest": "4.1.2"
   },
   "packageManager": "yarn@4.13.0",
   "engines": {
