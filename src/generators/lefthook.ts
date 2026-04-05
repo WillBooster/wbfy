@@ -5,6 +5,7 @@ import yaml from 'js-yaml';
 
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
+import { extensions } from '../utils/extensions.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 
@@ -59,7 +60,7 @@ const baseSettings: Omit<LefthookSettings, 'pre-commit'> = {
 const preCommitSettings: LefthookSettings['pre-commit'] = {
   commands: {
     cleanup: {
-      glob: '*.{astro,cjs,css,cts,gql,htm,html,java,js,json,json5,jsonc,jsx,md,mjs,mts,scss,svelte,ts,tsx,vue,yaml,yml}',
+      glob: '',
       run: '',
     },
     'check-migrations': {
@@ -107,6 +108,7 @@ async function core(config: PackageConfig): Promise<void> {
         ...preCommitSettings.commands,
         cleanup: {
           ...preCommitSettings.commands.cleanup,
+          glob: getCleanupGlobs(config),
           run: getCleanupCommand(config),
         },
       },
@@ -176,6 +178,14 @@ ${typecheckCommand}
 `.trim();
   }
   return typecheckCommand;
+}
+
+function getCleanupGlobs(config: PackageConfig): string {
+  const supportedExtensions =
+    config.depending.wb || config.isBun
+      ? extensions.biome
+      : [...new Set([...extensions.prettier, ...extensions.eslint])].toSorted();
+  return `*.{${supportedExtensions.join(',')}}`;
 }
 
 function getCleanupCommand(config: PackageConfig): string {

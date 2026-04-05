@@ -68,8 +68,6 @@ export const extensions = {
     'svelte',
     'astro',
     'css',
-    'yaml',
-    'yml',
     'gql',
   ].toSorted(),
 };
