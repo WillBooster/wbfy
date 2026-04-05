@@ -200,7 +200,7 @@ function getCleanupGlobs(config: PackageConfig): string {
 
 function getCleanupCommand(config: PackageConfig): string {
   if (hasLocalWbWorkspace(config)) {
-    return 'yarn workspace @willbooster/wb start --working-dir . lint --fix --format -- {staged_files} && git add -- {staged_files}';
+    return 'yarn workspace @willbooster/wb start --working-dir "$(git rev-parse --show-toplevel)" lint --fix --format -- {staged_files} && git add -- {staged_files}';
   }
   if (config.isBun || config.depending.wb) {
     const packageManager = config.isBun ? 'bun' : 'yarn';

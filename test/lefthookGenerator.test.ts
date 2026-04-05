@@ -74,7 +74,7 @@ test('uses local wb workspace for cleanup when available', async () => {
 
   const lefthookConfig = await fs.promises.readFile(path.join(dirPath, 'lefthook.yml'), 'utf8');
   expect(lefthookConfig).toContain(
-    'yarn workspace @willbooster/wb start --working-dir . lint --fix --format -- {staged_files}'
+    'yarn workspace @willbooster/wb start --working-dir "$(git rev-parse --show-toplevel)" lint --fix --format -- {staged_files}'
   );
   expect(lefthookConfig).not.toContain('printf');
 });
