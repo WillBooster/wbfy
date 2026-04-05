@@ -12,7 +12,7 @@ export function shouldSkipWillboosterConfigsEslintPackage(config: PackageConfig)
 }
 
 export function getPinnedDependencySpecifier(dependency: string): string | undefined {
-  if (dependency in pinnedDependencySpecifiers) {
+  if (Object.hasOwn(pinnedDependencySpecifiers, dependency)) {
     return `${dependency}@${pinnedDependencySpecifiers[dependency as keyof typeof pinnedDependencySpecifiers]}`;
   }
 
