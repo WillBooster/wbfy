@@ -189,15 +189,19 @@ function getCleanupGlobs(config: PackageConfig): string {
   const filteredExtensions = [...new Set(supportedExtensions)]
     .filter((extension) => config.isBun || !['astro', 'gql', 'svelte'].includes(extension))
     .toSorted();
-  return `*.{${filteredExtensions.join(',')}}`;
+  return `**/*.{${filteredExtensions.join(',')}}`;
 }
 
 function getCleanupCommand(config: PackageConfig): string {
   const packageManager = config.isBun ? 'bun' : 'yarn';
-  const command = config.depending.wb
-    ? `${config.isBun ? 'bun --bun wb' : 'yarn wb'} lint --fix --format -- {staged_files}`
-    : `${packageManager} run format && ${packageManager} run lint-fix`;
-  return `${command} && git add -- {staged_files}`;
+  if (config.isBun || config.depending.wb) {
+    const command = config.depending.wb
+      ? `${config.isBun ? 'bun --bun wb' : 'yarn wb'} lint --fix --format -- {staged_files}`
+      : `${packageManager} run format && ${packageManager} run lint-fix`;
+    return `${command} && git add -- {staged_files}`;
+  }
+
+  return 'node node_modules/.bin/lint-staged';
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {
