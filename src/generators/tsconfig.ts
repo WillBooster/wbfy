@@ -11,6 +11,7 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { combineMerge } from '../utils/mergeUtil.js';
 import { sortKeys } from '../utils/objectUtil.js';
 import { promisePool } from '../utils/promisePool.js';
+import { getSrcDirs } from '../utils/srcDirectories.js';
 import { getTsconfigExtends } from '../utils/tsconfigBase.js';
 
 const rootJsonObj = {
@@ -59,7 +60,15 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     if (config.depending.blitz || config.depending.next) return;
 
     let newSettings = cloneDeep(config.isRoot ? rootJsonObj : subJsonObj) as TsConfigJson;
+    const generatedRootDir = getGeneratedRootDir(config);
+    const generatedTypes = getGeneratedTypes(config);
     newSettings.extends = getTsconfigExtends(config);
+    if (generatedRootDir) {
+      newSettings.compilerOptions = { ...newSettings.compilerOptions, rootDir: generatedRootDir };
+    }
+    if (generatedTypes.length > 0) {
+      newSettings.compilerOptions = { ...newSettings.compilerOptions, types: generatedTypes };
+    }
     if (!config.doesContainJsxOrTsx && !config.doesContainJsxOrTsxInPackages) {
       delete newSettings.compilerOptions?.jsx;
     } else if (!config.isBun && !config.depending.reactNative) {
@@ -74,6 +83,8 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
     try {
       const existingContent = await fs.promises.readFile(filePath, 'utf8');
       const oldSettings = JSON.parse(existingContent) as TsConfigJson;
+      const existingRootDir = oldSettings.compilerOptions?.rootDir;
+      const existingTypes = normalizeStringArray(oldSettings.compilerOptions?.types);
       newSettings.extends = mergeTsconfigExtends(newSettings.extends, oldSettings.extends);
       delete oldSettings.extends;
       delete oldSettings.compilerOptions?.jsx;
@@ -82,6 +93,21 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
         (dirPath: string) =>
           !dirPath.includes('@types') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
       );
+      newSettings.compilerOptions ??= {};
+      if (existingRootDir) {
+        newSettings.compilerOptions.rootDir = existingRootDir;
+      } else if (generatedRootDir) {
+        newSettings.compilerOptions.rootDir = generatedRootDir;
+      } else {
+        delete newSettings.compilerOptions.rootDir;
+      }
+
+      const mergedTypes = [...new Set([...existingTypes, ...generatedTypes])];
+      if (mergedTypes.length > 0) {
+        newSettings.compilerOptions.types = mergedTypes;
+      } else {
+        delete newSettings.compilerOptions.types;
+      }
     } catch {
       // do nothing
     }
@@ -111,4 +137,71 @@ function mergeTsconfigExtends(
 function normalizeExtends(value: TsConfigJson['extends']): string[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
+}
+
+function normalizeStringArray(value: string | string[] | undefined): string[] {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
+function getGeneratedRootDir(config: PackageConfig): string | undefined {
+  const existingRootSourceDirs = getSrcDirs(config).filter((dirName) =>
+    fs.existsSync(path.resolve(config.dirPath, dirName))
+  );
+
+  if (config.isRoot && config.doesContainSubPackageJsons) {
+    const packagesDirPath = path.resolve(config.dirPath, 'packages');
+    const hasSubPackageSources =
+      fs.existsSync(packagesDirPath) &&
+      fs
+        .readdirSync(packagesDirPath, { withFileTypes: true })
+        .some(
+          (dirent) =>
+            dirent.isDirectory() &&
+            getSrcDirs(config).some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
+        );
+    if (hasSubPackageSources) {
+      return existingRootSourceDirs.length > 0 ? '.' : './packages';
+    }
+  }
+
+  if (existingRootSourceDirs.length === 1) {
+    return `./${existingRootSourceDirs[0]}`;
+  }
+  if (existingRootSourceDirs.length > 1) {
+    return '.';
+  }
+}
+
+function getGeneratedTypes(config: PackageConfig): string[] {
+  const typeNames = new Set<string>();
+  const dependencies = {
+    ...config.packageJson?.dependencies,
+    ...config.packageJson?.devDependencies,
+  };
+
+  if (config.isBun) {
+    typeNames.add('bun');
+  } else if (!config.depending.reactNative) {
+    typeNames.add('node');
+  }
+  if (
+    dependencies.jest ||
+    dependencies['@jest/globals'] ||
+    dependencies['jest-environment-jsdom'] ||
+    dependencies['ts-jest']
+  ) {
+    typeNames.add('jest');
+  }
+  if (dependencies.vitest) {
+    typeNames.add('vitest/globals');
+  }
+  if (dependencies.mocha) {
+    typeNames.add('mocha');
+  }
+  if (dependencies.cypress) {
+    typeNames.add('cypress');
+  }
+
+  return [...typeNames];
 }

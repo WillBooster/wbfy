@@ -9,7 +9,7 @@
     "complete-pr": {
       "source": "WillBooster/agent-skills",
       "sourceType": "github",
-      "computedHash": "b4061936802724a456f65acaa83595dcf3696bb8901194038e4f97c67bef19a4"
+      "computedHash": "bcdf1a61a9d3262b2ccd5ebb8f997bccb3443ac47f18f6e689fe777fa55ec4da"
     },
     "fetch-issue": {
       "source": "WillBooster/agent-skills",
@@ -90,6 +90,21 @@
       "source": "WillBooster/agent-skills",
       "sourceType": "github",
       "computedHash": "543c3a362741506b34bd402bc44cd853d6cdf5f30ee59840941b50eaa2effb9d"
+    },
+    "screenshot-claude": {
+      "source": "WillBooster/agent-skills",
+      "sourceType": "github",
+      "computedHash": "0aa981e0a154a74e5dde26f9fe1dcbbdbd3e615f8e850c2e924305d809f70c20"
+    },
+    "screenshot-codex": {
+      "source": "WillBooster/agent-skills",
+      "sourceType": "github",
+      "computedHash": "82fa143281fe8722058870db56987ac5e996139e1534ab813730c82072ac90e8"
+    },
+    "screenshot-gemini": {
+      "source": "WillBooster/agent-skills",
+      "sourceType": "github",
+      "computedHash": "38d1e43432924fae35cf6854ff67f21b99acf8673194abb910dca6d629b777a3"
     },
     "simplify-pr-claude": {
       "source": "WillBooster/agent-skills",

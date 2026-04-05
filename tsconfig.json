@@ -12,7 +12,9 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "rewriteRelativeImportExtensions": true,
+    "skipLibCheck": true,
     "sourceMap": true,
+    "strict": true,
     "typeRoots": ["./node_modules/@types", "./@types"],
     "verbatimModuleSyntax": true
   },

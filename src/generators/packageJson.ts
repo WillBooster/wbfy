@@ -218,6 +218,18 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     devDependencies.push('typescript');
     if (config.isBun) {
       devDependencies.push('@types/bun');
+    } else if (!config.depending.reactNative) {
+      devDependencies.push('@types/node');
+    }
+    if (
+      jsonObj.dependencies.jest ||
+      jsonObj.devDependencies.jest ||
+      jsonObj.dependencies['@jest/globals'] ||
+      jsonObj.devDependencies['@jest/globals'] ||
+      jsonObj.dependencies['ts-jest'] ||
+      jsonObj.devDependencies['ts-jest']
+    ) {
+      devDependencies.push('@types/jest');
     }
   }
 
