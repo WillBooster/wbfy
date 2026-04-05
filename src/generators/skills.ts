@@ -31,7 +31,7 @@ function isWebAppRelated(config: PackageConfig): boolean {
 async function runInstallAgentSkills(rootConfig: PackageConfig): Promise<void> {
   if (!rootConfig.isRoot) return;
 
-  const commonArgs = ['skills@latest', 'add', skillsRepo, ...installTargetAgentArgs, '--skill', '*', '--yes'];
+  const commonArgs = ['--yes', 'skills@latest', 'add', skillsRepo, ...installTargetAgentArgs, '--skill', '*', '--yes'];
   spawnSync('npx', commonArgs, rootConfig.dirPath);
 
   if (isWebAppRelated(rootConfig)) return;
