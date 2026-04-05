@@ -186,6 +186,12 @@ function getCleanupGlobs(config: PackageConfig): string {
     ...extensions.eslint,
     ...(config.depending.wb || config.isBun ? extensions.biome : []),
   ];
+  if (config.doesContainPoetryLock) {
+    supportedExtensions.push('py');
+  }
+  if (config.doesContainPubspecYaml) {
+    supportedExtensions.push('dart');
+  }
   const filteredExtensions = [...new Set(supportedExtensions)]
     .filter((extension) => config.isBun || !['astro', 'gql', 'svelte'].includes(extension))
     .toSorted();
