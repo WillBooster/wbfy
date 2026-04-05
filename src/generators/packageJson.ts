@@ -118,6 +118,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   delete jsonObj.devDependencies['lint-staged'];
+  delete (jsonObj as PackageJson & { 'lint-staged'?: unknown })['lint-staged'];
 
   if (config.isRoot) {
     delete jsonObj.devDependencies.husky;
