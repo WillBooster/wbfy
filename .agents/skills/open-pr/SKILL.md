@@ -4,7 +4,7 @@ description: Create a pull request for the current branch in the current reposit
 allowed-tools: Bash(bun:*), Bash(gh:*), Bash(git:*)
 ---
 
-# Open PR
+# Open PR workflow
 
 Commit your changes and push them to the current branch.
 Write a PR body that helps reviewers quickly understand the scope, motivation, and validation.

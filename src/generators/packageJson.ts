@@ -117,11 +117,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     devDependencies.push('prettier-plugin-java', '@willbooster/prettier-config');
   }
 
-  if (config.isBun) {
-    delete jsonObj.devDependencies['lint-staged'];
-  } else {
-    devDependencies.push('lint-staged');
-  }
+  delete jsonObj.devDependencies['lint-staged'];
 
   if (config.isRoot) {
     delete jsonObj.devDependencies.husky;

@@ -4,7 +4,7 @@ description: Update the pull request body for the current branch in the current 
 allowed-tools: Bash(bun:*), Bash(gh:*), Bash(git:*)
 ---
 
-# Update PR
+# Update PR workflow
 
 Write the complete replacement PR body so it reflects the current scope, motivation, and validation.
 Because updating replaces the existing body, include the full desired text, not just a diff.

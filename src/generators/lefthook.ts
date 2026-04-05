@@ -186,18 +186,81 @@ function getCleanupGlobs(config: PackageConfig): string {
     ...extensions.eslint,
     ...(config.depending.wb || config.isBun ? extensions.biome : []),
   ];
+  if (config.doesContainPoetryLock) {
+    supportedExtensions.push('py');
+  }
+  if (config.doesContainPubspecYaml) {
+    supportedExtensions.push('dart');
+  }
   const filteredExtensions = [...new Set(supportedExtensions)]
     .filter((extension) => config.isBun || !['astro', 'gql', 'svelte'].includes(extension))
     .toSorted();
-  return `*.{${filteredExtensions.join(',')}}`;
+  return `**/*.{${filteredExtensions.join(',')}}`;
 }
 
 function getCleanupCommand(config: PackageConfig): string {
-  const packageManager = config.isBun ? 'bun' : 'yarn';
-  const command = config.depending.wb
-    ? `${config.isBun ? 'bun --bun wb' : 'yarn wb'} lint --fix --format -- {staged_files}`
-    : `${packageManager} run format && ${packageManager} run lint-fix`;
-  return `${command} && git add -- {staged_files}`;
+  if (hasLocalWbWorkspace(config)) {
+    return 'yarn workspace @willbooster/wb start --working-dir . lint --fix --format -- {staged_files} && git add -- {staged_files}';
+  }
+  if (config.isBun || config.depending.wb) {
+    const packageManager = config.isBun ? 'bun' : 'yarn';
+    const command = config.depending.wb
+      ? `${config.isBun ? 'bun --bun wb' : 'yarn wb'} lint --fix --format -- {staged_files}`
+      : `${packageManager} run format && ${packageManager} run lint-fix`;
+    return `${command} && git add -- {staged_files}`;
+  }
+
+  const eslintRuleSuffix =
+    config.doesContainJsxOrTsx || config.doesContainJsxOrTsxInPackages
+      ? ' --rule "{ react-hooks/exhaustive-deps: 0 }"'
+      : '';
+  const eslintPattern = extensions.eslint.map((extension) => String.raw`\.${extension}$`).join('|');
+
+  return String.raw`
+eslint_files="$(printf '%s\n' {staged_files} | grep -E '(${eslintPattern})' || true)"
+package_json_files="$(printf '%s\n' {staged_files} | grep -E '(^|/)package\.json$' || true)"
+${config.doesContainPoetryLock ? String.raw`python_files="$(printf '%s\n' {staged_files} | grep -E '\.py$' || true)"` : ''}
+${config.doesContainPubspecYaml ? String.raw`dart_files="$(printf '%s\n' {staged_files} | grep -E '\.dart$' | grep -v 'generated' | grep -v '\.freezed\.dart$' | grep -v '\.g\.dart$' || true)"` : ''}
+
+node node_modules/.bin/prettier --cache --write --ignore-unknown -- {staged_files}
+if [ -n "$eslint_files" ]; then
+  node node_modules/.bin/eslint --color --fix${eslintRuleSuffix} -- $eslint_files
+fi
+if [ -n "$package_json_files" ]; then
+  node node_modules/.bin/sort-package-json -- $package_json_files
+fi
+${
+  config.doesContainPoetryLock
+    ? `if [ -n "$python_files" ]; then
+  poetry run isort --profile black --filter-files $python_files
+  poetry run black $python_files
+  poetry run flake8 $python_files
+fi`
+    : ''
+}
+${
+  config.doesContainPubspecYaml
+    ? `if [ -n "$dart_files" ]; then
+  dart format $dart_files
+fi`
+    : ''
+}
+git add -- {staged_files}
+`.trim();
+}
+
+function hasLocalWbWorkspace(config: PackageConfig): boolean {
+  if (!config.isRoot) return false;
+
+  const localWbPackageJsonPath = path.resolve(config.dirPath, 'packages', 'wb', 'package.json');
+  if (!fs.existsSync(localWbPackageJsonPath)) return false;
+
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(localWbPackageJsonPath, 'utf8')) as { name?: string };
+    return packageJson.name === '@willbooster/wb';
+  } catch {
+    return false;
+  }
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {
