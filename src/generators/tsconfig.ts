@@ -25,7 +25,6 @@ const rootJsonObj = {
     sourceMap: true,
     importHelpers: false,
     outDir: 'dist',
-    typeRoots: ['./node_modules/@types', './@types'],
   },
   exclude: ['packages/*/test/fixtures', 'test/fixtures'],
   include: [
@@ -49,7 +48,6 @@ const subJsonObj = {
     sourceMap: true,
     importHelpers: false,
     outDir: 'dist',
-    typeRoots: ['../../node_modules/@types', '../../@types', './@types'],
   },
   exclude: ['test/fixtures'],
   include: ['scripts/**/*', 'src/**/*', 'test/**/*'],
