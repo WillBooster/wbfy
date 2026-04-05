@@ -45,12 +45,12 @@
     "lodash.clonedeep": "4.5.0",
     "minimal-promise-pool": "6.0.1",
     "simple-git": "3.33.0",
-    "typescript": "6.0.2",
+    "typescript": "5.9.3",
     "yargs": "18.0.0",
     "zod": "4.3.6"
   },
   "devDependencies": {
-    "@eslint/js": "10.0.1",
+    "@eslint/js": "9.39.4",
     "@tsconfig/node-lts": "24.0.0",
     "@tsconfig/node-ts": "23.6.4",
     "@types/eslint": "9.6.1",
@@ -65,7 +65,7 @@
     "@yarnpkg/core": "4.6.0",
     "build-ts": "17.0.24",
     "conventional-changelog-conventionalcommits": "9.3.1",
-    "eslint": "10.1.0",
+    "eslint": "9.39.4",
     "eslint-config-flat-gitignore": "2.3.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.4",
