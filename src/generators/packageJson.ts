@@ -17,7 +17,7 @@ import { combineMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 import { spawnSync } from '../utils/spawnUtil.js';
 import { getTsconfigBaseDependencies } from '../utils/tsconfigBase.js';
-import { getWillboosterConfigsDependencySpecifier } from '../utils/willboosterConfigsUtil.js';
+import { getPinnedDependencySpecifier } from '../utils/willboosterConfigsUtil.js';
 
 const jsCommonDeps = [
   '@eslint/js',
@@ -371,9 +371,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
     if (dependencies.length > 0) {
-      const dependencySpecifiers = [...new Set(dependencies)].map((dependency) =>
-        getDependencySpecifier(dependency, config)
-      );
+      const dependencySpecifiers = [...new Set(dependencies)].map((dependency) => getDependencySpecifier(dependency));
       if (config.isBun) {
         spawnSync(packageManager, ['remove', ...new Set(dependencies)], config.dirPath);
         spawnSync(packageManager, ['add', '--exact', ...dependencySpecifiers], config.dirPath);
@@ -386,7 +384,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
       const devDependencySpecifiers = [...new Set(devDependencies)].map((dependency) =>
-        getDependencySpecifier(dependency, config)
+        getDependencySpecifier(dependency)
       );
       if (config.isBun) {
         spawnSync(packageManager, ['remove', ...new Set(devDependencies)], config.dirPath);
@@ -438,8 +436,8 @@ async function removeDeprecatedStuff(
   delete jsonObj.devDependencies['eslint-plugin-import'];
 }
 
-function getDependencySpecifier(dependency: string, config: PackageConfig): string {
-  return getWillboosterConfigsDependencySpecifier(dependency) ?? dependency;
+function getDependencySpecifier(dependency: string): string {
+  return getPinnedDependencySpecifier(dependency) ?? dependency;
 }
 
 function formatRepositoryForPackageJson(

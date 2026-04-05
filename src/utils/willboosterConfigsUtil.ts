@@ -11,7 +11,7 @@ export function shouldSkipWillboosterConfigsEslintPackage(config: PackageConfig)
   return config.isWillBoosterConfigs && config.packageJson?.name?.startsWith(ESLINT_CONFIG_PREFIX) === true;
 }
 
-export function getWillboosterConfigsDependencySpecifier(dependency: string): string | undefined {
+export function getPinnedDependencySpecifier(dependency: string): string | undefined {
   if (dependency in pinnedDependencySpecifiers) {
     return `${dependency}@${pinnedDependencySpecifiers[dependency as keyof typeof pinnedDependencySpecifiers]}`;
   }
