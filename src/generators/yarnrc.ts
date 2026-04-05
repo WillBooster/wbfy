@@ -62,17 +62,9 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
     settings.nmMode = 'hardlinks-global';
     settings.npmMinimalAgeGate = '5d';
     settings.npmPreapprovedPackages = [
-      '@exercode/problem-utils',
-      '@willbooster/babel-configs',
-      '@willbooster/biome-config',
-      '@willbooster/eslint-config-js',
-      '@willbooster/eslint-config-js-react',
-      '@willbooster/eslint-config-next',
-      '@willbooster/eslint-config-ts',
-      '@willbooster/eslint-config-ts-react',
-      '@willbooster/prettier-config',
-      '@willbooster/shared-lib',
-      '@willbooster/wb',
+      // We believe we are safe
+      '@exercode/*',
+      '@willbooster/*',
       // To deal with CVE like https://nextjs.org/blog/CVE-2025-66478
       'next',
       '@next/*',
