@@ -371,9 +371,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     // We cannot add dependencies which are already included in devDependencies.
     dependencies = dependencies.filter((dep) => !jsonObj.devDependencies?.[dep]);
     if (dependencies.length > 0) {
-      const dependencySpecifiers = [...new Set(dependencies)].map((dependency) => getDependencySpecifier(dependency));
+      const uniqueDependencies = [...new Set(dependencies)];
+      const dependencySpecifiers = uniqueDependencies.map((dependency) => getDependencySpecifier(dependency));
       if (config.isBun) {
-        spawnSync(packageManager, ['remove', ...new Set(dependencies)], config.dirPath);
+        spawnSync(packageManager, ['remove', ...uniqueDependencies], config.dirPath);
         spawnSync(packageManager, ['add', '--exact', ...dependencySpecifiers], config.dirPath);
       } else {
         // Intentionally omit versions to update dependencies to the latest versions with Yarn.
@@ -383,11 +384,10 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
     // We cannot add devDependencies which are already included in dependencies.
     devDependencies = devDependencies.filter((dep) => !jsonObj.dependencies?.[dep]);
     if (devDependencies.length > 0) {
-      const devDependencySpecifiers = [...new Set(devDependencies)].map((dependency) =>
-        getDependencySpecifier(dependency)
-      );
+      const uniqueDevDependencies = [...new Set(devDependencies)];
+      const devDependencySpecifiers = uniqueDevDependencies.map((dependency) => getDependencySpecifier(dependency));
       if (config.isBun) {
-        spawnSync(packageManager, ['remove', ...new Set(devDependencies)], config.dirPath);
+        spawnSync(packageManager, ['remove', ...uniqueDevDependencies], config.dirPath);
         spawnSync(packageManager, ['add', '-D', '--exact', ...devDependencySpecifiers], config.dirPath);
       } else {
         // Intentionally omit versions to update dependencies to the latest versions with Yarn.
