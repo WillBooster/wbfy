@@ -29,7 +29,8 @@ test('includes python files in cleanup glob when poetry is used', async () => {
   const lefthookConfig = await fs.promises.readFile(path.join(dirPath, 'lefthook.yml'), 'utf8');
   expect(lefthookConfig).toContain("glob: '**/*.{");
   expect(lefthookConfig).toContain('py');
-  expect(lefthookConfig).toContain('run: node node_modules/.bin/lint-staged');
+  expect(lefthookConfig).toContain('python_files=');
+  expect(lefthookConfig).not.toContain('lint-staged');
 });
 
 test('includes dart files in cleanup glob when pubspec is present', async () => {
@@ -46,6 +47,8 @@ test('includes dart files in cleanup glob when pubspec is present', async () => 
   const lefthookConfig = await fs.promises.readFile(path.join(dirPath, 'lefthook.yml'), 'utf8');
   expect(lefthookConfig).toContain("glob: '**/*.{");
   expect(lefthookConfig).toContain('dart');
+  expect(lefthookConfig).toContain('dart_files=');
+  expect(lefthookConfig).not.toContain('lint-staged');
 });
 
 function createTempDir(): string {
