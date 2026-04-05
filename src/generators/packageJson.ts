@@ -439,7 +439,7 @@ async function removeDeprecatedStuff(
 }
 
 function getDependencySpecifier(dependency: string, config: PackageConfig): string {
-  return getWillboosterConfigsDependencySpecifier(dependency, config) ?? dependency;
+  return getWillboosterConfigsDependencySpecifier(dependency) ?? dependency;
 }
 
 function formatRepositoryForPackageJson(
