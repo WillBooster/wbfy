@@ -181,11 +181,15 @@ ${typecheckCommand}
 }
 
 function getCleanupGlobs(config: PackageConfig): string {
-  const supportedExtensions =
-    config.depending.wb || config.isBun
-      ? extensions.biome
-      : [...new Set([...extensions.prettier, ...extensions.eslint])].toSorted();
-  return `*.{${supportedExtensions.join(',')}}`;
+  const supportedExtensions = [
+    ...extensions.prettier,
+    ...extensions.eslint,
+    ...(config.depending.wb || config.isBun ? extensions.biome : []),
+  ];
+  const filteredExtensions = [...new Set(supportedExtensions)]
+    .filter((extension) => config.isBun || !['astro', 'gql', 'svelte'].includes(extension))
+    .toSorted();
+  return `*.{${filteredExtensions.join(',')}}`;
 }
 
 function getCleanupCommand(config: PackageConfig): string {
