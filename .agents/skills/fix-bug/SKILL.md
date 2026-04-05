@@ -3,9 +3,6 @@ name: fix-bug
 description: Fix a reported bug by first enhancing tests until the bug is reproduced, then fixing the implementation, and finally confirming the enhanced tests pass.
 ---
 
-Use this skill when you are asked to fix a specific bug in an existing codebase.
-Do not start by changing production code. First, make the bug concrete with a failing test or an equivalent automated reproduction.
-
 # Bug fix workflow
 
 1. Understand the reported bug precisely.
