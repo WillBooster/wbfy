@@ -199,6 +199,9 @@ function getCleanupGlobs(config: PackageConfig): string {
 }
 
 function getCleanupCommand(config: PackageConfig): string {
+  if (hasLocalWbWorkspace(config)) {
+    return 'yarn workspace @willbooster/wb start --working-dir . lint --fix --format -- {staged_files} && git add -- {staged_files}';
+  }
   if (config.isBun || config.depending.wb) {
     const packageManager = config.isBun ? 'bun' : 'yarn';
     const command = config.depending.wb
@@ -244,6 +247,20 @@ fi`
 }
 git add -- {staged_files}
 `.trim();
+}
+
+function hasLocalWbWorkspace(config: PackageConfig): boolean {
+  if (!config.isRoot) return false;
+
+  const localWbPackageJsonPath = path.resolve(config.dirPath, 'packages', 'wb', 'package.json');
+  if (!fs.existsSync(localWbPackageJsonPath)) return false;
+
+  try {
+    const packageJson = JSON.parse(fs.readFileSync(localWbPackageJsonPath, 'utf8')) as { name?: string };
+    return packageJson.name === '@willbooster/wb';
+  } catch {
+    return false;
+  }
 }
 
 function generatePostMergeCommands(config: PackageConfig): string[] {

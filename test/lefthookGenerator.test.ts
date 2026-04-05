@@ -51,6 +51,34 @@ test('includes dart files in cleanup glob when pubspec is present', async () => 
   expect(lefthookConfig).not.toContain('lint-staged');
 });
 
+test('uses local wb workspace for cleanup when available', async () => {
+  const dirPath = createTempDir();
+  await fs.promises.mkdir(path.join(dirPath, 'packages', 'wb'), { recursive: true });
+  await fs.promises.writeFile(
+    path.join(dirPath, 'packages', 'wb', 'package.json'),
+    JSON.stringify({ name: '@willbooster/wb' })
+  );
+
+  await generateLefthookUpdatingPackageJson(
+    createConfig({
+      dirPath,
+      doesContainPackageJson: true,
+      doesContainSubPackageJsons: true,
+      doesContainTypeScriptInPackages: true,
+      packageJson: {
+        private: true,
+        workspaces: ['packages/*'],
+      },
+    })
+  );
+
+  const lefthookConfig = await fs.promises.readFile(path.join(dirPath, 'lefthook.yml'), 'utf8');
+  expect(lefthookConfig).toContain(
+    'yarn workspace @willbooster/wb start --working-dir . lint --fix --format -- {staged_files}'
+  );
+  expect(lefthookConfig).not.toContain('printf');
+});
+
 function createTempDir(): string {
   const dirPath = fs.mkdtempSync(path.join(os.tmpdir(), 'wbfy-lefthook-'));
   tempDirs.push(dirPath);
