@@ -1,9 +1,10 @@
 import type { PackageConfig } from '../packageConfig.js';
 
 const ESLINT_CONFIG_PREFIX = '@willbooster/eslint-config-';
-const willboosterConfigsPinnedDependencySpecifiers = {
+const pinnedDependencySpecifiers = {
   '@eslint/js': '^9',
   eslint: '^9',
+  typescript: '^5',
 } as const;
 
 export function shouldSkipWillboosterConfigsEslintPackage(config: PackageConfig): boolean {
@@ -14,15 +15,13 @@ export function getWillboosterConfigsDependencySpecifier(
   dependency: string,
   config: PackageConfig
 ): string | undefined {
-  if (!config.isWillBoosterConfigs) return;
-
-  switch (dependency) {
-    case '@eslint/js':
-    case 'eslint': {
-      return `${dependency}@${willboosterConfigsPinnedDependencySpecifiers[dependency]}`;
-    }
-    default: {
-      return undefined;
-    }
+  if (dependency in pinnedDependencySpecifiers) {
+    return `${dependency}@${pinnedDependencySpecifiers[dependency as keyof typeof pinnedDependencySpecifiers]}`;
   }
+
+  if (!config.isWillBoosterConfigs) {
+    return undefined;
+  }
+
+  return undefined;
 }
