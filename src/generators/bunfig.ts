@@ -63,7 +63,7 @@ exact = true
 linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
 minimumReleaseAgeExcludes = [
-${minimumReleaseAgeExcludes.map((packageName) => `    "${packageName}"`).join('\n')}
+${minimumReleaseAgeExcludes.map((packageName) => `    "${packageName}",`).join('\n')}
 ]
 `;
 
