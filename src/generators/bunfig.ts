@@ -6,6 +6,55 @@ import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
+const minimumReleaseAgeExcludes = [
+  '@exercode/problem-utils',
+  '@next/env',
+  '@next/eslint-plugin-next',
+  '@next/font',
+  '@next/rspack-binding-linux-arm64-gnu',
+  '@next/rspack-binding-linux-arm64-musl',
+  '@next/rspack-binding-linux-x64-gnu',
+  '@next/rspack-binding-linux-x64-musl',
+  '@next/swc-android-arm-eabi',
+  '@next/swc-android-arm64',
+  '@next/swc-darwin-arm64',
+  '@next/swc-darwin-x64',
+  '@next/swc-freebsd-x64',
+  '@next/swc-linux-arm-gnueabihf',
+  '@next/swc-linux-arm64-gnu',
+  '@next/swc-linux-arm64-musl',
+  '@next/swc-linux-x64-gnu',
+  '@next/swc-linux-x64-musl',
+  '@next/swc-wasm-nodejs',
+  '@next/swc-wasm-web',
+  '@next/swc-win32-arm64-msvc',
+  '@next/swc-win32-ia32-msvc',
+  '@next/swc-win32-x64-msvc',
+  '@next/third-parties',
+  '@willbooster/agent-skills',
+  '@willbooster/babel-configs',
+  '@willbooster/biome-config',
+  '@willbooster/eslint-config-blitz-next',
+  '@willbooster/eslint-config-js',
+  '@willbooster/eslint-config-js-react',
+  '@willbooster/eslint-config-next',
+  '@willbooster/eslint-config-ts',
+  '@willbooster/eslint-config-ts-react',
+  '@willbooster/oxfmt-config',
+  '@willbooster/oxlint-config',
+  '@willbooster/prettier-config',
+  '@willbooster/renovate-config',
+  '@willbooster/shared-lib',
+  '@willbooster/shared-lib-blitz-next',
+  '@willbooster/shared-lib-next',
+  '@willbooster/shared-lib-node',
+  '@willbooster/shared-lib-react',
+  '@willbooster/wb',
+  'next',
+  'react',
+  'react-dom',
+];
+
 const newContentWithExactTrue = `env = false
 telemetry = false
 
@@ -14,12 +63,7 @@ exact = true
 linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
 minimumReleaseAgeExcludes = [
-    "@exercode/*",
-    "@willbooster/*",
-    "next",
-    "@next/*",
-    "react",
-    "react-dom"
+${minimumReleaseAgeExcludes.map((packageName) => `    "${packageName}",`).join('\n')}
 ]
 `;
 

@@ -60,7 +60,7 @@
     "@types/micromatch": "4.0.10",
     "@types/node": "25.5.0",
     "@types/yargs": "17.0.35",
-    "@willbooster/eslint-config-ts": "11.5.0",
+    "@willbooster/eslint-config-ts": "11.5.1",
     "@willbooster/prettier-config": "10.4.0",
     "@yarnpkg/core": "4.6.0",
     "build-ts": "17.0.24",
