@@ -106,7 +106,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       } else {
         delete newSettings.compilerOptions.types;
       }
-      if (shouldDeleteTypeRoots(mergedTypes)) {
+      if (shouldDeleteTypeRoots(generatedTypes)) {
         delete newSettings.compilerOptions.typeRoots;
       }
     } catch {
@@ -147,8 +147,8 @@ function normalizeStringArray(value: unknown): string[] {
 }
 
 function shouldDeleteTypeRoots(typeNames: string[]): boolean {
-  // Package subpaths and scoped packages are resolved from package ownership, so preserving
-  // user-defined typeRoots would hide those declarations instead of merging them in.
+  // Only generated package-owned test types should trigger this. User-defined slash-based
+  // entries may intentionally rely on custom typeRoots and should be preserved as-is.
   return typeNames.some((typeName) => typeName === 'cypress' || typeName.includes('/'));
 }
 
