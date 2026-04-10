@@ -147,6 +147,8 @@ function normalizeStringArray(value: unknown): string[] {
 }
 
 function shouldDeleteTypeRoots(typeNames: string[]): boolean {
+  // Package subpaths and scoped packages are resolved from package ownership, so preserving
+  // user-defined typeRoots would hide those declarations instead of merging them in.
   return typeNames.some((typeName) => typeName === 'cypress' || typeName.includes('/'));
 }
 
