@@ -106,6 +106,9 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       } else {
         delete newSettings.compilerOptions.types;
       }
+      if (shouldDeleteTypeRoots(mergedTypes)) {
+        delete newSettings.compilerOptions.typeRoots;
+      }
     } catch {
       // do nothing
     }
@@ -140,6 +143,10 @@ function normalizeExtends(value: TsConfigJson['extends']): string[] {
 function normalizeStringArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
+}
+
+function shouldDeleteTypeRoots(typeNames: string[]): boolean {
+  return typeNames.some((typeName) => typeName === 'cypress' || typeName.includes('/'));
 }
 
 function getGeneratedRootDir(config: PackageConfig): string | undefined {
