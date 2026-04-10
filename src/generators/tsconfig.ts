@@ -140,9 +140,10 @@ function normalizeExtends(value: TsConfigJson['extends']): string[] {
   return Array.isArray(value) ? value : [value];
 }
 
-function normalizeStringArray(value: string | string[] | undefined): string[] {
-  if (!value) return [];
-  return Array.isArray(value) ? value : [value];
+function normalizeStringArray(value: unknown): string[] {
+  if (typeof value === 'string') return [value];
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === 'string');
 }
 
 function shouldDeleteTypeRoots(typeNames: string[]): boolean {
