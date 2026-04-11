@@ -188,6 +188,8 @@ function getRootDirCandidates(config: PackageConfig): string[] {
 }
 
 function shouldReplaceExistingRootDir(existingRootDir: string, generatedRootDir: string | undefined): boolean {
+  // Mixed source/test tsconfigs must omit rootDir; otherwise src-only rootDir breaks typecheck,
+  // while "." changes library declaration output from dist/*.d.ts to dist/src/*.d.ts.
   return existingRootDir === '.' && generatedRootDir !== '.';
 }
 
