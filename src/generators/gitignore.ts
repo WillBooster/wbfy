@@ -20,6 +20,7 @@ const commonContent = `
 .idea/AugmentWebviewStateStore.xml
 .idea/copilot.*
 .idea/copilot/chatSessions/
+.playwright-cli/
 .serena/
 .tmp/
 __generated__/
@@ -91,7 +92,6 @@ packaged.yaml
     if (config.depending.playwrightTest) {
       headUserContent += `playwright-report/
 test-results/
-.playwright-cli/
 `;
     }
     if (rootConfig.depending.reactNative || config.depending.reactNative) {
