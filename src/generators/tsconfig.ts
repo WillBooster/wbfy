@@ -153,7 +153,8 @@ function shouldDeleteTypeRoots(typeNames: string[]): boolean {
 }
 
 function getGeneratedRootDir(config: PackageConfig): string | undefined {
-  const existingRootSourceDirs = getSrcDirs(config).filter((dirName) =>
+  const rootDirCandidates = getRootDirCandidates(config);
+  const existingRootSourceDirs = rootDirCandidates.filter((dirName) =>
     fs.existsSync(path.resolve(config.dirPath, dirName))
   );
 
@@ -166,7 +167,7 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
         .some(
           (dirent) =>
             dirent.isDirectory() &&
-            getSrcDirs(config).some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
+            rootDirCandidates.some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
         );
     if (hasSubPackageSources) {
       return existingRootSourceDirs.length > 0 ? '.' : './packages';
@@ -179,6 +180,10 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
   if (existingRootSourceDirs.length > 1) {
     return '.';
   }
+}
+
+function getRootDirCandidates(config: PackageConfig): string[] {
+  return getSrcDirs(config).filter((dirName) => dirName !== 'scripts' && dirName !== 'test');
 }
 
 function getGeneratedTypes(config: PackageConfig): string[] {
