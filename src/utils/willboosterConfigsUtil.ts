@@ -2,10 +2,10 @@ import type { PackageConfig } from '../packageConfig.js';
 
 const ESLINT_CONFIG_PREFIX = '@willbooster/eslint-config-';
 const pinnedDependencySpecifiers = {
-  '@eslint/js': '^9',
+  '@eslint/js': '9.39.4',
   eslint: '^9',
   // 1.22.0 is published without dist/, which breaks ESLint config resolution.
-  'eslint-plugin-sort-class-members': '1.21.0',
+  'eslint-plugin-sort-class-members': '1.22.1',
   typescript: '^5',
 } as const;
 
