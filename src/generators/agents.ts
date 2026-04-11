@@ -49,7 +49,7 @@ function generateAgentInstruction(
 - Run any \`git\` commands sequentially.
 - Write tests ONLY if explicitly requested.
   - Make sure to continue to modify the tests and code until the tests pass.
-- When writing tests, ensure they reset any related persistent data, as our test infrastructure does not clear the database automatically.
+- When writing tests, ensure they reset any related persistent data, as our test infrastructure does not clear it automatically.
 - Before fixing issues, always investigate the root cause first (e.g., by gathering debug logs, taking screenshots, etc.).
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour) or \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
