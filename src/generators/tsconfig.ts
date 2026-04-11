@@ -106,6 +106,9 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
       } else {
         delete newSettings.compilerOptions.types;
       }
+      if (shouldDeleteTypeRoots(generatedTypes)) {
+        delete newSettings.compilerOptions.typeRoots;
+      }
     } catch {
       // do nothing
     }
@@ -137,9 +140,16 @@ function normalizeExtends(value: TsConfigJson['extends']): string[] {
   return Array.isArray(value) ? value : [value];
 }
 
-function normalizeStringArray(value: string | string[] | undefined): string[] {
-  if (!value) return [];
-  return Array.isArray(value) ? value : [value];
+function normalizeStringArray(value: unknown): string[] {
+  if (typeof value === 'string') return [value];
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === 'string');
+}
+
+function shouldDeleteTypeRoots(typeNames: string[]): boolean {
+  // Only generated package-owned test types should trigger this. User-defined slash-based
+  // entries may intentionally rely on custom typeRoots and should be preserved as-is.
+  return typeNames.some((typeName) => typeName === 'cypress' || typeName.includes('/'));
 }
 
 function getGeneratedRootDir(config: PackageConfig): string | undefined {
