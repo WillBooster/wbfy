@@ -103,5 +103,5 @@ function parseBunfigToml(content: string | undefined): BunfigToml | undefined {
 }
 
 function generateRunSection(bunfigToml: BunfigToml | undefined): string {
-  return typeof bunfigToml?.run?.bun === 'boolean' ? `[run]\nbun = ${bunfigToml.run.bun}\n\n` : '';
+  return typeof bunfigToml?.run?.bun === 'boolean' ? `[run]\nbun = ${bunfigToml.run.bun}\n` : '';
 }
