@@ -51,8 +51,8 @@ function generateAgentInstruction(
   - Write tests ONLY if explicitly requested.
   - Continue modifying the tests and code until all tests pass.
   - Ensure tests reset any related persistent data, as our test infrastructure does not clear it automatically.
-  - Prefer actual API calls over mocks. Do not use mocks unless explicitly requested.
-- Before fixing issues, always investigate the root cause first by gathering debug logs, taking screenshots, etc.
+  - Prefer actual API calls over mocks. Use mocks only when actual calls are impractical, such as for external APIs, or explicitly requested.
+- Before fixing issues, always investigate the root cause first, for example, by gathering debug logs, taking screenshots, etc.
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour) or \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
 - Once you have verified your changes, commit and push them to the current (non-main) branch then create a PR via \`gh\`.
