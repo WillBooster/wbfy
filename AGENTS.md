@@ -12,7 +12,7 @@
   - Write tests ONLY if explicitly requested.
   - Continue modifying the tests and code until all tests pass.
   - Ensure tests reset any related persistent data, as our test infrastructure does not clear it automatically.
-  - Prefer actual API calls over mocks. Use mocks only when actual calls are impractical, such as for external APIs, or explicitly requested.
+  - Prefer actual API calls over mocks. Use mocks when actual calls are impractical, have unintended side effects, or are explicitly requested.
 - Before fixing issues, always investigate the root cause first, for example, by gathering debug logs, taking screenshots, etc.
 - After making code changes, run `yarn check-all-for-ai` to execute all tests (takes up to 1 hour) or `yarn check-for-ai` for type checking and linting only (takes up to 10 minutes).
   - If you are confident your changes will not break any tests, you may use `check-for-ai`.
@@ -27,7 +27,7 @@
 - Design each module with high cohesion, grouping related functionality together.
   - Refactor existing large modules into smaller, focused modules when necessary.
   - Create well-organized directory structures with low coupling and high cohesion.
-- Place calling functions or classes in the file above the functions or classes they call to maintain a clear top-down order.
+- Place calling functions in the file above the functions they call to maintain a clear top-down order.
   - e.g. `function caller() { callee(); } function callee() { ... }`
 - Write comments that explain "why" rather than "what". Avoid stating what can be understood from the code itself.
 - Prefer `undefined` over `null` unless explicitly required by APIs or libraries.
