@@ -47,20 +47,12 @@ function generateAgentInstruction(
 
 - Create a new branch if the current branch is \`main\`.
 - Run any \`git\` commands sequentially.
-- Write tests ONLY if explicitly requested.
-  - Make sure to continue to modify the tests and code until the tests pass.
-- When fixing tests, gather debug information through logging and screenshots before modifying the code.
-- After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour), or run \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
-  - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
 - Once you have verified your changes, commit and push them to the current (non-main) branch then create a PR via \`gh\`.
   - Follow the conventional commits; your commit message should start with \`feat:\`, \`fix:\`, etc.
   - If not specified, make sure to add a new line at the end of your commit message${rootConfig.isWillBoosterRepo ? ` with: \`Co-authored-by: WillBooster (${toolName}) <agent@willbooster.com>\`` : ''}.
   - Always create new commits. Avoid using \`--amend\`.
-${
-  allConfigs.some((c) => c.hasStartTestServer)
-    ? `- Use \`${packageManager} run start-test-server\` to launch a web server for debugging or testing.`
-    : ''
-}
+
+${generateAgentTestInstructions(rootConfig, allConfigs)}
 
 ${generateAgentCodingStyle(allConfigs)}
 `
@@ -75,6 +67,27 @@ ${generateAgentCodingStyle(allConfigs)}
       : '\n' + extraContent
     : '';
   return baseContent + normalizedExtraContent;
+}
+
+export function generateAgentTestInstructions(rootConfig: PackageConfig, allConfigs: PackageConfig[]): string {
+  const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
+  return `
+## Test Instructions
+
+- Write tests ONLY if explicitly requested.
+  - Make sure to continue to modify the tests and code until the tests pass.
+- When fixing tests, gather debug information through logging and screenshots before modifying the code.
+- After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour), or run \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
+  - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
+${
+  allConfigs.some((c) => c.hasStartTestServer)
+    ? `- Use \`${packageManager} run start-test-server\` to launch a web server for debugging or testing.`
+    : ''
+}
+`
+    .replaceAll(/\.\n\n+-/g, '.\n-')
+    .replaceAll(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {

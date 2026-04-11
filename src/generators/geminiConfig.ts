@@ -11,7 +11,7 @@ import { fsUtil } from '../utils/fsUtil.js';
 import { overwriteMerge } from '../utils/mergeUtil.js';
 import { promisePool } from '../utils/promisePool.js';
 
-import { generateAgentCodingStyle } from './agents.js';
+import { generateAgentCodingStyle, generateAgentTestInstructions } from './agents.js';
 
 const defaultConfig = {
   have_fun: true,
@@ -55,9 +55,10 @@ export async function generateGeminiConfig(config: PackageConfig, allConfigs: Pa
     });
 
     const extraContent = await fsUtil.readFileIgnoringError(agentsExtraPath);
-    const styleguideContent = `以下のコーディング規約を踏まえて、日本語でレビューしてください。\n\n${generateAgentCodingStyle(allConfigs)}${
-      extraContent ? `\n\n${extraContent.trimEnd()}` : ''
-    }`;
+    const styleguideContent = `以下の指示を踏まえて、日本語でレビューしてください。\n\n${generateAgentTestInstructions(
+      config,
+      allConfigs
+    )}\n\n${generateAgentCodingStyle(allConfigs)}${extraContent ? `\n\n${extraContent.trimEnd()}` : ''}`;
 
     const promises = [promisePool.run(() => fsUtil.generateFile(configFilePath, yamlContent))];
     if (!fs.existsSync(styleguideFilePath)) {
