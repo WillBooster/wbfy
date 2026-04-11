@@ -59,10 +59,10 @@ export async function generateGeminiConfig(config: PackageConfig, allConfigs: Pa
       extraContent ? `\n\n${extraContent.trimEnd()}` : ''
     }`;
 
-    const promises = [promisePool.run(() => fsUtil.generateFile(configFilePath, yamlContent))];
-    if (!fs.existsSync(styleguideFilePath)) {
-      promises.push(promisePool.run(() => fsUtil.generateFile(styleguideFilePath, styleguideContent)));
-    }
+    const promises = [
+      promisePool.run(() => fsUtil.generateFile(configFilePath, yamlContent)),
+      promisePool.run(() => fsUtil.generateFile(styleguideFilePath, styleguideContent)),
+    ];
     await Promise.all(promises);
   });
 }
