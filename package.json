@@ -64,7 +64,7 @@
     "@willbooster/eslint-config-ts": "11.5.1",
     "@willbooster/prettier-config": "10.4.0",
     "@yarnpkg/core": "4.6.0",
-    "build-ts": "17.0.25",
+    "build-ts": "17.0.26",
     "conventional-changelog-conventionalcommits": "9.3.1",
     "eslint": "^9",
     "eslint-config-flat-gitignore": "2.3.0",
