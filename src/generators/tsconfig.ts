@@ -92,7 +92,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
           !dirPath.includes('@types') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
       );
       newSettings.compilerOptions ??= {};
-      if (existingRootDir) {
+      if (existingRootDir && !shouldReplaceExistingRootDir(existingRootDir, generatedRootDir)) {
         newSettings.compilerOptions.rootDir = existingRootDir;
       } else if (generatedRootDir) {
         newSettings.compilerOptions.rootDir = generatedRootDir;
@@ -184,6 +184,10 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
 
 function getRootDirCandidates(config: PackageConfig): string[] {
   return getSrcDirs(config).filter((dirName) => dirName !== 'scripts' && dirName !== 'test');
+}
+
+function shouldReplaceExistingRootDir(existingRootDir: string, generatedRootDir: string | undefined): boolean {
+  return existingRootDir === '.' && generatedRootDir !== undefined && generatedRootDir !== '.';
 }
 
 function getGeneratedTypes(config: PackageConfig): string[] {
