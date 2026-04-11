@@ -55,11 +55,12 @@ const minimumReleaseAgeExcludes = [
   'react-dom',
 ];
 
-const newContentWithExactTrue = `env = false
+const newContent = (existingContent: string | undefined): string => `env = false
 telemetry = false
 
+${extractRunSectionContainingBun(existingContent)}
 [install]
-exact = true
+exact = ${existingContent?.includes('exact = false') ? 'false' : 'true'}
 linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
 minimumReleaseAgeExcludes = [
@@ -67,15 +68,17 @@ ${minimumReleaseAgeExcludes.map((packageName) => `    "${packageName}",`).join('
 ]
 `;
 
-const newContentWithExactFalse = newContentWithExactTrue.replace('exact = true', 'exact = false');
-
 export async function generateBunfigToml(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateBunfigToml', async () => {
     const filePath = path.resolve(config.dirPath, 'bunfig.toml');
-    const content =
-      fs.existsSync(filePath) && fs.readFileSync(filePath, 'utf8').includes('exact = false')
-        ? newContentWithExactFalse
-        : newContentWithExactTrue;
+    const existingContent = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : undefined;
+    const content = newContent(existingContent);
     await promisePool.run(() => fsUtil.generateFile(filePath, content));
   });
+}
+
+function extractRunSectionContainingBun(content: string | undefined): string {
+  const runSectionMatch = content?.match(/^(\[run]\n(?:(?!^\[).*\n?)*)/m);
+  const runSection = runSectionMatch?.[1]?.trim();
+  return runSection && /^\s*bun\s*=.*/m.test(runSection) ? `${runSection}\n\n` : '';
 }
