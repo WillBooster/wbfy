@@ -153,8 +153,10 @@ function shouldDeleteTypeRoots(typeNames: string[]): boolean {
 }
 
 function getGeneratedRootDir(config: PackageConfig): string | undefined {
-  const rootDirCandidates = getRootDirCandidates(config);
-  const existingRootSourceDirs = rootDirCandidates.filter((dirName) =>
+  const existingIncludedDirs = getSrcDirs(config).filter((dirName) =>
+    fs.existsSync(path.resolve(config.dirPath, dirName))
+  );
+  const existingRootSourceDirs = getRootDirCandidates(config).filter((dirName) =>
     fs.existsSync(path.resolve(config.dirPath, dirName))
   );
 
@@ -167,18 +169,17 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
         .some(
           (dirent) =>
             dirent.isDirectory() &&
-            rootDirCandidates.some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
+            getRootDirCandidates(config).some((dirName) =>
+              fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName))
+            )
         );
     if (hasSubPackageSources) {
-      return existingRootSourceDirs.length > 0 ? '.' : './packages';
+      return existingIncludedDirs.length > 0 ? '.' : './packages';
     }
   }
 
-  if (existingRootSourceDirs.length === 1) {
+  if (existingIncludedDirs.length === 1 && existingRootSourceDirs.length === 1) {
     return `./${existingRootSourceDirs[0]}`;
-  }
-  if (existingRootSourceDirs.length > 1) {
-    return '.';
   }
 }
 
@@ -187,7 +188,7 @@ function getRootDirCandidates(config: PackageConfig): string[] {
 }
 
 function shouldReplaceExistingRootDir(existingRootDir: string, generatedRootDir: string | undefined): boolean {
-  return existingRootDir === '.' && generatedRootDir !== undefined && generatedRootDir !== '.';
+  return existingRootDir === '.' && generatedRootDir !== '.';
 }
 
 function getGeneratedTypes(config: PackageConfig): string[] {
