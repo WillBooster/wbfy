@@ -8,8 +8,7 @@
 
 - Create a new branch if the current branch is `main`.
 - Run any `git` commands sequentially.
-- Follow these rules for writing tests:
-  - Write tests ONLY if explicitly requested.
+- Write tests ONLY if explicitly requested. If requested, follow these rules:
   - Continue modifying the tests and code until all tests pass.
   - Ensure tests reset any related persistent data, as our test infrastructure does not clear it automatically.
   - Prefer actual API calls over mocks. Use mocks when actual calls are impractical, have unintended side effects, or are explicitly requested.
