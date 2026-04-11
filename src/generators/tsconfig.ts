@@ -153,6 +153,8 @@ function shouldDeleteTypeRoots(typeNames: string[]): boolean {
 }
 
 function getGeneratedRootDir(config: PackageConfig): string | undefined {
+  // Keep test and scripts in this list so mixed tsconfigs omit rootDir instead of
+  // generating a src-only rootDir that conflicts with the generated include globs.
   const existingIncludedDirs = getSrcDirs(config).filter((dirName) =>
     fs.existsSync(path.resolve(config.dirPath, dirName))
   );
