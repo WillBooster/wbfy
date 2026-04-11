@@ -55,14 +55,15 @@ export async function generateGeminiConfig(config: PackageConfig, allConfigs: Pa
     });
 
     const extraContent = await fsUtil.readFileIgnoringError(agentsExtraPath);
+    const codingRuleExtraContent = extraContent?.trimStart().startsWith('#') ? undefined : extraContent;
     const styleguideContent = `以下のコーディング規約を踏まえて、日本語でレビューしてください。\n\n${generateAgentCodingStyle(allConfigs)}${
-      extraContent ? `\n\n${extraContent.trimEnd()}` : ''
+      codingRuleExtraContent ? `\n\n${codingRuleExtraContent.trimEnd()}` : ''
     }`;
 
-    const promises = [promisePool.run(() => fsUtil.generateFile(configFilePath, yamlContent))];
-    if (!fs.existsSync(styleguideFilePath)) {
-      promises.push(promisePool.run(() => fsUtil.generateFile(styleguideFilePath, styleguideContent)));
-    }
+    const promises = [
+      promisePool.run(() => fsUtil.generateFile(configFilePath, yamlContent)),
+      promisePool.run(() => fsUtil.generateFile(styleguideFilePath, styleguideContent)),
+    ];
     await Promise.all(promises);
   });
 }
