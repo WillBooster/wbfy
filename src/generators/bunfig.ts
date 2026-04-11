@@ -1,10 +1,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { parse } from 'smol-toml';
+
 import { logger } from '../logger.js';
 import type { PackageConfig } from '../packageConfig.js';
 import { fsUtil } from '../utils/fsUtil.js';
 import { promisePool } from '../utils/promisePool.js';
+
+interface BunfigToml {
+  install?: {
+    exact?: boolean;
+  };
+  run?: {
+    bun?: boolean;
+  };
+}
 
 const minimumReleaseAgeExcludes = [
   '@exercode/problem-utils',
@@ -55,18 +66,21 @@ const minimumReleaseAgeExcludes = [
   'react-dom',
 ];
 
-const newContent = (existingContent: string | undefined): string => `env = false
+const newContent = (existingContent: string | undefined): string => {
+  const bunfigToml = parseBunfigToml(existingContent);
+  return `env = false
 telemetry = false
 
-${extractRunSectionContainingBun(existingContent)}
+${generateRunSection(bunfigToml)}
 [install]
-exact = ${existingContent?.includes('exact = false') ? 'false' : 'true'}
+exact = ${bunfigToml?.install?.exact === false ? 'false' : 'true'}
 linker = "hoisted"
 minimumReleaseAge = 432000 # 5 days
 minimumReleaseAgeExcludes = [
 ${minimumReleaseAgeExcludes.map((packageName) => `    "${packageName}",`).join('\n')}
 ]
 `;
+};
 
 export async function generateBunfigToml(config: PackageConfig): Promise<void> {
   return logger.functionIgnoringException('generateBunfigToml', async () => {
@@ -77,8 +91,17 @@ export async function generateBunfigToml(config: PackageConfig): Promise<void> {
   });
 }
 
-function extractRunSectionContainingBun(content: string | undefined): string {
-  const runSectionMatch = content?.match(/^(\[run]\n(?:(?!^\[).*\n?)*)/m);
-  const runSection = runSectionMatch?.[1]?.trim();
-  return runSection && /^\s*bun\s*=.*/m.test(runSection) ? `${runSection}\n\n` : '';
+function parseBunfigToml(content: string | undefined): BunfigToml | undefined {
+  if (!content) {
+    return undefined;
+  }
+  try {
+    return parse(content) as BunfigToml;
+  } catch {
+    return undefined;
+  }
+}
+
+function generateRunSection(bunfigToml: BunfigToml | undefined): string {
+  return typeof bunfigToml?.run?.bun === 'boolean' ? `[run]\nbun = ${bunfigToml.run.bun}\n\n` : '';
 }

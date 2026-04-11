@@ -10261,6 +10261,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"smol-toml@npm:1.6.1":
+  version: 1.6.1
+  resolution: "smol-toml@npm:1.6.1"
+  checksum: 10c0/511a78722f99c7616fdb46af708de3d7e81434b5a3d58061166da73f28bfc6cae4f0cd04683f60515b9c490cd10152fce72287c960b337419c0299cc1f0f2a22
+  languageName: node
+  linkType: hard
+
 "socks-proxy-agent@npm:^8.0.3":
   version: 8.0.5
   resolution: "socks-proxy-agent@npm:8.0.5"
@@ -11486,6 +11493,7 @@ __metadata:
     prettier-plugin-java: "npm:2.8.1"
     semantic-release: "npm:25.0.3"
     simple-git: "npm:3.33.0"
+    smol-toml: "npm:1.6.1"
     sort-package-json: "npm:3.6.1"
     ts-node: "npm:10.9.2"
     type-fest: "npm:5.5.0"
