@@ -47,9 +47,10 @@ function generateAgentInstruction(
 
 - Create a new branch if the current branch is \`main\`.
 - Run any \`git\` commands sequentially.
-- Write tests ONLY if explicitly requested.
-  - Make sure to continue to modify the tests and code until the tests pass.
-- When writing tests, ensure they reset any related persistent data, as our test infrastructure does not clear it automatically.
+- Write tests ONLY if explicitly requested. If requested, follow these rules:
+  - Continue modifying the tests and code until all tests pass.
+  - Ensure tests reset any related persistent data, as our test infrastructure does not clear it automatically.
+  - Prefer actual API calls over mocks. Use mocks when actual calls are impractical, have unintended side effects, or are explicitly requested.
 - Before fixing issues, always investigate the root cause first (e.g., by gathering debug logs, taking screenshots, etc.).
 - After making code changes, run \`${packageManager} check-all-for-ai\` to execute all tests (takes up to 1 hour) or \`${packageManager} check-for-ai\` for type checking and linting only (takes up to 10 minutes).
   - If you are confident your changes will not break any tests, you may use \`check-for-ai\`.
@@ -79,6 +80,7 @@ ${generateAgentCodingStyle(allConfigs)}
 }
 
 export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
+  // Keep top-down ordering guidance function-only because classes are not hoisted and can fail when inheritance or top-level instantiation depends on declaration order.
   return `
 ## Coding Style
 
@@ -86,7 +88,7 @@ export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
 - Design each module with high cohesion, grouping related functionality together.
   - Refactor existing large modules into smaller, focused modules when necessary.
   - Create well-organized directory structures with low coupling and high cohesion.
-- Place calling functions or classes in the file above the functions or classes they call to maintain a clear top-down order.
+- Place calling functions in the file above the functions they call to maintain a clear top-down order.
   - e.g. \`function caller() { callee(); } function callee() { ... }\`
 - Write comments that explain "why" rather than "what". Avoid stating what can be understood from the code itself.
 - Prefer \`undefined\` over \`null\` unless explicitly required by APIs or libraries.
