@@ -618,32 +618,41 @@ async function updatePrivatePackages(jsonObj: PackageJson): Promise<void> {
   jsonObj.devDependencies = jsonObj.devDependencies ?? {};
   const packageNames = new Set([...Object.keys(jsonObj.dependencies), ...Object.keys(jsonObj.devDependencies)]);
   if (packageNames.has('@willbooster/auth') && !isWorkspacePackage(jsonObj, '@willbooster/auth')) {
+    const specifier = getExistingDependencySpecifier(jsonObj, '@willbooster/auth');
     delete jsonObj.devDependencies['@willbooster/auth'];
-    const commitHash = await getLatestCommitHash('WillBoosterLab', 'auth');
-    jsonObj.dependencies['@willbooster/auth'] = `git@github.com:WillBoosterLab/auth.git#${commitHash}`;
+    jsonObj.dependencies['@willbooster/auth'] = specifier ?? (await getLatestPrivatePackageSpecifier('auth'));
   }
   if (packageNames.has('@discord-bot/shared') && !isWorkspacePackage(jsonObj, '@discord-bot/shared')) {
+    const specifier = getExistingDependencySpecifier(jsonObj, '@discord-bot/shared');
     delete jsonObj.devDependencies['@discord-bot/shared'];
-    const commitHash = await getLatestCommitHash('WillBoosterLab', 'discord-bot');
-    jsonObj.dependencies['@discord-bot/shared'] = `git@github.com:WillBoosterLab/discord-bot.git#${commitHash}`;
+    jsonObj.dependencies['@discord-bot/shared'] = specifier ?? (await getLatestPrivatePackageSpecifier('discord-bot'));
   }
 
   if (packageNames.has('@willbooster/code-analyzer') && !isWorkspacePackage(jsonObj, '@willbooster/code-analyzer')) {
+    const specifier = getExistingDependencySpecifier(jsonObj, '@willbooster/code-analyzer');
     delete jsonObj.dependencies['@willbooster/code-analyzer'];
-    const commitHash = await getLatestCommitHash('WillBoosterLab', 'code-analyzer');
     jsonObj.devDependencies['@willbooster/code-analyzer'] =
-      `git@github.com:WillBoosterLab/code-analyzer.git#${commitHash}`;
+      specifier ?? (await getLatestPrivatePackageSpecifier('code-analyzer'));
   }
   if (packageNames.has('@willbooster/judge') && !isWorkspacePackage(jsonObj, '@willbooster/judge')) {
+    const specifier = getExistingDependencySpecifier(jsonObj, '@willbooster/judge');
     delete jsonObj.devDependencies['@willbooster/judge'];
-    const commitHash = await getLatestCommitHash('WillBoosterLab', 'judge');
-    jsonObj.dependencies['@willbooster/judge'] = `git@github.com:WillBoosterLab/judge.git#${commitHash}`;
+    jsonObj.dependencies['@willbooster/judge'] = specifier ?? (await getLatestPrivatePackageSpecifier('judge'));
   }
   if (packageNames.has('@willbooster/llm-proxy') && !isWorkspacePackage(jsonObj, '@willbooster/llm-proxy')) {
+    const specifier = getExistingDependencySpecifier(jsonObj, '@willbooster/llm-proxy');
     delete jsonObj.devDependencies['@willbooster/llm-proxy'];
-    const commitHash = await getLatestCommitHash('WillBoosterLab', 'llm-proxy');
-    jsonObj.dependencies['@willbooster/llm-proxy'] = `git@github.com:WillBoosterLab/llm-proxy.git#${commitHash}`;
+    jsonObj.dependencies['@willbooster/llm-proxy'] = specifier ?? (await getLatestPrivatePackageSpecifier('llm-proxy'));
   }
+}
+
+function getExistingDependencySpecifier(jsonObj: PackageJson, packageName: string): string | undefined {
+  return jsonObj.dependencies?.[packageName] ?? jsonObj.devDependencies?.[packageName];
+}
+
+async function getLatestPrivatePackageSpecifier(repo: string): Promise<string> {
+  const commitHash = await getLatestCommitHash('WillBoosterLab', repo);
+  return `git@github.com:WillBoosterLab/${repo}.git#${commitHash}`;
 }
 
 function isWorkspacePackage(jsonObj: PackageJson, packageName: string): boolean {
