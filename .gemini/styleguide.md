@@ -11,7 +11,3 @@
 - Write comments that explain "why" rather than "what". Avoid stating what can be understood from the code itself.
 - Prefer `undefined` over `null` unless explicitly required by APIs or libraries.
 - Prefer using a single template literal for prompts instead of `join()` with an array of strings.
-
-## How to Run
-
-Use `yarn start` to run `wbfy` on this repository.
