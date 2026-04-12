@@ -36,6 +36,7 @@ import { generateVscodeSettings } from './generators/vscodeSettings.js';
 import { generateWorkflows, isReusableWorkflowsRepo } from './generators/workflow.js';
 import { generateYarnrcYml } from './generators/yarnrc.js';
 import { setupLabels } from './github/label.js';
+import { setupRulesets } from './github/ruleset.js';
 import { setupSecrets } from './github/secret.js';
 import { setupGitHubSettings } from './github/settings.js';
 import { generateGitHubTemplates } from './github/template.js';
@@ -133,6 +134,7 @@ async function main(): Promise<void> {
       generateReleaserc(rootConfig),
       ...(shouldRunWorkflows ? [generateWorkflows(rootConfig)] : []),
       setupLabels(rootConfig),
+      setupRulesets(rootConfig),
       setupSecrets(rootConfig),
       setupGitHubSettings(rootConfig),
       generateLefthookUpdatingPackageJson(rootConfig),
