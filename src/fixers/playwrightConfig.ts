@@ -125,8 +125,8 @@ async function hasNextPublicBaseUrl(dirPath: string): Promise<boolean> {
   const envFilePaths = [
     path.resolve(dirPath, '.env'),
     path.resolve(dirPath, '.env.test'),
-    path.resolve(dirPath, '.env.example'),
     path.resolve(dirPath, 'mise.toml'),
+    path.resolve(dirPath, 'mise.test.toml'),
   ];
   for (const envFilePath of envFilePaths) {
     try {
