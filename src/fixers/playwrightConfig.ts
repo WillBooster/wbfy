@@ -62,12 +62,15 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     // Keep filling missing defaults, but don't overwrite local adjustments on every regeneration.
     const merged = merge.all<ParsedObject>([defaultConfig, parsed]);
     const hasStartTestServer = Boolean(config.packageJson?.scripts?.['start-test-server']);
-    if (!hasStartTestServer) {
+    // Repos can have custom Playwright server commands without using the WillBooster start-test-server convention.
+    if (!hasStartTestServer && !parsed.webServer) {
       delete merged.webServer;
     }
 
     const hasBaseUrl = await hasNextPublicBaseUrl(config.dirPath);
-    if (!hasBaseUrl) {
+    const hasCustomBaseUrl = parsed.use?.kind === 'object' && Boolean(parsed.use.value.baseURL);
+    // NEXT_PUBLIC_BASE_URL only controls the default value; target-specific baseURL values must be preserved.
+    if (!hasBaseUrl && !hasCustomBaseUrl) {
       const useConfig = merged.use;
       if (useConfig?.kind === 'object') {
         delete useConfig.value.baseURL;
