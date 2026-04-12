@@ -65,7 +65,10 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     // Keep filling missing defaults, but don't overwrite local adjustments on every regeneration.
     const merged = merge.all<ParsedObject>([defaultConfig, parsed]);
     const hasStartTestServer = Boolean(config.packageJson?.scripts?.['start-test-server']);
-    if (!hasStartTestServer) {
+    const hasExistingWebServer = Boolean(parsed.webServer);
+    // Only drop wbfy's default server command. Repos with custom Playwright
+    // server setup still need it even when they do not expose start-test-server.
+    if (!hasStartTestServer && !hasExistingWebServer) {
       delete merged.webServer;
     }
 
