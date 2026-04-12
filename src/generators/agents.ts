@@ -84,6 +84,7 @@ export function generateAgentCodingStyle(allConfigs: PackageConfig[]): string {
   return `
 ## Coding Style
 
+- Use camelCase for JavaScript and TypeScript files (or PascalCase for React components).
 - Simplify code as much as possible to eliminate redundancy.
 - Design each module with high cohesion, grouping related functionality together.
   - Refactor existing large modules into smaller, focused modules when necessary.

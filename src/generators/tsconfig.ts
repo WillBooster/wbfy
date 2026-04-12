@@ -92,7 +92,7 @@ export async function generateTsconfig(config: PackageConfig): Promise<void> {
           !dirPath.includes('@types') && !dirPath.includes('__tests__/') && !dirPath.includes('tests/')
       );
       newSettings.compilerOptions ??= {};
-      if (existingRootDir) {
+      if (existingRootDir && !shouldReplaceExistingRootDir(existingRootDir, generatedRootDir)) {
         newSettings.compilerOptions.rootDir = existingRootDir;
       } else if (generatedRootDir) {
         newSettings.compilerOptions.rootDir = generatedRootDir;
@@ -153,9 +153,13 @@ function shouldDeleteTypeRoots(typeNames: string[]): boolean {
 }
 
 function getGeneratedRootDir(config: PackageConfig): string | undefined {
-  const existingRootSourceDirs = getSrcDirs(config).filter((dirName) =>
+  const rootDirCandidates = getRootDirCandidates(config);
+  // Keep test and scripts in this list so mixed tsconfigs omit rootDir instead of
+  // generating a src-only rootDir that conflicts with the generated include globs.
+  const existingIncludedDirs = getSrcDirs(config).filter((dirName) =>
     fs.existsSync(path.resolve(config.dirPath, dirName))
   );
+  const existingRootSourceDirs = existingIncludedDirs.filter((dirName) => rootDirCandidates.includes(dirName));
 
   if (config.isRoot && config.doesContainSubPackageJsons) {
     const packagesDirPath = path.resolve(config.dirPath, 'packages');
@@ -166,19 +170,26 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
         .some(
           (dirent) =>
             dirent.isDirectory() &&
-            getSrcDirs(config).some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
+            rootDirCandidates.some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
         );
     if (hasSubPackageSources) {
-      return existingRootSourceDirs.length > 0 ? '.' : './packages';
+      return existingIncludedDirs.length > 0 ? '.' : './packages';
     }
   }
 
-  if (existingRootSourceDirs.length === 1) {
+  if (existingIncludedDirs.length === 1 && existingRootSourceDirs.length === 1) {
     return `./${existingRootSourceDirs[0]}`;
   }
-  if (existingRootSourceDirs.length > 1) {
-    return '.';
-  }
+}
+
+function getRootDirCandidates(config: PackageConfig): string[] {
+  return getSrcDirs(config).filter((dirName) => dirName !== 'scripts' && dirName !== 'test');
+}
+
+function shouldReplaceExistingRootDir(existingRootDir: string, generatedRootDir: string | undefined): boolean {
+  // Mixed source/test tsconfigs must omit rootDir; otherwise src-only rootDir breaks typecheck,
+  // while "." changes library declaration output from dist/*.d.ts to dist/src/*.d.ts.
+  return generatedRootDir === undefined || (existingRootDir === '.' && generatedRootDir !== '.');
 }
 
 function getGeneratedTypes(config: PackageConfig): string[] {
