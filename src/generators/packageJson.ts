@@ -362,7 +362,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   if (config.isBun) delete jsonObj.packageManager;
   let newJsonText = JSON.stringify(jsonObj);
   newJsonText = await fixScriptNames(jsonObj.scripts, newJsonText, config);
-  await fs.promises.writeFile(filePath, newJsonText);
+  await fs.promises.writeFile(filePath, `${newJsonText}\n`);
 
   if (!skipAddingDeps) {
     // We cannot add dependencies which are already included in devDependencies.

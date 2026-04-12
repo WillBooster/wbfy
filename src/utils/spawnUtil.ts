@@ -2,12 +2,19 @@ import type { SpawnSyncOptions } from 'node:child_process';
 import child_process from 'node:child_process';
 
 export function spawnSync(command: string, args: string[], cwd: string, retry = 0): void {
+  spawnSyncAndReturnStatus(command, args, cwd, retry);
+}
+
+export function spawnSyncAndReturnStatus(command: string, args: string[], cwd: string, retry = 0): number {
+  let status = 1;
   do {
     const [newCmd, newArgs, options] = getSpawnSyncArgs(command, args, cwd);
     console.log(`$ ${newCmd} ${newArgs.join(' ')} at ${cwd}`);
     const ret = child_process.spawnSync(newCmd, newArgs, options);
-    if (ret.status === 0) break;
+    status = ret.status ?? 1;
+    if (status === 0) break;
   } while (--retry >= 0);
+  return status;
 }
 
 export function spawnSyncAndReturnStdout(command: string, args: string[], cwd: string): string {

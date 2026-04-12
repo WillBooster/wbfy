@@ -24,6 +24,7 @@ const rootJsonObj = {
     declaration: true,
     sourceMap: true,
     importHelpers: false,
+    noEmit: false,
     outDir: 'dist',
   },
   exclude: ['packages/*/test/fixtures', 'test/fixtures'],
@@ -47,6 +48,7 @@ const subJsonObj = {
     declaration: true,
     sourceMap: true,
     importHelpers: false,
+    noEmit: false,
     outDir: 'dist',
   },
   exclude: ['test/fixtures'],
@@ -161,21 +163,9 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
   );
   const existingRootSourceDirs = existingIncludedDirs.filter((dirName) => rootDirCandidates.includes(dirName));
 
-  if (config.isRoot && config.doesContainSubPackageJsons) {
-    const packagesDirPath = path.resolve(config.dirPath, 'packages');
-    const hasSubPackageSources =
-      fs.existsSync(packagesDirPath) &&
-      fs
-        .readdirSync(packagesDirPath, { withFileTypes: true })
-        .some(
-          (dirent) =>
-            dirent.isDirectory() &&
-            rootDirCandidates.some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
-        );
-    if (hasSubPackageSources) {
-      return existingIncludedDirs.length > 0 ? '.' : './packages';
-    }
-  }
+  // Subpackage tsconfigs inherit root options, so a monorepo rootDir would shift
+  // generated package declarations into nested paths such as dist/shared/shared/src.
+  if (config.isRoot && config.doesContainSubPackageJsons) return undefined;
 
   if (existingIncludedDirs.length === 1 && existingRootSourceDirs.length === 1) {
     return `./${existingRootSourceDirs[0]}`;
