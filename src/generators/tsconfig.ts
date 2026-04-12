@@ -163,6 +163,8 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
   );
   const existingRootSourceDirs = existingIncludedDirs.filter((dirName) => rootDirCandidates.includes(dirName));
 
+  // Subpackage tsconfigs inherit root options, so a monorepo rootDir would shift
+  // generated package declarations into nested paths such as dist/shared/shared/src.
   if (config.isRoot && config.doesContainSubPackageJsons) return undefined;
 
   if (existingIncludedDirs.length === 1 && existingRootSourceDirs.length === 1) {

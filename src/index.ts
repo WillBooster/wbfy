@@ -213,6 +213,8 @@ function refreshBunLock(rootDirPath: string): void {
   const backupLockFilePath = path.join(rootDirPath, '.bun.lock.wbfy-backup');
   fs.rmSync(backupLockFilePath, { force: true });
   if (fs.existsSync(lockFilePath)) {
+    // Regenerate from scratch, but keep the previous lockfile so a registry or
+    // resolver failure cannot leave the repository without a lockfile.
     fs.copyFileSync(lockFilePath, backupLockFilePath);
     fs.rmSync(lockFilePath, { force: true });
   }
