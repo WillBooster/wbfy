@@ -36,6 +36,7 @@ test('generates explicit TS 6 types and preserves inferred rootDir for src-only 
   await promisePool.promiseAll();
 
   const tsconfig = await readTsconfig(dirPath);
+  expect(tsconfig.compilerOptions.noEmit).toBe(false);
   expect(tsconfig.compilerOptions.rootDir).toBe('./src');
   expect(tsconfig.compilerOptions.types).toEqual(['node', 'vitest/globals']);
 });
@@ -60,6 +61,7 @@ test('omits rootDir for monorepos without root sources', async () => {
   await promisePool.promiseAll();
 
   const tsconfig = await readTsconfig(dirPath);
+  expect(tsconfig.compilerOptions.noEmit).toBe(false);
   expect(tsconfig.compilerOptions.rootDir).toBeUndefined();
   expect(tsconfig.compilerOptions.types).toEqual(['node']);
 });
@@ -71,10 +73,10 @@ function createTempDir(): string {
 }
 
 async function readTsconfig(dirPath: string): Promise<{
-  compilerOptions: { rootDir?: string; types?: string[] };
+  compilerOptions: { noEmit?: boolean; rootDir?: string; types?: string[] };
 }> {
   return JSON.parse(await fs.promises.readFile(path.join(dirPath, 'tsconfig.json'), 'utf8')) as {
-    compilerOptions: { rootDir?: string; types?: string[] };
+    compilerOptions: { noEmit?: boolean; rootDir?: string; types?: string[] };
   };
 }
 
