@@ -71,6 +71,7 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     if (!hasStartTestServer && !hasExistingWebServer) {
       delete merged.webServer;
     }
+    setWebServerCommand(config, merged);
 
     const hasBaseUrl = await hasNextPublicBaseUrl(config.dirPath);
     if (!hasBaseUrl) {
@@ -87,6 +88,15 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
 
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
+}
+
+function setWebServerCommand(config: PackageConfig, object: ParsedObject): void {
+  const webServer = object.webServer;
+  if (webServer?.kind !== 'object') return;
+
+  // wbfy owns the package script, so Playwright should consistently call that
+  // script while preserving the rest of each repository's webServer settings.
+  webServer.value.command = literal(config.isBun ? "'bun start-test-server'" : "'yarn start-test-server'");
 }
 
 function extractDefineConfigObjectLiteral(content: string): ExtractedObjectLiteral | undefined {
