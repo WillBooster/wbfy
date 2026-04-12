@@ -85,7 +85,22 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
 }
 
 async function assertNextPublicBaseUrl(dirPath: string): Promise<void> {
-  if (await hasNextPublicBaseUrl(dirPath)) return;
+  const envFilePaths = [
+    path.resolve(dirPath, '.env'),
+    path.resolve(dirPath, '.env.test'),
+    path.resolve(dirPath, 'mise.toml'),
+    path.resolve(dirPath, 'mise.test.toml'),
+  ];
+  for (const envFilePath of envFilePaths) {
+    try {
+      const content = await fs.promises.readFile(envFilePath, 'utf8');
+      if (/NEXT_PUBLIC_BASE_URL\s*=/m.test(content)) {
+        return;
+      }
+    } catch {
+      // Missing env files are expected in some repos.
+    }
+  }
 
   throw new Error('NEXT_PUBLIC_BASE_URL is required for Playwright. Define NEXT_PUBLIC_BASE_URL in the target repo.');
 }
@@ -119,26 +134,6 @@ function extractDefineConfigObjectLiteral(content: string): ExtractedObjectLiter
   visit(source);
 
   return found ? { source, node: found } : undefined;
-}
-
-async function hasNextPublicBaseUrl(dirPath: string): Promise<boolean> {
-  const envFilePaths = [
-    path.resolve(dirPath, '.env'),
-    path.resolve(dirPath, '.env.test'),
-    path.resolve(dirPath, 'mise.toml'),
-    path.resolve(dirPath, 'mise.test.toml'),
-  ];
-  for (const envFilePath of envFilePaths) {
-    try {
-      const content = await fs.promises.readFile(envFilePath, 'utf8');
-      if (/NEXT_PUBLIC_BASE_URL\s*=/m.test(content)) {
-        return true;
-      }
-    } catch {
-      // Missing env files are expected in some repos.
-    }
-  }
-  return false;
 }
 
 function parseObjectLiteralExpression(
