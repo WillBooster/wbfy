@@ -159,9 +159,7 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
   const existingIncludedDirs = getSrcDirs(config).filter((dirName) =>
     fs.existsSync(path.resolve(config.dirPath, dirName))
   );
-  const existingRootSourceDirs = rootDirCandidates.filter((dirName) =>
-    fs.existsSync(path.resolve(config.dirPath, dirName))
-  );
+  const existingRootSourceDirs = existingIncludedDirs.filter((dirName) => rootDirCandidates.includes(dirName));
 
   if (config.isRoot && config.doesContainSubPackageJsons) {
     const packagesDirPath = path.resolve(config.dirPath, 'packages');
@@ -191,7 +189,7 @@ function getRootDirCandidates(config: PackageConfig): string[] {
 function shouldReplaceExistingRootDir(existingRootDir: string, generatedRootDir: string | undefined): boolean {
   // Mixed source/test tsconfigs must omit rootDir; otherwise src-only rootDir breaks typecheck,
   // while "." changes library declaration output from dist/*.d.ts to dist/src/*.d.ts.
-  return existingRootDir === '.' && generatedRootDir !== '.';
+  return generatedRootDir === undefined || (existingRootDir === '.' && generatedRootDir !== '.');
 }
 
 function getGeneratedTypes(config: PackageConfig): string[] {
