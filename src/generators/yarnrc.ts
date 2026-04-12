@@ -65,6 +65,7 @@ export async function generateYarnrcYml(config: PackageConfig): Promise<void> {
       // We believe we are safe
       '@exercode/*',
       '@willbooster/*',
+      'agent-runtime-kit',
       // To deal with CVE like https://nextjs.org/blog/CVE-2025-66478
       'next',
       '@next/*',
