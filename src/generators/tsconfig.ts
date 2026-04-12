@@ -153,12 +153,13 @@ function shouldDeleteTypeRoots(typeNames: string[]): boolean {
 }
 
 function getGeneratedRootDir(config: PackageConfig): string | undefined {
+  const rootDirCandidates = getRootDirCandidates(config);
   // Keep test and scripts in this list so mixed tsconfigs omit rootDir instead of
   // generating a src-only rootDir that conflicts with the generated include globs.
   const existingIncludedDirs = getSrcDirs(config).filter((dirName) =>
     fs.existsSync(path.resolve(config.dirPath, dirName))
   );
-  const existingRootSourceDirs = getRootDirCandidates(config).filter((dirName) =>
+  const existingRootSourceDirs = rootDirCandidates.filter((dirName) =>
     fs.existsSync(path.resolve(config.dirPath, dirName))
   );
 
@@ -171,9 +172,7 @@ function getGeneratedRootDir(config: PackageConfig): string | undefined {
         .some(
           (dirent) =>
             dirent.isDirectory() &&
-            getRootDirCandidates(config).some((dirName) =>
-              fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName))
-            )
+            rootDirCandidates.some((dirName) => fs.existsSync(path.resolve(packagesDirPath, dirent.name, dirName)))
         );
     if (hasSubPackageSources) {
       return existingIncludedDirs.length > 0 ? '.' : './packages';
