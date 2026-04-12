@@ -192,7 +192,6 @@ async function main(): Promise<void> {
     const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
     // Refresh lock files
     if (rootConfig.isBun) {
-      fs.rmSync(path.join(rootDirPath, 'bun.lock'), { force: true });
       spawnSync(packageManager, ['update'], rootDirPath);
     } else {
       fs.rmSync(path.join(rootDirPath, 'yarn.lock'), { force: true });
