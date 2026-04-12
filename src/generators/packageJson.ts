@@ -439,11 +439,7 @@ function getDependencySpecifier(dependency: string): string {
 }
 
 function addStartTestServerScriptIfNeeded(config: PackageConfig, jsonObj: PackageJson): void {
-  if (
-    !config.depending.playwrightTest ||
-    !(config.depending.wb || config.isBun) ||
-    jsonObj.scripts?.['start-test-server']
-  ) {
+  if (!config.depending.playwrightTest || !config.depending.wb || jsonObj.scripts?.['start-test-server']) {
     return;
   }
 
