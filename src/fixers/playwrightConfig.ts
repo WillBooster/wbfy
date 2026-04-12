@@ -14,6 +14,10 @@ type ParsedValue =
   | { kind: 'literal'; value: string }
   | { kind: 'object'; value: ParsedObject };
 type ParsedObject = Record<string, ParsedValue>;
+interface ExtractedObjectLiteral {
+  source: ts.SourceFile;
+  node: ts.ObjectLiteralExpression;
+}
 
 const literal = (value: string): ParsedValue => ({ kind: 'literal', value });
 const asArray = (value: ParsedValue[]): ParsedValue => ({ kind: 'array', value });
@@ -52,17 +56,19 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     if (!fs.existsSync(filePath)) return;
 
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
-    const match = /defineConfig\s*\(\s*(\{[\s\S]*?})\s*\);?/.exec(oldContent);
-    const objectLiteral = match?.[1];
-    if (!objectLiteral) return;
+    const extractedObjectLiteral = extractDefineConfigObjectLiteral(oldContent);
+    if (!extractedObjectLiteral) return;
 
-    const parsed = parseObjectLiteral(objectLiteral);
+    const parsed = parseObjectLiteralExpression(extractedObjectLiteral.node, extractedObjectLiteral.source);
     if (!parsed) return;
 
     // Keep filling missing defaults, but don't overwrite local adjustments on every regeneration.
     const merged = merge.all<ParsedObject>([defaultConfig, parsed]);
     const hasStartTestServer = Boolean(config.packageJson?.scripts?.['start-test-server']);
-    if (!hasStartTestServer) {
+    const hasExistingWebServer = Boolean(parsed.webServer);
+    // Only drop wbfy's default server command. Repos with custom Playwright
+    // server setup still need it even when they do not expose start-test-server.
+    if (!hasStartTestServer && !hasExistingWebServer) {
       delete merged.webServer;
     }
 
@@ -75,10 +81,34 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     }
 
     const newObjectLiteral = stringifyObject(merged, 0);
-    const newContent = oldContent.replace(objectLiteral, newObjectLiteral);
+    const start = extractedObjectLiteral.node.getStart(extractedObjectLiteral.source);
+    const end = extractedObjectLiteral.node.getEnd();
+    const newContent = `${oldContent.slice(0, start)}${newObjectLiteral}${oldContent.slice(end)}`;
 
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
+}
+
+function extractDefineConfigObjectLiteral(content: string): ExtractedObjectLiteral | undefined {
+  const source = ts.createSourceFile('playwright.config.ts', content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+
+  // TypeScript already understands nested object literals and template strings, so use
+  // its AST ranges instead of a regex that can stop at the first inner closing brace.
+  let found: ts.ObjectLiteralExpression | undefined;
+  const visit = (node: ts.Node): void => {
+    if (found) return;
+    if (ts.isCallExpression(node) && node.expression.getText(source) === 'defineConfig') {
+      const firstArgument = node.arguments[0];
+      if (firstArgument && ts.isObjectLiteralExpression(firstArgument)) {
+        found = firstArgument;
+        return;
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+
+  return found ? { source, node: found } : undefined;
 }
 
 async function hasNextPublicBaseUrl(dirPath: string): Promise<boolean> {
@@ -94,21 +124,6 @@ async function hasNextPublicBaseUrl(dirPath: string): Promise<boolean> {
     }
   }
   return false;
-}
-
-function parseObjectLiteral(objectLiteral: string): ParsedObject | undefined {
-  const source = ts.createSourceFile(
-    'playwright-config.ts',
-    `const config = ${objectLiteral};`,
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TS
-  );
-  const statement = source.statements[0];
-  if (!statement || !ts.isVariableStatement(statement)) return;
-  const declaration = statement.declarationList.declarations[0];
-  if (!declaration?.initializer || !ts.isObjectLiteralExpression(declaration.initializer)) return;
-  return parseObjectLiteralExpression(declaration.initializer, source);
 }
 
 function parseObjectLiteralExpression(

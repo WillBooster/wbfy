@@ -79,6 +79,7 @@ async function core(config: PackageConfig, rootConfig: PackageConfig, skipAdding
   }
 
   jsonObj.scripts = merge(jsonObj.scripts, generateScripts(config, jsonObj.scripts));
+  addStartTestServerScriptIfNeeded(config, jsonObj);
 
   if ('check-for-ai' in jsonObj.scripts) {
     if ('gen-code' in jsonObj.scripts) {
@@ -435,6 +436,15 @@ async function removeDeprecatedStuff(
 
 function getDependencySpecifier(dependency: string): string {
   return getPinnedDependencySpecifier(dependency) ?? dependency;
+}
+
+function addStartTestServerScriptIfNeeded(config: PackageConfig, jsonObj: PackageJson): void {
+  if (!config.depending.playwrightTest || !config.depending.wb || jsonObj.scripts?.['start-test-server']) {
+    return;
+  }
+
+  jsonObj.scripts ??= {};
+  jsonObj.scripts['start-test-server'] = 'wb start --mode test';
 }
 
 function formatRepositoryForPackageJson(
