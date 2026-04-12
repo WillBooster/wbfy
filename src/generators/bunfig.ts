@@ -61,6 +61,7 @@ const minimumReleaseAgeExcludes = [
   '@willbooster/shared-lib-node',
   '@willbooster/shared-lib-react',
   '@willbooster/wb',
+  'agent-runtime-kit',
   'next',
   'react',
   'react-dom',
