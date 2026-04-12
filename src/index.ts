@@ -42,7 +42,7 @@ import { generateGitHubTemplates } from './github/template.js';
 import { options } from './options.js';
 import { getPackageConfig } from './packageConfig.js';
 import { promisePool } from './utils/promisePool.js';
-import { spawnSync } from './utils/spawnUtil.js';
+import { spawnSync, spawnSyncAndReturnStatus } from './utils/spawnUtil.js';
 import { shouldSkipWillboosterConfigsEslintPackage } from './utils/willboosterConfigsUtil.js';
 
 async function main(): Promise<void> {
@@ -192,7 +192,7 @@ async function main(): Promise<void> {
     const packageManager = rootConfig.isBun ? 'bun' : 'yarn';
     // Refresh lock files
     if (rootConfig.isBun) {
-      spawnSync(packageManager, ['update'], rootDirPath);
+      refreshBunLock(rootDirPath);
     } else {
       fs.rmSync(path.join(rootDirPath, 'yarn.lock'), { force: true });
       spawnSync(packageManager, ['install', '--no-immutable'], rootDirPath);
@@ -206,6 +206,28 @@ async function main(): Promise<void> {
 
     await installAgentSkills(rootConfig);
   }
+}
+
+function refreshBunLock(rootDirPath: string): void {
+  const lockFilePath = path.join(rootDirPath, 'bun.lock');
+  const backupLockFilePath = path.join(rootDirPath, '.bun.lock.wbfy-backup');
+  fs.rmSync(backupLockFilePath, { force: true });
+  if (fs.existsSync(lockFilePath)) {
+    fs.copyFileSync(lockFilePath, backupLockFilePath);
+    fs.rmSync(lockFilePath, { force: true });
+  }
+
+  const status = spawnSyncAndReturnStatus('bun', ['update'], rootDirPath);
+  if (status === 0 && fs.existsSync(lockFilePath)) {
+    fs.rmSync(backupLockFilePath, { force: true });
+    return;
+  }
+
+  if (fs.existsSync(backupLockFilePath)) {
+    fs.copyFileSync(backupLockFilePath, lockFilePath);
+    fs.rmSync(backupLockFilePath, { force: true });
+  }
+  throw new Error(`Failed to regenerate ${lockFilePath}`);
 }
 
 function getVersion(): string {
