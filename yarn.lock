@@ -3290,6 +3290,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@simple-git/args-pathspec@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@simple-git/args-pathspec@npm:1.0.2"
+  checksum: 10c0/e74a827baa9ee3e5ad8d10205a3d8a74d4251e5dbf12b0f7d485e687c903042c7c74beec71336226f8dd310c7292a73ebc911b345cfa3116cf75c230f26f3074
+  languageName: node
+  linkType: hard
+
+"@simple-git/argv-parser@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@simple-git/argv-parser@npm:1.0.3"
+  dependencies:
+    "@simple-git/args-pathspec": "npm:^1.0.2"
+  checksum: 10c0/687936b8e35a2f2e569ce7cef9a2c2b9be174d0da1c0e8de21f6bedb444dda34b3103741378c3356cc343a8b439a2342c38956c131579e94e2acf703064ee31f
+  languageName: node
+  linkType: hard
+
 "@simple-libs/stream-utils@npm:^1.2.0":
   version: 1.2.0
   resolution: "@simple-libs/stream-utils@npm:1.2.0"
@@ -4128,20 +4144,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib-node@npm:8.2.3":
-  version: 8.2.3
-  resolution: "@willbooster/shared-lib-node@npm:8.2.3"
+"@willbooster/shared-lib-node@npm:8.3.1":
+  version: 8.3.1
+  resolution: "@willbooster/shared-lib-node@npm:8.3.1"
   dependencies:
     dotenv: "npm:17.3.1"
     dotenv-expand: "npm:12.0.3"
-  checksum: 10c0/c9b43b94a52f543532601a34da46031a5ca7b3e69143d3277bf93d1af3d3a70fde53be6ec1fced2a43fbe523c3ac9b2b43b387a17fb77830edf7db2cfee461b9
+  checksum: 10c0/ea6eb2fc5ae37902764cfbc7ba6b8625c0b5dcc26e0495c902b9f743cbbb21697cca842eb6573427327107a80b8b8605e1b050fab2774ca76b2e9425cad96b73
   languageName: node
   linkType: hard
 
-"@willbooster/shared-lib@npm:7.1.8":
-  version: 7.1.8
-  resolution: "@willbooster/shared-lib@npm:7.1.8"
-  checksum: 10c0/e858ddf126a8fe7a7e35c689137fddd19dd628ee11c8013ba27f482eff529466430b7fecdf790e67c3e0361a496b5613ed20dd7ebbb53502e52a472bb23a70e6
+"@willbooster/shared-lib@npm:7.2.1":
+  version: 7.2.1
+  resolution: "@willbooster/shared-lib@npm:7.2.1"
+  checksum: 10c0/3724e799e4866d1a666aa29dc8cf8767b48f731aa4eda30dd8e1489ec19ca41f39631d30def055c63e20360f02fa07384ee2894e480440f454ca333d2c9a87dc
   languageName: node
   linkType: hard
 
@@ -10193,14 +10209,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-git@npm:3.33.0":
-  version: 3.33.0
-  resolution: "simple-git@npm:3.33.0"
+"simple-git@npm:3.35.2":
+  version: 3.35.2
+  resolution: "simple-git@npm:3.35.2"
   dependencies:
     "@kwsites/file-exists": "npm:^1.1.1"
     "@kwsites/promise-deferred": "npm:^1.1.1"
+    "@simple-git/args-pathspec": "npm:^1.0.2"
+    "@simple-git/argv-parser": "npm:^1.0.3"
     debug: "npm:^4.4.0"
-  checksum: 10c0/463e91f3ee04b7fc445284c64502a4ee3d607f626f18c8bcc036815a30fe178d2216976e683c6368edd7b3093801d6e534deeb8e700a4863a76ef23f881a0712
+  checksum: 10c0/9cc675d4591713dc90856526f9a671ce614d2e75079988628df6eb6ce3e7ec629ae6ec77736c76960a85a9a1a6a9ee218c03eda016acb0c21bf6829f55422cb9
   languageName: node
   linkType: hard
 
@@ -11436,8 +11454,8 @@ __metadata:
     "@types/yargs": "npm:17.0.35"
     "@willbooster/eslint-config-ts": "npm:11.5.1"
     "@willbooster/prettier-config": "npm:10.4.0"
-    "@willbooster/shared-lib": "npm:7.1.8"
-    "@willbooster/shared-lib-node": "npm:8.2.3"
+    "@willbooster/shared-lib": "npm:7.2.1"
+    "@willbooster/shared-lib-node": "npm:8.3.1"
     "@yarnpkg/core": "npm:4.6.0"
     build-ts: "npm:17.0.26"
     conventional-changelog-conventionalcommits: "npm:9.3.1"
@@ -11465,7 +11483,7 @@ __metadata:
     prettier: "npm:3.8.1"
     prettier-plugin-java: "npm:2.8.1"
     semantic-release: "npm:25.0.3"
-    simple-git: "npm:3.33.0"
+    simple-git: "npm:3.35.2"
     smol-toml: "npm:1.6.1"
     sort-package-json: "npm:3.6.1"
     ts-node: "npm:10.9.2"
