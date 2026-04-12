@@ -51,10 +51,12 @@ const defaultConfig: ParsedObject = {
 };
 
 export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> {
-  return logger.functionIgnoringException('fixPlaywrightConfig', async () => {
-    const filePath = path.resolve(config.dirPath, `playwright.config.ts`);
-    if (!fs.existsSync(filePath)) return;
+  const filePath = path.resolve(config.dirPath, `playwright.config.ts`);
+  if (!fs.existsSync(filePath)) return;
 
+  await assertNextPublicBaseUrl(config.dirPath);
+
+  return logger.functionIgnoringException('fixPlaywrightConfig', async () => {
     const oldContent = await fs.promises.readFile(filePath, 'utf8');
     const extractedObjectLiteral = extractDefineConfigObjectLiteral(oldContent);
     if (!extractedObjectLiteral) return;
@@ -71,14 +73,7 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
     if (!hasStartTestServer && !hasExistingWebServer) {
       delete merged.webServer;
     }
-
-    const hasBaseUrl = await hasNextPublicBaseUrl(config.dirPath);
-    if (!hasBaseUrl) {
-      const useConfig = merged.use;
-      if (useConfig?.kind === 'object') {
-        delete useConfig.value.baseURL;
-      }
-    }
+    setWebServerCommand(config, merged);
 
     const newObjectLiteral = stringifyObject(merged, 0);
     const start = extractedObjectLiteral.node.getStart(extractedObjectLiteral.source);
@@ -87,6 +82,36 @@ export async function fixPlaywrightConfig(config: PackageConfig): Promise<void> 
 
     await promisePool.run(() => fsUtil.generateFile(filePath, newContent));
   });
+}
+
+async function assertNextPublicBaseUrl(dirPath: string): Promise<void> {
+  const envFilePaths = [
+    path.resolve(dirPath, '.env'),
+    path.resolve(dirPath, '.env.test'),
+    path.resolve(dirPath, 'mise.toml'),
+    path.resolve(dirPath, 'mise.test.toml'),
+  ];
+  for (const envFilePath of envFilePaths) {
+    try {
+      const content = await fs.promises.readFile(envFilePath, 'utf8');
+      if (/NEXT_PUBLIC_BASE_URL\s*=/m.test(content)) {
+        return;
+      }
+    } catch {
+      // Missing env files are expected in some repos.
+    }
+  }
+
+  throw new Error('NEXT_PUBLIC_BASE_URL is required for Playwright. Define NEXT_PUBLIC_BASE_URL in the target repo.');
+}
+
+function setWebServerCommand(config: PackageConfig, object: ParsedObject): void {
+  const webServer = object.webServer;
+  if (webServer?.kind !== 'object') return;
+
+  // wbfy owns the package script, so Playwright should consistently call that
+  // script while preserving the rest of each repository's webServer settings.
+  webServer.value.command = literal(config.isBun ? "'bun start-test-server'" : "'yarn start-test-server'");
 }
 
 function extractDefineConfigObjectLiteral(content: string): ExtractedObjectLiteral | undefined {
@@ -109,21 +134,6 @@ function extractDefineConfigObjectLiteral(content: string): ExtractedObjectLiter
   visit(source);
 
   return found ? { source, node: found } : undefined;
-}
-
-async function hasNextPublicBaseUrl(dirPath: string): Promise<boolean> {
-  const envFilePaths = [path.resolve(dirPath, '.env'), path.resolve(dirPath, 'mise.toml')];
-  for (const envFilePath of envFilePaths) {
-    try {
-      const content = await fs.promises.readFile(envFilePath, 'utf8');
-      if (/NEXT_PUBLIC_BASE_URL\s*=/m.test(content)) {
-        return true;
-      }
-    } catch {
-      // Missing env files are expected in some repos.
-    }
-  }
-  return false;
 }
 
 function parseObjectLiteralExpression(
